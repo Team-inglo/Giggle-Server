@@ -18,7 +18,7 @@ jobs: # 3
     - name: Create Issue 
       uses: atlassian/gajira-create@v3
       with:
-        project: GIGGLE-SERVER
+        project: IGS
         issuetype: Task
         summary: '${{ github.event.issue.title }}'
         description: '${{ github.event.issue.html_url }}'
