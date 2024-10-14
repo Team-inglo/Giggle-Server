@@ -1,0 +1,24 @@
+name: Create Jira issue # 1
+on: # 2
+  issues: 
+    types: [opened]
+    
+jobs: # 3
+  create-issue: # 4
+    name: Create Jira issue # 5
+    runs-on: ubuntu-latest # 6
+    steps: # 7
+    - name: Login
+      uses: atlassian/gajira-login@v3 # 8
+      env: # 9
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+    
+    - name: Create Issue 
+      uses: atlassian/gajira-create@v3
+      with:
+        project: FESTA
+        issuetype: Task
+        summary: '${{ github.event.issue.title }}'
+        description: '${{ github.event.issue.html_url }}'
