@@ -4,7 +4,7 @@ Giggle Server Repository
 
 # Branch Naming Convention
 <PR컨벤션>/<Jira이슈번호>/<Github이슈번호> </br></br>
-ex) PR컨벤션에 맞는 현재의 작업이 ‘Feat’ 이고, Jira이슈번호가 ‘IGS-123’이며, Github이슈번호가 ‘#31’일경우엔 브랜치 명을 ‘Feat/IGS-123/#31’ 과 같이 작성합니다.
+ex) PR컨벤션에 맞는 현재의 작업이 ‘Feat’ 이고, Jira이슈번호가 ‘IGS-123’이며, Github이슈번호가 ‘#31’일경우엔 브랜치 명을 ‘Feat/IGS-123/31’ 과 같이 작성합니다.
 
 # Commit Convention
 <Jira이슈번호> <커밋 타입>: <내용>
