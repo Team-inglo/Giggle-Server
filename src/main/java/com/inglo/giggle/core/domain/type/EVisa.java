@@ -21,4 +21,20 @@ public enum EVisa {
 
     private final String krName;
     private final String enName;
+
+    public static EVisa fromString(String value) {
+        return switch (value.toUpperCase()) {
+            case "D-2-1" -> D_2_1;
+            case "D-2-2" -> D_2_2;
+            case "D-2-3" -> D_2_3;
+            case "D-2-4" -> D_2_4;
+            case "D-2-6" -> D_2_6;
+            case "D-2-7" -> D_2_7;
+            case "D-2-8" -> D_2_8;
+            case "D-4-1" -> D_4_1;
+            case "D-4-7" -> D_4_7;
+            case "F-2" -> F_2;
+            default -> throw new IllegalArgumentException("비자가 잘못되었습니다.");
+        };
+    }
 }
