@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: "Giggle Main Server API"
+  profiles:
+    active: local
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+---
