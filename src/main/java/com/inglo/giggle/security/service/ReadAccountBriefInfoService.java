@@ -21,10 +21,6 @@ public class ReadAccountBriefInfoService implements ReadAccountBriefInfoUseCase 
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
 
-
-        return AccountBriefInfoResponseDto.builder()
-                .accountType(account.getRole())
-                .name(account.getName())
-                .build();
+        return AccountBriefInfoResponseDto.of(account);
     }
 }
