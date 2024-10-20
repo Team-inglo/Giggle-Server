@@ -12,4 +12,13 @@ public enum EGender {
 
     private final String krName;
     private final String enName;
+
+    public static EGender fromString(String value) {
+        return switch (value.toUpperCase()) {
+            case "MALE" -> MALE;
+            case "FEMALE" -> FEMALE;
+            case "NONE" -> NONE;
+            default -> throw new IllegalArgumentException("성별이 잘못되었습니다.");
+        };
+    }
 }

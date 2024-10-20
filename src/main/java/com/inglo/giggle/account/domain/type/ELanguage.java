@@ -20,4 +20,19 @@ public enum ELanguage {
 
     private final String krName;
     private final String enName;
+
+    public static ELanguage fromString(String value) {
+        return switch (value.toUpperCase()) {
+            case "KOREAN" -> KOREAN;
+            case "ENGLISH" -> ENGLISH;
+            case "VIETNAMESE" -> VIETNAMESE;
+            case "TURKISH" -> TURKISH;
+            case "RUSSIAN" -> RUSSIAN;
+            case "UZBEK" -> UZBEK;
+            case "JAPANESE" -> JAPANESE;
+            case "CHINESE_SIMPLIFIED" -> CHINESE_SIMPLIFIED;
+            case "CHINESE_TRADITIONAL" -> CHINESE_TRADITIONAL;
+            default -> throw new IllegalArgumentException("언어가 잘못되었습니다.");
+        };
+    }
 }
