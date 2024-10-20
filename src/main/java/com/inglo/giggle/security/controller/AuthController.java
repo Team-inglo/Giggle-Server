@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/v1/auth")
 @Hidden
 public class AuthController {
     private final ReissueJsonWebTokenUseCase reissueJsonWebTokenUseCase;
