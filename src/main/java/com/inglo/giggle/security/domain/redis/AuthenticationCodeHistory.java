@@ -1,6 +1,5 @@
 package com.inglo.giggle.security.domain.redis;
 
-import jakarta.persistence.Column;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,13 +14,10 @@ import java.time.LocalDateTime;
 @RedisHash(value = "authentication_code_history", timeToLive = 60 * 30) // 30분
 public class AuthenticationCodeHistory {
     @Id
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "count")
     private Integer count;
 
-    @Column(name = "last_sent_at")
     private LocalDateTime lastSentAt;
 
     @Builder

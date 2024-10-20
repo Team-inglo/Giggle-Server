@@ -1,6 +1,5 @@
 package com.inglo.giggle.security.domain.redis;
 
-import jakarta.persistence.Column;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +12,8 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash(value = "authentication_code", timeToLive = 60 * 5) // 5분
 public class AuthenticationCode {
     @Id
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "value")
     private String value;
 
     @Builder
