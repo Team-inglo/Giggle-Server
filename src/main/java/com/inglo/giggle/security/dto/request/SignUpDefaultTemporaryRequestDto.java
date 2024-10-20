@@ -1,9 +1,6 @@
 package com.inglo.giggle.security.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -33,8 +30,7 @@ public record SignUpDefaultTemporaryRequestDto(
         String email,
 
         @JsonProperty("account_type")
-        @Enumerated(EnumType.STRING)
         @NotNull
-        ESecurityRole accountType
+        String accountType
 ) {
 }

@@ -7,6 +7,7 @@ import com.inglo.giggle.security.domain.redis.AuthenticationCode;
 import com.inglo.giggle.security.domain.redis.AuthenticationCodeHistory;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
+import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.inglo.giggle.security.dto.request.SignUpDefaultTemporaryRequestDto;
 import com.inglo.giggle.security.dto.response.IssueAuthenticationCodeResponseDto;
 import com.inglo.giggle.security.event.CompleteEmailValidationEvent;
@@ -42,7 +43,7 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
                 .id(requestDto.id() + ":" + requestDto.email())
                 .email(requestDto.email())
                 .password(requestDto.password())
-                .accountType(requestDto.accountType())
+                .accountType(ESecurityRole.fromString(requestDto.accountType()))
                 .build();
         temporaryAccountRepository.save(temporaryAccount);
 

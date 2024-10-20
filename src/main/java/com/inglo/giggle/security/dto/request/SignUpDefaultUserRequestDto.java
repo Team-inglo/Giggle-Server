@@ -1,11 +1,8 @@
 package com.inglo.giggle.security.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.core.dto.AddressDto;
 import com.inglo.giggle.security.dto.inner.SignUpDefaultUserUserInfo;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 
 public record SignUpDefaultUserRequestDto(
@@ -27,9 +24,8 @@ public record SignUpDefaultUserRequestDto(
         @NotNull(message = "알림 수신 동의 여부를 입력해주세요.")
         Boolean notificationAllowed,
 
-        @Enumerated(EnumType.STRING)
         @JsonProperty("language")
         @NotNull(message = "사용 언어 선택은 필수입니다.")
-        ELanguage language
+        String language
 ) {
 }
