@@ -5,7 +5,6 @@ import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import com.inglo.giggle.security.usecase.ValidateEmailUseCase;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.dto.request.ValidateEmailRequestDto;
 import org.springframework.stereotype.Service;
 
 @Service
