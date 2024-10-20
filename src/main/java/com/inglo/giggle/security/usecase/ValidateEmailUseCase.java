@@ -1,7 +1,6 @@
 package com.inglo.giggle.security.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.security.dto.request.ValidateEmailRequestDto;
 import com.inglo.giggle.security.dto.response.ValidationResponseDto;
 
 @UseCase
