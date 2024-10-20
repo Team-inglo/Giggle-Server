@@ -20,7 +20,6 @@ import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
 import com.inglo.giggle.security.usecase.SignUpDefaultOwnerUseCase;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,17 +41,11 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
     private final ImageUtil imageUtil;
     @Override
     public DefaultJsonWebTokenDto execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
-        // temporary Token 검증
-        Claims claims = jsonWebTokenUtil.validateToken(requestDto.temporaryToken());
-
-        // ID와 Email 추출
-        String id = claims.get("id", String.class);
-        String email = claims.get("email", String.class);
-
-        // temporary Token 존재 여부 확인
-        if (!isEqualsTemporaryToken(id, email, requestDto.temporaryToken())) {
-            throw new CommonException(ErrorCode.INVALID_TOKEN_ERROR);
-        }
+        // temporary Token 검증. Redis에 있는 토큰인지 확인 -> id, email 추출
+        TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(requestDto.temporaryToken())
+                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
+        String id = temporaryToken.getId();
+        String email = temporaryToken.getEmail();
 
         // Redis에서 임시 사용자 정보 가져오기
         TemporaryAccount tempUserInfo = temporaryAccountRepository.findById(id + ":" + email)
@@ -121,23 +114,5 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         temporaryAccountRepository.deleteById(id + ":" + email);
 
         return defaultJsonWebTokenDto;
-    }
-
-    /**
-     * temporary Token 일치 여부 확인
-     * @param id ID
-     * @param email 이메일
-     * @param temporaryToken temporary Token
-     * @return Redis에 저장된 temporary Token과 일치 여부
-     */
-    private Boolean isEqualsTemporaryToken(String id, String email, String temporaryToken) {
-        if (email == null || id == null) {
-            return false;
-        }
-
-        TemporaryToken temporaryTokenEntity = temporaryTokenRepository.findById(id + ":" + email)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
-
-        return temporaryTokenEntity.getValue().equals(temporaryToken);
     }
 }

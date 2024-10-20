@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface TemporaryTokenRepository extends CrudRepository<TemporaryToken, String> {
     Optional<TemporaryToken> findById(String compositeKey);
     void deleteById(String compositeKey);
+
+    Optional<TemporaryToken> findByValue(String value);
 }

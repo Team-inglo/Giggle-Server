@@ -1,13 +1,11 @@
 package com.inglo.giggle.security.service;
 
-import com.inglo.giggle.core.contants.Constants;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
 import com.inglo.giggle.security.usecase.ReissueJsonWebTokenUseCase;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.redis.RefreshToken;
@@ -27,17 +25,11 @@ public class ReissueJsonWebTokenService implements ReissueJsonWebTokenUseCase {
     private final JsonWebTokenUtil jsonWebTokenUtil;
 
     @Override
-    public DefaultJsonWebTokenDto execute(String refreshToken) {
-        // Refresh Token 검증
-        Claims claims = jsonWebTokenUtil.validateToken(refreshToken);
-
-        // Account ID 추출
-        UUID accountId = UUID.fromString(claims.get(Constants.ACCOUNT_ID_CLAIM_NAME, String.class));
-
-        // Token 일치 여부 확인
-        if (!isEqualsRefreshToken(accountId, refreshToken)) {
-            throw new CommonException(ErrorCode.ACCESS_DENIED);
-        }
+    public DefaultJsonWebTokenDto execute(String refreshTokenValue) {
+        // refresh Token 검증. Redis에 있는 토큰인지 확인 -> accountId 추출
+        RefreshToken refreshToken = refreshTokenRepository.findByValue(refreshTokenValue)
+                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
+        UUID accountId = refreshToken.getAccountId();
 
         // Account 조회
         Account account = accountRepository.findById(accountId)
@@ -58,18 +50,5 @@ public class ReissueJsonWebTokenService implements ReissueJsonWebTokenUseCase {
         );
 
         return defaultJsonWebTokenDto;
-    }
-
-    /**
-     * Refresh Token 일치 여부 확인
-     * @param accountId Account ID
-     * @param refreshToken Refresh Token
-     * @return Redis에 저장된 Refresh Token과 일치 여부
-     */
-    private Boolean isEqualsRefreshToken(UUID accountId, String refreshToken) {
-        RefreshToken token = refreshTokenRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
-
-        return token.getValue().equals(refreshToken);
     }
 }
