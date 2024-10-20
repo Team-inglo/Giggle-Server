@@ -61,9 +61,6 @@ public abstract class Account {
     @Column(name = "profile_img_url", length = 320, nullable = false)
     private String profileImgUrl;
 
-    @Column(name = "country_code", length = 10)
-    private String countryCode;
-
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
@@ -76,7 +73,6 @@ public abstract class Account {
             String password,
             String email,
             String profileImgUrl,
-            String countryCode,
             String phoneNumber
     ) {
         this.provider = provider;
@@ -84,7 +80,6 @@ public abstract class Account {
         this.password = password;
         this.email = email;
         this.profileImgUrl = profileImgUrl;
-        this.countryCode = countryCode;
         this.phoneNumber = phoneNumber;
     }
 

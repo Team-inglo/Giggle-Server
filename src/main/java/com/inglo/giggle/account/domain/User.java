@@ -89,7 +89,6 @@ public class User extends Account {
             String password,
             String email,
             String profileImgUrl,
-            String countryCode,
             String phoneNumber,
             String firstName,
             String lastName,
@@ -108,7 +107,6 @@ public class User extends Account {
                 password,
                 email,
                 profileImgUrl,
-                countryCode,
                 phoneNumber
         );
 

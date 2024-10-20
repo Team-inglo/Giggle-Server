@@ -69,7 +69,6 @@ public class Owner extends Account {
             String password,
             String email,
             String profileImgUrl,
-            String countryCode,
             String phoneNumber,
             String companyName,
             String ownerName,
@@ -84,7 +83,6 @@ public class Owner extends Account {
                 password,
                 email,
                 profileImgUrl,
-                countryCode,
                 phoneNumber
         );
         this.companyName = companyName;

@@ -1,7 +1,6 @@
 package com.inglo.giggle.security.service;
 
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.core.contants.Constants;
 import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
@@ -81,7 +80,6 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
                 .password(bCryptPasswordEncoder.encode(tempUserInfo.getPassword()))
                 .email(tempUserInfo.getEmail())
                 .profileImgUrl(iconUrl)
-                .countryCode(Constants.DEFAULT_COUNTRY_CODE)
                 .phoneNumber(requestDto.signUpDefaultOwnerOwnerInfo().phoneNumber())
                 .companyName(requestDto.signUpDefaultOwnerOwnerInfo().companyName())
                 .ownerName(requestDto.signUpDefaultOwnerOwnerInfo().ownerName())
