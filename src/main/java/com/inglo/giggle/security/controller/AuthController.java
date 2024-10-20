@@ -63,7 +63,7 @@ public class AuthController {
         return ResponseDto.ok(validateEmailUseCase.execute(email));
     }
 
-    @GetMapping("/auth/briefs")
+    @GetMapping("/briefs")
     public ResponseDto<AccountBriefInfoResponseDto> readUserBriefInfo(
             @AccountID UUID accountId
     ) {
