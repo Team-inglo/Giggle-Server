@@ -1,4 +1,4 @@
-package com.inglo.giggle.core.contants;
+package com.inglo.giggle.core.constant;
 
 import java.util.List;
 
@@ -22,14 +22,16 @@ public class Constants {
      */
     public static List<String> NO_NEED_AUTH_URLS = List.of(
             // Authentication/Authorization
-            "/auth/validations/**",
-            "/auth/reissue/token",
-            "/auth/reissue/authentication-code",
-            "/auth/sign-up",
-            "/auth/login",
+            "/v1/auth/validations/**",
+            "/v1/auth/reissue/token",
+            "/v1/auth/reissue/authentication-code",
+            "/v1/auth/sign-up",
+            "/v1/auth/login",
+            "/v1/auth/users",
+            "/v1/auth/owners",
 
             // Guest
-            "/guests/**",
+            "/v1/guests/**",
 
             // Swagger
             "/api-docs.html",
