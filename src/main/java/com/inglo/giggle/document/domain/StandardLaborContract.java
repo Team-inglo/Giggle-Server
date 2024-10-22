@@ -108,10 +108,10 @@ public class StandardLaborContract extends Document {
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "addressName", column = @Column(name = "employee_address_name")),
-            @AttributeOverride(name = "region1depthName", column = @Column(name = "employee_region_1depth_name")),
-            @AttributeOverride(name = "region2depthName", column = @Column(name = "employee_region_2depth_name")),
-            @AttributeOverride(name = "region3depthName", column = @Column(name = "employee_region_3depth_name")),
-            @AttributeOverride(name = "region4depthName", column = @Column(name = "employee_region_4depth_name")),
+            @AttributeOverride(name = "region1DepthName", column = @Column(name = "employee_region_1depth_name")),
+            @AttributeOverride(name = "region2DepthName", column = @Column(name = "employee_region_2depth_name")),
+            @AttributeOverride(name = "region3DepthName", column = @Column(name = "employee_region_3depth_name")),
+            @AttributeOverride(name = "region4DepthName", column = @Column(name = "employee_region_4depth_name")),
             @AttributeOverride(name = "addressDetail", column = @Column(name = "employee_address_detail")),
             @AttributeOverride(name = "longitude", column = @Column(name = "employee_longitude")),
             @AttributeOverride(name = "latitude", column = @Column(name = "employee_latitude"))
@@ -121,10 +121,10 @@ public class StandardLaborContract extends Document {
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "addressName", column = @Column(name = "employer_address_name")),
-            @AttributeOverride(name = "region1depthName", column = @Column(name = "employer_region_1depth_name")),
-            @AttributeOverride(name = "region2depthName", column = @Column(name = "employer_region_2depth_name")),
-            @AttributeOverride(name = "region3depthName", column = @Column(name = "employer_region_3depth_name")),
-            @AttributeOverride(name = "region4depthName", column = @Column(name = "employer_region_4depth_name")),
+            @AttributeOverride(name = "region1DepthName", column = @Column(name = "employer_region_1depth_name")),
+            @AttributeOverride(name = "region2DepthName", column = @Column(name = "employer_region_2depth_name")),
+            @AttributeOverride(name = "region3DepthName", column = @Column(name = "employer_region_3depth_name")),
+            @AttributeOverride(name = "region4DepthName", column = @Column(name = "employer_region_4depth_name")),
             @AttributeOverride(name = "addressDetail", column = @Column(name = "employer_address_detail")),
             @AttributeOverride(name = "longitude", column = @Column(name = "employer_longitude")),
             @AttributeOverride(name = "latitude", column = @Column(name = "employer_latitude"))
