@@ -90,6 +90,7 @@ public class Owner extends Account {
         this.companyRegistrationNumber = companyRegistrationNumber;
         this.marketingAllowed = marketingAllowed;
         this.notificationAllowed = notificationAllowed;
+        this.createdAt = LocalDateTime.now();
         this.address = address;
     }
 
