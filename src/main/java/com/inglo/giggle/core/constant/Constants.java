@@ -16,9 +16,7 @@ public class Constants {
     // COOKIE
     public static String ACCESS_TOKEN = "access_token";
     public static String REFRESH_TOKEN = "refresh_token";
-
-    // DEFAULT_COUNTRY_CODE
-    public static String DEFAULT_COUNTRY_CODE = "+82";
+    
     /**
      * 인증이 필요 없는 URL
      */

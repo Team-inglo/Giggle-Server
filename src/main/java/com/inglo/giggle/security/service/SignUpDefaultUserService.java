@@ -75,7 +75,6 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
                 .password(bCryptPasswordEncoder.encode(tempUserInfo.getPassword()))
                 .email(tempUserInfo.getEmail())
                 .profileImgUrl(imageUtil.getUserDefaultImgUrl())
-                .countryCode(requestDto.signUpDefaultUserUserInfo().countryCode())
                 .firstName(requestDto.signUpDefaultUserUserInfo().firstName())
                 .lastName(requestDto.signUpDefaultUserUserInfo().lastName())
                 .gender(requestDto.signUpDefaultUserUserInfo().gender())

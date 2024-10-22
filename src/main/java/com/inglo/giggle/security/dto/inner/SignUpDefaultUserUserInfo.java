@@ -37,10 +37,6 @@ public record SignUpDefaultUserUserInfo(
         @NotNull(message = "비자를 입력해주세요.")
         EVisa visa,
 
-        @JsonProperty("country_code")
-        @NotBlank(message = "국가 코드는 필수입니다.")
-        String countryCode,
-
         @JsonProperty("phone_number")
         @NotBlank(message = "전화번호를 입력해주세요.")
         String phoneNumber
