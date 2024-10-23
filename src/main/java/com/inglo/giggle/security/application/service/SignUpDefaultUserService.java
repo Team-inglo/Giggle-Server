@@ -7,9 +7,11 @@ import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.ImageUtil;
+import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.service.LanguageSkillService;
 import com.inglo.giggle.resume.domain.service.ResumeService;
+import com.inglo.giggle.resume.repository.mysql.LanguageSkillRepository;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultUserRequestDto;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultUserUseCase;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
@@ -42,6 +44,7 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
     private final ImageUtil imageUtil;
     private final ResumeService resumeService;
     private final LanguageSkillService languageSkillService;
+    private final LanguageSkillRepository languageSkillRepository;
 
     @Override
     @Transactional
@@ -71,7 +74,9 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
 
         // Resume, LanguageSkill 생성 및 저장
         Resume savedResume = resumeService.createResume(savedUser);
-        languageSkillService.createLanguageSkill(savedResume);
+        LanguageSkill savedLanguageSkill = languageSkillService.createLanguageSkill(savedResume);
+        languageSkillRepository.save(savedLanguageSkill);
+
 
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());
