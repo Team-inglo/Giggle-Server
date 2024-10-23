@@ -1,10 +1,6 @@
 package com.inglo.giggle.security.application.dto.inner;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.core.domain.type.EGender;
-import com.inglo.giggle.core.domain.type.EVisa;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

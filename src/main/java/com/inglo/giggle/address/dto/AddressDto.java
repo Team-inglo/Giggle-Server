@@ -1,7 +1,7 @@
-package com.inglo.giggle.core.dto;
+package com.inglo.giggle.address.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.core.domain.Address;
+import com.inglo.giggle.address.domain.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

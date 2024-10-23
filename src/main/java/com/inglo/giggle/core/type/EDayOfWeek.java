@@ -1,4 +1,4 @@
-package com.inglo.giggle.core.domain.type;
+package com.inglo.giggle.core.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

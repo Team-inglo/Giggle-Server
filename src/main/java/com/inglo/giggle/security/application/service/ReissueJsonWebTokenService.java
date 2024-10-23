@@ -4,7 +4,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.security.application.usecase.ReissueJsonWebTokenUseCase;
-import com.inglo.giggle.security.domain.service.RefreshTokenDomainService;
+import com.inglo.giggle.security.domain.service.RefreshTokenService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class ReissueJsonWebTokenService implements ReissueJsonWebTokenUseCase {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final RefreshTokenDomainService refreshTokenDomainService;
+    private final RefreshTokenService refreshTokenService;
 
     private final JsonWebTokenUtil jsonWebTokenUtil;
 
@@ -47,7 +47,7 @@ public class ReissueJsonWebTokenService implements ReissueJsonWebTokenUseCase {
         );
 
         // Refresh Token 갱신
-        refreshTokenRepository.save(refreshTokenDomainService.createRefreshToken(account.getId(), defaultJsonWebTokenDto.getRefreshToken()));
+        refreshTokenRepository.save(refreshTokenService.createRefreshToken(account.getId(), defaultJsonWebTokenDto.getRefreshToken()));
 
         return defaultJsonWebTokenDto;
     }

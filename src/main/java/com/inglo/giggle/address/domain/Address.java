@@ -1,4 +1,4 @@
-package com.inglo.giggle.core.domain;
+package com.inglo.giggle.address.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

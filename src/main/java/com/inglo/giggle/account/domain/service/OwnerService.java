@@ -1,14 +1,14 @@
 package com.inglo.giggle.account.domain.service;
 
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.core.domain.Address;
+import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultOwnerRequestDto;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OwnerDomainService {
+public class OwnerService {
     public Owner createOwner(ESecurityProvider securityProvider,
                              TemporaryAccount temporaryAccount,
                              String password,

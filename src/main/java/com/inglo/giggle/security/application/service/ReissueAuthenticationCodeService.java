@@ -5,8 +5,8 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.PasswordUtil;
 import com.inglo.giggle.security.application.usecase.ReissueAuthenticationCodeUseCase;
 import com.inglo.giggle.security.domain.redis.AuthenticationCodeHistory;
-import com.inglo.giggle.security.domain.service.AuthenticationCodeDomainService;
-import com.inglo.giggle.security.domain.service.AuthenticationCodeHistoryDomainService;
+import com.inglo.giggle.security.domain.service.AuthenticationCodeService;
+import com.inglo.giggle.security.domain.service.AuthenticationCodeHistoryService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.application.dto.request.IssueAuthenticationCodeRequestDto;
 import com.inglo.giggle.security.application.dto.response.IssueAuthenticationCodeResponseDto;
@@ -27,8 +27,8 @@ public class ReissueAuthenticationCodeService implements ReissueAuthenticationCo
     private final AuthenticationCodeRepository authenticationCodeRepository;
     private final AuthenticationCodeHistoryRepository authenticationCodeHistoryRepository;
 
-    private final AuthenticationCodeHistoryDomainService authenticationCodeHistoryDomainService;
-    private final AuthenticationCodeDomainService authenticationCodeDomainService;
+    private final AuthenticationCodeHistoryService authenticationCodeHistoryService;
+    private final AuthenticationCodeService authenticationCodeService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -46,19 +46,19 @@ public class ReissueAuthenticationCodeService implements ReissueAuthenticationCo
                 .orElse(null);
 
         // 인증코드 발급 제한, 발급 속도 제한 유효성 검사
-        authenticationCodeHistoryDomainService.validateAuthenticationCodeHistory(history);
+        authenticationCodeHistoryService.validateAuthenticationCodeHistory(history);
 
         // 새로운 인증코드 생성
         String code = PasswordUtil.generateAuthCode(6);
 
         // 새로운 인증코드 저장
-        authenticationCodeRepository.save(authenticationCodeDomainService.createAuthenticationCode(requestDto.email(), bCryptPasswordEncoder.encode(code)));
+        authenticationCodeRepository.save(authenticationCodeService.createAuthenticationCode(requestDto.email(), bCryptPasswordEncoder.encode(code)));
 
         // 인증코드 발급 이력 업데이트
         if (history == null) {
-            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryDomainService.createAuthenticationCodeHistory(requestDto.email()));
+            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryService.createAuthenticationCodeHistory(requestDto.email()));
         } else {
-            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryDomainService.incrementAuthenticationCodeCount(history));
+            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryService.incrementAuthenticationCodeCount(history));
         }
 
         // 메일 전송(비동기)

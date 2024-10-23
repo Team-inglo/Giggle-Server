@@ -6,7 +6,7 @@ import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TemporaryAccountDomainService {
+public class TemporaryAccountService {
     public void validateAccountTypeUser(TemporaryAccount temporaryAccount) {
         if (!temporaryAccount.getAccountType().getSecurityName().equals("ROLE_USER"))
             throw new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE);

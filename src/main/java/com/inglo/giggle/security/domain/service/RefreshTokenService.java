@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class RefreshTokenDomainService {
+public class RefreshTokenService {
     public RefreshToken createRefreshToken(UUID accountId, String refreshToken) {
         return RefreshToken.builder()
                 .accountId(accountId)

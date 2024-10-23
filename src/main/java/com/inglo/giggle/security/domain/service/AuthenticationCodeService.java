@@ -4,7 +4,7 @@ import com.inglo.giggle.security.domain.redis.AuthenticationCode;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthenticationCodeDomainService {
+public class AuthenticationCodeService {
     public AuthenticationCode createAuthenticationCode(String email, String code) {
         return AuthenticationCode.builder()
                 .email(email)

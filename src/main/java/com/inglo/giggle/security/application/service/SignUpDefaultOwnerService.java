@@ -1,8 +1,8 @@
 package com.inglo.giggle.security.application.service;
 
-import com.inglo.giggle.account.domain.service.OwnerDomainService;
-import com.inglo.giggle.core.domain.Address;
-import com.inglo.giggle.core.domain.service.AddressDomainService;
+import com.inglo.giggle.account.domain.service.OwnerService;
+import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.ImageUtil;
@@ -11,8 +11,8 @@ import com.inglo.giggle.security.application.usecase.SignUpDefaultOwnerUseCase;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.redis.TemporaryToken;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
-import com.inglo.giggle.security.domain.service.RefreshTokenDomainService;
-import com.inglo.giggle.security.domain.service.TemporaryAccountDomainService;
+import com.inglo.giggle.security.domain.service.RefreshTokenService;
+import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultOwnerRequestDto;
@@ -37,10 +37,10 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
     private final TemporaryAccountRepository temporaryAccountRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final TemporaryAccountDomainService temporaryAccountDomainService;
-    private final AddressDomainService addressDomainService;
-    private final OwnerDomainService ownerDomainService;
-    private final RefreshTokenDomainService refreshTokenDomainService;
+    private final TemporaryAccountService temporaryAccountService;
+    private final AddressService addressService;
+    private final OwnerService ownerService;
+    private final RefreshTokenService refreshTokenService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JsonWebTokenUtil jsonWebTokenUtil;
@@ -58,7 +58,7 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT));
 
         // AccountType 검증
-        temporaryAccountDomainService.validateAccountTypeOwner(tempUserInfo);
+        temporaryAccountService.validateAccountTypeOwner(tempUserInfo);
 
         // 아이콘 이미지 저장
         String iconUrl = imageUtil.getOwnerDefaultImgUrl();
@@ -67,10 +67,10 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         }
 
         // Address 생성
-        Address address = addressDomainService.createAddress(requestDto.address());
+        Address address = addressService.createAddress(requestDto.address());
 
         // Owner 생성 및 저장
-        Account account = ownerDomainService.createOwner(
+        Account account = ownerService.createOwner(
                 ESecurityProvider.DEFAULT,
                 tempUserInfo,
                 bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
@@ -85,7 +85,7 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         );
 
         // Refresh Token 저장
-        refreshTokenRepository.save(refreshTokenDomainService.createRefreshToken(account.getId(), defaultJsonWebTokenDto.getRefreshToken()));
+        refreshTokenRepository.save(refreshTokenService.createRefreshToken(account.getId(), defaultJsonWebTokenDto.getRefreshToken()));
 
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());

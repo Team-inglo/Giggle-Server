@@ -5,9 +5,9 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.PasswordUtil;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultTemporaryUseCase;
 import com.inglo.giggle.security.domain.redis.AuthenticationCodeHistory;
-import com.inglo.giggle.security.domain.service.AccountDomainService;
-import com.inglo.giggle.security.domain.service.AuthenticationCodeDomainService;
-import com.inglo.giggle.security.domain.service.AuthenticationCodeHistoryDomainService;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.domain.service.AuthenticationCodeService;
+import com.inglo.giggle.security.domain.service.AuthenticationCodeHistoryService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultTemporaryRequestDto;
 import com.inglo.giggle.security.application.dto.response.IssueAuthenticationCodeResponseDto;
@@ -29,9 +29,9 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
     private final AuthenticationCodeRepository authenticationCodeRepository;
     private final AuthenticationCodeHistoryRepository authenticationCodeHistoryRepository;
     private final AccountRepository accountRepository;
-    private final AccountDomainService accountDomainService;
-    private final AuthenticationCodeDomainService authenticationCodeDomainService;
-    private final AuthenticationCodeHistoryDomainService authenticationCodeHistoryDomainService;
+    private final AccountService accountService;
+    private final AuthenticationCodeService authenticationCodeService;
+    private final AuthenticationCodeHistoryService authenticationCodeHistoryService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
     @Override
@@ -51,22 +51,22 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
                 .orElse(null);
 
         // 인증코드 발급 제한, 발급 속도 제한 유효성 검사
-        authenticationCodeHistoryDomainService.validateAuthenticationCodeHistory(history);
+        authenticationCodeHistoryService.validateAuthenticationCodeHistory(history);
 
         // 임시 계정 생성
-        temporaryAccountRepository.save(accountDomainService.createTemporaryAccount(requestDto));
+        temporaryAccountRepository.save(accountService.createTemporaryAccount(requestDto));
 
         // 새로운 인증코드 생성
         String code = PasswordUtil.generateAuthCode(6);
 
         // 새로운 인증코드 저장
-        authenticationCodeRepository.save(authenticationCodeDomainService.createAuthenticationCode(requestDto.email(), bCryptPasswordEncoder.encode(code)));
+        authenticationCodeRepository.save(authenticationCodeService.createAuthenticationCode(requestDto.email(), bCryptPasswordEncoder.encode(code)));
 
         // 인증코드 발급 이력 업데이트
         if (history == null) {
-            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryDomainService.createAuthenticationCodeHistory(requestDto.email()));
+            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryService.createAuthenticationCodeHistory(requestDto.email()));
         } else {
-            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryDomainService.incrementAuthenticationCodeCount(history));
+            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryService.incrementAuthenticationCodeCount(history));
         }
 
         // 메일 전송(비동기)

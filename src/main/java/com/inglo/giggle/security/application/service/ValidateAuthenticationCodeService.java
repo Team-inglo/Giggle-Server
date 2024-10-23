@@ -4,7 +4,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.security.application.usecase.ValidateAuthenticationCodeUseCase;
-import com.inglo.giggle.security.domain.service.TemporaryTokenDomainService;
+import com.inglo.giggle.security.domain.service.TemporaryTokenService;
 import com.inglo.giggle.security.repository.redis.AuthenticationCodeHistoryRepository;
 import com.inglo.giggle.security.repository.redis.AuthenticationCodeRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
@@ -27,7 +27,7 @@ public class ValidateAuthenticationCodeService implements ValidateAuthentication
     private final AuthenticationCodeHistoryRepository authenticationCodeHistoryRepository;
     private final TemporaryTokenRepository temporaryTokenRepository;
 
-    private final TemporaryTokenDomainService temporaryTokenDomainService;
+    private final TemporaryTokenService temporaryTokenService;
 
     private final JsonWebTokenUtil jsonWebTokenUtil;
 
@@ -57,7 +57,7 @@ public class ValidateAuthenticationCodeService implements ValidateAuthentication
         TemporaryJsonWebTokenDto temporaryTokenDto = jsonWebTokenUtil.generateTemporaryJsonWebToken(requestDto.email());
 
         // 임시 토큰 저장
-        temporaryTokenRepository.save(temporaryTokenDomainService.createTemporaryToken(requestDto.id(), requestDto.email(), temporaryTokenDto.getTemporaryToken()));
+        temporaryTokenRepository.save(temporaryTokenService.createTemporaryToken(requestDto.id(), requestDto.email(), temporaryTokenDto.getTemporaryToken()));
 
         return temporaryTokenDto;
     }

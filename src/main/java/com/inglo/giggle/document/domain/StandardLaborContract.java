@@ -1,7 +1,7 @@
 package com.inglo.giggle.document.domain;
 
-import com.inglo.giggle.core.domain.Address;
-import com.inglo.giggle.core.domain.type.EDayOfWeek;
+import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.document.domain.type.*;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.persistence.*;

@@ -8,7 +8,7 @@ import com.inglo.giggle.security.info.CustomUserPrincipal;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountDomainService {
+public class AccountService {
 
     public TemporaryAccount createTemporaryAccount(SignUpDefaultTemporaryRequestDto requestDto) {
         return TemporaryAccount.builder()

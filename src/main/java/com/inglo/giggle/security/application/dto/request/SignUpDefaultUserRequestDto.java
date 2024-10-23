@@ -1,7 +1,7 @@
 package com.inglo.giggle.security.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.core.dto.AddressDto;
+import com.inglo.giggle.address.dto.AddressDto;
 import com.inglo.giggle.security.application.dto.inner.SignUpDefaultUserUserInfo;
 import jakarta.validation.constraints.NotNull;
 

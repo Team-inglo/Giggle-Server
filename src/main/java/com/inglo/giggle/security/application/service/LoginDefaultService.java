@@ -1,6 +1,6 @@
 package com.inglo.giggle.security.application.service;
 
-import com.inglo.giggle.security.domain.service.RefreshTokenDomainService;
+import com.inglo.giggle.security.domain.service.RefreshTokenService;
 import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
 import com.inglo.giggle.security.application.usecase.LoginByDefaultUseCase;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.UUID;
 public class LoginDefaultService implements LoginByDefaultUseCase {
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final RefreshTokenDomainService refreshTokenDomainService;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     @Transactional
@@ -25,7 +25,7 @@ public class LoginDefaultService implements LoginByDefaultUseCase {
         String refreshToken = jsonWebTokenDto.getRefreshToken();
 
         if (refreshToken != null) {
-            refreshTokenRepository.save(refreshTokenDomainService.createRefreshToken(accountId, refreshToken));
+            refreshTokenRepository.save(refreshTokenService.createRefreshToken(accountId, refreshToken));
         }
     }
 }

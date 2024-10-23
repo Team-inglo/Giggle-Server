@@ -1,6 +1,6 @@
 package com.inglo.giggle.account.domain;
 
-import com.inglo.giggle.core.domain.Address;
+import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;

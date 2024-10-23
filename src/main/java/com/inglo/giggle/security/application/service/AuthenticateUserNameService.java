@@ -1,6 +1,6 @@
 package com.inglo.giggle.security.application.service;
 
-import com.inglo.giggle.security.domain.service.AccountDomainService;
+import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import com.inglo.giggle.security.application.usecase.AuthenticateUserNameUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 public class AuthenticateUserNameService implements AuthenticateUserNameUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountDomainService accountDomainService;
+    private final AccountService accountService;
 
     @Override
     public UserDetails loadUserByUsername(String serialId) throws UsernameNotFoundException {
         Account account = accountRepository.findBySerialIdAndProvider(serialId, ESecurityProvider.DEFAULT)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with serialId: " + serialId));
 
-        return accountDomainService.createCustomUserPrincipalByAccount(account);
+        return accountService.createCustomUserPrincipalByAccount(account);
     }
 }

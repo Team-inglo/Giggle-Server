@@ -1,8 +1,8 @@
 package com.inglo.giggle.security.application.service;
 
-import com.inglo.giggle.account.domain.service.UserDomainService;
-import com.inglo.giggle.core.domain.Address;
-import com.inglo.giggle.core.domain.service.AddressDomainService;
+import com.inglo.giggle.account.domain.service.UserService;
+import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.ImageUtil;
@@ -10,8 +10,8 @@ import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultUserUseCase;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultUserRequestDto;
-import com.inglo.giggle.security.domain.service.RefreshTokenDomainService;
-import com.inglo.giggle.security.domain.service.TemporaryAccountDomainService;
+import com.inglo.giggle.security.domain.service.RefreshTokenService;
+import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
@@ -36,10 +36,10 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
     private final TemporaryAccountRepository temporaryAccountRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final AddressDomainService addressDomainService;
-    private final UserDomainService userDomainService;
-    private final RefreshTokenDomainService refreshTokenDomainService;
-    private final TemporaryAccountDomainService temporaryAccountDomainService;
+    private final AddressService addressService;
+    private final UserService userService;
+    private final RefreshTokenService refreshTokenService;
+    private final TemporaryAccountService temporaryAccountService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JsonWebTokenUtil jsonWebTokenUtil;
@@ -58,13 +58,13 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT));
 
         // AccountType 검증
-        temporaryAccountDomainService.validateAccountTypeUser(tempUserInfo);
+        temporaryAccountService.validateAccountTypeUser(tempUserInfo);
 
         // Address 생성
-        Address address = addressDomainService.createAddress(requestDto.address());
+        Address address = addressService.createAddress(requestDto.address());
 
         // User 생성 및 저장
-        Account account = userDomainService.createUser(
+        Account account = userService.createUser(
                 ESecurityProvider.DEFAULT,
                 tempUserInfo,
                 bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
@@ -79,7 +79,7 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
         );
 
         // Refresh Token 저장
-        refreshTokenRepository.save(refreshTokenDomainService.createRefreshToken(account.getId(), defaultJsonWebTokenDto.getRefreshToken()));
+        refreshTokenRepository.save(refreshTokenService.createRefreshToken(account.getId(), defaultJsonWebTokenDto.getRefreshToken()));
 
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class AuthenticationCodeHistoryDomainService {
+public class AuthenticationCodeHistoryService {
     public AuthenticationCodeHistory createAuthenticationCodeHistory(String email) {
         return AuthenticationCodeHistory.builder()
                 .email(email)
