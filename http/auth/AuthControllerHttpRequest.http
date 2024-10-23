@@ -1,0 +1,79 @@
+### 2.4 기본 회원가입
+// @no-log
+@email = "test1234@gmail.com"
+POST {{host_url}}/v1/auth/sign-up
+Content-Type: application/json
+
+{
+    "id": "TestGiggleUser1234",
+    "password" : "TestGiggleUser1234!",
+    "email" : {{email}},
+    "account_type" : "USER"
+}
+
+### 2.7 이메일 인증코드 검증
+// @no-log
+@authentication_code = ""
+PATCH {{host_url}}/v1/auth/validations/authentication-code
+Content-Type: application/json
+
+{
+  "id" : "TestGiggleUser1234",
+  "email" : {{email}},
+  "authentication_code" : {{authentication_code}}
+}
+
+> {%
+    client.global.set("temporary_token", response.body.data.temporary_token);
+%}
+
+### 2.5 기본 회원가입(유학생)
+// @no-log
+POST {{host_url}}/v1/auth/users
+Content-Type: application/json
+
+{
+  "temporary_token": "{{temporary_token}}",
+  "user_info": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "gender": "Male",
+    "birth": "1995-05-15",
+    "nationality": "USA",
+    "visa": "D_2_1",
+    "phone_number": "010-1234-5678"
+  },
+  "address": {
+    "address_name": "Seoul National University",
+    "region_1depth_name": "Seoul",
+    "region_2depth_name": "Gwanak-gu",
+    "region_3depth_name": "Gwanak-ro",
+    "region_4depth_name": "San 56-1",
+    "address_detail": "Building 301, Room 104",
+    "latitude": 37.4602,
+    "longitude": 126.9515
+  },
+  "marketing_allowed": true,
+  "notification_allowed": false,
+  "language": "English"
+}
+
+### 1.1 사용자 로그인
+// @no-log
+POST {{host_url}}/v1/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+serial_id=TestGiggleUser1234&
+password=TestGiggleUser1234!
+
+> {%
+    client.global.set("access_token", response.body.data.access_token);
+%}
+
+### 예시를 위한 코드
+GET {{host_url}}/v1/auth/test
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+
