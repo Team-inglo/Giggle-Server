@@ -1,21 +1,37 @@
 package com.inglo.giggle.security.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.security.domain.mysql.Account;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.Getter;
 
-@Builder
-public record AccountBriefInfoResponseDto(
-        @JsonProperty("account_type")
-        String accountType,
+@Getter
+public class AccountBriefInfoResponseDto extends SelfValidating<AccountBriefInfoResponseDto> {
 
-        @JsonProperty("name")
-        String name
-) {
+    @JsonProperty("account_type")
+    @NotNull
+    private final String accountType;
+
+    @JsonProperty("name")
+    @NotNull
+    private final String name;
+
+    @Builder
+    public AccountBriefInfoResponseDto(
+            String accountType,
+            String name
+    ) {
+        this.accountType = accountType;
+        this.name = name;
+        this.validateSelf();
+    }
+
     public static AccountBriefInfoResponseDto of(Account account) {
-            return AccountBriefInfoResponseDto.builder()
-                    .accountType(account.getRole().getEnName())
-                    .name(account.getName())
-                    .build();
+        return AccountBriefInfoResponseDto.builder()
+                .accountType(account.getRole().getEnName())
+                .name(account.getName())
+                .build();
     }
 }
