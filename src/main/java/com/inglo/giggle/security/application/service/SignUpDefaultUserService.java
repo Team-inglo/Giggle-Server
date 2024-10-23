@@ -1,22 +1,25 @@
 package com.inglo.giggle.security.application.service;
 
+import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.domain.service.UserService;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.ImageUtil;
+import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.resume.domain.service.LanguageSkillService;
+import com.inglo.giggle.resume.domain.service.ResumeService;
+import com.inglo.giggle.security.application.dto.request.SignUpDefaultUserRequestDto;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultUserUseCase;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
-import com.inglo.giggle.security.application.dto.request.SignUpDefaultUserRequestDto;
-import com.inglo.giggle.security.domain.service.TemporaryAccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
-import lombok.RequiredArgsConstructor;
-import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.redis.TemporaryToken;
+import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
+import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +40,8 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final ImageUtil imageUtil;
+    private final ResumeService resumeService;
+    private final LanguageSkillService languageSkillService;
 
     @Override
     @Transactional
@@ -56,13 +61,17 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
         Address address = addressService.createAddress(requestDto.address());
 
         // User 생성 및 저장
-        Account account = userService.createUser(
+        User user = userService.createUser(
                 ESecurityProvider.DEFAULT,
                 tempUserInfo,
                 bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
                 imageUtil.getUserDefaultImgUrl(), requestDto, address
         );
-        accountRepository.save(account);
+        User savedUser = accountRepository.save(user);
+
+        // Resume, LanguageSkill 생성 및 저장
+        Resume savedResume = resumeService.createResume(savedUser);
+        languageSkillService.createLanguageSkill(savedResume);
 
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());
