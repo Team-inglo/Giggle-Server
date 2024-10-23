@@ -75,18 +75,20 @@ public class AuthController {
     }
 
     @PostMapping("/users")
-    public ResponseDto<DefaultJsonWebTokenDto> signUpDefaultUser(
+    public ResponseDto<?> signUpDefaultUser(
             @RequestBody @Valid SignUpDefaultUserRequestDto requestDto
-    ) {;
-        return ResponseDto.created(signUpDefaultUserUseCase.execute(requestDto));
+    ) {
+        signUpDefaultUserUseCase.execute(requestDto);
+        return ResponseDto.created(null);
     }
 
     @PostMapping(value = "/owners", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseDto<DefaultJsonWebTokenDto> signUpDefaultOwner(
+    public ResponseDto<?> signUpDefaultOwner(
             @RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart("body") @Valid SignUpDefaultOwnerRequestDto requestDto
     ) {
-        return ResponseDto.created(signUpDefaultOwnerUseCase.execute(requestDto, image));
+        signUpDefaultOwnerUseCase.execute(requestDto, image);
+        return ResponseDto.created(null);
     }
 
     @PatchMapping("/validations/authentication-code")

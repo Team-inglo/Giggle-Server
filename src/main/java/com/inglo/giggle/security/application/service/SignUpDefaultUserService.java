@@ -6,22 +6,17 @@ import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.ImageUtil;
-import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultUserUseCase;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultUserRequestDto;
-import com.inglo.giggle.security.domain.service.RefreshTokenService;
 import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
-import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.redis.TemporaryToken;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
-import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,21 +29,18 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
 
     private final TemporaryTokenRepository temporaryTokenRepository;
     private final TemporaryAccountRepository temporaryAccountRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     private final AddressService addressService;
     private final UserService userService;
-    private final RefreshTokenService refreshTokenService;
     private final TemporaryAccountService temporaryAccountService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JsonWebTokenUtil jsonWebTokenUtil;
 
     private final ImageUtil imageUtil;
 
     @Override
     @Transactional
-    public DefaultJsonWebTokenDto execute(SignUpDefaultUserRequestDto requestDto) {
+    public void execute(SignUpDefaultUserRequestDto requestDto) {
         // temporary Token 검증. Redis에 있는 토큰인지 확인
         TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(requestDto.temporaryToken())
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
@@ -72,21 +64,11 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
         );
         accountRepository.save(account);
 
-        // Default Json Web Token 생성
-        DefaultJsonWebTokenDto defaultJsonWebTokenDto = jsonWebTokenUtil.generateDefaultJsonWebTokens(
-                account.getId(),
-                ESecurityRole.USER
-        );
-
-        // Refresh Token 저장
-        refreshTokenRepository.save(refreshTokenService.createRefreshToken(account.getId(), defaultJsonWebTokenDto.getRefreshToken()));
-
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());
 
         // temporary User Info 삭제
         temporaryAccountRepository.deleteById(tempUserInfo.getCompositeKey());
 
-        return defaultJsonWebTokenDto;
     }
 }

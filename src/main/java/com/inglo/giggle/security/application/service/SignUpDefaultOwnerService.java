@@ -35,20 +35,17 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
 
     private final TemporaryTokenRepository temporaryTokenRepository;
     private final TemporaryAccountRepository temporaryAccountRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     private final TemporaryAccountService temporaryAccountService;
     private final AddressService addressService;
     private final OwnerService ownerService;
-    private final RefreshTokenService refreshTokenService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JsonWebTokenUtil jsonWebTokenUtil;
 
     private final ImageUtil imageUtil;
     @Override
     @Transactional
-    public DefaultJsonWebTokenDto execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
+    public void execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
         // temporary Token 검증. Redis에 있는 토큰인지 확인
         TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(requestDto.temporaryToken())
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
@@ -78,21 +75,11 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         );
         accountRepository.save(account);
 
-        // Default Json Web Token 생성
-        DefaultJsonWebTokenDto defaultJsonWebTokenDto = jsonWebTokenUtil.generateDefaultJsonWebTokens(
-                account.getId(),
-                ESecurityRole.OWNER
-        );
-
-        // Refresh Token 저장
-        refreshTokenRepository.save(refreshTokenService.createRefreshToken(account.getId(), defaultJsonWebTokenDto.getRefreshToken()));
-
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());
 
         // temporary User Info 삭제
         temporaryAccountRepository.deleteById(tempUserInfo.getCompositeKey());
 
-        return defaultJsonWebTokenDto;
     }
 }

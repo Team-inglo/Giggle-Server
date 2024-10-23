@@ -12,5 +12,5 @@ public interface SignUpDefaultOwnerUseCase {
      * @param requestDto 점주 회원가입 요청 DTO With Token
      * @return DefaultJsonWebTokenDto
      */
-    DefaultJsonWebTokenDto execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file);
+    void execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file);
 }

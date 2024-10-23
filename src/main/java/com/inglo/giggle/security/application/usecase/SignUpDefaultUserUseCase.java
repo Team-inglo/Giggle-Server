@@ -12,5 +12,5 @@ public interface SignUpDefaultUserUseCase {
      * @param requestDto 유학생 회원가입 요청 DTO With Token
      * @return DefaultJsonWebTokenDto
      */
-    DefaultJsonWebTokenDto execute(SignUpDefaultUserRequestDto requestDto);
+    void execute(SignUpDefaultUserRequestDto requestDto);
 }
