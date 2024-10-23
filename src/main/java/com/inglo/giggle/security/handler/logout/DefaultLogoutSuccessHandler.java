@@ -1,6 +1,6 @@
 package com.inglo.giggle.security.handler.logout;
 
-import com.inglo.giggle.core.contants.Constants;
+import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.utility.CookieUtil;
 import com.inglo.giggle.core.utility.HttpServletUtil;

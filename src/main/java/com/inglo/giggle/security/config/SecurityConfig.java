@@ -1,6 +1,6 @@
 package com.inglo.giggle.security.config;
 
-import com.inglo.giggle.core.contants.Constants;
+import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.security.filter.ExceptionFilter;
 import com.inglo.giggle.security.filter.GlobalLoggerFilter;
@@ -11,7 +11,7 @@ import com.inglo.giggle.security.handler.login.DefaultLoginFailureHandler;
 import com.inglo.giggle.security.handler.login.DefaultLoginSuccessHandler;
 import com.inglo.giggle.security.handler.logout.DefaultLogoutProcessHandler;
 import com.inglo.giggle.security.handler.logout.DefaultLogoutSuccessHandler;
-import com.inglo.giggle.security.usecase.AuthenticateJsonWebTokenUseCase;
+import com.inglo.giggle.security.application.usecase.AuthenticateJsonWebTokenUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,7 +59,7 @@ public class SecurityConfig {
 
                 .formLogin(configurer -> configurer
                         .loginPage("/login")
-                        .loginProcessingUrl("/auth/login")
+                        .loginProcessingUrl("/v1/auth/login")
                         .usernameParameter("serial_id")
                         .passwordParameter("password")
                         .successHandler(defaultLoginSuccessHandler)
@@ -67,7 +67,7 @@ public class SecurityConfig {
                 )
 
                 .logout(configurer -> configurer
-                        .logoutUrl("/auth/logout")
+                        .logoutUrl("/v1/auth/logout")
                         .addLogoutHandler(defaultLogoutProcessHandler)
                         .logoutSuccessHandler(defaultLogoutSuccessHandler)
                 )

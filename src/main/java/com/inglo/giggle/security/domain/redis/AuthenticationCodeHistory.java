@@ -31,10 +31,11 @@ public class AuthenticationCodeHistory {
         this.lastSentAt = LocalDateTime.now();
     }
 
-    public AuthenticationCodeHistory copyWith(Integer count) {
-        return AuthenticationCodeHistory.builder()
-                .email(this.email)
-                .count(count)
-                .build();
+    public void incrementCount() {
+        this.count++;
+    }
+
+    public void updateLastSentAt() {
+        this.lastSentAt = LocalDateTime.now();
     }
 }

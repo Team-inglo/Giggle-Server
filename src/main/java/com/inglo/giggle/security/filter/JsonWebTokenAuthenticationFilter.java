@@ -1,11 +1,11 @@
 package com.inglo.giggle.security.filter;
 
-import com.inglo.giggle.core.contants.Constants;
+import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.HeaderUtil;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
-import com.inglo.giggle.security.usecase.AuthenticateJsonWebTokenUseCase;
+import com.inglo.giggle.security.application.usecase.AuthenticateJsonWebTokenUseCase;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,7 +1,7 @@
 package com.inglo.giggle.core.config;
 
 import lombok.RequiredArgsConstructor;
-import com.inglo.giggle.core.contants.Constants;
+import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.interceptor.pre.HttpAccountIDInterceptor;
 import com.inglo.giggle.core.resolver.HttpAccountIDArgumentResolver;
 import org.springframework.context.annotation.Configuration;

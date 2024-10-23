@@ -1,9 +1,9 @@
 package com.inglo.giggle.document.domain;
 
-import com.inglo.giggle.core.domain.Address;
+import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.core.domain.type.EGender;
+import com.inglo.giggle.core.type.EGender;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

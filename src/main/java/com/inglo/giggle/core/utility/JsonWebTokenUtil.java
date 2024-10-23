@@ -4,12 +4,12 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
-import com.inglo.giggle.core.contants.Constants;
+import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.exception.type.HttpSecurityException;
-import com.inglo.giggle.security.dto.response.DefaultJsonWebTokenDto;
-import com.inglo.giggle.security.dto.response.TemporaryJsonWebTokenDto;
+import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
+import com.inglo.giggle.security.application.dto.response.TemporaryJsonWebTokenDto;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,4 +93,5 @@ public class JsonWebTokenUtil implements InitializingBean {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
+    //TODO: refresh, access 검증 로직 필요. 현재는 refresh token도 통과시킴
 }

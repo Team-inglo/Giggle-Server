@@ -1,10 +1,10 @@
 package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.core.domain.Address;
-import com.inglo.giggle.core.domain.type.EEducationLevel;
-import com.inglo.giggle.core.domain.type.EGender;
-import com.inglo.giggle.core.domain.type.EVisa;
+import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.type.EEducationLevel;
+import com.inglo.giggle.core.type.EGender;
+import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.type.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

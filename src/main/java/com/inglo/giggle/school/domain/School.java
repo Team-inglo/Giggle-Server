@@ -1,6 +1,6 @@
 package com.inglo.giggle.school.domain;
 
-import com.inglo.giggle.core.domain.Address;
+import com.inglo.giggle.address.domain.Address;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

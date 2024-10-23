@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.domain;
 
-import com.inglo.giggle.core.domain.type.EDayOfWeek;
+import com.inglo.giggle.core.type.EDayOfWeek;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

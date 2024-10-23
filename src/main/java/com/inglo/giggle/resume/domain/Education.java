@@ -1,6 +1,6 @@
 package com.inglo.giggle.resume.domain;
 
-import com.inglo.giggle.core.domain.type.EEducationLevel;
+import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.school.domain.School;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
