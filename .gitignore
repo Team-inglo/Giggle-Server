@@ -265,4 +265,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Http Request Environment
+http-client.private.env.json
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,macos,windows,intellij+all,java
