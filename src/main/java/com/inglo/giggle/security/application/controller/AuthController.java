@@ -35,6 +35,9 @@ public class AuthController {
     private final ReissueAuthenticationCodeUseCase reissueAuthenticationCodeUseCase;
     private final ReissuePasswordUseCase reissuePasswordUseCase;
 
+    /**
+     * 2.3 JWT 재발급
+     */
     @PostMapping("/reissue/token")
     public ResponseDto<DefaultJsonWebTokenDto> reissueDefaultJsonWebToken(
             HttpServletRequest request
@@ -45,6 +48,9 @@ public class AuthController {
         return ResponseDto.created(reissueJsonWebTokenUseCase.execute(refreshToken));
     }
 
+    /**
+     * 2.1 아이디 중복 검사
+     */
     @GetMapping("/validations/id")
     public ResponseDto<ValidationResponseDto> validateId(
             @RequestParam(name = "id") String id
@@ -52,6 +58,9 @@ public class AuthController {
         return ResponseDto.ok(validateIdUseCase.execute(id));
     }
 
+    /**
+     * 2.2 이메일 중복 검사
+     */
     @GetMapping("/validations/email")
     public ResponseDto<ValidationResponseDto> validateEmail(
             @RequestParam(name = "email") String email
@@ -59,6 +68,9 @@ public class AuthController {
         return ResponseDto.ok(validateEmailUseCase.execute(email));
     }
 
+    /**
+     * 2.5 유학생 or 고용주 간단 정보 조회(판단)
+     */
     @GetMapping("/briefs")
     public ResponseDto<AccountBriefInfoResponseDto> readUserBriefInfo(
             @AccountID UUID accountId
@@ -66,7 +78,9 @@ public class AuthController {
         return ResponseDto.ok(readAccountBriefInfoUseCase.execute(accountId));
     }
 
-
+    /**
+     * 2.4 기본 임시 회원가입
+     */
     @PostMapping("/sign-up")
     public ResponseDto<IssueAuthenticationCodeResponseDto> signUpDefaultTemporary(
             @RequestBody @Valid SignUpDefaultTemporaryRequestDto requestDto
@@ -74,6 +88,9 @@ public class AuthController {
         return ResponseDto.created(signUpDefaultTemporaryUseCase.execute(requestDto));
     }
 
+    /**
+     * 2.5 기본 회원가입(유학생)
+     */
     @PostMapping("/users")
     public ResponseDto<?> signUpDefaultUser(
             @RequestBody @Valid SignUpDefaultUserRequestDto requestDto
@@ -82,6 +99,9 @@ public class AuthController {
         return ResponseDto.created(null);
     }
 
+    /**
+     * 2.6 기본 회원가입(고용주)
+     */
     @PostMapping(value = "/owners", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseDto<?> signUpDefaultOwner(
             @RequestPart(value = "image", required = false) MultipartFile image,
@@ -91,6 +111,9 @@ public class AuthController {
         return ResponseDto.created(null);
     }
 
+    /**
+     * 2.7 이메일 인증 코드 검증
+     */
     @PatchMapping("/validations/authentication-code")
     public ResponseDto<TemporaryJsonWebTokenDto> validateAuthenticationCode(
             @RequestBody @Valid ValidateAuthenticationCodeRequestDto requestDto
@@ -98,6 +121,9 @@ public class AuthController {
         return ResponseDto.created(validateAuthenticationCodeUseCase.execute(requestDto));
     }
 
+    /**
+     * 2.8 인증 코드 재전송
+     */
     @PatchMapping("/reissue/authentication-code")
     public ResponseDto<IssueAuthenticationCodeResponseDto> reissueAuthenticationCode(
             @RequestBody @Valid IssueAuthenticationCodeRequestDto requestDto
@@ -105,6 +131,9 @@ public class AuthController {
         return ResponseDto.created(reissueAuthenticationCodeUseCase.execute(requestDto));
     }
 
+    /**
+     * 비밀번호 재전송(명세서에 없음 - 임시 비밀번호 재전송)
+     */
     @PostMapping("/reissue/password")
     public ResponseDto<?> reissuePassword(
             HttpServletRequest request
