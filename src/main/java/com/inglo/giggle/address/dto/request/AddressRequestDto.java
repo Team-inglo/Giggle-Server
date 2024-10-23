@@ -1,4 +1,4 @@
-package com.inglo.giggle.address.dto;
+package com.inglo.giggle.address.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.domain.Address;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record AddressDto(
+public record AddressRequestDto(
         @JsonProperty("address_name")
         @NotBlank(message = "주소를 입력해주세요.")
         String addressName,
@@ -40,8 +40,8 @@ public record AddressDto(
         @NotNull(message = "경도를 입력해주세요.")
         Double longitude
 ) {
-        public static AddressDto fromEntity(Address address) {
-                return AddressDto.builder()
+        public static AddressRequestDto fromEntity(Address address) {
+                return AddressRequestDto.builder()
                         .addressName(address.getAddressName())
                         .region1DepthName(address.getRegion1DepthName())
                         .region2DepthName(address.getRegion2DepthName())
