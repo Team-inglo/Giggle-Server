@@ -53,10 +53,11 @@ public class LanguageSkill {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public LanguageSkill(Integer topikLevel, Integer socialIntegrationLevel, Integer sejongInstituteLevel) {
-        this.topikLevel = topikLevel;
-        this.socialIntegrationLevel = socialIntegrationLevel;
-        this.sejongInstituteLevel = sejongInstituteLevel;
+    public LanguageSkill(Resume resume) {
+        this.resume = resume;
+        this.topikLevel = 0;
+        this.socialIntegrationLevel = 0;
+        this.sejongInstituteLevel = 0;
     }
 
 }
