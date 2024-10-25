@@ -65,9 +65,6 @@ public class IntegratedApplication extends Document {
     @Column(name = "occupation", length = 30, nullable = false)
     private String occupation;
 
-    @Column(name = "intended_period_of_reentry", nullable = false)
-    private LocalDate intendedPeriodOfReentry;
-
     @Column(name = "email", length = 320, nullable = false)
     private String email;
 
@@ -106,8 +103,8 @@ public class IntegratedApplication extends Document {
                                  LocalDate birth, EGender gender, String nationality, String telePhoneNumber,
                                  String cellPhoneNumber, Boolean isAccredited, String newWorkPlaceName,
                                  String newWorkPlaceRegistrationNumber, String newWorkPlacePhoneNumber,
-                                 Integer annualIncomeAmount, String occupation, LocalDate intendedPeriodOfReentry,
-                                 String email, String employeeSignatureBase64, Address employeeAddress, School school) {
+                                 Integer annualIncomeAmount, String occupation, String email,
+                                 String employeeSignatureBase64, Address employeeAddress, School school) {
         super(userOwnerJobPosting);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -122,7 +119,6 @@ public class IntegratedApplication extends Document {
         this.newWorkPlacePhoneNumber = newWorkPlacePhoneNumber;
         this.annualIncomeAmount = annualIncomeAmount;
         this.occupation = occupation;
-        this.intendedPeriodOfReentry = intendedPeriodOfReentry;
         this.email = email;
         this.employeeSignatureBase64 = employeeSignatureBase64;
         this.employeeAddress = employeeAddress;
