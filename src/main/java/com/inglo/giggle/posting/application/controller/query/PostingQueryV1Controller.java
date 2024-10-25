@@ -47,10 +47,10 @@ public class PostingQueryV1Controller {
     /**
      * 6.2 (유학생) 지원한 공고 상태 상세 조회하기
      */
-    @GetMapping("/users/user-owner-job-postings/{user-owner-job-postings-id}/details")
+    @GetMapping("/users/user-owner-job-postings/{id}/details")
     public ResponseDto<ReadUserOwnerJobPostingDetailResponseDto> readUserAppliedJobDetail(
             @AccountID UUID accountId,
-            @PathVariable(name = "user-owner-job-postings-id") Long userOwnerJobPostingsId
+            @PathVariable(name = "id") Long userOwnerJobPostingsId
     ) {
         return ResponseDto.ok(readUserOwnerJobPostingDetailUseCase.execute(
                 accountId,
@@ -85,4 +85,6 @@ public class PostingQueryV1Controller {
                 accountId
         ));
     }
+
+
 }
