@@ -4,8 +4,8 @@ import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.repository.mysql.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.posting.application.dto.response.ReadUserAppliedJobListResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadUserAppliedJobListUseCase;
+import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingListResponseDto;
+import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingListUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ReadUserAppliedJobListService implements ReadUserAppliedJobListUseCase {
+public class ReadUserOwnerJobPostingListService implements ReadUserOwnerJobPostingListUseCase {
 
     private final UserRepository userRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
@@ -31,7 +31,7 @@ public class ReadUserAppliedJobListService implements ReadUserAppliedJobListUseC
 
     @Override
     @Transactional(readOnly = true)
-    public ReadUserAppliedJobListResponseDto execute(
+    public ReadUserOwnerJobPostingListResponseDto execute(
             UUID accountId,
             Integer page,
             Integer size,
@@ -49,7 +49,7 @@ public class ReadUserAppliedJobListService implements ReadUserAppliedJobListUseC
         Page<UserOwnerJobPosting> userOwnerJobPostingPage = findUserOwnerJobPostings(user, status, pageable);
 
         // DTO 반환
-        return ReadUserAppliedJobListResponseDto.of(userOwnerJobPostingPage);
+        return ReadUserOwnerJobPostingListResponseDto.of(userOwnerJobPostingPage);
     }
 
     /* -------------------------------------------- */
@@ -63,14 +63,14 @@ public class ReadUserAppliedJobListService implements ReadUserAppliedJobListUseC
             Pageable pageable
     ) {
         if (status.equals(ALL)) {
-            return userOwnerJobPostingRepository.findAllWithJobPostingAndUserByUser(
+            return userOwnerJobPostingRepository.findAllPagedWithJobPostingByUser(
                     user,
                     pageable
             );
         }
 
         EApplicationStep step = EApplicationStep.fromString(status);
-        return userOwnerJobPostingRepository.findAllWithJobPostingAndUserByUserAndStep(
+        return userOwnerJobPostingRepository.findAllPagedWithJobPostingByUserAndStep(
                 user,
                 step,
                 pageable
@@ -80,9 +80,9 @@ public class ReadUserAppliedJobListService implements ReadUserAppliedJobListUseC
     // 정렬 기준에 따라 정렬하는 메서드
     private Sort getSortByProperty(String sortingType) {
         if(sortingType.equals(ASCENDING)) {
-            return Sort.by(ReadUserAppliedJobListService.property).ascending();
+            return Sort.by(ReadUserOwnerJobPostingListService.property).ascending();
         }
-        return Sort.by(ReadUserAppliedJobListService.property).descending();
+        return Sort.by(ReadUserOwnerJobPostingListService.property).descending();
     }
 
 }

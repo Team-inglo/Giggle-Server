@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class ReadUserAppliedJobListResponseDto extends SelfValidating<ReadUserAppliedJobListResponseDto> {
+public class ReadUserOwnerJobPostingListResponseDto extends SelfValidating<ReadUserOwnerJobPostingListResponseDto> {
 
     @NotNull(message = "has_next는 null일 수 없습니다.")
     @JsonProperty("has_next")
@@ -25,7 +24,7 @@ public class ReadUserAppliedJobListResponseDto extends SelfValidating<ReadUserAp
     private final List<UserAppliedJobDto> jobPostingList;
 
     @Builder
-    public ReadUserAppliedJobListResponseDto(
+    public ReadUserOwnerJobPostingListResponseDto(
             Boolean hasNext,
             List<UserAppliedJobDto> jobPostingList
     ) {
@@ -36,7 +35,7 @@ public class ReadUserAppliedJobListResponseDto extends SelfValidating<ReadUserAp
     }
 
     // UserOwnerJobPosting 엔티티를 UserAppliedJobDto로 변환하는 메서드 추가
-    public static ReadUserAppliedJobListResponseDto of(
+    public static ReadUserOwnerJobPostingListResponseDto of(
             Page<UserOwnerJobPosting> userOwnerJobPostingPage
     ) {
         boolean hasNext = userOwnerJobPostingPage.hasNext();
@@ -44,7 +43,7 @@ public class ReadUserAppliedJobListResponseDto extends SelfValidating<ReadUserAp
                 .map(UserAppliedJobDto::fromEntity)
                 .collect(Collectors.toList());
 
-        return ReadUserAppliedJobListResponseDto.builder()
+        return ReadUserOwnerJobPostingListResponseDto.builder()
                 .hasNext(hasNext)
                 .jobPostingList(jobPostingList)
                 .build();
