@@ -63,14 +63,14 @@ public class ReadUserAppliedJobListService implements ReadUserAppliedJobListUseC
             Pageable pageable
     ) {
         if (status.equals(ALL)) {
-            return userOwnerJobPostingRepository.findAllByUser(
+            return userOwnerJobPostingRepository.findAllWithJobPostingAndUserByUser(
                     user,
                     pageable
             );
         }
 
         EApplicationStep step = EApplicationStep.fromString(status);
-        return userOwnerJobPostingRepository.findAllByUserAndStep(
+        return userOwnerJobPostingRepository.findAllWithJobPostingAndUserByUserAndStep(
                 user,
                 step,
                 pageable
