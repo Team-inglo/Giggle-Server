@@ -24,3 +24,8 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/users/user-owner-job-postings/count
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+### 6.5 (유학생) 공고 담당자 정보 조회하기
+GET {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_5.user_owner_job_posting_id}}/recruiters
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

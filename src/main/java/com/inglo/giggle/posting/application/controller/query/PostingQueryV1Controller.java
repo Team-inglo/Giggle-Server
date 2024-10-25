@@ -6,10 +6,7 @@ import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPosting
 import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingCountResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingDetailResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingListResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingBriefListUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingCountUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingDetailUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingListUseCase;
+import com.inglo.giggle.posting.application.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +21,7 @@ public class PostingQueryV1Controller {
     private final ReadUserOwnerJobPostingDetailUseCase readUserOwnerJobPostingDetailUseCase;
     private final ReadUserOwnerJobPostingBriefListUseCase readUserOwnerJobPostingBriefListUseCase;
     private final ReadUserOwnerJobPostingCountUseCase readUserOwnerJobPostingCountUseCase;
+    private final ReadUserOwnerJobPostingJobPostingRecruiterUserCase readUserOwnerJobPostingJobPostingRecruiterUserCase;
 
     /**
      * 6.1 (유학생) 지원한 공고 리스트 조회하기
@@ -87,6 +85,18 @@ public class PostingQueryV1Controller {
         ));
     }
 
-
+    /**
+     * 6.5 (유학생) 공고 담당자 정보 조회하기
+     */
+    @GetMapping("/users/user-owner-job-postings/{user-owner-job-postings-id}/recruiters")
+    public ResponseDto<?> readRecruiterInfo(
+            @AccountID UUID accountId,
+            @PathVariable(name = "user-owner-job-postings-id") Long userOwnerJobPostingsId
+    ) {
+        return ResponseDto.ok(readUserOwnerJobPostingJobPostingRecruiterUserCase.execute(
+                accountId,
+                userOwnerJobPostingsId
+        ));
+    }
 
 }
