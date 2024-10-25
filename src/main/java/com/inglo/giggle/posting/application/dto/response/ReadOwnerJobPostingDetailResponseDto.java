@@ -2,7 +2,6 @@ package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
-import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.school.domain.School;
 import jakarta.validation.constraints.NotBlank;
@@ -70,11 +69,12 @@ public class ReadOwnerJobPostingDetailResponseDto extends SelfValidating<ReadOwn
         this.validateSelf();
     }
 
+    private static final String DASH = "-";
     public static ReadOwnerJobPostingDetailResponseDto of(
             UserOwnerJobPosting userOwnerJobPosting,
             School school
     ) {
-        String schoolName = (school != null) ? school.getSchoolName() : null;
+        String schoolName = (school != null) ? school.getSchoolName() : DASH;
 
         int durationOfDays = (int) java.time.Duration.between(
                 userOwnerJobPosting.getUpdatedAt().atStartOfDay(),
