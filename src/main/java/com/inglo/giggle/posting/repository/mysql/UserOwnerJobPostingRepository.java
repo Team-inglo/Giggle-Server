@@ -14,13 +14,16 @@ import java.util.Optional;
 @Repository
 public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJobPosting, Long>{
 
-    @EntityGraph(attributePaths = {"jobPosting", "user"})
-    Page<UserOwnerJobPosting> findAllWithJobPostingAndUserByUser(User user, Pageable pageable);
+    @EntityGraph(attributePaths = {"jobPosting"})
+    Page<UserOwnerJobPosting> findAllPagedWithJobPostingByUser(User user, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"jobPosting", "user"})
-    Page<UserOwnerJobPosting> findAllWithJobPostingAndUserByUserAndStep(User user, EApplicationStep step, Pageable pageable);
+    @EntityGraph(attributePaths = {"jobPosting", "owner"})
+    Page<UserOwnerJobPosting> findAllPagedWithJobPostingAndOwnerByUser(User user, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"jobPosting", "owner", "user", "jobPosting.workDayTimes"})
-    Optional<UserOwnerJobPosting> findWithJobPostingById(Long id);
+    @EntityGraph(attributePaths = {"jobPosting"})
+    Page<UserOwnerJobPosting> findAllPagedWithJobPostingByUserAndStep(User user, EApplicationStep step, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"jobPosting", "owner", "jobPosting.workDayTimes"})
+    Optional<UserOwnerJobPosting> findWithJobPostingAndOwnerAndJobPostingsWorkDayTimesById(Long id);
 
 }

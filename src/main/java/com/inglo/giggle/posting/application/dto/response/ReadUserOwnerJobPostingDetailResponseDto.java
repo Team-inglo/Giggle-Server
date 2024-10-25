@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class ReadUserAppliedJobDetailResponseDto extends SelfValidating<ReadUserAppliedJobDetailResponseDto> {
+public class ReadUserOwnerJobPostingDetailResponseDto extends SelfValidating<ReadUserOwnerJobPostingDetailResponseDto> {
 
     @NotBlank(message = "title은 null일 수 없습니다.")
     @JsonProperty("title")
@@ -41,7 +41,7 @@ public class ReadUserAppliedJobDetailResponseDto extends SelfValidating<ReadUser
     private final String step;
 
     @Builder
-    public ReadUserAppliedJobDetailResponseDto(
+    public ReadUserOwnerJobPostingDetailResponseDto(
             String title,
             String iconImgUrl,
             String addressName,
@@ -59,7 +59,7 @@ public class ReadUserAppliedJobDetailResponseDto extends SelfValidating<ReadUser
         this.validateSelf();
     }
 
-    public static ReadUserAppliedJobDetailResponseDto fromEntity(
+    public static ReadUserOwnerJobPostingDetailResponseDto fromEntity(
             UserOwnerJobPosting userOwnerJobPosting
     ) {
 
@@ -68,9 +68,9 @@ public class ReadUserAppliedJobDetailResponseDto extends SelfValidating<ReadUser
                 LocalDate.now().atStartOfDay()
         ).toDays();
 
-        return ReadUserAppliedJobDetailResponseDto.builder()
+        return ReadUserOwnerJobPostingDetailResponseDto.builder()
                 .title(userOwnerJobPosting.getJobPosting().getTitle())
-                .iconImgUrl(userOwnerJobPosting.getJobPosting().getOwner().getProfileImgUrl())
+                .iconImgUrl(userOwnerJobPosting.getOwner().getProfileImgUrl())
                 .addressName(userOwnerJobPosting.getJobPosting().getAddress().getAddressName())
                 .durationOfDays(durationOfDays)
                 .jobInfo(JobInfo.fromEntity(userOwnerJobPosting.getJobPosting()))
