@@ -25,14 +25,21 @@ GET {{host_url}}/v1/users/user-owner-job-postings/count
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
+
 ### 6.5 (유학생) 공고 담당자 정보 조회하기
 GET {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_5.user_owner_job_posting_id}}/recruiters
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
+
 ### 6.6 (고용주) 등록한 공고 리스트 조회하기
 GET {{host_url}}/v1/owners/job-postings/overviews?
     page={{posting.API_6_6.page}}&
     size={{posting.API_6_6.size}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### 6.7 (고용주) 지원자 지원 상태 상세 조회
+GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_7.user_owner_job_posting_id}}/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}

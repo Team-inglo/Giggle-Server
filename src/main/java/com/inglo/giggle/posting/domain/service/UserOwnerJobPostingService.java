@@ -23,4 +23,10 @@ public class UserOwnerJobPostingService {
             throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
         }
     }
+
+    public void validateUserOwnerJobPostingAndOwner(UserOwnerJobPosting userOwnerJobPosting, UUID accountId) {
+        if (!userOwnerJobPosting.getOwner().getId().equals(accountId)) {
+            throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
+        }
+    }
 }
