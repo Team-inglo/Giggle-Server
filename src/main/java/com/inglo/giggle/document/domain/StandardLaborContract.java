@@ -60,7 +60,7 @@ public class StandardLaborContract extends Document {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "description", length = 50)
+    @Column(name = "description", length = 200)
     private String description;
 
     @ElementCollection(targetClass = EDayOfWeek.class)
