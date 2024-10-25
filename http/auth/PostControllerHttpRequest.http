@@ -18,3 +18,9 @@ GET http://localhost:8080/v1/users/user-owner-job-postings/briefs?
     size={{posting.API_6_3.size}}
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.4 (유학생) 지원 현황(개수) 확인하기
+GET {{host_url}}/v1/users/user-owner-job-postings/count
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

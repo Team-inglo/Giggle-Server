@@ -6,6 +6,7 @@ import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPosting
 import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingDetailResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingListResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingBriefListUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingCountUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingDetailUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingListUseCase;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class PostingQueryV1Controller {
     private final ReadUserOwnerJobPostingListUseCase readUserOwnerJobPostingListUseCase;
     private final ReadUserOwnerJobPostingDetailUseCase readUserOwnerJobPostingDetailUseCase;
     private final ReadUserOwnerJobPostingBriefListUseCase readUserOwnerJobPostingBriefListUseCase;
+    private final ReadUserOwnerJobPostingCountUseCase readUserOwnerJobPostingCountUseCase;
 
     /**
      * 6.1 (유학생) 지원한 공고 리스트 조회하기
@@ -70,5 +72,17 @@ public class PostingQueryV1Controller {
                page,
                size
        ));
+    }
+
+    /**
+     * 6.4 (유학생) 지원 현황(개수) 확인하기
+     */
+    @GetMapping("/users/user-owner-job-postings/count")
+    public ResponseDto<?> readUserAppliedJobCount(
+            @AccountID UUID accountId
+    ) {
+        return ResponseDto.ok(readUserOwnerJobPostingCountUseCase.execute(
+                accountId
+        ));
     }
 }
