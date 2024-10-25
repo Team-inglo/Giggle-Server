@@ -52,7 +52,7 @@ public class Education {
     @JoinColumn(name = "resume_id", nullable = false)
     private Resume resume;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", nullable = false)
     private School school;
 
