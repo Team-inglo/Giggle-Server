@@ -52,6 +52,9 @@ public class Education {
     @JoinColumn(name = "resume_id", nullable = false)
     private Resume resume;
 
+    /* -------------------------------------------- */
+    /* One To One Mapping ------------------------- */
+    /* -------------------------------------------- */
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", nullable = false)
     private School school;
