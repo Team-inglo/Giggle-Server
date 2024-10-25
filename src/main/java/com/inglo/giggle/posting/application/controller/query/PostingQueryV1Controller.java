@@ -3,6 +3,7 @@ package com.inglo.giggle.posting.application.controller.query;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingBriefListResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingCountResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingDetailResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingListResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingBriefListUseCase;
@@ -78,13 +79,14 @@ public class PostingQueryV1Controller {
      * 6.4 (유학생) 지원 현황(개수) 확인하기
      */
     @GetMapping("/users/user-owner-job-postings/count")
-    public ResponseDto<?> readUserAppliedJobCount(
+    public ResponseDto<ReadUserOwnerJobPostingCountResponseDto> readUserAppliedJobCount(
             @AccountID UUID accountId
     ) {
         return ResponseDto.ok(readUserOwnerJobPostingCountUseCase.execute(
                 accountId
         ));
     }
+
 
 
 }
