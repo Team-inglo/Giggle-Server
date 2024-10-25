@@ -15,7 +15,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-public class PostingQueryV1Controller {
+public class PostingUsersQueryV1Controller {
 
     private final ReadUserOwnerJobPostingListUseCase readUserOwnerJobPostingListUseCase;
     private final ReadUserOwnerJobPostingDetailUseCase readUserOwnerJobPostingDetailUseCase;
@@ -98,5 +98,6 @@ public class PostingQueryV1Controller {
                 userOwnerJobPostingsId
         ));
     }
+
 
 }

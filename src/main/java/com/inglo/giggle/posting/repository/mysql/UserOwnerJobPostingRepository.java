@@ -1,5 +1,6 @@
 package com.inglo.giggle.posting.repository.mysql;
 
+import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
@@ -32,5 +33,8 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
 
     @EntityGraph(attributePaths = {"jobPosting"})
     Optional<UserOwnerJobPosting> findWithJobPostingById(Long id);
+
+    @EntityGraph(attributePaths = {"jobPosting"})
+    Page<UserOwnerJobPosting> findWithJobPostingByOwner(Owner owner, Pageable pageable);
 
 }
