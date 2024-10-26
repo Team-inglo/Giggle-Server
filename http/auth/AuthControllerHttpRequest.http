@@ -1,33 +1,81 @@
-### 2.4 기본 회원가입
+### 1.1 사용자 로그인 - 유학생
 // @no-log
-@email = "test1234@gmail.com"
+POST {{host_url}}/v1/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+serial_id={{auth.API_1_1_USER.serial_id}}&
+password={{auth.API_1_1_USER.password}}
+
+> {%
+    client.global.set("access_token", response.body.data.access_token);
+    client.global.set("refresh_token", response.body.data.refresh_token);
+%}
+
+### 1.1 사용자 로그인 - 고용주
+// @no-log
+POST {{host_url}}/v1/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+serial_id={{auth.API_1_1_OWNER.serial_id}}&
+password={{auth.API_1_1_OWNER.password}}
+
+> {%
+    client.global.set("access_token", response.body.data.access_token);
+    client.global.set("refresh_token", response.body.data.refresh_token);
+%}
+
+### 1.2 사용자 로그아웃
+// @no-log
+POST {{host_url}}/v1/auth/logout
+Authorization: Bearer {{access_token}}
+
+### 1.3 JWT 재발급
+// @no-log
+POST {{host_url}}/v1/auth/reissue/token
+Authorization: Bearer {{refresh_token}}
+
+### 2.1 아이디 중복검사
+// @no-log
+@id = ""
+GET {{host_url}}/v1/auth/validations/id?id={{id}}
+
+### 2.2 이메일 중복검사
+// @no-log
+@email = ""
+GET {{host_url}}/v1/auth/validations/email?email={{email}}
+
+### 2.3 유학생/고용주 판단
+// @no-log
+GET {{host_url}}/v1/auth/briefs
+Authorization: Bearer {{access_token}}
+
+### 2.4 기본 임시 회원가입 - 유학생
+// @no-log
+@email_user = "jangelliot0404@dgu.ac.kr"
 POST {{host_url}}/v1/auth/sign-up
 Content-Type: application/json
 
 {
-    "id": "TestGiggleUser1234",
-    "password" : "TestGiggleUser1234!",
-    "email" : {{email}},
+    "id": "{{auth.API_2_4_USER.id}}",
+    "password" : "{{auth.API_2_4_USER.password}}",
+    "email" : {{email_user}},
     "account_type" : "USER"
 }
 
-### 2.7 이메일 인증코드 검증
+### 2.4 기본 임시 회원가입 - 고용주
 // @no-log
-@authentication_code = ""
-PATCH {{host_url}}/v1/auth/validations/authentication-code
+@email_owner = "jdk0304@naver.com"
+POST {{host_url}}/v1/auth/sign-up
 Content-Type: application/json
 
 {
-  "id" : "TestGiggleUser1234",
-  "email" : {{email}},
-  "authentication_code" : {{authentication_code}}
+    "id": "{{auth.API_2_4_OWNER.id}}",
+    "password" : "{{auth.API_2_4_OWNER.password}}",
+    "email" : {{email_owner}},
+    "account_type" : "OWNER"
 }
 
-> {%
-    client.global.set("temporary_token", response.body.data.temporary_token);
-%}
-
-### 2.5 기본 회원가입(유학생)
+### 2.5 기본 유저 회원가입
 // @no-log
 POST {{host_url}}/v1/auth/users
 Content-Type: application/json
@@ -35,45 +83,114 @@ Content-Type: application/json
 {
   "temporary_token": "{{temporary_token}}",
   "user_info": {
-    "first_name": "John",
-    "last_name": "Doe",
-    "gender": "Male",
-    "birth": "1995-05-15",
-    "nationality": "USA",
-    "visa": "D_2_1",
-    "phone_number": "010-1234-5678"
+    "first_name": "{{auth.API_2_5.user_info.first_name}}",
+    "last_name": "{{auth.API_2_5.user_info.last_name}}",
+    "gender": "{{auth.API_2_5.user_info.gender}}",
+    "birth": "{{auth.API_2_5.user_info.birth}}",
+    "nationality": "{{auth.API_2_5.user_info.nationality}}",
+    "visa": "{{auth.API_2_5.user_info.visa}}",
+    "phone_number": "{{auth.API_2_5.user_info.phone_number}}"
   },
   "address": {
-    "address_name": "Seoul National University",
-    "region_1depth_name": "Seoul",
-    "region_2depth_name": "Gwanak-gu",
-    "region_3depth_name": "Gwanak-ro",
-    "region_4depth_name": "San 56-1",
-    "address_detail": "Building 301, Room 104",
-    "latitude": 37.4602,
-    "longitude": 126.9515
+    "address_name": "{{auth.API_2_5.address.address_name}}",
+    "region_1depth_name": "{{auth.API_2_5.address.region_1depth_name}}",
+    "region_2depth_name": "{{auth.API_2_5.address.region_2depth_name}}",
+    "region_3depth_name": "{{auth.API_2_5.address.region_3depth_name}}",
+    "region_4depth_name": "{{auth.API_2_5.address.region_4depth_name}}",
+    "address_detail": "{{auth.API_2_5.address.address_detail}}",
+    "latitude": "{{auth.API_2_5.address.latitude}}",
+    "longitude": "{{auth.API_2_5.address.longitude}}"
   },
-  "marketing_allowed": true,
-  "notification_allowed": false,
-  "language": "English"
+  "marketing_allowed": "{{auth.API_2_5.marketing_allowed}}",
+  "notification_allowed": "{{auth.API_2_5.notification_allowed}}",
+  "language": "{{auth.API_2_5.language}}"
 }
 
-### 1.1 사용자 로그인
+### 2.6 기본 고용주 회원가입
 // @no-log
-POST {{host_url}}/v1/auth/login
-Content-Type: application/x-www-form-urlencoded
+POST {{host_url}}/v1/auth/owners
+Content-Type: multipart/form-data; boundary=boundary
 
-serial_id=TestGiggleUser1234&
-password=TestGiggleUser1234!
+--boundary
+Content-Disposition: form-data; name="image"; filename="image.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image.png
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "temporary_token": "{{temporary_token}}",
+  "owner_info": {
+    "company_name": "{{auth.API_2_6.owner_info.company_name}}",
+    "owner_name": "{{auth.API_2_6.owner_info.owner_name}}",
+    "company_registration_number": "{{auth.API_2_6.owner_info.company_registration_number}}",
+    "phone_number": "{{auth.API_2_6.owner_info.phone_number}}"
+    },
+    "address": {
+      "address_name": "{{auth.API_2_6.address.address_name}}",
+      "region_1depth_name": "{{auth.API_2_6.address.region_1depth_name}}",
+      "region_2depth_name": "{{auth.API_2_6.address.region_2depth_name}}",
+      "region_3depth_name": "{{auth.API_2_6.address.region_3depth_name}}",
+      "region_4depth_name": "{{auth.API_2_6.address.region_4depth_name}}",
+      "address_detail": "{{auth.API_2_6.address.address_detail}}",
+      "latitude": "{{auth.API_2_6.address.latitude}}",
+      "longitude": "{{auth.API_2_6.address.longitude}}"
+    },
+    "marketing_allowed": "{{auth.API_2_6.marketing_allowed}}",
+    "notification_allowed": "{{auth.API_2_6.notification_allowed}}"
+}
+
+### 2.7 이메일 인증코드 검증 - 유학생
+// @no-log
+@authentication_code_user = "372971"
+PATCH {{host_url}}/v1/auth/validations/authentication-code
+Content-Type: application/json
+
+{
+  "id" : "{{auth.API_2_7_USER.id}}",
+  "email" : {{email_user}},
+  "authentication_code" : {{authentication_code_user}}
+}
 
 > {%
-    client.global.set("access_token", response.body.data.access_token);
+    client.global.set("temporary_token", response.body.data.temporary_token);
 %}
 
-### 예시를 위한 코드
-GET {{host_url}}/v1/auth/test
+### 2.7 이메일 인증코드 검증 - 고용주
+// @no-log
+@authentication_code_owner = "223503"
+PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
-Authorization: Bearer {{access_token}}
 
+{
+  "id" : "{{auth.API_2_7_OWNER.id}}",
+  "email" : {{email_owner}},
+  "authentication_code" : {{authentication_code_owner}}
+}
 
+> {%
+    client.global.set("temporary_token", response.body.data.temporary_token);
+%}
 
+### 2.8 이메일 인증코드 재전송 - 유학생
+// @no-log
+PATCH {{host_url}}/v1/auth/reissue/authentication-code
+Content-Type: application/json
+
+{
+  "id" : "{{auth.API_2_8_USER.id}}",
+  "email" : {{email_user}}
+}
+
+### 2.8 이메일 인증코드 재전송 - 고용주
+// @no-log
+PATCH {{host_url}}/v1/auth/reissue/authentication-code
+Content-Type: application/json
+
+{
+  "id" : "{{auth.API_2_8_OWNER.id}}",
+  "email" : {{email_owner}}
+}

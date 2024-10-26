@@ -38,6 +38,9 @@ public class School {
     @Column(name = "coordinator_phone_number", length = 20, nullable = false)
     private String coordinatorPhoneNumber;
 
+    @Column(name = "is_metropolitan", nullable = false)
+    private Boolean isMetropolitan;
+
     /* -------------------------------------------- */
     /* Embedded Column ---------------------------- */
     /* -------------------------------------------- */
@@ -49,13 +52,14 @@ public class School {
     /* -------------------------------------------- */
     @Builder
     public School(String schoolName, String schoolPhoneNumber, String instituteName,
-                  String coordinatorName, String coordinatorPhoneNumber, Address address) {
+                  String coordinatorName, String coordinatorPhoneNumber, Address address, Boolean isMetropolitan) {
         this.schoolName = schoolName;
         this.schoolPhoneNumber = schoolPhoneNumber;
         this.instituteName = instituteName;
         this.coordinatorName = coordinatorName;
         this.coordinatorPhoneNumber = coordinatorPhoneNumber;
         this.address = address;
+        this.isMetropolitan = isMetropolitan;
     }
 
 }

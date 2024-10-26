@@ -26,4 +26,5 @@ public class AccountService {
     public CustomUserPrincipal createCustomUserPrincipalByAccount(Account account) {
         return CustomUserPrincipal.create(account);
     }
+
 }
