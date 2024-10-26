@@ -42,4 +42,7 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
 
     @EntityGraph(attributePaths = {"user"})
     Optional<UserOwnerJobPosting> findWithUserById(Long userOwnerJobPostingsId);
+
+    @EntityGraph(attributePaths = {"jobPosting"})
+    List<UserOwnerJobPosting> findAllWithJobPostingByOwner(Owner owner);
 }

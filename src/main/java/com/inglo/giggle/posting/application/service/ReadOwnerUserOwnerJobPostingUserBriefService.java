@@ -25,11 +25,8 @@ public class ReadOwnerUserOwnerJobPostingUserBriefService implements ReadOwnerUs
     @Override
     public ReadOwnerUserOwnerJobPostingUserBriefResponseDto execute(UUID accountId, Long userOwnerJobPostingsId) {
 
-        Owner owner = ownerRepository.findById(accountId)
+        ownerRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
-
-        // 고용주 검증
-        accountService.validateAccountIsOwner(owner);
 
         // UserOwnerJobPosting 조회
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithUserById(userOwnerJobPostingsId)

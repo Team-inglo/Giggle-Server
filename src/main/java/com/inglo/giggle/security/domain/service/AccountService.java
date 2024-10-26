@@ -1,7 +1,5 @@
 package com.inglo.giggle.security.domain.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultTemporaryRequestDto;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
@@ -27,12 +25,6 @@ public class AccountService {
 
     public CustomUserPrincipal createCustomUserPrincipalByAccount(Account account) {
         return CustomUserPrincipal.create(account);
-    }
-
-    public void validateAccountIsOwner(Account account) {
-        if(!account.getRole().equals(ESecurityRole.OWNER)){
-            throw new CommonException(ErrorCode.ACCESS_DENIED);
-        }
     }
 
 }

@@ -31,8 +31,6 @@ public class ReadOwnerJobPostingOverviewsService implements ReadOwnerJobPostingO
         Owner owner = ownerRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        accountService.validateAccountIsOwner(owner);
-
         // 고용주가 등록한 공고 리스트 조회
         Page<UserOwnerJobPosting> userOwnerJobPostingPageList = userOwnerJobPostingRepository.findWithJobPostingByOwner(
                 owner,

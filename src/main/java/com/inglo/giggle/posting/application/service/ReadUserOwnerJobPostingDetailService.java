@@ -25,10 +25,8 @@ public class ReadUserOwnerJobPostingDetailService implements ReadUserOwnerJobPos
     @Override
     public ReadUserOwnerJobPostingDetailResponseDto execute(UUID accountId, Long userOwnerJobPostingsId) {
 
-        Owner owner = ownerRepository.findById(accountId)
+        ownerRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
-
-        accountService.validateAccountIsOwner(owner);
 
         // UserOwnerJobPosting을 조회
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingAndOwnerAndJobPostingsWorkDayTimesById(userOwnerJobPostingsId)

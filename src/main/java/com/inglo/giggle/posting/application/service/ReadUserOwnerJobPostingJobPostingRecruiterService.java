@@ -25,11 +25,7 @@ public class ReadUserOwnerJobPostingJobPostingRecruiterService implements ReadUs
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        // 조회한 UserOwnerJobPosting의 UserId가 accountId와 일치하는지 확인
-        if (!userOwnerJobPosting.getUser().getId().equals(accountId)) {
-            throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
-        }
-
+        // DTO 반환
         return ReadUserOwnerJobPostingJobPostingRecruiterResponseDto.fromEntity(
                 userOwnerJobPosting.getJobPosting()
         );

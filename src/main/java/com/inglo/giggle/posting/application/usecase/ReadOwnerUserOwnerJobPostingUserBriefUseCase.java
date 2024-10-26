@@ -16,7 +16,7 @@ public interface ReadOwnerUserOwnerJobPostingUserBriefUseCase {
      *
      * @return 지원자 간단정보 DTO
      */
-    public ReadOwnerUserOwnerJobPostingUserBriefResponseDto execute(
+    ReadOwnerUserOwnerJobPostingUserBriefResponseDto execute(
             UUID accountId,
             Long userOwnerJobPostingsId
     );
