@@ -64,6 +64,12 @@ public abstract class Account {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
+    @Column(name = "marketing_allowed", nullable = false)
+    private Boolean marketingAllowed;
+
+    @Column(name = "notification_allowed", nullable = false)
+    private Boolean notificationAllowed;
+
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
@@ -73,7 +79,9 @@ public abstract class Account {
             String password,
             String email,
             String profileImgUrl,
-            String phoneNumber
+            String phoneNumber,
+            Boolean marketingAllowed,
+            Boolean notificationAllowed
     ) {
         this.provider = provider;
         this.serialId = serialId;
@@ -81,10 +89,24 @@ public abstract class Account {
         this.email = email;
         this.profileImgUrl = profileImgUrl;
         this.phoneNumber = phoneNumber;
+        this.marketingAllowed = marketingAllowed;
+        this.notificationAllowed = notificationAllowed;
     }
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateProfileImgUrl(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
+    }
+
+    public void updatePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void updateNotificationAllowed(Boolean notificationAllowed) {
+        this.notificationAllowed = notificationAllowed;
     }
 
     public abstract ESecurityRole getRole();

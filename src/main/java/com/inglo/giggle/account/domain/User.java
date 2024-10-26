@@ -56,12 +56,6 @@ public class User extends Account {
     @Column(name = "visa")
     private EVisa visa;
 
-    @Column(name = "marketing_allowed")
-    private Boolean marketingAllowed;
-
-    @Column(name = "notification_allowed")
-    private Boolean notificationAllowed;
-
     /* -------------------------------------------- */
     /* Timestamp Column --------------------------- */
     /* -------------------------------------------- */
@@ -92,9 +86,9 @@ public class User extends Account {
             ELanguage language,
             LocalDate birth,
             EVisa visa,
-            Boolean marketingAllowed,
+            Address address,
             Boolean notificationAllowed,
-            Address address
+            Boolean marketingAllowed
     ) {
         super(
                 provider,
@@ -102,9 +96,10 @@ public class User extends Account {
                 password,
                 email,
                 profileImgUrl,
-                phoneNumber
+                phoneNumber,
+                notificationAllowed,
+                marketingAllowed
         );
-
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -112,10 +107,32 @@ public class User extends Account {
         this.language = language;
         this.birth = birth;
         this.visa = visa;
-        this.marketingAllowed = marketingAllowed;
-        this.notificationAllowed = notificationAllowed;
         this.createdAt = LocalDateTime.now();
         this.address = address;
+    }
+
+    public void updateFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void updateLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void updateGender(EGender gender) {
+        this.gender = gender;
+    }
+
+    public void updateNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public void updateVisa(EVisa visa) {
+        this.visa = visa;
+    }
+
+    public void updateLanguage(ELanguage language) {
+        this.language = language;
     }
 
     @Override

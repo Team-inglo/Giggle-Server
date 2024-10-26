@@ -18,4 +18,17 @@ public class AddressService {
                 .latitude(addressRequestDto.latitude())
                 .build();
     }
+
+    public Address updateAddress(Address address, AddressRequestDto addressRequestDto) {
+        address.updateAddressName(addressRequestDto.addressName());
+        address.updateRegion1DepthName(addressRequestDto.region1DepthName());
+        address.updateRegion2DepthName(addressRequestDto.region2DepthName());
+        address.updateRegion3DepthName(addressRequestDto.region3DepthName());
+        address.updateRegion4DepthName(addressRequestDto.region4DepthName());
+        address.updateAddressDetail(addressRequestDto.addressDetail());
+        address.updateLongitude(addressRequestDto.longitude());
+        address.updateLatitude(addressRequestDto.latitude());
+
+        return address;
+    }
 }

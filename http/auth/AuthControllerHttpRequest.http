@@ -115,7 +115,7 @@ Content-Type: multipart/form-data; boundary=boundary
 Content-Disposition: form-data; name="image"; filename="image.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image.png
+< /Users/kyeom/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="body"
@@ -145,7 +145,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "372971"
+@authentication_code_user = "567089"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
@@ -161,7 +161,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 고용주
 // @no-log
-@authentication_code_owner = "223503"
+@authentication_code_owner = "196450"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 

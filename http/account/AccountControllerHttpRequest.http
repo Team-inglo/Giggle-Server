@@ -1,0 +1,104 @@
+### 3.1 (유학생) 유저 프로필 조회하기
+// @no-log
+GET {{host_url}}/v1/users/details
+Authorization: Bearer {{access_token}}
+
+### 3.2 (고용주) 회사 정보 조회하기
+// @no-log
+GET {{host_url}}/v1/owners/details
+Authorization: Bearer {{access_token}}
+
+### 3.3 (유학생) 유저 요약 정보 조회하기
+// @no-log
+GET {{host_url}}/v1/users/summaries
+Authorization: Bearer {{access_token}}
+
+### 3.4 (고용주) 고용주 간단 정보 조회하기
+// @no-log
+GET {{host_url}}/v1/owners/briefs
+Authorization: Bearer {{access_token}}
+
+### 3.5 (유학생) 프로필 수정
+// @no-log
+PATCH {{host_url}}/v1/users
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="updated-image.png"
+Content-Type: image/png
+
+< /Users/kyeom/Desktop/updated-image.png
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "first_name": "{{account.API_3_5.first_name}}",
+  "last_name": "{{account.API_3_5.last_name}}",
+  "birth": "{{account.API_3_5.birth}}",
+  "gender": "{{account.API_3_5.gender}}",
+  "nationality": "{{account.API_3_5.nationality}}",
+  "visa": "{{account.API_3_5.visa}}",
+  "phone_number": "{{account.API_3_5.phone_number}}",
+  "is_profile_img_changed": "{{account.API_3_5.is_profile_img_changed}}"
+}
+
+### 3.6 (고용주) 회사 정보 수정하기
+// @no-log
+PATCH {{host_url}}/v1/owners
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="updated-image.png"
+Content-Type: image/png
+
+< /Users/kyeom/Desktop/updated-image.png
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+	"owner_info":
+	{
+		"company_name" : "{{account.API_3_6.owner_info.company_name}}",
+		"owner_name" : "{{account.API_3_6.owner_info.owner_name}}",
+		"company_registration_number" : "{{account.API_3_6.owner_info.company_registration_number}}",
+		"phone_number" : "{{account.API_3_6.owner_info.phone_number}}"
+	},
+	"address" :
+	{
+		"address_name" : "{{account.API_3_6.address.address_name}}",
+		"region_1depth_name" : "{{account.API_3_6.address.region_1depth_name}}",
+		"region_2depth_name" : "{{account.API_3_6.address.region_2depth_name}}",
+		"region_3depth_name" : "{{account.API_3_6.address.region_3depth_name}}",
+		"region_4depth_name" : "{{account.API_3_6.address.region_4depth_name}}",
+		"address_detail" : "{{account.API_3_6.address.address_detail}}",
+		"longitude" : "{{account.API_3_6.address.longitude}}",
+		"latitude" : "{{account.API_3_6.address.latitude}}"
+	},
+	"is_icon_img_changed" : "{{account.API_3_6.is_icon_img_changed}}"
+}
+
+### 3.7 (유학생/고용주) 알람 설정 변경하기
+// @no-log
+PATCH {{host_url}}/v1/notification-allowed
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "is_notification_allowed" : "{{account.API_3_7.is_notification_allowed}}"
+}
+
+### 3.8 (유학생) 앱 내 언어 수정
+// @no-log
+PATCH {{host_url}}/v1/users/languages
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "language" : "{{account.API_3_8.language}}"
+}

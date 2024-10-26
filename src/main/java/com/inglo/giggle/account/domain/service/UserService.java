@@ -1,5 +1,6 @@
 package com.inglo.giggle.account.domain.service;
 
+import com.inglo.giggle.account.application.dto.request.UpdateUserRequestDto;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.address.domain.Address;
@@ -37,5 +38,20 @@ public class UserService {
                 .notificationAllowed(signUpDefaultUserRequestDto.notificationAllowed())
                 .address(address)
                 .build();
+    }
+
+    public User updateUser(User user, UpdateUserRequestDto requestDto) {
+        user.updateFirstName(requestDto.firstName());
+        user.updateLastName(requestDto.lastName());
+        user.updateGender(EGender.fromString(requestDto.gender()));
+        user.updateNationality(requestDto.nationality());
+        user.updateVisa(EVisa.fromString(requestDto.visa()));
+
+        return user;
+    }
+
+    public User updateLanguage(User user, String language) {
+        user.updateLanguage(ELanguage.fromString(language));
+        return user;
     }
 }

@@ -9,7 +9,9 @@ public enum EEducationLevel {
 
     BACHELOR("4년제", "BACHELOR"),
     ASSOCIATE("2년제", "ASSOCIATE"),
-    HIGHSCHOOL("고졸", "HIGHSCHOOL")
+    HIGHSCHOOL("고졸", "HIGHSCHOOL"),
+    MASTER("석사", "MASTER"),
+    DOCTOR("박사", "DOCTOR")
 
     ;
 

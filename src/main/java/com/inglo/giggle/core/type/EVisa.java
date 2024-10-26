@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum EVisa {
-    D_2_1("전문학사", "D_2_2"),
+    D_2_1("전문학사", "D_2_1"),
     D_2_2("학사과정", "D_2_2"),
     D_2_3("석사과정", "D_2_3"),
     D_2_4("박사과정", "D_2_4"),
