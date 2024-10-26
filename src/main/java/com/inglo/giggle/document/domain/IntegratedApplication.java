@@ -89,9 +89,9 @@ public class IntegratedApplication extends Document {
     private Address employeeAddress;
 
     /* -------------------------------------------- */
-    /* Many To One Mapping ------------------------ */
+    /* One To One Mapping ------------------------- */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", nullable = false)
     private School school;
 
