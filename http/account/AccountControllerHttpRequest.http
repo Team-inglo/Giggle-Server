@@ -44,3 +44,41 @@ Content-Type: application/json
   "phone_number": "{{account.API_3_5.phone_number}}",
   "is_profile_img_changed": "{{account.API_3_5.is_profile_img_changed}}"
 }
+
+### 3.6 (고용주) 회사 정보 수정하기
+// @no-log
+PATCH {{host_url}}/v1/owners
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="updated-image.png"
+Content-Type: image/png
+
+< /Users/kyeom/Desktop/updated-image.png
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+	"owner_info":
+	{
+		"company_name" : "{{account.API_3_6.owner_info.company_name}}",
+		"owner_name" : "{{account.API_3_6.owner_info.owner_name}}",
+		"company_registration_number" : "{{account.API_3_6.owner_info.company_registration_number}}",
+		"phone_number" : "{{account.API_3_6.owner_info.phone_number}}"
+	},
+	"address" :
+	{
+		"address_name" : "{{account.API_3_6.address.address_name}}",
+		"region_1depth_name" : "{{account.API_3_6.address.region_1depth_name}}",
+		"region_2depth_name" : "{{account.API_3_6.address.region_2depth_name}}",
+		"region_3depth_name" : "{{account.API_3_6.address.region_3depth_name}}",
+		"region_4depth_name" : "{{account.API_3_6.address.region_4depth_name}}",
+		"address_detail" : "{{account.API_3_6.address.address_detail}}",
+		"longitude" : "{{account.API_3_6.address.longitude}}",
+		"latitude" : "{{account.API_3_6.address.latitude}}"
+	},
+	"is_icon_img_changed" : "{{account.API_3_6.is_icon_img_changed}}"
+}

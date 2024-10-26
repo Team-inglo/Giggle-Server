@@ -94,6 +94,22 @@ public class Owner extends Account {
         this.address = address;
     }
 
+    public void updateCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void updateOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public void updateCompanyRegistrationNumber(String companyRegistrationNumber) {
+        this.companyRegistrationNumber = companyRegistrationNumber;
+    }
+
+    public void updateAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public ESecurityRole getRole() {
         return ESecurityRole.USER;
