@@ -17,3 +17,30 @@ Authorization: Bearer {{access_token}}
 // @no-log
 GET {{host_url}}/v1/owners/briefs
 Authorization: Bearer {{access_token}}
+
+### 3.5 (유학생) 프로필 수정
+// @no-log
+PATCH {{host_url}}/v1/users
+Authorization: Bearer {{access_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="updated-image.png"
+Content-Type: image/png
+
+< /Users/kyeom/Desktop/updated-image.png
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "first_name": "{{account.API_3_5.first_name}}",
+  "last_name": "{{account.API_3_5.last_name}}",
+  "birth": "{{account.API_3_5.birth}}",
+  "gender": "{{account.API_3_5.gender}}",
+  "nationality": "{{account.API_3_5.nationality}}",
+  "visa": "{{account.API_3_5.visa}}",
+  "phone_number": "{{account.API_3_5.phone_number}}",
+  "is_profile_img_changed": "{{account.API_3_5.is_profile_img_changed}}"
+}

@@ -20,6 +20,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReadUserSummaryService implements ReadUserSummaryUseCase {
+
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
     private final EducationRepository educationRepository;

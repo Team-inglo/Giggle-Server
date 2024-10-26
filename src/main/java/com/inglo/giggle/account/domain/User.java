@@ -118,6 +118,26 @@ public class User extends Account {
         this.address = address;
     }
 
+    public void updateFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void updateLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void updateGender(EGender gender) {
+        this.gender = gender;
+    }
+
+    public void updateNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public void updateVisa(EVisa visa) {
+        this.visa = visa;
+    }
+
     @Override
     public ESecurityRole getRole() {
         return ESecurityRole.USER;

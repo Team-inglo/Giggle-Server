@@ -14,8 +14,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReadOwnerBriefService implements ReadOwnerBriefUseCase {
+
     private final OwnerRepository ownerRepository;
 
+    @Override
     public ReadOwnerBriefResponseDto execute(UUID accountId) {
         // 고용주 정보 조회
         Owner owner = ownerRepository.findById(accountId)

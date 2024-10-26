@@ -27,4 +27,13 @@ public class AccountService {
         return CustomUserPrincipal.create(account);
     }
 
+    public Account updateProfileImgUrl(Account account, String profileImgUrl) {
+        account.updateProfileImgUrl(profileImgUrl);
+        return account;
+    }
+
+    public Account updatePhoneNumber(Account account, String phoneNumber) {
+        account.updatePhoneNumber(phoneNumber);
+        return account;
+    }
 }

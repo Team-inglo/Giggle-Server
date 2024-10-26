@@ -14,7 +14,9 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReadUserDetailService implements ReadUserDetailUseCase {
+
     private final UserRepository userRepository;
+
     @Override
     public ReadUserDetailResponseDto execute(UUID accountId) {
         // 유저 정보 조회

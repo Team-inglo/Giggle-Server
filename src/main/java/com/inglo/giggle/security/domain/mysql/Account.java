@@ -87,6 +87,14 @@ public abstract class Account {
         this.password = password;
     }
 
+    public void updateProfileImgUrl(String profileImgUrl) {
+        this.profileImgUrl = profileImgUrl;
+    }
+
+    public void updatePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public abstract ESecurityRole getRole();
     public abstract String getName();
 }
