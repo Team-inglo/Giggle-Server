@@ -78,3 +78,26 @@ Authorization: Bearer {{access_token}}
 PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_12.user_owner_job_posting_id}}/step-filling-out-documents
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.13 (유학생) 담당자 검토 완료
+PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_13.user_owner_job_posting_id}}/step-document-under-review
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 6.14 (유학생) 하이코리아 지원
+PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_14.user_owner_job_posting_id}}/step-application-in-progress
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 6.15 (유학생) 하이코리아 처리결과 등록하기
+PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_15.user_owner_job_posting_id}}/step-registering-results
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "is_approval": {{posting.API_6_15.is_approval}},
+  "feedback": "{{posting.API_6_15.feedback}}"
+}

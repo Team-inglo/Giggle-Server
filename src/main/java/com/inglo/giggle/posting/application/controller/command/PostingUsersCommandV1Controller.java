@@ -22,6 +22,7 @@ public class PostingUsersCommandV1Controller {
     private final UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase updateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase;
     private final UpdateUserUserOwnerJobPostingStepApplicationInProgressUseCase updateUserUserOwnerJobPostingStepApplicationInProgressUseCase;
     private final UpdateUserUserOwnerJobPostingStepRegisteringResultUseCase updateUserUserOwnerJobPostingStepRegisteringResultUseCase;
+
     /**
      * 6.12 (유학생) 서류 작성 완료하기
      */
