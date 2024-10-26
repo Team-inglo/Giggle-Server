@@ -69,7 +69,8 @@ public class ReadOwnerJobPostingDetailResponseDto extends SelfValidating<ReadOwn
         this.validateSelf();
     }
 
-    private static final String DASH = "-";
+    private static final String DASH = " - ";
+
     public static ReadOwnerJobPostingDetailResponseDto of(
             UserOwnerJobPosting userOwnerJobPosting,
             School school

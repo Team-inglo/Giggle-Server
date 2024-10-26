@@ -2,7 +2,8 @@ package com.inglo.giggle.posting.application.controller.command;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepFillingOutDocumentUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,8 @@ import java.util.UUID;
 @RequestMapping("/v1")
 public class PostingUsersCommandV1Controller {
 
-    private final UpdateUserUserOwnerJobPostingStepFillingOutDocumentUseCase updateUserUserOwnerJobPostingStepFillingOutDocumentUseCase;
+    private final UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase updateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase;
+    private final UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase updateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase;
 
     /**
      * 6.12 (유학생) 서류 작성 완료하기
@@ -26,7 +28,22 @@ public class PostingUsersCommandV1Controller {
             @AccountID UUID accountId,
             @PathVariable(name = "user-owner-job-posting-id") Long userOwnerJobPostingId
     ) {
-        updateUserUserOwnerJobPostingStepFillingOutDocumentUseCase.execute(
+        updateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase.execute(
+                accountId,
+                userOwnerJobPostingId
+        );
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 6.13 (유학생) 담당자 검토 완료
+     */
+    @PatchMapping("/users/user-owner-job-postings/{user-owner-job-posting-id}/step-document-under-review")
+    public ResponseDto<Void> completeDocumentReview(
+            @AccountID UUID accountId,
+            @PathVariable(name = "user-owner-job-posting-id") Long userOwnerJobPostingId
+    ) {
+        updateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase.execute(
                 accountId,
                 userOwnerJobPostingId
         );

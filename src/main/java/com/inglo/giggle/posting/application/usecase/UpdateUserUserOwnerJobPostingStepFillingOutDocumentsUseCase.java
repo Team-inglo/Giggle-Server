@@ -5,7 +5,7 @@ import com.inglo.giggle.core.annotation.bean.UseCase;
 import java.util.UUID;
 
 @UseCase
-public interface UpdateUserUserOwnerJobPostingStepFillingOutDocumentUseCase {
+public interface UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase {
 
     /**
      * 6.12 (사용자) 문서 작성 완료하기

@@ -3,7 +3,7 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.account.repository.mysql.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepFillingOutDocumentUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentService implements UpdateUserUserOwnerJobPostingStepFillingOutDocumentUseCase {
+public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService implements UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase {
 
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final UserRepository userRepository;
@@ -39,5 +39,6 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentService implemen
         // UserOwnerJobPosting 저장
         userOwnerJobPostingRepository.save(userOwnerJobPosting);
 
+        // TODO: 결과에 따른 Notification 전송
     }
 }
