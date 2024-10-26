@@ -53,7 +53,7 @@ public class UserOwnerJobPostingService {
     }
 
     /* -------------------------------------------- */
-    /* Private Method ------------------------------ */
+    /* Private Method ----------------------------- */
     /* -------------------------------------------- */
     private void saveFeedback(UserOwnerJobPosting userOwnerJobPosting, String feedback) {
         userOwnerJobPosting.updateFeedback(feedback);
