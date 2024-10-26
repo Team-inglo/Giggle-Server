@@ -11,11 +11,11 @@ public enum EDayOfWeek {
     MONDAY("월요일", "MONDAY"),
     TUESDAY("화요일", "TUESDAY"),
     WEDNESDAY("수요일", "WEDNESDAY"),
-    WENSDAY("목요일", "WENSDAY"),
+    THURSDAY("목요일", "THURSDAY"),
     FRIDAY("금요일", "FRIDAY"),
     SATURDAY("토요일", "SATURDAY"),
     SUNDAY("일요일", "SUNDAY"),
-    NEGOCIABLE("협의가능", "NEGOCIABLE")
+    NEGOTIABLE("협의가능", "NEGOTIABLE")
     ;
 
     private final String krName;
@@ -28,11 +28,11 @@ public enum EDayOfWeek {
             case "MONDAY" -> MONDAY;
             case "TUESDAY" -> TUESDAY;
             case "WEDNESDAY" -> WEDNESDAY;
-            case "WENSDAY" -> WENSDAY;
+            case "THURSDAY" -> THURSDAY;
             case "FRIDAY" -> FRIDAY;
             case "SATURDAY" -> SATURDAY;
             case "SUNDAY" -> SUNDAY;
-            case "NEGOCIABLE" -> NEGOCIABLE;
+            case "NEGOTIABLE" -> NEGOTIABLE;
             default -> throw new IllegalArgumentException("요일이 잘못되었습니다.");
         };
     }

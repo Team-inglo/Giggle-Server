@@ -6,7 +6,10 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
-
+### 4.7 (유학생/고용주) 공고 요약 정보 조회하기
+GET {{host_url}}/v1/job-postings/{{posting.API_4_7.job_posting_id}}/summaries
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
 
 
 
