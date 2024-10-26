@@ -72,3 +72,9 @@ Authorization: Bearer {{access_token}}
 PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_11.user_owner_job_posting_id}}/step-waiting-for-review
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.12 (유학생) 서류 작성 완료하기
+PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_12.user_owner_job_posting_id}}/step-filling-out-documents
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

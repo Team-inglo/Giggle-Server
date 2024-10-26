@@ -22,4 +22,8 @@ public class UserOwnerJobPostingService {
     public void updateStepFromStepWaitingForInterview(UserOwnerJobPosting userOwnerJobPosting) {
         userOwnerJobPosting.updateStep(EApplicationStep.FILLING_OUT_DOCUMENTS);
     }
+
+    public void updateStepFromStepFillingOutDocument(UserOwnerJobPosting userOwnerJobPosting) {
+        userOwnerJobPosting.updateStep(EApplicationStep.DOCUMENT_UNDER_REVIEW);
+    }
 }
