@@ -18,4 +18,8 @@ public class UserOwnerJobPostingService {
     public void updateStepFromResumeUnderReview(UserOwnerJobPosting userOwnerJobPosting, boolean isAccepted) {
         userOwnerJobPosting.updateStep(isAccepted ? EApplicationStep.WAITING_FOR_INTERVIEW : EApplicationStep.RESUME_REJECTED);
     }
+
+    public void updateStepFromStepWaitingForInterview(UserOwnerJobPosting userOwnerJobPosting) {
+        userOwnerJobPosting.updateStep(EApplicationStep.FILLING_OUT_DOCUMENTS);
+    }
 }
