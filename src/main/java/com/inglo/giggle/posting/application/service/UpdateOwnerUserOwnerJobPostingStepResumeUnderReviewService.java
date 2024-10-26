@@ -34,8 +34,11 @@ public class UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewService implemen
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        // UserOwnerJobPosting의 상태 변경
-        userOwnerJobPostingService.updateStepFromResumeUnderReview(userOwnerJobPosting, requestDto.isAccepted());
+        // UserOwnerJobPosting의 상태 변경 및 실패 시 결과 저장
+        userOwnerJobPostingService.updateStepFromResumeUnderReview(
+                userOwnerJobPosting,
+                requestDto.isAccepted()
+        );
 
         // UserOwnerJobPosting 저장
         userOwnerJobPostingRepository.save(userOwnerJobPosting);

@@ -5,6 +5,7 @@ import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.request.UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewRequestDto;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewUseCase;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class PostingOwnersCommandV1Controller {
     public ResponseDto<Void> acceptOrRejectResume(
             @AccountID UUID accountId,
             @PathVariable(name = "user-owner-job-posting-id") Long userOwnerJobPostingId,
-            @RequestBody UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewRequestDto requestDto
+            @Valid @RequestBody UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewRequestDto requestDto
     ) {
         updateOwnerUserOwnerJobPostingStepResumeUnderReviewUseCase.execute(
                 accountId,

@@ -82,4 +82,12 @@ public class UserOwnerJobPosting {
         this.step = step;
         this.lastStepUpdated = LocalDate.now();
     }
+
+    public void updateFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public void updateResult(Boolean result) {
+        this.result = result;
+    }
 }
