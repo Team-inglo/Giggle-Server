@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostingGuestsQueryV1Controller {
 
     /**
-     * 4.4 (게스트) 공고 리스트 조회하기
+     * 4.1 (게스트) 공고 리스트 조회하기
      */
     @GetMapping("/guests/job-postings/overviews")
     public ResponseDto<ReadGuestJobPostingOverviewsResponseDto> readGuestJobPostingList(
