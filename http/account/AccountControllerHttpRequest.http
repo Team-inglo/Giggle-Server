@@ -16,8 +16,8 @@ password={{auth.API_1_1_USER.password}}
 POST {{host_url}}/v1/auth/login
 Content-Type: application/x-www-form-urlencoded
 
-serial_id={{auth.API_1_1_OWNER.id}}&
-password={{auth.API_1_1_OWNER.password}}!
+serial_id={{auth.API_1_1_OWNER.serial_id}}&
+password={{auth.API_1_1_OWNER.password}}
 
 > {%
     client.global.set("access_token", response.body.data.access_token);
@@ -39,4 +39,9 @@ Authorization: Bearer {{refresh_token}}
 ### 3.1 (유학생) 유저 프로필 조회하기
 // @no-log
 GET {{host_url}}/v1/users/details
+Authorization: Bearer {{access_token}}
+
+### 3.2 (고용주) 회사 정보 조회하기
+// @no-log
+GET {{host_url}}/v1/owners/details
 Authorization: Bearer {{access_token}}

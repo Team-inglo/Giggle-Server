@@ -16,8 +16,8 @@ password={{auth.API_1_1_USER.password}}
 POST {{host_url}}/v1/auth/login
 Content-Type: application/x-www-form-urlencoded
 
-serial_id={{auth.API_1_1_OWNER.id}}&
-password={{auth.API_1_1_OWNER.password}}!
+serial_id={{auth.API_1_1_OWNER.serial_id}}&
+password={{auth.API_1_1_OWNER.password}}
 
 > {%
     client.global.set("access_token", response.body.data.access_token);
@@ -161,7 +161,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 고용주
 // @no-log
-@authentication_code_owner = "861249"
+@authentication_code_owner = "006364"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
