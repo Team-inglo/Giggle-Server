@@ -1,41 +1,3 @@
-### 1.1 사용자 로그인 - 유학생
-// @no-log
-POST {{host_url}}/v1/auth/login
-Content-Type: application/x-www-form-urlencoded
-
-serial_id={{auth.API_1_1_USER.serial_id}}&
-password={{auth.API_1_1_USER.password}}
-
-> {%
-    client.global.set("access_token", response.body.data.access_token);
-    client.global.set("refresh_token", response.body.data.refresh_token);
-%}
-
-### 1.1 사용자 로그인 - 고용주
-// @no-log
-POST {{host_url}}/v1/auth/login
-Content-Type: application/x-www-form-urlencoded
-
-serial_id={{auth.API_1_1_OWNER.serial_id}}&
-password={{auth.API_1_1_OWNER.password}}
-
-> {%
-    client.global.set("access_token", response.body.data.access_token);
-    client.global.set("refresh_token", response.body.data.refresh_token);
-%}
-
-### 1.2 사용자 로그아웃
-// @no-log
-POST {{host_url}}/v1/auth/logout
-Authorization: Bearer {{access_token}}
-
-### 1.3 JWT 재발급
-// @no-log
-POST {{host_url}}/v1/auth/reissue/token
-Authorization: Bearer {{refresh_token}}
-
-### ---------------------------------------------------------------------------------------------
-
 ### 3.1 (유학생) 유저 프로필 조회하기
 // @no-log
 GET {{host_url}}/v1/users/details
@@ -44,4 +6,9 @@ Authorization: Bearer {{access_token}}
 ### 3.2 (고용주) 회사 정보 조회하기
 // @no-log
 GET {{host_url}}/v1/owners/details
+Authorization: Bearer {{access_token}}
+
+### 3.3 유저 요약 정보 조회하기
+// @no-log
+GET {{host_url}}/v1/users/summaries
 Authorization: Bearer {{access_token}}

@@ -20,7 +20,7 @@ public class ReadOwnerDetailService implements ReadOwnerDetailUseCase {
     public ReadOwnerDetailResponseDto execute(UUID accountId) {
         // 고용주 정보 조회
         Owner owner = ownerRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_OWNER));
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         return ReadOwnerDetailResponseDto.fromEntity(owner);
     }
