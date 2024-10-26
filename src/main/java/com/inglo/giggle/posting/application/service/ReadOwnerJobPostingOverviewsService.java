@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -22,9 +23,9 @@ public class ReadOwnerJobPostingOverviewsService implements ReadOwnerJobPostingO
 
     private final OwnerRepository ownerRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-    private final AccountService accountService;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadOwnerJobPostingOverviewsResponseDto execute(UUID accountId, Integer page, Integer size) {
 
         // 고용주 조회 및 검증

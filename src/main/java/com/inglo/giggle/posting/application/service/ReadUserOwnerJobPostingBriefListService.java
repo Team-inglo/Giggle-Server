@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ public class ReadUserOwnerJobPostingBriefListService implements ReadUserOwnerJob
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserOwnerJobPostingBriefListResponseDto execute(UUID accountId, Integer page, Integer size) {
         // 유학생 조회
         User user = userRepository.findById(accountId)

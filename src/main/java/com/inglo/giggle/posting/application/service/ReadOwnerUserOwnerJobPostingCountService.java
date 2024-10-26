@@ -13,6 +13,7 @@ import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class ReadOwnerUserOwnerJobPostingCountService implements ReadOwnerUserOw
     private final UserOwnerJobPostingService userOwnerJobPostingService;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadOwnerUserOwnerJobPostingCountResponseDto execute(UUID accountId) {
 
         // Owner 조회

@@ -12,6 +12,7 @@ import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class ReadOwnerJobPostingDetailService implements ReadOwnerJobPostingDeta
     private final SchoolRepository schoolRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadOwnerJobPostingDetailResponseDto execute(UUID accountId, Long userOwnerJobPostingsId) {
 
         // UserOwnerJobPosting 조회
@@ -43,8 +45,5 @@ public class ReadOwnerJobPostingDetailService implements ReadOwnerJobPostingDeta
                 userOwnerJobPosting,
                 school.orElse(null)
         );
-
-
-
     }
 }

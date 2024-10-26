@@ -8,6 +8,7 @@ import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class ReadUserOwnerJobPostingJobPostingRecruiterService implements ReadUs
 
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserOwnerJobPostingJobPostingRecruiterResponseDto execute(UUID accountId, Long userOwnerJobPostingId) {
 
         // UserOwnerJobPosting 조회

@@ -11,6 +11,7 @@ import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -23,10 +24,11 @@ public class ReadOwnerUserOwnerJobPostingUserBriefService implements ReadOwnerUs
     private final AccountService accountService;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadOwnerUserOwnerJobPostingUserBriefResponseDto execute(UUID accountId, Long userOwnerJobPostingsId) {
 
         ownerRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE));
 
         // UserOwnerJobPosting 조회
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithUserById(userOwnerJobPostingsId)

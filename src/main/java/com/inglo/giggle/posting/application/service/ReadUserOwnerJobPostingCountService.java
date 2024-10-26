@@ -11,6 +11,7 @@ import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class ReadUserOwnerJobPostingCountService implements ReadUserOwnerJobPost
     private final UserOwnerJobPostingService userOwnerJobPostingService;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserOwnerJobPostingCountResponseDto execute(UUID accountId) {
         // 유저 조회
         User user = userRepository.findById(accountId)

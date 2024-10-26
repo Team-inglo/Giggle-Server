@@ -78,4 +78,8 @@ public class UserOwnerJobPosting {
         this.updatedAt = LocalDate.now();
     }
 
+    public void updateStep(EApplicationStep step) {
+        this.step = step;
+        this.lastStepUpdated = LocalDate.now();
+    }
 }

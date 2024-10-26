@@ -39,17 +39,30 @@ GET {{host_url}}/v1/owners/job-postings/overviews?
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
+
 ### 6.7 (고용주) 지원자 지원 상태 상세 조회
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_7.user_owner_job_posting_id}}/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
 
 ### 6.8 (고용주) 지원자 간단 정보 조회하기
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_8.user_owner_job_posting_id}}/users/briefs
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
+
 ### 6.9 (고용주) 지원 현황(개수) 확인하기
 GET {{host_url}}/v1/owners/user-owner-job-postings/counts
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.10 (고용주) 이력서 수락/거절하기
+PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_9.user_owner_job_posting_id}}/step-resume-under-review
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "is_accepted": {{posting.API_6_9.is_accepted}}
+}
