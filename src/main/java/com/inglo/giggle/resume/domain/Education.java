@@ -60,12 +60,6 @@ public class Education {
     private School school;
 
     /* -------------------------------------------- */
-    /* Timestamp Column --------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDate createdAt;
-
-    /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
@@ -78,7 +72,6 @@ public class Education {
         this.graduationDate = graduationDate;
         this.grade = grade;
         this.school = school;
-        this.createdAt = LocalDate.now();
     }
 
 }
