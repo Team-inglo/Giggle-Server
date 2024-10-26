@@ -1,6 +1,8 @@
 package com.inglo.giggle.account.application.controller.command;
 
+import com.inglo.giggle.account.application.dto.request.UpdateUserLanguageRequestDto;
 import com.inglo.giggle.account.application.dto.request.UpdateUserRequestDto;
+import com.inglo.giggle.account.application.usecase.UpdateUserLanguageUseCase;
 import com.inglo.giggle.account.application.usecase.UpdateUserUseCase;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @RequestMapping("/v1/users")
 public class AccountUsersCommandV1Controller {
     private final UpdateUserUseCase updateUserUseCase;
+    private final UpdateUserLanguageUseCase updateUserLanguageUseCase;
 
     /**
      * 3.5 (유학생) 프로필 수정
@@ -27,6 +30,18 @@ public class AccountUsersCommandV1Controller {
             @RequestPart(value = "body") UpdateUserRequestDto requestDto
             ) {
         updateUserUseCase.execute(accountId, requestDto, image);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 3.8 (유학생) 앱 내 언어 수정
+     */
+    @PatchMapping(value = "/languages")
+    public ResponseDto<Void> updateUserLanguage(
+            @AccountID UUID accountId,
+            @RequestBody UpdateUserLanguageRequestDto requestDto
+    ) {
+        updateUserLanguageUseCase.execute(accountId, requestDto);
         return ResponseDto.ok(null);
     }
 }

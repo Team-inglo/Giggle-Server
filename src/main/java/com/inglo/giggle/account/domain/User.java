@@ -131,6 +131,10 @@ public class User extends Account {
         this.visa = visa;
     }
 
+    public void updateLanguage(ELanguage language) {
+        this.language = language;
+    }
+
     @Override
     public ESecurityRole getRole() {
         return ESecurityRole.USER;

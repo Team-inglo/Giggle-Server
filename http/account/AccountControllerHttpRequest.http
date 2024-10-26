@@ -92,3 +92,13 @@ Content-Type: application/json
 {
     "is_notification_allowed" : "{{account.API_3_7.is_notification_allowed}}"
 }
+
+### 3.8 (유학생) 앱 내 언어 수정
+// @no-log
+PATCH {{host_url}}/v1/users/languages
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "language" : "{{account.API_3_8.language}}"
+}

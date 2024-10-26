@@ -6,7 +6,6 @@ import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-@Slf4j
 public class AccountCommandV1Controller {
 
     private final UpdateNotificationAllowedUseCase updateNotificationAllowedUseCase;
@@ -30,7 +28,6 @@ public class AccountCommandV1Controller {
             @AccountID UUID accountId,
             @RequestBody @Valid UpdateNotificationAllowedRequestDto requestDto
     ) {
-        log.info("requestDto: {}", requestDto);
         updateNotificationAllowedUseCase.execute(accountId, requestDto);
         return ResponseDto.ok(null);
     }

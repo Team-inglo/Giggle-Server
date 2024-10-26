@@ -39,6 +39,7 @@ public class UserService {
                 .address(address)
                 .build();
     }
+
     public User updateUser(User user, UpdateUserRequestDto requestDto) {
         user.updateFirstName(requestDto.firstName());
         user.updateLastName(requestDto.lastName());
@@ -46,6 +47,11 @@ public class UserService {
         user.updateNationality(requestDto.nationality());
         user.updateVisa(EVisa.fromString(requestDto.visa()));
 
+        return user;
+    }
+
+    public User updateLanguage(User user, String language) {
+        user.updateLanguage(ELanguage.fromString(language));
         return user;
     }
 }
