@@ -2,10 +2,7 @@ package com.inglo.giggle.posting.application.controller.query;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingBriefListResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingCountResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingDetailResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingListResponseDto;
+import com.inglo.giggle.posting.application.dto.response.*;
 import com.inglo.giggle.posting.application.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -89,7 +86,7 @@ public class PostingUsersQueryV1Controller {
      * 6.5 (유학생) 공고 담당자 정보 조회하기
      */
     @GetMapping("/users/user-owner-job-postings/{user-owner-job-postings-id}/recruiters")
-    public ResponseDto<?> readRecruiterInfo(
+    public ResponseDto<ReadUserOwnerJobPostingJobPostingRecruiterResponseDto> readRecruiterInfo(
             @AccountID UUID accountId,
             @PathVariable(name = "user-owner-job-postings-id") Long userOwnerJobPostingsId
     ) {
