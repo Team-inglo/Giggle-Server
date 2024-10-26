@@ -30,4 +30,8 @@ public class UserOwnerJobPostingService {
     public void updateStepFromStepDocumentUnderReview(UserOwnerJobPosting userOwnerJobPosting) {
         userOwnerJobPosting.updateStep(EApplicationStep.APPLICATION_IN_PROGRESS);
     }
+
+    public void updateStepFromStepApplicationInProgress(UserOwnerJobPosting userOwnerJobPosting) {
+        userOwnerJobPosting.updateStep(EApplicationStep.APPLICATION_SUCCESS);
+    }
 }
