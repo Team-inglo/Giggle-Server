@@ -3,7 +3,9 @@ package com.inglo.giggle.posting.application.controller.query;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadOwnerJobPostingOverviewsResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingDetailResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadOwnerJobPostingOverviewsUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadOwnerUserOwnerJobPostingUserBriefUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingDetailUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ public class PostingOwnersQueryV1Controller {
 
     private final ReadOwnerJobPostingOverviewsUseCase readOwnerJobPostingOverviewsUseCase;
     private final ReadUserOwnerJobPostingDetailUseCase readUserOwnerJobPostingDetailUseCase;
+    private final ReadOwnerUserOwnerJobPostingUserBriefUseCase readOwnerUserOwnerJobPostingUserBriefUseCase;
 
     /**
      * 6.6 (고용주) 등록한 공고 리스트 조회하기
@@ -41,11 +44,25 @@ public class PostingOwnersQueryV1Controller {
      * 6.7 (고용주) 지원자 지원 상태 상세 조회
      */
     @GetMapping("/owners/user-owner-job-postings/{user-owner-job-postings-id}/details")
-    public ResponseDto<?> readUserOwnerJobPostingDetails(
+    public ResponseDto<ReadUserOwnerJobPostingDetailResponseDto> readUserOwnerJobPostingDetails(
             @AccountID UUID accountId,
             @PathVariable(name = "user-owner-job-postings-id") Long userOwnerJobPostingsId
     ) {
         return ResponseDto.ok(readUserOwnerJobPostingDetailUseCase.execute(
+                accountId,
+                userOwnerJobPostingsId
+        ));
+    }
+
+    /**
+     * 6.8 (고용주) 지원자 간단 정보 조회하기
+     */
+    @GetMapping("/owners/user-owner-job-postings/{user-owner-job-postings-id}/users/briefs")
+    public ResponseDto<?> readUserOwnerJobPostingBrief(
+            @AccountID UUID accountId,
+            @PathVariable(name = "user-owner-job-postings-id") Long userOwnerJobPostingsId
+    ) {
+        return ResponseDto.ok(readOwnerUserOwnerJobPostingUserBriefUseCase.execute(
                 accountId,
                 userOwnerJobPostingsId
         ));

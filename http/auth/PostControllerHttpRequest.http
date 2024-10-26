@@ -43,3 +43,8 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_7.user_owner_job_posting_id}}/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+### 6.8 (고용주) 지원자 간단 정보 조회하기
+GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_8.user_owner_job_posting_id}}/users/briefs
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
