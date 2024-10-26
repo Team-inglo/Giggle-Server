@@ -8,7 +8,12 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/owners/details
 Authorization: Bearer {{access_token}}
 
-### 3.3 유저 요약 정보 조회하기
+### 3.3 (유학생) 유저 요약 정보 조회하기
 // @no-log
 GET {{host_url}}/v1/users/summaries
+Authorization: Bearer {{access_token}}
+
+### 3.4 (고용주) 고용주 간단 정보 조회하기
+// @no-log
+GET {{host_url}}/v1/owners/briefs
 Authorization: Bearer {{access_token}}

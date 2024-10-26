@@ -1,6 +1,8 @@
 package com.inglo.giggle.account.application.controller.query;
 
+import com.inglo.giggle.account.application.dto.response.ReadOwnerBriefResponseDto;
 import com.inglo.giggle.account.application.dto.response.ReadOwnerDetailResponseDto;
+import com.inglo.giggle.account.application.usecase.ReadOwnerBriefUseCase;
 import com.inglo.giggle.account.application.usecase.ReadOwnerDetailUseCase;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @RequestMapping("/v1/owners")
 public class AccountOwnersQueryV1Controller {
     private final ReadOwnerDetailUseCase readOwnerDetailUseCase;
+    private final ReadOwnerBriefUseCase readOwnerBriefUseCase;
 
     /**
      * 3.2 (고용주) 회사 정보 조회하기
@@ -25,5 +28,15 @@ public class AccountOwnersQueryV1Controller {
             @AccountID UUID accountId
     ) {
         return ResponseDto.ok(readOwnerDetailUseCase.execute(accountId));
+    }
+
+    /**
+     * 3.4 (고용주) 고용주 간단 정보 조회하기
+     */
+    @GetMapping("/briefs")
+    public ResponseDto<ReadOwnerBriefResponseDto> readOwnerBrief(
+            @AccountID UUID accountId
+    ) {
+        return ResponseDto.ok(readOwnerBriefUseCase.execute(accountId));
     }
 }

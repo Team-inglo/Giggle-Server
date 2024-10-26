@@ -7,13 +7,11 @@ import com.inglo.giggle.account.repository.mysql.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
-import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.service.EducationService;
 import com.inglo.giggle.resume.repository.mysql.EducationRepository;
 import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,6 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
     private final EducationRepository educationRepository;
-    private final SchoolRepository schoolRepository;
 
     private final EducationService educationService;
 
