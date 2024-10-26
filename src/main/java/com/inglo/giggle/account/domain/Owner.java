@@ -37,12 +37,6 @@ public class Owner extends Account {
     @Column(name = "company_registration_number", length = 12, nullable = false)
     private String companyRegistrationNumber;
 
-    @Column(name = "marketing_allowed", nullable = false)
-    private Boolean marketingAllowed;
-
-    @Column(name = "notification_allowed", nullable = false)
-    private Boolean notificationAllowed;
-
     /* -------------------------------------------- */
     /* Timestamp Column --------------------------- */
     /* -------------------------------------------- */
@@ -73,9 +67,9 @@ public class Owner extends Account {
             String companyName,
             String ownerName,
             String companyRegistrationNumber,
-            Boolean marketingAllowed,
+            Address address,
             Boolean notificationAllowed,
-            Address address
+            Boolean marketingAllowed
     ) {
         super(
                 provider,
@@ -83,13 +77,13 @@ public class Owner extends Account {
                 password,
                 email,
                 profileImgUrl,
-                phoneNumber
+                phoneNumber,
+                notificationAllowed,
+                marketingAllowed
         );
         this.companyName = companyName;
         this.ownerName = ownerName;
         this.companyRegistrationNumber = companyRegistrationNumber;
-        this.marketingAllowed = marketingAllowed;
-        this.notificationAllowed = notificationAllowed;
         this.createdAt = LocalDateTime.now();
         this.address = address;
     }

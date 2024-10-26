@@ -36,4 +36,9 @@ public class AccountService {
         account.updatePhoneNumber(phoneNumber);
         return account;
     }
+
+    public Account updateNotificationAllowed(Account account, Boolean notificationAllowed) {
+        account.updateNotificationAllowed(notificationAllowed);
+        return account;
+    }
 }

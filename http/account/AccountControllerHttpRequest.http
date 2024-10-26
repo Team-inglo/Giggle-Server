@@ -82,3 +82,13 @@ Content-Type: application/json
 	},
 	"is_icon_img_changed" : "{{account.API_3_6.is_icon_img_changed}}"
 }
+
+### 3.7 (유학생/고용주) 알람 설정 변경하기
+// @no-log
+PATCH {{host_url}}/v1/notification-allowed
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "is_notification_allowed" : "{{account.API_3_7.is_notification_allowed}}"
+}
