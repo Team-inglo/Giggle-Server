@@ -5,7 +5,6 @@ import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.ResumeAggregate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -41,16 +40,21 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
         this.validateSelf();
     }
 
-    public static ReadUserSummaryResponseDto of(ResumeAggregate resumeAggregate) {
+    public static ReadUserSummaryResponseDto of(
+            User user,
+            Resume resume,
+            Education education,
+            Map<String, Integer> workHours
+    ) {
         return ReadUserSummaryResponseDto.builder()
-                .userInformation(UserInfoDto.of(resumeAggregate.getUser(), resumeAggregate.getEducation()))
-                .languageLevel(LanguageLevelDto.fromEntity(resumeAggregate.getResume()))
-                .metaData(MetaDataDto.of(resumeAggregate))
+                .userInformation(UserInfoDto.of(user, education))
+                .languageLevel(LanguageLevelDto.fromEntity(resume))
+                .metaData(MetaDataDto.of(resume, education, workHours))
                 .build();
     }
 
     @Getter
-    public static class UserInfoDto {
+    public static class UserInfoDto extends SelfValidating<UserInfoDto> {
 
         @NotBlank(message = "profile_img_url은 null일 수 없습니다.")
         @JsonProperty("profile_img_url")
@@ -128,7 +132,7 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
     }
 
     @Getter
-    public static class LanguageLevelDto {
+    public static class LanguageLevelDto extends SelfValidating<LanguageLevelDto> {
 
         @NotNull(message = "topik_level은 null일 수 없습니다.")
         @JsonProperty("topik_level")
@@ -163,7 +167,7 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
     }
 
     @Getter
-    public static class MetaDataDto {
+    public static class MetaDataDto extends SelfValidating<MetaDataDto> {
 
         @NotNull(message = "weekend_work_hour은 null일 수 없습니다.")
         @JsonProperty("weekend_work_hour")
@@ -174,8 +178,8 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
         private final Integer weekdayWorkHour;
 
         @NotNull(message = "is_topik_4_or_more은 null일 수 없습니다.")
-        @JsonProperty("is_topik_4_or_more")
-        private final Boolean isTopik4OrMore;
+        @JsonProperty("is_language_skill_4_or_more")
+        private final Boolean isLanguageSkill4OrMore;
 
         @NotNull(message = "is_metropolitan_area은 null일 수 없습니다.")
         @JsonProperty("is_metropolitan_area")
@@ -185,27 +189,28 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
         public MetaDataDto(
                 Integer weekendWorkHour,
                 Integer weekdayWorkHour,
-                Boolean isTopik4OrMore,
+                Boolean isLanguageSkill4OrMore,
                 Boolean isMetropolitanArea
         ) {
             this.weekendWorkHour = weekendWorkHour;
             this.weekdayWorkHour = weekdayWorkHour;
-            this.isTopik4OrMore = isTopik4OrMore;
+            this.isLanguageSkill4OrMore = isLanguageSkill4OrMore;
             this.isMetropolitanArea = isMetropolitanArea;
         }
 
         public static final String WEEKEND_WORK_HOURS = "weekendWorkHours";
         public static final String WEEKDAY_WORK_HOURS = "weekdayWorkHours";
 
-        public static MetaDataDto of(ResumeAggregate resumeAggregate) {
-
-            Map<String, Integer> stringIntegerMap = resumeAggregate.calculateWorkHours();
-
+        public static MetaDataDto of(
+                Resume resume,
+                Education education,
+                Map<String, Integer> workHours
+        ) {
             return MetaDataDto.builder()
-                    .weekendWorkHour(stringIntegerMap.get(WEEKEND_WORK_HOURS))
-                    .weekdayWorkHour(stringIntegerMap.get(WEEKDAY_WORK_HOURS))
-                    .isTopik4OrMore(resumeAggregate.getResume().getLanguageSkill().getTopikLevel() >= 4)
-                    .isMetropolitanArea(resumeAggregate.getEducation().getSchool().getIsMetropolitan())
+                    .weekendWorkHour(workHours.get(WEEKEND_WORK_HOURS))
+                    .weekdayWorkHour(workHours.get(WEEKDAY_WORK_HOURS))
+                    .isLanguageSkill4OrMore(resume.getLanguageSkill().getTopikLevel() >= 4 && resume.getLanguageSkill().getSocialIntegrationLevel() >= 4)
+                    .isMetropolitanArea(education.getSchool().getIsMetropolitan())
                     .build();
         }
     }

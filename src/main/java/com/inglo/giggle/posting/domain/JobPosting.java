@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
@@ -12,9 +13,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -145,4 +149,40 @@ public class JobPosting {
         this.address = address;
     }
 
+    public Map<String, Integer> calculateWorkHours() {
+        int weekdayHours = 0;
+        int weekendHours = 0;
+
+        for (PostingWorkDayTime workDayTime : workDayTimes) {
+            if (workDayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE) {
+                continue;
+            }
+
+            Duration workDuration = Duration.between(workDayTime.getWorkStartTime(), workDayTime.getWorkEndTime());
+            int hours = (int) workDuration.toHours();
+
+            if (isWeekday(workDayTime.getDayOfWeek())) {
+                weekdayHours += hours;
+            } else if (isWeekend(workDayTime.getDayOfWeek())) {
+                weekendHours += hours;
+            }
+        }
+
+        Map<String, Integer> workHoursMap = new HashMap<>();
+        workHoursMap.put("weekdayWorkHours", weekdayHours);
+        workHoursMap.put("weekendWorkHours", weekendHours);
+
+        return workHoursMap;
+    }
+
+    private boolean isWeekday(EDayOfWeek dayOfWeek) {
+        return dayOfWeek == EDayOfWeek.MONDAY || dayOfWeek == EDayOfWeek.TUESDAY ||
+                dayOfWeek == EDayOfWeek.WEDNESDAY || dayOfWeek == EDayOfWeek.THURSDAY ||
+                dayOfWeek == EDayOfWeek.FRIDAY;
+    }
+
+    private boolean isWeekend(EDayOfWeek dayOfWeek) {
+        return dayOfWeek == EDayOfWeek.SATURDAY || dayOfWeek == EDayOfWeek.SUNDAY;
+    }
 }
+

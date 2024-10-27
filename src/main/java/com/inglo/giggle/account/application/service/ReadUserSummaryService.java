@@ -17,6 +17,7 @@ import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -48,9 +49,13 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
 
         // ResumeAggregate 생성 및 반환
         ResumeAggregate resumeAggregate = resumeAggregateService.createResumeAggregate(user, resume, education);
+        Map<String, Integer> stringIntegerMap = resumeAggregateService.calculateWorkHours(resumeAggregate);
 
         return ReadUserSummaryResponseDto.of(
-                resumeAggregate
+                user,
+                resume,
+                education,
+                stringIntegerMap
         );
     }
 }

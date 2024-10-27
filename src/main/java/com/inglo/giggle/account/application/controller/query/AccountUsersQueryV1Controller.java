@@ -31,7 +31,7 @@ public class AccountUsersQueryV1Controller {
     }
 
     /**
-     * 3.2 (유학생) 유저 요약 정보 조회하기
+     * 3.3 (유학생) 유저 요약 정보 조회하기
      */
     @GetMapping("/summaries")
     public ResponseDto<ReadUserSummaryResponseDto> readUserSummary(

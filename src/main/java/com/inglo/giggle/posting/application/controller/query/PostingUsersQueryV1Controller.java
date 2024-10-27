@@ -19,6 +19,34 @@ public class PostingUsersQueryV1Controller {
     private final ReadUserOwnerJobPostingBriefListUseCase readUserOwnerJobPostingBriefListUseCase;
     private final ReadUserOwnerJobPostingCountUseCase readUserOwnerJobPostingCountUseCase;
     private final ReadUserOwnerJobPostingJobPostingRecruiterUserCase readUserOwnerJobPostingJobPostingRecruiterUserCase;
+    private final ReadUserJobPostingValidationUseCase readUserJobPostingValidationUseCase;
+
+    /**
+     * 4.8 (유학생) 공고 지원 자격 확인하기
+     */
+    @GetMapping("/users/job-postings/{job-posting-id}/validation")
+    public ResponseDto<ReadUserJobPostingValidationResponseDto> readUserOwnerJobPostingValidation(
+            @AccountID UUID accountId,
+            @PathVariable(name = "job-posting-id") Long jobPostingId
+    ) throws Exception {
+        return ResponseDto.ok(readUserJobPostingValidationUseCase.execute(
+                accountId,
+                jobPostingId
+        ));
+    }
+
+    /**
+     * 4.9 (유학생) 공고 지원하기
+     */
+    @PostMapping("/users/job-postings/{job-posting-id}")
+
+
+
+
+
+    /* -------------------------------------------- */
+    /* API 6 -------------------------------------- */
+    /* -------------------------------------------- */
 
     /**
      * 6.1 (유학생) 지원한 공고 리스트 조회하기
