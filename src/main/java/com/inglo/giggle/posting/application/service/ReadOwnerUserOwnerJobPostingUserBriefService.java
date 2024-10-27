@@ -21,7 +21,6 @@ public class ReadOwnerUserOwnerJobPostingUserBriefService implements ReadOwnerUs
 
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final OwnerRepository ownerRepository;
-    private final AccountService accountService;
 
     @Override
     @Transactional(readOnly = true)

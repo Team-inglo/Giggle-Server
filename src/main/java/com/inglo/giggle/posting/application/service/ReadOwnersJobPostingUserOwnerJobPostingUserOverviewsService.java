@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
     private final static String DASH = " - ";
 
     @Override
+    @Transactional(readOnly = true)
     public ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto execute(UUID accountId, Long jobPostingId, Integer page, Integer size) {
 
         // 고용주 조회 및 검증

@@ -9,6 +9,7 @@ import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class ReadJobPostingSummariesService implements ReadJobPostingSummariesUs
     private final JobPostingRepository jobPostingRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadJobPostingSummariesResponseDto execute(UUID accountId, Long jobPostingId) {
 
         // 계정 조회

@@ -18,6 +18,12 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
+### 4.9 (유학생) 공고 지원하기
+POST {{host_url}}/v1/users/job-postings/{{posting.API_4_9.job_posting_id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
 ### 6.1 (유학생) 지원한 공고 리스트 조회하기
 GET {{host_url}}/v1/users/user-owner-job-postings/overviews?
     page=1&

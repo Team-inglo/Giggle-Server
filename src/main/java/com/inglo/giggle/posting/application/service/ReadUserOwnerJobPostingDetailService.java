@@ -11,6 +11,7 @@ import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ public class ReadUserOwnerJobPostingDetailService implements ReadUserOwnerJobPos
     private final AccountService accountService;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserOwnerJobPostingDetailResponseDto execute(UUID accountId, Long userOwnerJobPostingsId) {
 
         ownerRepository.findById(accountId)

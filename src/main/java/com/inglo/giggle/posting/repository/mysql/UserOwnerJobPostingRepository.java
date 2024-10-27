@@ -49,4 +49,6 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
 
     @EntityGraph(attributePaths = {"user"})
     Page<UserOwnerJobPosting> findAllPageWithUserByJobPosting(JobPosting jobPosting, Pageable pageable);
+
+    Boolean existsByUserAndJobPosting(User user, JobPosting jobPosting);
 }

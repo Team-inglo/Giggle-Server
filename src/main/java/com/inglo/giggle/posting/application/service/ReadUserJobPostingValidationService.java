@@ -26,6 +26,7 @@ import com.inglo.giggle.school.repository.mysql.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -53,6 +54,7 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
     private final static String NON_METROPOLITAN_DURATION = "5400";
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserJobPostingValidationResponseDto execute(UUID accountId, Long jobPostingId) throws Exception {
 
         // 공고 조회

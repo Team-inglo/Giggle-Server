@@ -3,10 +3,8 @@ package com.inglo.giggle.posting.application.controller.command;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.request.UpdateUserUserOwnerJobPostingStepRegisteringResultRequestDto;
-import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepRegisteringResultUseCase;
-import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepApplicationInProgressUseCase;
-import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase;
-import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase;
+import com.inglo.giggle.posting.application.dto.response.CreateUserJobPostingResponseDto;
+import com.inglo.giggle.posting.application.usecase.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +20,21 @@ public class PostingUsersCommandV1Controller {
     private final UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase updateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase;
     private final UpdateUserUserOwnerJobPostingStepApplicationInProgressUseCase updateUserUserOwnerJobPostingStepApplicationInProgressUseCase;
     private final UpdateUserUserOwnerJobPostingStepRegisteringResultUseCase updateUserUserOwnerJobPostingStepRegisteringResultUseCase;
+    private final CreateUserJobPostingUseCase createUserJobPostingUseCase;
+
+    /**
+     * 4.9 (유학생) 공고 지원하기
+     */
+    @PostMapping("/users/job-postings/{job-posting-id}")
+    public ResponseDto<CreateUserJobPostingResponseDto> applyToJobPosting(
+            @AccountID UUID accountId,
+            @PathVariable(name = "job-posting-id") Long jobPostingId
+    ) {
+        return ResponseDto.created(createUserJobPostingUseCase.execute(
+                accountId,
+                jobPostingId
+        ));
+    }
 
     /**
      * 6.12 (유학생) 서류 작성 완료하기
