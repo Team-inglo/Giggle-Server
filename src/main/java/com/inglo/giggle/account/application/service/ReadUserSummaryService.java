@@ -9,7 +9,9 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.domain.service.EducationService;
+import com.inglo.giggle.resume.domain.service.ResumeAggregateService;
 import com.inglo.giggle.resume.repository.mysql.EducationRepository;
 import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
     private final EducationRepository educationRepository;
 
     private final EducationService educationService;
+    private final ResumeAggregateService resumeAggregateService;
 
     @Override
     public ReadUserSummaryResponseDto execute(UUID accountId) {
@@ -43,6 +46,11 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
         Education education = educationRepository.findEducationByAccountIdAndEducationLevel(accountId, educationLevel)
                 .orElse(null);
 
-        return ReadUserSummaryResponseDto.of(user, resume, education);
+        // ResumeAggregate 생성 및 반환
+        ResumeAggregate resumeAggregate = resumeAggregateService.createResumeAggregate(user, resume, education);
+
+        return ReadUserSummaryResponseDto.of(
+                resumeAggregate
+        );
     }
 }
