@@ -2,7 +2,6 @@ package com.inglo.giggle.core.exception.handler;
 
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.core.exception.error.ErrorCode;
-import io.sentry.Sentry;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +111,6 @@ public class HttpGlobalExceptionHandler {
     public ResponseDto<?> handleException(Exception e) {
         log.error("ExceptionHandler catch Exception : {}", e.getMessage());
         e.printStackTrace();
-        Sentry.captureException(e);
         return ResponseDto.fail(new CommonException(ErrorCode.INTERNAL_SERVER_ERROR));
     }
 }

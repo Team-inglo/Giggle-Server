@@ -1,0 +1,4 @@
+### 8.1 (유학생) 서류 조회하기
+// @no-log
+GET {{host_url}}/v1/users/user-owner-job-postings/{{document.API_8_1.id}}/documents/summaries
+Authorization: Bearer {{access_token}}

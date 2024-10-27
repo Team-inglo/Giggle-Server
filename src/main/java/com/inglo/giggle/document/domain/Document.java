@@ -24,6 +24,18 @@ public abstract class Document {
     private Long id;
 
     /* -------------------------------------------- */
+    /* Information Column ------------------------- */
+    /* -------------------------------------------- */
+    @Column(name = "pdf_url", length = 320 , nullable = false)
+    private String pdfUrl;
+
+    @Column(name = "hwp_url", length = 320 , nullable = false)
+    private String hwpUrl;
+
+    @Column(name = "word_url", length = 320 , nullable = false)
+    private String wordUrl;
+
+    /* -------------------------------------------- */
     /* Timestamp Column --------------------------- */
     /* -------------------------------------------- */
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -33,7 +45,7 @@ public abstract class Document {
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_job_postings_id", nullable = false)
+    @JoinColumn(name = "user_owner_job_postings_id", nullable = false)
     private UserOwnerJobPosting userOwnerJobPosting;
 
     /* -------------------------------------------- */
