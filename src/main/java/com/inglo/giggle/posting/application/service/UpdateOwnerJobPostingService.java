@@ -2,6 +2,8 @@ package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.repository.mysql.OwnerRepository;
+import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
@@ -40,6 +42,7 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
     private final CompanyImageService companyImageService;
 
     private final S3Util s3Util;
+    private final AddressService addressService;
 
     @Override
     @Transactional
@@ -52,6 +55,18 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
         // 공고 조회
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 주소 생성
+        Address address = addressService.createAddress(
+                requestDto.address().addressName(),
+                requestDto.address().region1DepthName(),
+                requestDto.address().region2DepthName(),
+                requestDto.address().region3DepthName(),
+                requestDto.address().region4DepthName(),
+                requestDto.address().addressDetail(),
+                requestDto.address().latitude(),
+                requestDto.address().longitude()
+        );
 
         // 공고 수정
         jobPostingService.updateJobPosting(
@@ -71,7 +86,8 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
                 requestDto.recruiterPhoneNumber(),
                 requestDto.description(),
                 requestDto.preferredConditions(),
-                requestDto.employmentType()
+                requestDto.employmentType(),
+                address
         );
 
         if (requestDto.workDayTimes() != null) {

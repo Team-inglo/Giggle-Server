@@ -80,7 +80,8 @@ public class JobPostingService {
             String recruiterPhoneNumber,
             String description,
             String preferredConditions,
-            EEmploymentType employmentType
+            EEmploymentType employmentType,
+            Address address
     ) {
         jobPosting.updateJobPosting(
                 title,
@@ -98,7 +99,8 @@ public class JobPostingService {
                 recruiterPhoneNumber,
                 description,
                 preferredConditions,
-                employmentType
+                employmentType,
+                address
         );
     }
 

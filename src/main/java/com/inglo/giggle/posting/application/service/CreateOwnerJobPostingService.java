@@ -3,6 +3,7 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
@@ -37,6 +38,7 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
 
     private final S3Util s3Util;
     private final CompanyImageService companyImageService;
+    private final AddressService addressService;
 
     @Override
     @Transactional
@@ -47,16 +49,16 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // 주소 생성
-        Address address = Address.builder()
-                .addressName(requestDto.address().addressName())
-                .region1DepthName(requestDto.address().region1DepthName())
-                .region2DepthName(requestDto.address().region2DepthName())
-                .region3DepthName(requestDto.address().region3DepthName())
-                .addressDetail(requestDto.address().addressDetail())
-                .latitude(requestDto.address().latitude())
-                .longitude(requestDto.address().longitude())
-                .build();
-
+        Address address = addressService.createAddress(
+                requestDto.address().addressName(),
+                requestDto.address().region1DepthName(),
+                requestDto.address().region2DepthName(),
+                requestDto.address().region3DepthName(),
+                requestDto.address().region4DepthName(),
+                requestDto.address().addressDetail(),
+                requestDto.address().latitude(),
+                requestDto.address().longitude()
+        );
 
         // 공고 생성
         JobPosting jobPosting = jobPostingService.createJobPosting(

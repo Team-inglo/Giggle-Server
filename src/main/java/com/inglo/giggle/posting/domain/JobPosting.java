@@ -165,7 +165,8 @@ public class JobPosting {
             String recruiterPhoneNumber,
             String description,
             String preferredConditions,
-            EEmploymentType employmentType
+            EEmploymentType employmentType,
+            Address address
     ){
         this.title = title;
         this.jobCategory = jobCategory;
@@ -183,6 +184,7 @@ public class JobPosting {
         this.description = description;
         this.preferredConditions = preferredConditions;
         this.employmentType = employmentType;
+        this.address = address;
     }
     public Map<String, Integer> calculateWorkHours() {
         int weekdayHours = 0;

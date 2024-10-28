@@ -65,7 +65,17 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
         }
 
         // 주소 정보 업데이트
-        Address address = addressService.updateAddress(owner.getAddress(), requestDto.address());
+        Address address = addressService.updateAddress(
+                owner.getAddress(),
+                requestDto.address().addressName(),
+                requestDto.address().region1DepthName(),
+                requestDto.address().region2DepthName(),
+                requestDto.address().region3DepthName(),
+                requestDto.address().region4DepthName(),
+                requestDto.address().addressDetail(),
+                requestDto.address().latitude(),
+                requestDto.address().longitude()
+        );
 
         // 고용주 정보 업데이트
         owner = ownerService.updateOwner(owner, requestDto, address);
