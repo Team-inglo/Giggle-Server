@@ -4,6 +4,7 @@ import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.request.UpdateUserUserOwnerJobPostingStepRegisteringResultRequestDto;
 import com.inglo.giggle.posting.application.dto.response.CreateUserJobPostingResponseDto;
+import com.inglo.giggle.posting.application.dto.response.UpdateUserJobPostingBookMarkResponseDto;
 import com.inglo.giggle.posting.application.usecase.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class PostingUsersCommandV1Controller {
     private final UpdateUserUserOwnerJobPostingStepApplicationInProgressUseCase updateUserUserOwnerJobPostingStepApplicationInProgressUseCase;
     private final UpdateUserUserOwnerJobPostingStepRegisteringResultUseCase updateUserUserOwnerJobPostingStepRegisteringResultUseCase;
     private final CreateUserJobPostingUseCase createUserJobPostingUseCase;
+    private final UpdateUserJobPostingBookMarkUseCase updateUserJobPostingBookMarkUseCase;
 
     /**
      * 4.9 (유학생) 공고 지원하기
@@ -31,6 +33,20 @@ public class PostingUsersCommandV1Controller {
             @PathVariable(name = "job-posting-id") Long jobPostingId
     ) {
         return ResponseDto.created(createUserJobPostingUseCase.execute(
+                accountId,
+                jobPostingId
+        ));
+    }
+
+    /**
+     * 4.12 (유학생) 북마크 추가/삭제
+     */
+    @PutMapping("/users/job-postings/{job-posting-id}/book-marks")
+    public ResponseDto<UpdateUserJobPostingBookMarkResponseDto> toggleBookMark(
+            @AccountID UUID accountId,
+            @PathVariable(name = "job-posting-id") Long jobPostingId
+    ) {
+        return ResponseDto.ok(updateUserJobPostingBookMarkUseCase.execute(
                 accountId,
                 jobPostingId
         ));

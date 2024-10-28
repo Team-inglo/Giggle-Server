@@ -177,6 +177,13 @@ Content-Type: image/png
 
 
 
+### 4.12 (유학생) 북마크 추가/삭제
+// @no-log
+PUT {{host_url}}/v1/users/job-postings/{{posting.API_4_12.job_posting_id}}/book-marks
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
 ### 6.1 (유학생) 지원한 공고 리스트 조회하기
 GET {{host_url}}/v1/users/user-owner-job-postings/overviews?
     page=1&
