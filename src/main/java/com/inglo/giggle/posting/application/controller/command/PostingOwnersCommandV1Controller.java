@@ -7,10 +7,7 @@ import com.inglo.giggle.posting.application.dto.request.CreateOwnerJobPostingReq
 import com.inglo.giggle.posting.application.dto.request.UpdateOwnerJobPostingRequestDto;
 import com.inglo.giggle.posting.application.dto.request.UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewRequestDto;
 import com.inglo.giggle.posting.application.dto.response.CreateOwnerJobPostingResponseDto;
-import com.inglo.giggle.posting.application.usecase.CreateOwnerJobPostingUseCase;
-import com.inglo.giggle.posting.application.usecase.UpdateOwnerJobPostingUseCase;
-import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewUseCase;
-import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
+import com.inglo.giggle.posting.application.usecase.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -29,6 +26,7 @@ public class PostingOwnersCommandV1Controller {
     private final UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase updateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
     private final CreateOwnerJobPostingUseCase createOwnerJobPostingUseCase;
     private final UpdateOwnerJobPostingUseCase updateOwnerJobPostingUseCase;
+    private final DeleteOwnerJobPostingUseCase deleteOwnerJobPostingUseCase;
 
     /**
      * 4.10 (고용주) 공고 등록하기
@@ -64,6 +62,26 @@ public class PostingOwnersCommandV1Controller {
 
         return ResponseDto.ok(null);
     }
+
+    /**
+     * 4.12 (고용주) 공고 삭제하기
+     */
+    @DeleteMapping("/owners/job-postings/{job-posting-id}")
+    public ResponseDto<Void> deleteJobPosting(
+            @AccountID UUID accountId,
+            @PathVariable(name = "job-posting-id") Long jobPostingId
+    ) {
+        deleteOwnerJobPostingUseCase.execute(
+                accountId,
+                jobPostingId
+        );
+
+        return ResponseDto.ok(null);
+    }
+
+    /* -------------------------------------------- */
+    /* API 6 -------------------------------------- */
+    /* -------------------------------------------- */
 
     /**
      * 6.10 (고용주) 이력서 수락/거절하기

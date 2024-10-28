@@ -19,6 +19,7 @@ public class PostingOwnersQueryV1Controller {
     private final ReadOwnerUserOwnerJobPostingUserBriefUseCase readOwnerUserOwnerJobPostingUserBriefUseCase;
     private final ReadOwnerUserOwnerJobPostingCountUseCase readOwnerUserOwnerJobPostingCountUseCase;
     private final ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase readOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase;
+
     /**
      * 4.6 (고용주) 공고에 대한 지원자 리스트 조회
      */
@@ -37,6 +38,9 @@ public class PostingOwnersQueryV1Controller {
         ));
     }
 
+    /* -------------------------------------------- */
+    /* API 6 -------------------------------------- */
+    /* -------------------------------------------- */
 
     /**
      * 6.6 (고용주) 등록한 공고 리스트 조회하기
