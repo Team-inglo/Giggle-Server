@@ -62,4 +62,44 @@ public class JobPostingService {
                 .address(address)
                 .build();
     }
+
+    public void updateJobPosting(
+            JobPosting jobPosting,
+            String title,
+            EJobCategory jobCategory,
+            Integer hourlyRate,
+            LocalDate recruitmentDeadLine,
+            EWorkPeriod workPeriod,
+            Integer recruitmentNumber,
+            EGender gender,
+            Integer ageRestriction,
+            EEducationLevel educationLevel,
+            EVisa visa,
+            String recruiterName,
+            String recruiterEmail,
+            String recruiterPhoneNumber,
+            String description,
+            String preferredConditions,
+            EEmploymentType employmentType
+    ) {
+        jobPosting.updateJobPosting(
+                title,
+                jobCategory,
+                hourlyRate,
+                recruitmentDeadLine,
+                workPeriod,
+                recruitmentNumber,
+                gender,
+                ageRestriction,
+                educationLevel,
+                visa,
+                recruiterName,
+                recruiterEmail,
+                recruiterPhoneNumber,
+                description,
+                preferredConditions,
+                employmentType
+        );
+    }
+
 }

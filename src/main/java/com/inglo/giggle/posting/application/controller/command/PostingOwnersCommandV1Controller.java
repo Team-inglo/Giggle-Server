@@ -4,9 +4,11 @@ import com.inglo.giggle.account.application.dto.request.UpdateOwnerRequestDto;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.request.CreateOwnerJobPostingRequestDto;
+import com.inglo.giggle.posting.application.dto.request.UpdateOwnerJobPostingRequestDto;
 import com.inglo.giggle.posting.application.dto.request.UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewRequestDto;
 import com.inglo.giggle.posting.application.dto.response.CreateOwnerJobPostingResponseDto;
 import com.inglo.giggle.posting.application.usecase.CreateOwnerJobPostingUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateOwnerJobPostingUseCase;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewUseCase;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
 import jakarta.validation.Valid;
@@ -26,6 +28,7 @@ public class PostingOwnersCommandV1Controller {
     private final UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewUseCase updateOwnerUserOwnerJobPostingStepResumeUnderReviewUseCase;
     private final UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase updateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
     private final CreateOwnerJobPostingUseCase createOwnerJobPostingUseCase;
+    private final UpdateOwnerJobPostingUseCase updateOwnerJobPostingUseCase;
 
     /**
      * 4.10 (고용주) 공고 등록하기
@@ -34,13 +37,32 @@ public class PostingOwnersCommandV1Controller {
     public ResponseDto<CreateOwnerJobPostingResponseDto> registerJobPosting(
             @AccountID UUID accountId,
             @RequestPart(value = "image", required = false) List<MultipartFile> image,
-            @RequestPart(value = "body") CreateOwnerJobPostingRequestDto requestDto
+            @Valid @RequestPart(value = "body") CreateOwnerJobPostingRequestDto requestDto
     ) {
         return ResponseDto.created(createOwnerJobPostingUseCase.execute(
                 accountId,
                 image,
                 requestDto
         ));
+    }
+
+    /**
+     * 4.11 (고용주) 공고 수정하기
+     */
+    @PutMapping(value = "/owners/job-postings/{job-posting-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseDto<Void> updateJobPosting(
+            @AccountID UUID accountId,
+            @PathVariable(name = "job-posting-id") Long jobPostingId,
+            @RequestPart(value = "image", required = false) List<MultipartFile> image,
+            @Valid @RequestPart(value = "body") UpdateOwnerJobPostingRequestDto requestDto
+    ) {
+        updateOwnerJobPostingUseCase.execute(
+                image,
+                accountId,
+                jobPostingId,
+                requestDto);
+
+        return ResponseDto.ok(null);
     }
 
     /**

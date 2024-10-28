@@ -149,6 +149,41 @@ public class JobPosting {
         this.address = address;
     }
 
+    public void updateJobPosting(
+            String title,
+            EJobCategory jobCategory,
+            Integer hourlyRate,
+            LocalDate recruitmentDeadLine,
+            EWorkPeriod workPeriod,
+            Integer recruitmentNumber,
+            EGender gender,
+            Integer ageRestriction,
+            EEducationLevel educationLevel,
+            EVisa visa,
+            String recruiterName,
+            String recruiterEmail,
+            String recruiterPhoneNumber,
+            String description,
+            String preferredConditions,
+            EEmploymentType employmentType
+    ){
+        this.title = title;
+        this.jobCategory = jobCategory;
+        this.hourlyRate = hourlyRate;
+        this.recruitmentDeadLine = recruitmentDeadLine;
+        this.workPeriod = workPeriod;
+        this.recruitmentNumber = recruitmentNumber;
+        this.gender = gender;
+        this.ageRestriction = ageRestriction;
+        this.educationLevel = educationLevel;
+        this.visa = visa;
+        this.recruiterName = recruiterName;
+        this.recruiterEmail = recruiterEmail;
+        this.recruiterPhoneNumber = recruiterPhoneNumber;
+        this.description = description;
+        this.preferredConditions = preferredConditions;
+        this.employmentType = employmentType;
+    }
     public Map<String, Integer> calculateWorkHours() {
         int weekdayHours = 0;
         int weekendHours = 0;

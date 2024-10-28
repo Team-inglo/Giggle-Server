@@ -97,6 +97,85 @@ Content-Type: image/png
 
 < /Users/jjuuuunnii/Desktop/image3.png
 
+--boundary
+
+
+
+### 4.11 (고용주) 공고 수정하기
+// @no-log
+PUT {{host_url}}/v1/owners/job-postings/{{posting.API_4_11.job_posting_id}}
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{access_token}}
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "title": "{{posting.API_4_11.title}}",
+  "job_category": "{{posting.API_4_11.job_category}}",
+  "work_day_times": [
+    {
+      "day_of_week": "{{posting.API_4_11.work_day_times[0].day_of_week}}",
+      "work_start_time": "{{posting.API_4_11.work_day_times[0].work_start_time}}",
+      "work_end_time": "{{posting.API_4_11.work_day_times[0].work_end_time}}"
+    },
+    {
+      "day_of_week": "{{posting.API_4_11.work_day_times[1].day_of_week}}",
+      "work_start_time": "{{posting.API_4_11.work_day_times[1].work_start_time}}",
+      "work_end_time": "{{posting.API_4_11.work_day_times[1].work_end_time}}"
+    }
+  ],
+  "work_period": "{{posting.API_4_11.work_period}}",
+  "hourly_rate": {{posting.API_4_11.hourly_rate}},
+  "employment_type": "{{posting.API_4_11.employment_type}}",
+  "address": {
+    "address_name": "{{posting.API_4_11.address.address_name}}",
+    "region_1depth_name": "{{posting.API_4_11.address.region_1depth_name}}",
+    "region_2depth_name": "{{posting.API_4_11.address.region_2depth_name}}",
+    "region_3depth_name": "{{posting.API_4_11.address.region_3depth_name}}",
+    "region_4depth_name": "{{posting.API_4_11.address.region_4depth_name}}",
+    "address_detail": "{{posting.API_4_11.address.address_detail}}",
+    "latitude": {{posting.API_4_11.address.latitude}},
+    "longitude": {{posting.API_4_11.address.longitude}}
+  },
+  "recruitment_dead_line": "{{posting.API_4_11.recruitment_dead_line}}",
+  "recruitment_number": {{posting.API_4_11.recruitment_number}},
+  "gender": "{{posting.API_4_11.gender}}",
+  "age_restriction": {{posting.API_4_11.age_restriction}},
+  "education_level": "{{posting.API_4_11.education_level}}",
+  "visa": "{{posting.API_4_11.visa}}",
+  "recruiter_name": "{{posting.API_4_11.recruiter_name}}",
+  "recruiter_email": "{{posting.API_4_11.recruiter_email}}",
+  "recruiter_phone_number": "{{posting.API_4_11.recruiter_phone_number}}",
+  "description": "{{posting.API_4_11.description}}",
+  "preferred_conditions": "{{posting.API_4_11.preferred_conditions}}",
+  "deleted_img_ids": [
+    {{posting.API_4_11.deleted_img_ids[0]}}, {{posting.API_4_11.deleted_img_ids[1]}}
+  ]
+}
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image1.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image1.png
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image2.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image2.png
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image3.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image3.png
+
+--boundary
+
+
 
 ### 6.1 (유학생) 지원한 공고 리스트 조회하기
 GET {{host_url}}/v1/users/user-owner-job-postings/overviews?
