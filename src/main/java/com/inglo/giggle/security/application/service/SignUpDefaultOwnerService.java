@@ -5,20 +5,16 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.core.utility.ImageUtil;
-import com.inglo.giggle.core.utility.JsonWebTokenUtil;
+import com.inglo.giggle.core.type.EImageType;
+import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultOwnerUseCase;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.redis.TemporaryToken;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
-import com.inglo.giggle.security.domain.service.RefreshTokenService;
 import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultOwnerRequestDto;
-import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
-import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +38,7 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final ImageUtil imageUtil;
+    private final S3Util s3Util;
     @Override
     @Transactional
     public void execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
@@ -58,9 +54,9 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         temporaryAccountService.validateAccountTypeOwner(tempUserInfo);
 
         // 아이콘 이미지 저장
-        String iconUrl = imageUtil.getOwnerDefaultImgUrl();
+        String iconUrl = s3Util.getOwnerDefaultImgUrl();
         if (file != null) {
-            iconUrl = imageUtil.uploadOwnerIconImageFile(file, tempUserInfo.getId());
+            iconUrl = s3Util.uploadImageFile(file, tempUserInfo.getId(), EImageType.OWNER_PROFILE_IMG);
         }
 
         // Address 생성

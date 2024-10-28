@@ -11,7 +11,6 @@ import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPosti
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.docx4j.wml.R;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

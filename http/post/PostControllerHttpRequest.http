@@ -35,12 +35,6 @@ Content-Type: multipart/form-data; boundary=boundary
 Authorization: Bearer {{access_token}}
 
 --boundary
-Content-Disposition: form-data; name="image"; filename="image.png"
-Content-Type: image/png
-
-< /Users/jjuuuunnii/Desktop/image.png
-
---boundary
 Content-Disposition: form-data; name="body"
 Content-Type: application/json
 
@@ -85,7 +79,24 @@ Content-Type: application/json
   "preferred_conditions": "{{posting.API_4_10.preferred_conditions}}"
 }
 
---boundary--
+--boundary
+Content-Disposition: form-data; name="image"; filename="image1.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image1.png
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image2.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image2.png
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image3.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image3.png
+
 
 ### 6.1 (유학생) 지원한 공고 리스트 조회하기
 GET {{host_url}}/v1/users/user-owner-job-postings/overviews?

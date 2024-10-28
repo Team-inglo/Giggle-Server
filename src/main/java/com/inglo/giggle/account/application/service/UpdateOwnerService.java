@@ -9,7 +9,8 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.core.utility.ImageUtil;
+import com.inglo.giggle.core.type.EImageType;
+import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
@@ -30,7 +31,7 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
     private final AccountService accountService;
     private final AddressService addressService;
 
-    private final ImageUtil imageUtil;
+    private final S3Util s3Util;
 
     @Override
     @Transactional
@@ -47,7 +48,7 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
         if (requestDto.isIconImgChanged() && image != null) {
 
             // 아이콘 이미지 업로드
-            String iconImgUrl = imageUtil.uploadOwnerIconImageFile(image, account.getSerialId());
+            String iconImgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.OWNER_PROFILE_IMG);
 
             // 아이콘 이미지 URL 업데이트
             account = accountService.updateProfileImgUrl(account, iconImgUrl);
@@ -57,7 +58,7 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
         if (requestDto.isIconImgChanged() && image == null) {
 
             // 기본 이미지 URL 가져오기
-            String iconImgUrl = imageUtil.getOwnerDefaultImgUrl();
+            String iconImgUrl = s3Util.getOwnerDefaultImgUrl();
 
             // 아이콘 이미지 URL 업데이트
             account = accountService.updateProfileImgUrl(account, iconImgUrl);
