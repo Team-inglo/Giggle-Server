@@ -13,6 +13,6 @@ import java.util.UUID;
 public interface ResumeRepository extends JpaRepository<Resume, UUID>{
 
     @NotNull
-    @EntityGraph(attributePaths = {"educations", "users", "languages", "skills"})
+    @EntityGraph(attributePaths = {"educations", "languageSkill"})
     Optional<Resume> findById(@NotNull @Param(value = "accountId") UUID accountId);
 }

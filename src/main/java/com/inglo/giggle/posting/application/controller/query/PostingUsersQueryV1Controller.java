@@ -14,8 +14,8 @@ import java.util.UUID;
 @RequestMapping("/v1")
 public class PostingUsersQueryV1Controller {
 
-    private final ReadUserOwnerJobPostingListUseCase readUserOwnerJobPostingListUseCase;
-    private final ReadUserOwnerJobPostingDetailUseCase readUserOwnerJobPostingDetailUseCase;
+    private final ReadUserUserOwnerJobPostingListUseCase readUserUserOwnerJobPostingListUseCase;
+    private final ReadUserUserOwnerJobPostingDetailUseCase readUserUserOwnerJobPostingDetailUseCase;
     private final ReadUserOwnerJobPostingBriefListUseCase readUserOwnerJobPostingBriefListUseCase;
     private final ReadUserOwnerJobPostingCountUseCase readUserOwnerJobPostingCountUseCase;
     private final ReadUserOwnerJobPostingJobPostingRecruiterUserCase readUserOwnerJobPostingJobPostingRecruiterUserCase;
@@ -43,14 +43,14 @@ public class PostingUsersQueryV1Controller {
      * 6.1 (유학생) 지원한 공고 리스트 조회하기
      */
     @GetMapping("/users/user-owner-job-postings/overviews")
-    public ResponseDto<ReadUserOwnerJobPostingListResponseDto> readUserAppliedJobList(
+    public ResponseDto<ReadUserUserOwnerJobPostingListResponseDto> readUserAppliedJobList(
             @AccountID UUID accountId,
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name= "sorting", defaultValue = "ASCENDING") String sort,
             @RequestParam(name = "status", defaultValue = "ALL", required = false) String status
     ) {
-        return ResponseDto.ok(readUserOwnerJobPostingListUseCase.execute(
+        return ResponseDto.ok(readUserUserOwnerJobPostingListUseCase.execute(
                 accountId,
                 page,
                 size,
@@ -63,11 +63,11 @@ public class PostingUsersQueryV1Controller {
      * 6.2 (유학생) 지원한 공고 상태 상세 조회하기
      */
     @GetMapping("/users/user-owner-job-postings/{id}/details")
-    public ResponseDto<ReadUserOwnerJobPostingDetailResponseDto> readUserAppliedJobDetail(
+    public ResponseDto<ReadUserUserOwnerJobPostingDetailResponseDto> readUserAppliedJobDetail(
             @AccountID UUID accountId,
             @PathVariable(name = "id") Long userOwnerJobPostingsId
     ) {
-        return ResponseDto.ok(readUserOwnerJobPostingDetailUseCase.execute(
+        return ResponseDto.ok(readUserUserOwnerJobPostingDetailUseCase.execute(
                 accountId,
                 userOwnerJobPostingsId
         ));

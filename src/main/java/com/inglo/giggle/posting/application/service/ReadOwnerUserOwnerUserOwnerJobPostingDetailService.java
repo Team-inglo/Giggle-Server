@@ -3,8 +3,8 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.posting.application.dto.response.ReadOwnerJobPostingDetailResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadOwnerJobPostingDetailUseCase;
+import com.inglo.giggle.posting.application.dto.response.ReadOwnerUserOwnerJobPostingDetailResponseDto;
+import com.inglo.giggle.posting.application.usecase.ReadOwnerUserOwnerJobPostingDetailUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ReadOwnerJobPostingDetailService implements ReadOwnerJobPostingDetailUseCase {
+public class ReadOwnerUserOwnerUserOwnerJobPostingDetailService implements ReadOwnerUserOwnerJobPostingDetailUseCase {
 
 
     private final OwnerRepository ownerRepository;
@@ -29,7 +29,7 @@ public class ReadOwnerJobPostingDetailService implements ReadOwnerJobPostingDeta
 
     @Override
     @Transactional(readOnly = true)
-    public ReadOwnerJobPostingDetailResponseDto execute(UUID accountId, Long userOwnerJobPostingsId) {
+    public ReadOwnerUserOwnerJobPostingDetailResponseDto execute(UUID accountId, Long userOwnerJobPostingsId) {
 
         // UserOwnerJobPosting 조회
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithOwnerAndUserJobPostingById(userOwnerJobPostingsId)
@@ -41,7 +41,7 @@ public class ReadOwnerJobPostingDetailService implements ReadOwnerJobPostingDeta
         );
 
         // DTO 변환
-        return ReadOwnerJobPostingDetailResponseDto.of(
+        return ReadOwnerUserOwnerJobPostingDetailResponseDto.of(
                 userOwnerJobPosting,
                 school.orElse(null)
         );

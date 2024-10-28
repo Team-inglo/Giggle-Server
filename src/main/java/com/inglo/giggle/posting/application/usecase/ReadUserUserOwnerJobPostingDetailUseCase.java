@@ -1,12 +1,12 @@
 package com.inglo.giggle.posting.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingDetailResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserUserOwnerJobPostingDetailResponseDto;
 
 import java.util.UUID;
 
 @UseCase
-public interface ReadUserOwnerJobPostingDetailUseCase {
+public interface ReadUserUserOwnerJobPostingDetailUseCase {
 
     /**
      * 유저가 지원한 채용공고 디테일을 조회합니다.
@@ -16,7 +16,7 @@ public interface ReadUserOwnerJobPostingDetailUseCase {
      *
      * @return 유저가 지원한 채용공고 디테일
      */
-    ReadUserOwnerJobPostingDetailResponseDto execute(
+    ReadUserUserOwnerJobPostingDetailResponseDto execute(
             UUID accountId,
             Long userOwnerJobPostingsId
     );

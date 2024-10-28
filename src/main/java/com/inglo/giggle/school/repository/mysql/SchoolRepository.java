@@ -22,14 +22,15 @@ public interface SchoolRepository extends JpaRepository<School, Long>{
             "ORDER BY e.graduationDate DESC")
     Optional<School> findMostRecentGraduationSchoolByUserId(@Param("userId") UUID userId);
 
-    @Query(value = "SELECT u.id AS userId, s.school_name AS schoolName FROM schools s " +
+    @Query(value = "SELECT u.account_id AS userId, s.school_name AS schoolName FROM schools s " +
             "JOIN educations e ON s.id = e.school_id " +
-            "JOIN resumes r ON e.resume_account_id = r.account_id " +
-            "JOIN users u ON r.user_id = u.id " +
-            "WHERE u.id IN :userIds " +
+            "JOIN resumes r ON e.resume_id = r.account_id " +  // account_id 대신 resume_id 확인
+            "JOIN users u ON r.account_id = u.account_id " +
+            "WHERE u.account_id IN :userIds " +
             "AND e.graduation_date = (SELECT MAX(e2.graduation_date) " +
             "                         FROM educations e2 " +
-            "                         WHERE e2.resume_account_id = r.account_id) ", nativeQuery = true)
+            "                         WHERE e2.resume_id = r.account_id)", nativeQuery = true)
     List<Object[]> findUserIdsWithMostRecentSchoolNames(@Param("userIds") List<UUID> userIds);
+
 
 }

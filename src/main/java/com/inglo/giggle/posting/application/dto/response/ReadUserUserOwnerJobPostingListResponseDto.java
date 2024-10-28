@@ -3,7 +3,6 @@ package com.inglo.giggle.posting.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,10 +10,9 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
-public class ReadUserOwnerJobPostingListResponseDto extends SelfValidating<ReadUserOwnerJobPostingListResponseDto> {
+public class ReadUserUserOwnerJobPostingListResponseDto extends SelfValidating<ReadUserUserOwnerJobPostingListResponseDto> {
 
     @NotNull(message = "has_next는 null일 수 없습니다.")
     @JsonProperty("has_next")
@@ -24,7 +22,7 @@ public class ReadUserOwnerJobPostingListResponseDto extends SelfValidating<ReadU
     private final List<UserAppliedJobDto> jobPostingList;
 
     @Builder
-    public ReadUserOwnerJobPostingListResponseDto(
+    public ReadUserUserOwnerJobPostingListResponseDto(
             Boolean hasNext,
             List<UserAppliedJobDto> jobPostingList
     ) {
@@ -35,15 +33,15 @@ public class ReadUserOwnerJobPostingListResponseDto extends SelfValidating<ReadU
     }
 
     // UserOwnerJobPosting 엔티티를 UserAppliedJobDto로 변환하는 메서드 추가
-    public static ReadUserOwnerJobPostingListResponseDto of(
+    public static ReadUserUserOwnerJobPostingListResponseDto of(
             Page<UserOwnerJobPosting> userOwnerJobPostingPage
     ) {
         boolean hasNext = userOwnerJobPostingPage.hasNext();
         List<UserAppliedJobDto> jobPostingList = userOwnerJobPostingPage.getContent().stream()
                 .map(UserAppliedJobDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
 
-        return ReadUserOwnerJobPostingListResponseDto.builder()
+        return ReadUserUserOwnerJobPostingListResponseDto.builder()
                 .hasNext(hasNext)
                 .jobPostingList(jobPostingList)
                 .build();
@@ -52,35 +50,35 @@ public class ReadUserOwnerJobPostingListResponseDto extends SelfValidating<ReadU
     @Getter
     public static class UserAppliedJobDto extends SelfValidating<UserAppliedJobDto> {
 
-        @NotBlank(message = "job_posting_id는 null일 수 없습니다.")
+        @NotNull(message = "job_posting_id는 null일 수 없습니다.")
         @JsonProperty("job_posting_id")
         private final Long jobPostingId;
 
-        @NotBlank(message = "user_owner_job_posting_id는 null일 수 없습니다.")
+        @NotNull(message = "user_owner_job_posting_id는 null일 수 없습니다.")
         @JsonProperty("user_owner_job_posting_id")
         private final Long userOwnerJobPostingId;
 
-        @NotBlank(message = "icon_img_url은 null일 수 없습니다.")
+        @NotNull(message = "icon_img_url은 null일 수 없습니다.")
         @JsonProperty("icon_img_url")
         private final String iconImgUrl;
 
-        @NotBlank(message = "title은 null일 수 없습니다.")
+        @NotNull(message = "title은 null일 수 없습니다.")
         @JsonProperty("title")
         private final String title;
 
-        @NotBlank(message = "address_name은 null일 수 없습니다.")
+        @NotNull(message = "address_name은 null일 수 없습니다.")
         @JsonProperty("address_name")
         private final String addressName;
 
-        @NotBlank(message = "step은 null일 수 없습니다.")
+        @NotNull(message = "step은 null일 수 없습니다.")
         @JsonProperty("step")
         private final String step;
 
-        @NotBlank(message = "hourly_rate은 null일 수 없습니다.")
+        @NotNull(message = "hourly_rate은 null일 수 없습니다.")
         @JsonProperty("hourly_rate")
         private final Integer hourlyRate;
 
-        @NotBlank(message = "duration_of_days는 null일 수 없습니다.")
+        @NotNull(message = "duration_of_days는 null일 수 없습니다.")
         @JsonProperty("duration_of_days")
         private final Integer durationOfDays;
 

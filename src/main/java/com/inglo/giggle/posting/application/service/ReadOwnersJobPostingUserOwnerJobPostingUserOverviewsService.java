@@ -47,7 +47,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
         // 지원자 리스트 조회
         Page<UserOwnerJobPosting> userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPosting(
                 jobPosting,
-                PageRequest.of(page, size)
+                PageRequest.of(page - 1, size)
         );
 
         // 지원자 리스트의 학교 정보 조회

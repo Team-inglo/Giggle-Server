@@ -32,7 +32,7 @@ public class ReadUserOwnerJobPostingBriefListService implements ReadUserOwnerJob
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // 페이지네이션 설정 UserOwnerJobPosting 조회
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<UserOwnerJobPosting> userOwnerJobPostingList = userOwnerJobPostingRepository.findAllPagedWithJobPostingAndOwnerByUser(user, pageable);
 
         // DTO 반환
