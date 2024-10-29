@@ -1,10 +1,13 @@
 package com.inglo.giggle.document.domain.service;
 
+import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
 import com.inglo.giggle.document.domain.StandardLaborContract;
+import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.xml.bind.JAXBElement;
 import kr.dogfoot.hwplib.object.HWPFile;
 import kr.dogfoot.hwplib.object.bodytext.Section;
@@ -61,6 +64,25 @@ public class StandardLaborContractService {
 
     public void updateEmployerStatusConfirmation(StandardLaborContract document) {
         document.updateEmployerStatusConfirmation();
+    }
+
+    public StandardLaborContract createStandardLaborContract(
+            UserOwnerJobPosting userOwnerJobPosting,
+            String employeeFirstName,
+            String employeeLastName,
+            Address employeeAddress,
+            String employeePhoneNumber,
+            String employeeSignatureBase64
+    ) {
+        return StandardLaborContract.builder()
+                .userOwnerJobPosting(userOwnerJobPosting)
+                .employeeFirstName(employeeFirstName)
+                .employeeLastName(employeeLastName)
+                .employeeAddress(employeeAddress)
+                .employeePhoneNumber(employeePhoneNumber)
+                .employeeSignatureBase64(employeeSignatureBase64)
+                .employeeStatus(EEmployeeStatus.TEMPORARY_SAVE)
+                .build();
     }
 
     public ByteArrayInputStream createStandardLaborContractDocxFile(StandardLaborContract document) {

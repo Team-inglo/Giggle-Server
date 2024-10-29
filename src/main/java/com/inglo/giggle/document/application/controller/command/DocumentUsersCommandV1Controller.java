@@ -3,8 +3,11 @@ package com.inglo.giggle.document.application.controller.command;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.document.application.dto.request.CreateUserPartTimeEmploymentPermitRequestDto;
+import com.inglo.giggle.document.application.dto.request.CreateUserStandardLaborContractRequestDto;
 import com.inglo.giggle.document.application.usecase.ConfirmUserDocumentUseCase;
 import com.inglo.giggle.document.application.usecase.CreateUserPartTimeEmploymentPermitUseCase;
+import com.inglo.giggle.document.application.usecase.CreateUserStandardLaborContractUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,7 @@ public class DocumentUsersCommandV1Controller {
 
     private final ConfirmUserDocumentUseCase confirmUserDocumentUseCase;
     private final CreateUserPartTimeEmploymentPermitUseCase createUserPartTimeEmploymentPermitUseCase;
+    private final CreateUserStandardLaborContractUseCase createUserStandardLaborContractUseCase;
 
     /**
      * 8.6 (유학생) 시간제 취업허가서 생성하기
@@ -24,9 +28,21 @@ public class DocumentUsersCommandV1Controller {
     @PostMapping("/user-owner-job-postings/{id}/documents/part-time-employment-permits")
     public ResponseDto<Void> createUserPartTimeEmploymentPermit(
             @PathVariable Long id,
-            @RequestBody CreateUserPartTimeEmploymentPermitRequestDto requestDto
+            @RequestBody @Valid CreateUserPartTimeEmploymentPermitRequestDto requestDto
     ) {
         createUserPartTimeEmploymentPermitUseCase.execute(id, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 8.7 (유학생) 근로계약서 생성하기
+     */
+    @PostMapping("/user-owner-job-postings/{id}/documents/standard-labor-contracts")
+    public ResponseDto<Void> createUserStandardLaborContract(
+            @PathVariable Long id,
+            @RequestBody @Valid CreateUserStandardLaborContractRequestDto requestDto
+            ) {
+        createUserStandardLaborContractUseCase.execute(id, requestDto);
         return ResponseDto.ok(null);
     }
 

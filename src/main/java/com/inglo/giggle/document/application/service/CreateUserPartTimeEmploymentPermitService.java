@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 public class CreateUserPartTimeEmploymentPermitService implements CreateUserPartTimeEmploymentPermitUseCase {
 
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-    private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
+    private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
 
     @Override
     public void execute(Long userOwnerJobPostingId, CreateUserPartTimeEmploymentPermitRequestDto requestDto) {
