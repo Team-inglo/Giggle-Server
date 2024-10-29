@@ -1,5 +1,6 @@
 package com.inglo.giggle.document.domain.service;
 
+import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
@@ -7,6 +8,7 @@ import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import jakarta.xml.bind.JAXBElement;
 import kr.dogfoot.hwplib.object.HWPFile;
 import kr.dogfoot.hwplib.object.bodytext.Section;
@@ -107,6 +109,36 @@ public class PartTimeEmploymentPermitService {
         document.updateTermOfCompletion(termOfCompletion);
         document.updateEmployeePhoneNumber(employeePhoneNumber);
         document.updateEmployeeEmail(employeeEmail);
+
+        return document;
+    }
+
+    public PartTimeEmploymentPermit updateOwnerPartTimeEmploymentPermit(
+            PartTimeEmploymentPermit document,
+            String companyName,
+            String companyRegistrationNumber,
+            String jobType,
+            String employerName,
+            String employerPhoneNumber,
+            String employerSignatureBase64,
+            EWorkPeriod workPeriod,
+            Integer hourlyRate,
+            String workDaysWeekDays,
+            String workDaysWeekends,
+            Address employerAddress
+    )
+    {
+        document.updateCompanyName(companyName);
+        document.updateCompanyRegistrationNumber(companyRegistrationNumber);
+        document.updateJobType(jobType);
+        document.updateEmployerName(employerName);
+        document.updateEmployerPhoneNumber(employerPhoneNumber);
+        document.updateEmployerSignatureBase64(employerSignatureBase64);
+        document.updateWorkPeriod(workPeriod);
+        document.updateHourlyRate(hourlyRate);
+        document.updateWorkDaysWeekDays(workDaysWeekDays);
+        document.updateWorkDaysWeekends(workDaysWeekends);
+        document.updateEmployerAddress(employerAddress);
 
         return document;
     }

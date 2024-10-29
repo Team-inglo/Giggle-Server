@@ -21,6 +21,7 @@ public class DocumentUsersCommandV1Controller {
     private final CreateUserIntegratedApplicationUseCase createUserIntegratedApplicationUseCase;
     private final UpdateDocumentStatusRequestionUseCase updateDocumentStatusRequestionUseCase;
     private final UpdateUserPartTimeEmploymentPermitUseCase updateUserPartTimeEmploymentPermitUseCase;
+    private final UpdateOwnerPartTimeEmploymentPermitUseCase updateOwnerPartTimeEmploymentPermitUseCase;
 
     /**
      * 8.6 (유학생) 시간제 취업허가서 생성하기

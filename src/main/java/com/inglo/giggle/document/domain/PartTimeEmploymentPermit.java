@@ -151,6 +151,50 @@ public class PartTimeEmploymentPermit extends Document {
         this.major = major;
     }
 
+    public void updateCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void updateCompanyRegistrationNumber(String companyRegistrationNumber) {
+        this.companyRegistrationNumber = companyRegistrationNumber;
+    }
+
+    public void updateJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public void updateEmployerName(String employerName) {
+        this.employerName = employerName;
+    }
+
+    public void updateEmployerPhoneNumber(String employerPhoneNumber) {
+        this.employerPhoneNumber = employerPhoneNumber;
+    }
+
+    public void updateEmployerSignatureBase64(String employerSignatureBase64) {
+        this.employerSignatureBase64 = employerSignatureBase64;
+    }
+
+    public void updateWorkPeriod(EWorkPeriod workPeriod) {
+        this.workPeriod = workPeriod;
+    }
+
+    public void updateHourlyRate(Integer hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public void updateWorkDaysWeekDays(String workDaysWeekDays) {
+        this.workDaysWeekDays = workDaysWeekDays;
+    }
+
+    public void updateWorkDaysWeekends(String workDaysWeekends) {
+        this.workDaysWeekends = workDaysWeekends;
+    }
+
+    public void updateEmployerAddress(Address employerAddress) {
+        this.employerAddress = employerAddress;
+    }
+
     public void updateTermOfCompletion(Integer termOfCompletion) {
         this.termOfCompletion = termOfCompletion;
     }
