@@ -17,10 +17,6 @@ import java.util.Map;
 @Service
 public class JobPostingService {
 
-    public Map<String, Integer> calculateWorkHours(JobPosting jobPosting) {
-        return jobPosting.calculateWorkHours();
-    }
-
     public JobPosting createJobPosting(
             String title,
             EJobCategory jobCategory,
@@ -102,6 +98,14 @@ public class JobPostingService {
                 employmentType,
                 address
         );
+    }
+
+    public Map<String, Integer> calculateWorkHours(JobPosting jobPosting) {
+        return jobPosting.calculateWorkHours();
+    }
+
+    public String getWorkDaysPerWeekToString(JobPosting jobPosting) {
+        return jobPosting.getWorkDaysPerWeekToString();
     }
 
 }

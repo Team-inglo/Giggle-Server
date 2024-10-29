@@ -47,7 +47,6 @@ public record UpdateOwnerJobPostingRequestDto(
         @JsonProperty("recruitment_dead_line")
         String recruitmentDeadLine,  // null if 상시모집
 
-        @NotNull(message = "모집 인원은 필수 입력 값입니다.")
         @JsonProperty("recruitment_number")
         Integer recruitmentNumber,
 

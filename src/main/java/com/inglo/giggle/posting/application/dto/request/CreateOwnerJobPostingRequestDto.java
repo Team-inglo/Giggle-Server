@@ -48,7 +48,6 @@ public record CreateOwnerJobPostingRequestDto(
         @JsonProperty("recruitment_dead_line")
         String recruitmentDeadLine,  // null if 상시모집
 
-        @NotNull
         @JsonProperty("recruitment_number")
         Integer recruitmentNumber,
 

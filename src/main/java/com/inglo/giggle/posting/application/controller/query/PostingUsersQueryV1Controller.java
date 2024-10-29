@@ -20,6 +20,12 @@ public class PostingUsersQueryV1Controller {
     private final ReadUserOwnerJobPostingCountUseCase readUserOwnerJobPostingCountUseCase;
     private final ReadUserOwnerJobPostingJobPostingRecruiterUserCase readUserOwnerJobPostingJobPostingRecruiterUserCase;
     private final ReadUserJobPostingValidationUseCase readUserJobPostingValidationUseCase;
+    private final ReadUserBookMarkOverviewUseCase readUserBookMarkOverviewUseCase;
+
+
+    /* -------------------------------------------- */
+    /* API 4 -------------------------------------- */
+    /* -------------------------------------------- */
 
     /**
      * 4.8 (유학생) 공고 지원 자격 확인하기
@@ -34,6 +40,27 @@ public class PostingUsersQueryV1Controller {
                 jobPostingId
         ));
     }
+
+    /* -------------------------------------------- */
+    /* API 5 -------------------------------------- */
+    /* -------------------------------------------- */
+
+    /**
+     * 5.1 (유학생) 북마크한 공고 리스트 조회하기
+     */
+    @GetMapping("/users/book-marks/overviews")
+    public ResponseDto<ReadUserBookMarkOverviewResponseDto> readUserBookMarkList(
+            @AccountID UUID accountId,
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "10") Integer size
+    ) {
+        return ResponseDto.ok(readUserBookMarkOverviewUseCase.execute(
+                accountId,
+                page,
+                size
+        ));
+    }
+
 
     /* -------------------------------------------- */
     /* API 6 -------------------------------------- */

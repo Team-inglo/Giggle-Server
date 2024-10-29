@@ -126,8 +126,8 @@ public class ReadUserUserOwnerJobPostingDetailResponseDto extends SelfValidating
         public static WorkDayTime fromEntity(PostingWorkDayTime postingWorkDayTime) {
             return WorkDayTime.builder()
                     .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
-                    .workStartTime(postingWorkDayTime.getWorkStartTime().toString())
-                    .workEndTime(postingWorkDayTime.getWorkEndTime().toString())
+                    .workStartTime(postingWorkDayTime.getWorkStartTime() == null ? null : postingWorkDayTime.getWorkStartTime().toString())
+                    .workEndTime(postingWorkDayTime.getWorkEndTime() == null ? null: postingWorkDayTime.getWorkEndTime().toString())
                     .build();
         }
     }

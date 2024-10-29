@@ -53,7 +53,7 @@ public class JobPosting {
     @Column(name = "work_period", nullable = false)
     private EWorkPeriod workPeriod;
 
-    @Column(name = "recruitment_number", nullable = false)
+    @Column(name = "recruitment_number")
     private Integer recruitmentNumber;
 
     @Enumerated(EnumType.STRING)
@@ -189,6 +189,32 @@ public class JobPosting {
         this.employmentType = employmentType;
         this.address = address;
     }
+
+    public String getWorkDaysPerWeekToString() {
+        // 협의 가능 요일이 포함되어 있는 경우
+        if (workDayTimes.stream().anyMatch(dayTime -> dayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE)) {
+            return "협의 가능";
+        }
+
+        // 중복되지 않은 요일의 개수 세기
+        long distinctDays = workDayTimes.stream()
+                .map(PostingWorkDayTime::getDayOfWeek)
+                .distinct()
+                .count();
+
+        // 작업일 수에 따라 적절한 문자열 반환
+        return switch ((int) distinctDays) {
+            case 1 -> "1 day per week";
+            case 2 -> "2 days per week";
+            case 3 -> "3 days per week";
+            case 4 -> "4 days per week";
+            case 5 -> "5 days per week";
+            case 6 -> "6 days per week";
+            case 7 -> "7 days per week";
+            default -> "협의 가능";
+        };
+    }
+
     public Map<String, Integer> calculateWorkHours() {
         int weekdayHours = 0;
         int weekendHours = 0;

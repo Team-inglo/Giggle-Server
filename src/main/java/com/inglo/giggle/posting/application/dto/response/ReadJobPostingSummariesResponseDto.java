@@ -55,7 +55,10 @@ public class ReadJobPostingSummariesResponseDto extends SelfValidating<ReadJobPo
                 .companyName(jobPosting.getOwner().getCompanyName())
                 .title(jobPosting.getTitle())
                 .tags(Tags.fromEntity(jobPosting))
-                .summaries(Summaries.fromEntity(jobPosting))
+                .summaries(
+                        Summaries.of(
+                                jobPosting
+                        ))
                 .build();
     }
 
@@ -111,10 +114,10 @@ public class ReadJobPostingSummariesResponseDto extends SelfValidating<ReadJobPo
 
         @NotNull
         @JsonProperty("work_days_per_week")
-        private final Integer workDaysPerWeek;
+        private final String workDaysPerWeek;
 
         @Builder
-        public Summaries(String address, Integer hourlyRate, String workPeriod, Integer workDaysPerWeek) {
+        public Summaries(String address, Integer hourlyRate, String workPeriod, String workDaysPerWeek) {
             this.address = address;
             this.hourlyRate = hourlyRate;
             this.workPeriod = workPeriod;
@@ -123,14 +126,14 @@ public class ReadJobPostingSummariesResponseDto extends SelfValidating<ReadJobPo
             this.validateSelf();
         }
 
-        public static Summaries fromEntity(
+        public static Summaries of(
                 JobPosting jobPosting
         ) {
             return Summaries.builder()
                     .address(jobPosting.getAddress().getAddressName())
                     .hourlyRate(jobPosting.getHourlyRate())
                     .workPeriod(jobPosting.getWorkPeriod().toString())
-                    .workDaysPerWeek(jobPosting.getWorkDayTimes().size())
+                    .workDaysPerWeek(jobPosting.getWorkDaysPerWeekToString())
                     .build();
         }
     }

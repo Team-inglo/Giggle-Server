@@ -67,7 +67,7 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
                 requestDto.hourlyRate(),
                 requestDto.recruitmentDeadLine() == null ? null : DateTimeUtil.convertStringToLocalDate(requestDto.recruitmentDeadLine()),
                 requestDto.workPeriod(),
-                requestDto.recruitmentNumber(),
+                requestDto.recruitmentNumber() == null ? null: requestDto.recruitmentNumber(),
                 requestDto.gender(),
                 requestDto.ageRestriction(),
                 requestDto.educationLevel(),
@@ -85,8 +85,8 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
         requestDto.workDayTimes().forEach(workDayTimeDto -> jobPosting.getWorkDayTimes().add(
                 postWorkDayTimeService.createPostingWorkDayTime(
                         workDayTimeDto.dayOfWeek(),
-                        DateTimeUtil.convertStringToLocalTime(workDayTimeDto.workStartTime()),
-                        DateTimeUtil.convertStringToLocalTime(workDayTimeDto.workEndTime()),
+                        workDayTimeDto.workStartTime() == null ? null : DateTimeUtil.convertStringToLocalTime(workDayTimeDto.workStartTime()),
+                        workDayTimeDto.workEndTime() == null ? null : DateTimeUtil.convertStringToLocalTime(workDayTimeDto.workEndTime()),
                         jobPosting
                 )
         ));

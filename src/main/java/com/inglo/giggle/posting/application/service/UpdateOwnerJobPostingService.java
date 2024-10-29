@@ -76,7 +76,7 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
                 requestDto.hourlyRate(),
                 requestDto.recruitmentDeadLine() == null ? null : LocalDate.parse(requestDto.recruitmentDeadLine()), // 상시 모집일 경우 null 처리
                 requestDto.workPeriod(),
-                requestDto.recruitmentNumber(),
+                requestDto.recruitmentNumber() == null ? null: requestDto.recruitmentNumber(), // null인 경우 모집인원 무관
                 requestDto.gender(),
                 requestDto.ageRestriction(),
                 requestDto.educationLevel(),
@@ -95,8 +95,8 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
 
             requestDto.workDayTimes().forEach(workDayTime -> postWorkDayTimeService.createPostingWorkDayTime(
                     workDayTime.dayOfWeek(),
-                    DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()),
-                    DateTimeUtil.convertStringToLocalTime(workDayTime.workEndTime()),
+                    workDayTime.workStartTime() == null ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()),
+                    workDayTime.workEndTime() == null ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workEndTime()),
                     jobPosting
             ));
         }
