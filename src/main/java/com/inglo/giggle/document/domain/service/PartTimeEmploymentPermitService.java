@@ -92,6 +92,25 @@ public class PartTimeEmploymentPermitService {
                 .build();
     }
 
+    public PartTimeEmploymentPermit updateUserPartTimeEmploymentPermit(
+            PartTimeEmploymentPermit document,
+            String employeeFirstName,
+            String employeeLastName,
+            String major,
+            Integer termOfCompletion,
+            String employeePhoneNumber,
+            String employeeEmail
+    ) {
+        document.updateEmployeeFirstName(employeeFirstName);
+        document.updateEmployeeLastName(employeeLastName);
+        document.updateMajor(major);
+        document.updateTermOfCompletion(termOfCompletion);
+        document.updateEmployeePhoneNumber(employeePhoneNumber);
+        document.updateEmployeeEmail(employeeEmail);
+
+        return document;
+    }
+
     public ByteArrayInputStream createPartTimeEmploymentPermitDocxFile(PartTimeEmploymentPermit document) {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));

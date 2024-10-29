@@ -139,6 +139,30 @@ public class PartTimeEmploymentPermit extends Document {
         return this.employeeFirstName + " " + this.employeeLastName;
     }
 
+    public void updateEmployeeFirstName(String employeeFirstName) {
+        this.employeeFirstName = employeeFirstName;
+    }
+
+    public void updateEmployeeLastName(String employeeLastName) {
+        this.employeeLastName = employeeLastName;
+    }
+
+    public void updateMajor(String major) {
+        this.major = major;
+    }
+
+    public void updateTermOfCompletion(Integer termOfCompletion) {
+        this.termOfCompletion = termOfCompletion;
+    }
+
+    public void updateEmployeePhoneNumber(String employeePhoneNumber) {
+        this.employeePhoneNumber = employeePhoneNumber;
+    }
+
+    public void updateEmployeeEmail(String employeeEmail) {
+        this.employeeEmail = employeeEmail;
+    }
+
     public void updateEmployeeStatus(EEmployeeStatus employeeStatus) {
         this.employeeStatus = employeeStatus;
     }

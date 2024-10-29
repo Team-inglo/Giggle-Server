@@ -2,10 +2,7 @@ package com.inglo.giggle.document.application.controller.command;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.document.application.dto.request.CreateUserIntegratedApplicationRequestDto;
-import com.inglo.giggle.document.application.dto.request.CreateUserPartTimeEmploymentPermitRequestDto;
-import com.inglo.giggle.document.application.dto.request.CreateUserStandardLaborContractRequestDto;
-import com.inglo.giggle.document.application.dto.request.UpdateDocumentStatusReqeustionRequestDto;
+import com.inglo.giggle.document.application.dto.request.*;
 import com.inglo.giggle.document.application.usecase.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +20,7 @@ public class DocumentUsersCommandV1Controller {
     private final CreateUserStandardLaborContractUseCase createUserStandardLaborContractUseCase;
     private final CreateUserIntegratedApplicationUseCase createUserIntegratedApplicationUseCase;
     private final UpdateDocumentStatusRequestionUseCase updateDocumentStatusRequestionUseCase;
+    private final UpdateUserPartTimeEmploymentPermitUseCase updateUserPartTimeEmploymentPermitUseCase;
 
     /**
      * 8.6 (유학생) 시간제 취업허가서 생성하기
@@ -69,6 +67,18 @@ public class DocumentUsersCommandV1Controller {
             @RequestBody @Valid UpdateDocumentStatusReqeustionRequestDto requestDto
     ) {
         updateDocumentStatusRequestionUseCase.updateDocumentStatusRequestion(id, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 8.10 (유학생) 시간제 취업허가서 수정하기
+     */
+    @PutMapping("/documents/{id}/part-time-employment-permits")
+    public ResponseDto<Void> updateUserPartTimeEmploymentPermit(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateUserPartTimeEmploymentPermitRequestDto requestDto
+    ) {
+        updateUserPartTimeEmploymentPermitUseCase.execute(id, requestDto);
         return ResponseDto.ok(null);
     }
 

@@ -108,6 +108,20 @@ Content-Type: application/json
   "reason" : "{{document.API_8_9.reason}}"
 }
 
+### 8.10 (유학생) 시간제 취업허가서 수정하기
+// @no-log
+PUT {{host_url}}/v1/users/documents/{{document.API_8_10.id}}/part-time-employment-permits
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "first_name": "{{document.API_8_10.first_name}}",
+  "last_name": "{{document.API_8_10.last_name}}",
+  "major": "{{document.API_8_10.major}}",
+  "term_of_completion": {{document.API_8_10.term_of_completion}},
+  "phone_number": "{{document.API_8_10.phone_number}}",
+  "email": "{{document.API_8_10.email}}"
+}
 
 
 ### 8.17 (유학생) 서류 컨펌하기
