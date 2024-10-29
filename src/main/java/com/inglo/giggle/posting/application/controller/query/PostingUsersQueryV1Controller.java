@@ -21,6 +21,7 @@ public class PostingUsersQueryV1Controller {
     private final ReadUserOwnerJobPostingJobPostingRecruiterUserCase readUserOwnerJobPostingJobPostingRecruiterUserCase;
     private final ReadUserJobPostingValidationUseCase readUserJobPostingValidationUseCase;
     private final ReadUserBookMarkOverviewUseCase readUserBookMarkOverviewUseCase;
+    private final ReadUserBookMarkCountUseCase readUserBookMarkCountUseCase;
 
 
     /* -------------------------------------------- */
@@ -58,6 +59,18 @@ public class PostingUsersQueryV1Controller {
                 accountId,
                 page,
                 size
+        ));
+    }
+
+    /**
+     * 5.2 (유학생) 북마크 현황(개수) 확인하기
+     */
+    @GetMapping("/users/book-marks/counts")
+    public ResponseDto<ReadUserBookMarkCountResponseDto> readUserBookMarkCount(
+            @AccountID UUID accountId
+    ) {
+        return ResponseDto.ok(readUserBookMarkCountUseCase.execute(
+                accountId
         ));
     }
 
