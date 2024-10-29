@@ -18,6 +18,11 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/documents/{{document.API_8_4.id}}/standard-labor-contract/details
 Authorization: Bearer {{access_token}}
 
+### 8.5 (유학생/고용주) 통합 신청서 조회하기
+// @no-log
+GET {{host_url}}/v1/documents/{{document.API_8_5.id}}/integrated-application/details
+Authorization: Bearer {{access_token}}
+
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log
 PATCH {{host_url}}/v1/users/documents/{{document.API_8_17.id}}/status/confirmation

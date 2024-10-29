@@ -1,8 +1,10 @@
 package com.inglo.giggle.document.application.controller.query;
 
 import com.inglo.giggle.core.dto.ResponseDto;
+import com.inglo.giggle.document.application.dto.response.ReadIntegratedApplicationDetailResponseDto;
 import com.inglo.giggle.document.application.dto.response.ReadPartTimeEmploymentPermitDetailResponseDto;
 import com.inglo.giggle.document.application.dto.response.ReadStandardLaborContractDetailResponseDto;
+import com.inglo.giggle.document.application.usecase.ReadIntegratedApplicationDetailUseCase;
 import com.inglo.giggle.document.application.usecase.ReadPartTimeEmploymentPermitDetailUseCase;
 import com.inglo.giggle.document.application.usecase.ReadStandardLaborContractDetailUseCase;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DocumentQueryV1Controller {
     private final ReadPartTimeEmploymentPermitDetailUseCase readPartTimeEmploymentPermitDetailUseCase;
     private final ReadStandardLaborContractDetailUseCase readStandardLaborContractDetailUseCase;
+    private final ReadIntegratedApplicationDetailUseCase readIntegratedApplicationDetailUseCase;
 
     /**
      * 8.3 (유학생/고용주) 시간제 취업 허가서 조회하기
@@ -32,5 +35,13 @@ public class DocumentQueryV1Controller {
     @GetMapping("{id}/standard-labor-contract/details")
     public ResponseDto<ReadStandardLaborContractDetailResponseDto> readDocumentStandardLaborContractDetail(@PathVariable Long id) {
         return ResponseDto.ok(readStandardLaborContractDetailUseCase.execute(id));
+    }
+
+    /**
+     * 8.5 (유학생/고용주) 통합신청서 조회하기
+     */
+    @GetMapping("{id}/integrated-application/details")
+    public ResponseDto<ReadIntegratedApplicationDetailResponseDto> readDocumentIntegratedApplicationDetail(@PathVariable Long id) {
+        return ResponseDto.ok(readIntegratedApplicationDetailUseCase.execute(id));
     }
 }
