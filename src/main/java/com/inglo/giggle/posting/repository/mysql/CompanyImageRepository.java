@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CompanyImageRepository extends JpaRepository<CompanyImage, Long>{
     void deleteAllByIdIn(List<Long> ids);
+
+    List<CompanyImage> findAllByJobPostingId(Long jobPostingId);
 }

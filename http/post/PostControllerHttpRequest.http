@@ -1,3 +1,28 @@
+### 4.1 (게스트) 공고 리스트 조회하기
+// @no-log
+GET {{host_url}}/v1/guests/job-postings/overviews?
+    page={{posting.API_4_1.page}}&
+    size={{posting.API_4_1.size}}&
+    sorting={{posting.API_4_1.sorting}}&
+    search={{posting.API_4_1.search}}&
+    region_1depth={{posting.API_4_1.region_1depth_name}}&
+    region_2depth={{posting.API_4_1.region_2depth_name}}&
+    region_3depth={{posting.API_4_1.region_3depth_name}}&
+    industry={{posting.API_4_1.industry}}&
+    work_period={{posting.API_4_1.work_period}}&
+    work_days_per_week={{posting.API_4_1.work_days_per_week}}&
+    working_day={{posting.API_4_1.working_day}}&
+    working_hours={{posting.API_4_1.working_hours}}&
+    recruitment_period={{posting.API_4_1.recruitment_period}}&
+    employment_type={{posting.API_4_1.employment_type}}&
+    visa={{posting.API_4_1.visa}}
+Content-Type: application/json
+
+
+
+
+
+
 ### 4.6 (고용주) 공고에 대한 지원자 리스트 조회
 // @no-log
 GET {{host_url}}/v1/owners/job-postings/{{posting.API_4_6.job_posting_id}}/user-owner-job-postings/users/overviews?

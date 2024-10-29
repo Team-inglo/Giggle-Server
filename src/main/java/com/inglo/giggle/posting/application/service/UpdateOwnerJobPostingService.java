@@ -11,6 +11,7 @@ import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.posting.application.dto.request.UpdateOwnerJobPostingRequestDto;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerJobPostingUseCase;
+import com.inglo.giggle.posting.domain.CompanyImage;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.CompanyImageService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
@@ -76,7 +77,7 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
                 requestDto.hourlyRate(),
                 requestDto.recruitmentDeadLine() == null ? null : LocalDate.parse(requestDto.recruitmentDeadLine()), // 상시 모집일 경우 null 처리
                 requestDto.workPeriod(),
-                requestDto.recruitmentNumber() == null ? null: requestDto.recruitmentNumber(), // null인 경우 모집인원 무관
+                requestDto.recruitmentNumber() == null ? null : requestDto.recruitmentNumber(), // null인 경우 모집인원 무관
                 requestDto.gender(),
                 requestDto.ageRestriction(),
                 requestDto.educationLevel(),
@@ -102,6 +103,13 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
         }
 
         if (!requestDto.deletedImgIds().isEmpty()) {
+            companyImageRepository.findAllById(requestDto.deletedImgIds())
+                    .forEach(companyImage -> s3Util.deleteFile(
+                            companyImage.getImgUrl(),
+                            EImageType.COMPANY_IMG,
+                            owner.getSerialId()
+                            )
+                    );
             companyImageRepository.deleteAllByIdIn(requestDto.deletedImgIds());
         }
 

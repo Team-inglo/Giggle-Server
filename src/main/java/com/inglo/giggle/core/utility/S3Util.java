@@ -4,6 +4,7 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
@@ -53,9 +54,9 @@ public class S3Util {
 
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata);
 
-            amazonS3Client.putObject(putObjectRequest);
+            PutObjectResult putObjectResult = amazonS3Client.putObject(putObjectRequest);
 
-            return bucketName + key;
+            return bucketUrl + key;
         } catch (SdkClientException | IOException e) {
             throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
         }

@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.application.controller.query;
 
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingOverviewsResponseDto;
+import com.inglo.giggle.posting.application.usecase.ReadGuestJobPostingOverviewsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/v1")
 public class PostingGuestsQueryV1Controller {
+
+    private final ReadGuestJobPostingOverviewsUseCase readGuestJobPostingOverviewsUseCase;
 
     /**
      * 4.1 (게스트) 공고 리스트 조회하기
@@ -32,10 +35,25 @@ public class PostingGuestsQueryV1Controller {
             @RequestParam(value = "working_hours", required = false) String workingHours,
             @RequestParam(value = "recruitment_period", required = false) String recruitmentPeriod,
             @RequestParam(value = "employment_type", required = false) String employmentType,
-            @RequestParam(value = "visa", required = false) String visa,
-            @RequestParam(value = "type", required = false) String type
+            @RequestParam(value = "visa", required = false) String visa
     ) {
-        return null;
+        return ResponseDto.ok(readGuestJobPostingOverviewsUseCase.execute(
+                page,
+                size,
+                jobTitle,
+                sorting,
+                region1Depth,
+                region2Depth,
+                region3Depth,
+                industry,
+                workPeriod,
+                workDaysPerWeek,
+                workingDay,
+                workingHours,
+                recruitmentPeriod,
+                employmentType,
+                visa
+        ));
     }
 
 

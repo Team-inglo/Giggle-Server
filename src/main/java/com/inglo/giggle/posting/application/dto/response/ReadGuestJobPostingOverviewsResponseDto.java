@@ -2,10 +2,13 @@ package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.posting.domain.JobPosting;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -27,6 +30,18 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
         this.jobPostingList = jobPostingList;
 
         this.validateSelf();
+    }
+
+    public static ReadGuestJobPostingOverviewsResponseDto fromPage(Page<JobPosting> jobPostingsPage) {
+        boolean hasNext = jobPostingsPage.hasNext();
+        List<JobPostingOverviewDto> jobPostingList = jobPostingsPage.getContent().stream()
+                .map(JobPostingOverviewDto::fromEntity)
+                .toList();
+
+        return ReadGuestJobPostingOverviewsResponseDto.builder()
+                .hasNext(hasNext)
+                .jobPostingList(jobPostingList)
+                .build();
     }
 
     @Getter
@@ -86,6 +101,28 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
 
             this.validateSelf();
         }
+
+        public static JobPostingOverviewDto fromEntity(JobPosting jobPosting) {
+
+            return JobPostingOverviewDto.builder()
+                    .id(jobPosting.getId())
+                    .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
+                    .title(jobPosting.getTitle())
+                    .summaries(
+                            Summaries.fromEntity(
+                                    jobPosting
+                            )
+                    )
+                    .tags(
+                            Tags.fromEntity(
+                                    jobPosting
+                            )
+                    )
+                    .hourlyRate(jobPosting.getHourlyRate())
+                    .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine().toString())
+                    .createdAt(jobPosting.getCreatedAt().toString())
+                    .build();
+        }
     }
 
     @Getter
@@ -101,15 +138,23 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
 
         @NotNull(message = "work_days_per_week는 null일 수 없습니다.")
         @JsonProperty("work_days_per_week")
-        private final Integer workDaysPerWeek;
+        private final String workDaysPerWeek;
 
         @Builder
-        public Summaries(String address, String workPeriod, Integer workDaysPerWeek) {
+        public Summaries(String address, String workPeriod, String workDaysPerWeek) {
             this.address = address;
             this.workPeriod = workPeriod;
             this.workDaysPerWeek = workDaysPerWeek;
 
             this.validateSelf();
+        }
+
+        public static Summaries fromEntity(JobPosting jobPosting) {
+            return Summaries.builder()
+                    .address(jobPosting.getAddress().getAddressName())
+                    .workPeriod(jobPosting.getWorkPeriod().toString())
+                    .workDaysPerWeek(jobPosting.getWorkDaysPerWeekToString())
+                    .build();
         }
     }
 
@@ -135,6 +180,14 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
             this.jobCategory = jobCategory;
 
             this.validateSelf();
+        }
+
+        public static Tags fromEntity(JobPosting jobPosting) {
+            return Tags.builder()
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .visa(jobPosting.getVisa().toString())
+                    .jobCategory(jobPosting.getJobCategory().toString())
+                    .build();
         }
     }
 }

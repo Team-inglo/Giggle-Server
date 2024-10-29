@@ -52,6 +52,10 @@ public class JobPosting {
     @Enumerated(EnumType.STRING)
     @Column(name = "work_period", nullable = false)
     private EWorkPeriod workPeriod;
+//
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "work_days_per_week", nullable = false)
+//    private EWorkDaysPerWeek workDaysPerWeek;
 
     @Column(name = "recruitment_number")
     private Integer recruitmentNumber;
