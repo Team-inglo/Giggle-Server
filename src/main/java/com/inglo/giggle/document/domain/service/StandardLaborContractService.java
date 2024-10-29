@@ -95,6 +95,22 @@ public class StandardLaborContractService {
                 .build();
     }
 
+    public StandardLaborContract updateUserStandardLaborContract(
+            StandardLaborContract document,
+            String employeeFirstName,
+            String employeeLastName,
+            Address employeeAddress,
+            String employeePhoneNumber,
+            String employeeSignatureBase64
+    ) {
+        document.updateEmployeeFirstName(employeeFirstName);
+        document.updateEmployeeLastName(employeeLastName);
+        document.updateEmployeeAddress(employeeAddress);
+        document.updateEmployeePhoneNumber(employeePhoneNumber);
+        document.updateEmployeeSignatureBase64(employeeSignatureBase64);
+        return document;
+    }
+
     public ByteArrayInputStream createStandardLaborContractDocxFile(StandardLaborContract document) {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));

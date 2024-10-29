@@ -201,6 +201,98 @@ public class StandardLaborContract extends Document {
         return this.employerAddress.getFullAddress();
     }
 
+    public void updateEmployeeFirstName(String employeeFirstName) {
+        this.employeeFirstName = employeeFirstName;
+    }
+
+    public void updateEmployeeLastName(String employeeLastName) {
+        this.employeeLastName = employeeLastName;
+    }
+
+    public void updateEmployeePhoneNumber(String employeePhoneNumber) {
+        this.employeePhoneNumber = employeePhoneNumber;
+    }
+
+    public void updateEmployeeSignatureBase64(String employeeSignatureBase64) {
+        this.employeeSignatureBase64 = employeeSignatureBase64;
+    }
+
+    public void updateCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void updateCompanyRegistrationNumber(String companyRegistrationNumber) {
+        this.companyRegistrationNumber = companyRegistrationNumber;
+    }
+
+    public void updateEmployerName(String employerName) {
+        this.employerName = employerName;
+    }
+
+    public void updateEmployerPhoneNumber(String employerPhoneNumber) {
+        this.employerPhoneNumber = employerPhoneNumber;
+    }
+
+    public void updateEmployerSignatureBase64(String employerSignatureBase64) {
+        this.employerSignatureBase64 = employerSignatureBase64;
+    }
+
+    public void updateStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void updateEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
+
+    public void updateHourlyRate(Integer hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public void updateBonus(Integer bonus) {
+        this.bonus = bonus;
+    }
+
+    public void updateAdditionalSalary(Integer additionalSalary) {
+        this.additionalSalary = additionalSalary;
+    }
+
+    public void updateWageRate(Double wageRate) {
+        this.wageRate = wageRate;
+    }
+
+    public void updatePaymentDay(Integer paymentDay) {
+        this.paymentDay = paymentDay;
+    }
+
+    public void updatePaymentMethod(EPaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void updateInsurances(Set<EInsurance> insurances) {
+        this.insurances = insurances;
+    }
+
+    public void updateWeeklyRestDays(Set<EDayOfWeek> weeklyRestDays) {
+        this.weeklyRestDays = weeklyRestDays;
+    }
+
+    public void updateEmployerAddress(Address employerAddress) {
+        this.employerAddress = employerAddress;
+    }
+
+    public void updateEmployeeAddress(Address employeeAddress) {
+        this.employeeAddress = employeeAddress;
+    }
+
+    public void updateContractWorkDayTimes(List<ContractWorkDayTime> contractWorkDayTimes) {
+        this.contractWorkDayTimes = contractWorkDayTimes;
+    }
+
     public void updateEmployeeStatus(EEmployeeStatus employeeStatus) {
         this.employeeStatus = employeeStatus;
     }

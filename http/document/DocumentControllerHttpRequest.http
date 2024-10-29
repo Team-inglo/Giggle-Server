@@ -153,6 +153,30 @@ Content-Type: application/json
   }
 }
 
+### 8.12 (유학생) 근로 계약서 수정하기
+// @no-log
+PUT {{host_url}}/v1/users/documents/{{document.API_8_12.id}}/standard-labor-contracts
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "first_name" : "{{document.API_8_12.first_name}}",
+  "last_name" : "{{document.API_8_12.last_name}}",
+  "address" :
+  {
+    "address_name" : "{{document.API_8_12.address.address_name}}",
+    "region_1depth_name" : "{{document.API_8_12.address.region_1depth_name}}",
+    "region_2depth_name" : "{{document.API_8_12.address.region_2depth_name}}",
+    "region_3depth_name" : "{{document.API_8_12.address.region_3depth_name}}",
+    "region_4depth_name" : "{{document.API_8_12.address.region_4depth_name}}",
+    "address_detail" : "{{document.API_8_12.address.address_detail}}",
+    "longitude" : {{document.API_8_12.address.longitude}},
+    "latitude" : {{document.API_8_12.address.latitude}}
+  },
+  "phone_number" : "{{document.API_8_12.phone_number}}",
+  "signature_base64" : "{{document.API_8_12.signature_base64}}"
+}
+
 
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log

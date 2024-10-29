@@ -21,7 +21,7 @@ public class DocumentUsersCommandV1Controller {
     private final CreateUserIntegratedApplicationUseCase createUserIntegratedApplicationUseCase;
     private final UpdateDocumentStatusRequestionUseCase updateDocumentStatusRequestionUseCase;
     private final UpdateUserPartTimeEmploymentPermitUseCase updateUserPartTimeEmploymentPermitUseCase;
-    private final UpdateOwnerPartTimeEmploymentPermitUseCase updateOwnerPartTimeEmploymentPermitUseCase;
+    private final UpdateUserStandardLaborContractUseCase updateUserStandardLaborContractUseCase;
 
     /**
      * 8.6 (유학생) 시간제 취업허가서 생성하기
@@ -80,6 +80,18 @@ public class DocumentUsersCommandV1Controller {
             @RequestBody @Valid UpdateUserPartTimeEmploymentPermitRequestDto requestDto
     ) {
         updateUserPartTimeEmploymentPermitUseCase.execute(id, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 8.12 (유학생) 근로계약서 수정하기
+     */
+    @PutMapping("/documents/{id}/standard-labor-contracts")
+    public ResponseDto<Void> updateUserStandardLaborContract(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateUserStandardLaborContractRequestDto requestDto
+    ) {
+        updateUserStandardLaborContractUseCase.execute(id, requestDto);
         return ResponseDto.ok(null);
     }
 
