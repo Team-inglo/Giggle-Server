@@ -11,6 +11,7 @@ import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class CreateUserPartTimeEmploymentPermitService implements CreateUserPart
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
 
     @Override
+    @Transactional
     public void execute(Long userOwnerJobPostingId, CreateUserPartTimeEmploymentPermitRequestDto requestDto) {
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));

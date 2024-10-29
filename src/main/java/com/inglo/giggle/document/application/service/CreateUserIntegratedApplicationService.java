@@ -16,6 +16,7 @@ import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class CreateUserIntegratedApplicationService implements CreateUserIntegra
     private final AddressService addressService;
 
     @Override
+    @Transactional
     public void execute(Long userOwnerJobPostingId, CreateUserIntegratedApplicationRequestDto requestDto) {
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));

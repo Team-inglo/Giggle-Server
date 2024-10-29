@@ -201,11 +201,11 @@ public class StandardLaborContract extends Document {
         return this.employerAddress.getFullAddress();
     }
 
-    public void updateEmployerStatusConfirmation() {
-        this.employerStatus = EEmployerStatus.CONFIRMATION;
+    public void updateEmployeeStatus(EEmployeeStatus employeeStatus) {
+        this.employeeStatus = employeeStatus;
     }
 
-    public void updateEmployeeStatusConfirmation() {
-        this.employeeStatus = EEmployeeStatus.CONFIRMATION;
+    public void updateEmployerStatus(EEmployerStatus employerStatus) {
+        this.employerStatus = employerStatus;
     }
 }

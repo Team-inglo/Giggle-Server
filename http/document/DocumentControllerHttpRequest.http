@@ -98,6 +98,16 @@ Content-Type: application/json
   }
 }
 
+### 8.9 (유학생) 서류 재검토 요청하기
+// @no-log
+POST {{host_url}}/v1/users/documents/{{document.API_8_9.id}}/status/requestion
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "reason" : "{{document.API_8_9.reason}}"
+}
+
 
 
 ### 8.17 (유학생) 서류 컨펌하기

@@ -2,9 +2,12 @@ package com.inglo.giggle.document.domain.service;
 
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.constant.Constants;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
+import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
@@ -49,7 +52,6 @@ import java.time.Duration;
 import java.util.*;
 
 @Service
-@Slf4j
 public class StandardLaborContractService {
 
     @Value("${template.standard-labor-contract.word.path}")
@@ -58,12 +60,20 @@ public class StandardLaborContractService {
     @Value("${template.standard-labor-contract.hwp.path}")
     private String hwpTemplatePath;
 
+    public void updateEmployeeStatusRequest(StandardLaborContract document) {
+        document.updateEmployeeStatus(EEmployeeStatus.REQUEST);
+    }
+
+    public void updateEmployerStatusRewriting(StandardLaborContract document) {
+        document.updateEmployerStatus(EEmployerStatus.REWRITING);
+    }
+
     public void updateEmployeeStatusConfirmation(StandardLaborContract document) {
-        document.updateEmployeeStatusConfirmation();
+        document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
     }
 
     public void updateEmployerStatusConfirmation(StandardLaborContract document) {
-        document.updateEmployerStatusConfirmation();
+        document.updateEmployerStatus(EEmployerStatus.CONFIRMATION);
     }
 
     public StandardLaborContract createStandardLaborContract(
@@ -634,7 +644,7 @@ public class StandardLaborContractService {
                 }
             }
         } catch (Exception e) {
-            log.error("Error inserting image at placeholder: ", e);
+            throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 

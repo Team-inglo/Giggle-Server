@@ -55,6 +55,14 @@ public class PartTimeEmploymentPermitService {
     @Value("${template.part-time-employment-permit.hwp.path}")
     private String hwpTemplatePath;
 
+    public void updateEmployeeStatusRequest(PartTimeEmploymentPermit document) {
+        document.updateEmployeeStatus(EEmployeeStatus.REQUEST);
+    }
+
+    public void updateEmployerStatusRewriting(PartTimeEmploymentPermit document) {
+        document.updateEmployerStatus(EEmployerStatus.REWRITING);
+    }
+
     public void updateEmployeeStatusConfirmation(PartTimeEmploymentPermit document) {
         document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
     }

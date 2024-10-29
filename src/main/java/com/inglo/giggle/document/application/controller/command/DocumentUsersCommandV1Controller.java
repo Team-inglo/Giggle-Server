@@ -5,10 +5,8 @@ import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.document.application.dto.request.CreateUserIntegratedApplicationRequestDto;
 import com.inglo.giggle.document.application.dto.request.CreateUserPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.document.application.dto.request.CreateUserStandardLaborContractRequestDto;
-import com.inglo.giggle.document.application.usecase.ConfirmUserDocumentUseCase;
-import com.inglo.giggle.document.application.usecase.CreateUserIntegratedApplicationUseCase;
-import com.inglo.giggle.document.application.usecase.CreateUserPartTimeEmploymentPermitUseCase;
-import com.inglo.giggle.document.application.usecase.CreateUserStandardLaborContractUseCase;
+import com.inglo.giggle.document.application.dto.request.UpdateDocumentStatusReqeustionRequestDto;
+import com.inglo.giggle.document.application.usecase.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +22,7 @@ public class DocumentUsersCommandV1Controller {
     private final CreateUserPartTimeEmploymentPermitUseCase createUserPartTimeEmploymentPermitUseCase;
     private final CreateUserStandardLaborContractUseCase createUserStandardLaborContractUseCase;
     private final CreateUserIntegratedApplicationUseCase createUserIntegratedApplicationUseCase;
+    private final UpdateDocumentStatusRequestionUseCase updateDocumentStatusRequestionUseCase;
 
     /**
      * 8.6 (유학생) 시간제 취업허가서 생성하기
@@ -59,6 +58,18 @@ public class DocumentUsersCommandV1Controller {
     ) {
        createUserIntegratedApplicationUseCase.execute(id, requestDto);
          return ResponseDto.ok(null);
+    }
+
+    /**
+     * 8.9 (유학생) 서류 재검토 요청하기
+     */
+    @PostMapping("/documents/{id}/status/requestion")
+    public ResponseDto<Void> requestUserDocument(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateDocumentStatusReqeustionRequestDto requestDto
+    ) {
+        updateDocumentStatusRequestionUseCase.updateDocumentStatusRequestion(id, requestDto);
+        return ResponseDto.ok(null);
     }
 
     /**

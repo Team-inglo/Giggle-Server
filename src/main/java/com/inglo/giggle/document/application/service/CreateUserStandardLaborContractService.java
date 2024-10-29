@@ -13,6 +13,7 @@ import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,9 @@ public class CreateUserStandardLaborContractService implements CreateUserStandar
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final StandardLaborContractService standardLaborContractService;
     private final AddressService addressService;
+
     @Override
+    @Transactional
     public void execute(Long id, CreateUserStandardLaborContractRequestDto requestDto) {
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findById(id)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
