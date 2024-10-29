@@ -13,6 +13,11 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/documents/{{document.API_8_3.id}}/part-time-employment-permit/details
 Authorization: Bearer {{access_token}}
 
+### 8.4 (유학생/고용주) 근로 계약서 조회하기
+// @no-log
+GET {{host_url}}/v1/documents/{{document.API_8_4.id}}/standard-labor-contract/details
+Authorization: Bearer {{access_token}}
+
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log
 PATCH {{host_url}}/v1/users/documents/{{document.API_8_17.id}}/status/confirmation

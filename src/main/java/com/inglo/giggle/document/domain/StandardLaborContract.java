@@ -50,14 +50,14 @@ public class StandardLaborContract extends Document {
     @Column(name = "company_name", length = 150)
     private String companyName;
 
+    @Column(name = "employer_phone_number", length = 20)
+    private String employerPhoneNumber;
+
     @Column(name = "company_registration_number", length = 12)
     private String companyRegistrationNumber;
 
     @Column(name = "employer_name", length = 150)
     private String employerName;
-
-    @Column(name = "employer_phone_number", length = 20)
-    private String employerPhoneNumber;
 
     @Column(name = "start_date")
     private LocalDate startDate;

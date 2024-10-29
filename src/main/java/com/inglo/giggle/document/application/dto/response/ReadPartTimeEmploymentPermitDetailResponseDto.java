@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ReadDocumentPartTimeEmploymentPermitDetailResponseDto extends SelfValidating<ReadDocumentPartTimeEmploymentPermitDetailResponseDto> {
+public class ReadPartTimeEmploymentPermitDetailResponseDto extends SelfValidating<ReadPartTimeEmploymentPermitDetailResponseDto> {
 
     @JsonProperty("employee_information")
     private final EmployeeInformationDto employeeInformation;
@@ -17,7 +17,7 @@ public class ReadDocumentPartTimeEmploymentPermitDetailResponseDto extends SelfV
     private final EmployerInformationDto employerInformation;
 
     @Builder
-    public ReadDocumentPartTimeEmploymentPermitDetailResponseDto(
+    public ReadPartTimeEmploymentPermitDetailResponseDto(
             EmployeeInformationDto employeeInformation,
             EmployerInformationDto employerInformation
     ) {
@@ -147,8 +147,8 @@ public class ReadDocumentPartTimeEmploymentPermitDetailResponseDto extends SelfV
                     .build();
         }
     }
-    public static ReadDocumentPartTimeEmploymentPermitDetailResponseDto fromEntity(PartTimeEmploymentPermit partTimeEmploymentPermit) {
-        return ReadDocumentPartTimeEmploymentPermitDetailResponseDto.builder()
+    public static ReadPartTimeEmploymentPermitDetailResponseDto fromEntity(PartTimeEmploymentPermit partTimeEmploymentPermit) {
+        return ReadPartTimeEmploymentPermitDetailResponseDto.builder()
                 .employeeInformation(EmployeeInformationDto.fromEntity(partTimeEmploymentPermit))
                 .employerInformation(EmployerInformationDto.fromEntity(partTimeEmploymentPermit))
                 .build();
