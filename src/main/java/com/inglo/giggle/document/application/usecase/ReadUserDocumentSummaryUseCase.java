@@ -1,7 +1,7 @@
-package com.inglo.giggle.document.appliation.usecase;
+package com.inglo.giggle.document.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.document.appliation.dto.response.ReadUserDocumentSummaryResponseDto;
+import com.inglo.giggle.document.application.dto.response.ReadUserDocumentSummaryResponseDto;
 
 import java.util.UUID;
 

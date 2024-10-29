@@ -1,4 +1,4 @@
-package com.inglo.giggle.document.appliation.service;
+package com.inglo.giggle.document.application.service;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
@@ -7,7 +7,7 @@ import com.inglo.giggle.account.repository.mysql.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.S3Util;
-import com.inglo.giggle.document.appliation.usecase.ConfirmUserDocumentUseCase;
+import com.inglo.giggle.document.application.usecase.ConfirmUserDocumentUseCase;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
@@ -23,17 +23,14 @@ import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
     private final DocumentRepository documentRepository;
     private final JobPostingRepository jobPostingRepository;

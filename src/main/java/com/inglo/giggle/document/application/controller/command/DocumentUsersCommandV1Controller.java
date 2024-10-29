@@ -1,8 +1,8 @@
-package com.inglo.giggle.document.appliation.controller.command;
+package com.inglo.giggle.document.application.controller.command;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.document.appliation.usecase.ConfirmUserDocumentUseCase;
+import com.inglo.giggle.document.application.usecase.ConfirmUserDocumentUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;

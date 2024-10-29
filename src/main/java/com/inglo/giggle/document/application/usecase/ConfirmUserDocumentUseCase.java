@@ -1,4 +1,4 @@
-package com.inglo.giggle.document.appliation.usecase;
+package com.inglo.giggle.document.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
 
