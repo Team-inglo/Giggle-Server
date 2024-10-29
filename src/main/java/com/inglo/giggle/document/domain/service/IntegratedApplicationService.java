@@ -1,11 +1,14 @@
 package com.inglo.giggle.document.domain.service;
 
+import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.school.domain.School;
 import jakarta.xml.bind.JAXBElement;
 import kr.dogfoot.hwplib.object.HWPFile;
 import kr.dogfoot.hwplib.object.bodytext.Section;
@@ -42,6 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +62,49 @@ public class IntegratedApplicationService {
 
     public void updateEmployeeStatusConfirmation(IntegratedApplication document) {
         document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
+    }
+
+    public IntegratedApplication createIntegratedApplication(
+            UserOwnerJobPosting userOwnerJobPosting,
+            Address employeeAddress,
+            String firstName,
+            String lastName,
+            LocalDate birth,
+            EGender gender,
+            String nationality,
+            String telePhoneNumber,
+            String cellPhoneNumber,
+            Boolean isAccredited,
+            String newWorkPlaceName,
+            String newWorkPlaceRegistrationNumber,
+            String newWorkPlacePhoneNumber,
+            Integer annualIncomeAmount,
+            String occupation,
+            String email,
+            String employeeSignatureBase64,
+            School school
+    ){
+        return IntegratedApplication.builder()
+                .userOwnerJobPosting(userOwnerJobPosting)
+                .employeeAddress(employeeAddress)
+                .firstName(firstName)
+                .lastName(lastName)
+                .birth(birth)
+                .gender(gender)
+                .nationality(nationality)
+                .telePhoneNumber(telePhoneNumber)
+                .cellPhoneNumber(cellPhoneNumber)
+                .isAccredited(isAccredited)
+                .newWorkPlaceName(newWorkPlaceName)
+                .newWorkPlaceRegistrationNumber(newWorkPlaceRegistrationNumber)
+                .newWorkPlacePhoneNumber(newWorkPlacePhoneNumber)
+                .annualIncomeAmount(annualIncomeAmount)
+                .occupation(occupation)
+                .email(email)
+                .employeeSignatureBase64(employeeSignatureBase64)
+                .employeeStatus(EEmployeeStatus.TEMPORARY_SAVE)
+                .school(school)
+                .build();
     }
 
     public ByteArrayInputStream createIntegratedApplicationDocxFile(IntegratedApplication document) {

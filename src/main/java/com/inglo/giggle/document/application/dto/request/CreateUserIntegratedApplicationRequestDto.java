@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+
 public record CreateUserIntegratedApplicationRequestDto(
 
         @NotNull
@@ -20,7 +22,7 @@ public record CreateUserIntegratedApplicationRequestDto(
 
         @NotNull
         @JsonProperty("birth")
-        String birth,
+        LocalDate birth,
 
         @NotNull
         @JsonProperty("gender")
@@ -46,8 +48,12 @@ public record CreateUserIntegratedApplicationRequestDto(
         Boolean isAccredited,
 
         @NotNull
-        @JsonProperty("school_id")
-        Long schoolId,
+        @JsonProperty("school_name")
+        String schoolName,
+
+        @NotNull
+        @JsonProperty("school_phone_number")
+        String schoolPhoneNumber,
 
         @NotNull
         @Size(min = 1, max = 50)

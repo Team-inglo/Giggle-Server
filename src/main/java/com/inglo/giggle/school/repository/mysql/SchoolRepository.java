@@ -21,4 +21,5 @@ public interface SchoolRepository extends JpaRepository<School, Long>{
             "ORDER BY e.graduationDate DESC")
     Optional<School> findMostRecentGraduationSchoolByUserId(@Param("userId") UUID userId);
 
+    Optional<School> findBySchoolName(String schoolName);
 }

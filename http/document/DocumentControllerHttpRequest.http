@@ -62,6 +62,44 @@ Content-Type: application/json
   "signature_base64" : "{{document.API_8_7.signature_base64}}"
 }
 
+### 8.8 (유학생) 통합 신청서 생성하기
+// @no-log
+POST {{host_url}}/v1/users/user-owner-job-postings/{{document.API_8_8.id}}/documents/integrated-applications
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "first_name" : "{{document.API_8_8.first_name}}",
+  "last_name" : "{{document.API_8_8.last_name}}",
+  "birth" : "{{document.API_8_8.birth}}",
+  "gender" : "{{document.API_8_8.gender}}",
+  "nationality" : "{{document.API_8_8.nationality}}",
+  "tele_phone_number" : "{{document.API_8_8.tele_phone_number}}",
+  "cell_phone_number" : "{{document.API_8_8.cell_phone_number}}",
+  "is_accredited" : {{document.API_8_8.is_accredited}},
+  "school_name" : "{{document.API_8_8.school_name}}",
+  "school_phone_number" : "{{document.API_8_8.school_phone_number}}",
+  "new_work_place_name" : "{{document.API_8_8.new_work_place_name}}",
+  "new_work_place_registration_number" : "{{document.API_8_8.new_work_place_registration_number}}",
+  "new_work_place_phone_number" : "{{document.API_8_8.new_work_place_phone_number}}",
+  "annual_income_amount" : {{document.API_8_8.annual_income_amount}},
+  "occupation" : "{{document.API_8_8.occupation}}",
+  "email" : "{{document.API_8_8.email}}",
+  "signature_base64" : "{{document.API_8_8.signature_base64}}",
+  "address" : {
+    "address_name" : "{{document.API_8_8.address.address_name}}",
+    "region_1depth_name" : "{{document.API_8_8.address.region_1depth_name}}",
+    "region_2depth_name" : "{{document.API_8_8.address.region_2depth_name}}",
+    "region_3depth_name" : "{{document.API_8_8.address.region_3depth_name}}",
+    "region_4depth_name" : "{{document.API_8_8.address.region_4depth_name}}",
+    "address_detail" : "{{document.API_8_8.address.address_detail}}",
+    "longitude" : {{document.API_8_8.address.longitude}},
+    "latitude" : {{document.API_8_8.address.latitude}}
+  }
+}
+
+
+
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log
 PATCH {{host_url}}/v1/users/documents/{{document.API_8_17.id}}/status/confirmation
