@@ -4,6 +4,7 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "part_time_employment_permits")
+@DiscriminatorValue("PART_TIME_EMPLOYMENT_PERMIT")
 @PrimaryKeyJoinColumn(
         name = "document_id",
         foreignKey = @ForeignKey(name = "fk_part_time_employment_permit_document")
@@ -23,11 +25,11 @@ public class PartTimeEmploymentPermit extends Document {
     /* -------------------------------------------- */
     /* Information Column(Employee) --------------- */
     /* -------------------------------------------- */
-    @Column(name = "first_name", length = 50, nullable = false)
-    private String firstName;
+    @Column(name = "employee_first_name", length = 50, nullable = false)
+    private String employeeFirstName;
 
-    @Column(name = "last_name", length = 100, nullable = false)
-    private String lastName;
+    @Column(name = "employee_last_name", length = 100, nullable = false)
+    private String employeeLastName;
 
     @Column(name = "major", length = 50, nullable = false)
     private String major;
@@ -57,6 +59,29 @@ public class PartTimeEmploymentPermit extends Document {
     @Column(name = "job_type", length = 20)
     private String jobType;
 
+    @Column(name = "employer_name", length = 100)
+    private String employerName;
+
+    @Column(name = "employer_phone_number", length = 20)
+    private String employerPhoneNumber;
+
+    @Lob
+    @Column(name = "employer_signature_base64", columnDefinition = "TEXT")
+    private String employerSignatureBase64;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "work_period")
+    private EWorkPeriod workPeriod;
+
+    @Column(name = "hourly_rate")
+    private Integer hourlyRate;
+
+    @Column(name = "work_days_weekdays", length = 150)
+    private String workDaysWeekDays;
+
+    @Column(name = "work_days_weekends", length = 150)
+    private String workDaysWeekends;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "employer_status")
     private EEmployerStatus employerStatus;
@@ -81,14 +106,16 @@ public class PartTimeEmploymentPermit extends Document {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public PartTimeEmploymentPermit(UserOwnerJobPosting userOwnerJobPosting, String firstName, String lastName,
+    public PartTimeEmploymentPermit(UserOwnerJobPosting userOwnerJobPosting, String employeeFirstName, String employeeLastName,
                                     String major, Integer termOfCompletion, String employeePhoneNumber,
                                     String employeeEmail, EEmployeeStatus employeeStatus, String companyName,
-                                    String companyRegistrationNumber, String jobType, EEmployerStatus employerStatus,
-                                    Address employerAddress) {
+                                    String companyRegistrationNumber, String jobType, String employerName,
+                                    String employerPhoneNumber, String employerSignatureBase64, EWorkPeriod workPeriod,
+                                    Integer hourlyRate, String workDaysWeekDays, String workDaysWeekends,
+                                    EEmployerStatus employerStatus, Address employerAddress) {
         super(userOwnerJobPosting);
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.employeeFirstName = employeeFirstName;
+        this.employeeLastName = employeeLastName;
         this.major = major;
         this.termOfCompletion = termOfCompletion;
         this.employeePhoneNumber = employeePhoneNumber;
@@ -97,7 +124,26 @@ public class PartTimeEmploymentPermit extends Document {
         this.companyName = companyName;
         this.companyRegistrationNumber = companyRegistrationNumber;
         this.jobType = jobType;
+        this.employerName = employerName;
+        this.employerPhoneNumber = employerPhoneNumber;
+        this.employerSignatureBase64 = employerSignatureBase64;
+        this.workPeriod = workPeriod;
+        this.hourlyRate = hourlyRate;
+        this.workDaysWeekDays = workDaysWeekDays;
+        this.workDaysWeekends = workDaysWeekends;
         this.employerStatus = employerStatus;
         this.employerAddress = employerAddress;
+    }
+
+    public String getEmployeeFullName() {
+        return this.employeeFirstName + " " + this.employeeLastName;
+    }
+
+    public void updateEmployeeStatus(EEmployeeStatus employeeStatus) {
+        this.employeeStatus = employeeStatus;
+    }
+
+    public void updateEmployerStatus(EEmployerStatus employerStatus) {
+        this.employerStatus = employerStatus;
     }
 }

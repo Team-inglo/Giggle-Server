@@ -26,13 +26,11 @@ public abstract class Document {
     /* -------------------------------------------- */
     /* Information Column ------------------------- */
     /* -------------------------------------------- */
-    @Column(name = "pdf_url", length = 320 , nullable = false)
-    private String pdfUrl;
 
-    @Column(name = "hwp_url", length = 320 , nullable = false)
+    @Column(name = "hwp_url", length = 320)
     private String hwpUrl;
 
-    @Column(name = "word_url", length = 320 , nullable = false)
+    @Column(name = "word_url", length = 320)
     private String wordUrl;
 
     /* -------------------------------------------- */
@@ -54,5 +52,13 @@ public abstract class Document {
     protected Document(UserOwnerJobPosting userOwnerJobPosting) {
         this.createdAt = LocalDate.now();
         this.userOwnerJobPosting = userOwnerJobPosting;
+    }
+
+    public void updateWordUrl(String wordUrl) {
+        this.wordUrl = wordUrl;
+    }
+
+    public void updateHwpUrl(String hwpUrl) {
+        this.hwpUrl = hwpUrl;
     }
 }

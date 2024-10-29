@@ -10,11 +10,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 @Configuration
 @RequiredArgsConstructor
-public class ImageUtil {
+public class S3Util {
     private final AmazonS3Client amazonS3Client;
 
     private final String IMAGE_CONTENT_PREFIX = "image/";
@@ -67,6 +68,30 @@ public class ImageUtil {
         try {
             amazonS3Client.putObject(bucketName, fileName, file.getInputStream(), null);
         } catch (IOException e) {
+            throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
+        }
+        return bucketUrl + fileName;
+    }
+
+    public String uploadWordFile(InputStream inputStream, String type, Long jobPostingId, String jobPostingTitle, String ownerName, String userName) {
+        String uuid = UUID.randomUUID().toString();
+        String fileName = "documents/" + jobPostingTitle + ":id_" + jobPostingId + "/" + type + "-" + ownerName + "_" + userName + "-" + uuid + ".docx";
+
+        try {
+            amazonS3Client.putObject(bucketName, fileName, inputStream, null);
+        } catch (Exception e) {
+            throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
+        }
+        return bucketUrl + fileName;
+    }
+
+    public String uploadHwpFile(InputStream inputStream, String type, Long jobPostingId, String jobPostingTitle, String ownerName, String userName) {
+        String uuid = UUID.randomUUID().toString();
+        String fileName = "documents/" + jobPostingTitle + ":id_" + jobPostingId + "/" + type + "-" + ownerName + "_" + userName + "-" + uuid + ".hwp";
+
+        try {
+            amazonS3Client.putObject(bucketName, fileName, inputStream, null);
+        } catch (Exception e) {
             throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
         }
         return bucketUrl + fileName;

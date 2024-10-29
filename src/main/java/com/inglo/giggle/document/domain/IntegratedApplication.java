@@ -1,6 +1,7 @@
 package com.inglo.giggle.document.domain;
 
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.core.type.EGender;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "integrated_applications")
+@DiscriminatorValue("INTEGRATED_APPLICATION")
 @PrimaryKeyJoinColumn(
         name = "document_id",
         foreignKey = @ForeignKey(name = "fk_integrated_application_document")
@@ -69,8 +71,12 @@ public class IntegratedApplication extends Document {
     private String email;
 
     @Lob
-    @Column(name = "employee_signature_base64")
+    @Column(name = "employee_signature_base64", nullable = false, columnDefinition = "TEXT")
     private String employeeSignatureBase64;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "employee_status", nullable = false)
+    private EEmployeeStatus employeeStatus;
 
     /* -------------------------------------------- */
     /* Embedded Column ---------------------------- */
@@ -103,8 +109,8 @@ public class IntegratedApplication extends Document {
                                  LocalDate birth, EGender gender, String nationality, String telePhoneNumber,
                                  String cellPhoneNumber, Boolean isAccredited, String newWorkPlaceName,
                                  String newWorkPlaceRegistrationNumber, String newWorkPlacePhoneNumber,
-                                 Integer annualIncomeAmount, String occupation, String email,
-                                 String employeeSignatureBase64, Address employeeAddress, School school) {
+                                 Integer annualIncomeAmount, String occupation, String email, String employeeSignatureBase64,
+                                 EEmployeeStatus employeeStatus, Address employeeAddress, School school) {
         super(userOwnerJobPosting);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -121,7 +127,13 @@ public class IntegratedApplication extends Document {
         this.occupation = occupation;
         this.email = email;
         this.employeeSignatureBase64 = employeeSignatureBase64;
+        this.employeeStatus = employeeStatus;
         this.employeeAddress = employeeAddress;
         this.school = school;
     }
+
+    public void updateEmployeeStatus(EEmployeeStatus employeeStatus) {
+        this.employeeStatus = employeeStatus;
+    }
+
 }

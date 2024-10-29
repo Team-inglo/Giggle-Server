@@ -2,3 +2,9 @@
 // @no-log
 GET {{host_url}}/v1/users/user-owner-job-postings/{{document.API_8_1.id}}/documents/summaries
 Authorization: Bearer {{access_token}}
+
+### 8.17 (유학생) 서류 컨펌하기
+// @no-log
+PATCH {{host_url}}/v1/users/documents/{{document.API_8_17.id}}/status/confirmation
+Authorization: Bearer {{access_token}}
+

@@ -6,20 +6,21 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum EDayOfWeek {
-    WEEKDAYS("평일", "WEEKDAYS"),
-    WEEKEND("주말", "WEEKEND"),
-    MONDAY("월요일", "MONDAY"),
-    TUESDAY("화요일", "TUESDAY"),
-    WEDNESDAY("수요일", "WEDNESDAY"),
-    WENSDAY("목요일", "WENSDAY"),
-    FRIDAY("금요일", "FRIDAY"),
-    SATURDAY("토요일", "SATURDAY"),
-    SUNDAY("일요일", "SUNDAY"),
-    NEGOCIABLE("협의가능", "NEGOCIABLE")
+    WEEKDAYS("평일", "WEEKDAYS", 0),
+    WEEKEND("주말", "WEEKEND", 1),
+    MONDAY("월", "MONDAY", 2),
+    TUESDAY("화", "TUESDAY", 3),
+    WEDNESDAY("수", "WEDNESDAY", 4),
+    THURSDAY("목", "THURSDAY", 5),
+    FRIDAY("금", "FRIDAY", 6),
+    SATURDAY("토", "SATURDAY", 7),
+    SUNDAY("일", "SUNDAY", 8),
+    NEGOCIABLE("협의가능", "NEGOCIABLE", 9)
     ;
 
     private final String krName;
     private final String enName;
+    private final Integer order;
 
     public static EDayOfWeek fromString(String value) {
         return switch (value.toUpperCase()) {
@@ -28,7 +29,7 @@ public enum EDayOfWeek {
             case "MONDAY" -> MONDAY;
             case "TUESDAY" -> TUESDAY;
             case "WEDNESDAY" -> WEDNESDAY;
-            case "WENSDAY" -> WENSDAY;
+            case "THURSDAY" -> THURSDAY;
             case "FRIDAY" -> FRIDAY;
             case "SATURDAY" -> SATURDAY;
             case "SUNDAY" -> SUNDAY;

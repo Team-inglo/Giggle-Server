@@ -80,9 +80,19 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-aws-context:2.2.6.RELEASE'
     implementation 'org.springframework.cloud:spring-cloud-aws-autoconfigure:2.2.6.RELEASE'
 
-    // Firebase
-    implementation 'com.google.firebase:firebase-admin:6.8.1'
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+    // Documents
+    implementation 'org.docx4j:docx4j-core:11.5.0'
+    implementation 'org.docx4j:docx4j-JAXB-ReferenceImpl:11.5.0'
+    implementation 'org.docx4j:docx4j-openxml-objects:11.5.0'
+    implementation 'kr.dogfoot:hwplib:1.1.7'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+    implementation 'org.glassfish.jaxb:jaxb-core:4.0.5'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
+    implementation 'org.apache.xmlgraphics:batik-transcoder:1.17'
+    implementation 'org.apache.xmlgraphics:batik-codec:1.17'
+    implementation 'org.apache.xmlgraphics:batik-dom:1.17'
+    implementation 'org.apache.xmlgraphics:batik-anim:1.17'
+
 
     // Testing Dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

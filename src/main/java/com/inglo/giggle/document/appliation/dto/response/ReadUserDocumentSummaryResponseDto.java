@@ -43,9 +43,6 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         @JsonProperty("id")
         private final Long id;
 
-        @JsonProperty("pdf_url")
-        private final String pdfUrl;
-
         @JsonProperty("hwp_url")
         private final String hwpUrl;
 
@@ -56,9 +53,8 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         private final String status;
 
         @Builder
-        public DocumentDetailDto(Long id, String pdfUrl, String hwpUrl, String wordUrl, EEmployeeStatus status) {
+        public DocumentDetailDto(Long id, String hwpUrl, String wordUrl, EEmployeeStatus status) {
             this.id = id;
-            this.pdfUrl = pdfUrl;
             this.hwpUrl = hwpUrl;
             this.wordUrl = wordUrl;
             this.status = status.getEnName();
@@ -67,7 +63,6 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         public static DocumentDetailDto fromEntity(Document document, EEmployeeStatus status) {
             return DocumentDetailDto.builder()
                     .id(document.getId())
-                    .pdfUrl(document.getPdfUrl())
                     .hwpUrl(document.getHwpUrl())
                     .wordUrl(document.getWordUrl())
                     .status(status)
@@ -82,9 +77,6 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         @JsonProperty("id")
         private final Long id;
 
-        @JsonProperty("pdf_url")
-        private final String pdfUrl;
-
         @JsonProperty("hwp_url")
         private final String hwpUrl;
 
@@ -92,9 +84,8 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         private final String wordUrl;
 
         @Builder
-        public SimpleDocumentDto(Long id, String pdfUrl, String hwpUrl, String wordUrl) {
+        public SimpleDocumentDto(Long id, String hwpUrl, String wordUrl) {
             this.id = id;
-            this.pdfUrl = pdfUrl;
             this.hwpUrl = hwpUrl;
             this.wordUrl = wordUrl;
         }
@@ -102,7 +93,6 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         public static SimpleDocumentDto fromEntity(Document document) {
             return SimpleDocumentDto.builder()
                     .id(document.getId())
-                    .pdfUrl(document.getPdfUrl())
                     .hwpUrl(document.getHwpUrl())
                     .wordUrl(document.getWordUrl())
                     .build();

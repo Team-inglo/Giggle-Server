@@ -60,6 +60,10 @@ public class Address {
         this.latitude = latitude;
     }
 
+    public String getFullAddress() {
+        return this.addressName + " " + this.addressDetail;
+    }
+
     public void updateAddressName(String addressName) {
         this.addressName = addressName;
     }
