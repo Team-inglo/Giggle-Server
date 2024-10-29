@@ -15,28 +15,28 @@ public class Address {
     //* -------------------------------------------- */
     //* Address Information Column ----------------- */
     //* -------------------------------------------- */
-    @Column(name = "address_name", length = 50, nullable = false)
+    @Column(name = "address_name", length = 50)
     private String addressName;
 
-    @Column(name = "region_1depth_name", length = 10, nullable = false)
+    @Column(name = "region_1depth_name", length = 10)
     private String region1DepthName;
 
-    @Column(name = "region_2depth_name", length = 10, nullable = false)
+    @Column(name = "region_2depth_name", length = 10)
     private String region2DepthName;
 
-    @Column(name = "region_3depth_name", length = 10, nullable = false)
+    @Column(name = "region_3depth_name", length = 10)
     private String region3DepthName;
 
     @Column(name = "region_4depth_name", length = 10)
     private String region4DepthName;
 
-    @Column(name = "address_detail", length = 100, nullable = false)
+    @Column(name = "address_detail", length = 100)
     private String addressDetail;
 
-    @Column(name = "longitude", nullable = false)
+    @Column(name = "longitude")
     private Double longitude;
 
-    @Column(name = "latitude", nullable = false)
+    @Column(name = "latitude")
     private Double latitude;
 
     @Builder

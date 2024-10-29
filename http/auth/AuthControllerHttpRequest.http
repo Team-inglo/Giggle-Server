@@ -145,7 +145,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "920215"
+@authentication_code_user = "782822"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
@@ -161,7 +161,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 고용주
 // @no-log
-@authentication_code_owner = "671518"
+@authentication_code_owner = "716074"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 

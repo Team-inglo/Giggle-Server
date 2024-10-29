@@ -6,6 +6,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.xml.bind.JAXBElement;
 import kr.dogfoot.hwplib.object.HWPFile;
 import kr.dogfoot.hwplib.object.bodytext.Section;
@@ -60,6 +61,27 @@ public class PartTimeEmploymentPermitService {
 
     public void updateEmployerStatusConfirmation(PartTimeEmploymentPermit document) {
         document.updateEmployerStatus(EEmployerStatus.CONFIRMATION);
+    }
+
+    public PartTimeEmploymentPermit createPartTimeEmploymentPermit(
+            UserOwnerJobPosting userOwnerJobPosting,
+            String employeeFirstName,
+            String employeeLastName,
+            String major,
+            Integer termOfCompletion,
+            String employeePhoneNumber,
+            String employeeEmail
+    ) {
+        return PartTimeEmploymentPermit.builder()
+                .userOwnerJobPosting(userOwnerJobPosting)
+                .employeeFirstName(employeeFirstName)
+                .employeeLastName(employeeLastName)
+                .major(major)
+                .termOfCompletion(termOfCompletion)
+                .employeePhoneNumber(employeePhoneNumber)
+                .employeeEmail(employeeEmail)
+                .employeeStatus(EEmployeeStatus.TEMPORARY_SAVE)
+                .build();
     }
 
     public ByteArrayInputStream createPartTimeEmploymentPermitDocxFile(PartTimeEmploymentPermit document) {

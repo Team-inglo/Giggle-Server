@@ -22,22 +22,22 @@ public record UpdateOwnerRequestDto(
 
     public record OwnerInfo(
             @NotNull
-            @Size(min = 1, max = 50)
+            @Size(min = 1, max = 100)
             @JsonProperty("company_name")
             String companyName,
 
             @NotNull
-            @Size(min = 1, max = 50)
+            @Size(min = 1, max = 10)
             @JsonProperty("owner_name")
             String ownerName,
 
             @NotNull
-            @Size(min = 1, max = 20)
+            @Size(min = 1, max = 12)
             @JsonProperty("company_registration_number")
             String companyRegistrationNumber,
 
             @NotNull
-            @Size(min = 10, max = 15)
+            @Size(min = 10, max = 20)
             @JsonProperty("phone_number")
             String phoneNumber
     ) {}

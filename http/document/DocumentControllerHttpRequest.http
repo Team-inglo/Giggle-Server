@@ -23,6 +23,21 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/documents/{{document.API_8_5.id}}/integrated-application/details
 Authorization: Bearer {{access_token}}
 
+### 8.6 (유학생) 시간제 취업허가서 생성하기
+// @no-log
+POST {{host_url}}/v1/users/user-owner-job-postings/{{document.API_8_6.id}}/documents/part-time-employment-permits
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "first_name": "{{document.API_8_6.first_name}}",
+  "last_name": "{{document.API_8_6.last_name}}",
+  "major": "{{document.API_8_6.major}}",
+  "term_of_completion": {{document.API_8_6.term_of_completion}},
+  "phone_number": "{{document.API_8_6.phone_number}}",
+  "email": "{{document.API_8_6.email}}"
+}
+
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log
 PATCH {{host_url}}/v1/users/documents/{{document.API_8_17.id}}/status/confirmation
