@@ -20,6 +20,9 @@ public class ResumeUsersCommandV1Controller {
     private final UpdateUserIntroductionUseCase updateUserIntroductionUseCase;
     private final UpdateUserWorkExperienceUseCase updateUserWorkExperienceUseCase;
     private final UpdateUserEducationUseCase updateUserEducationUseCase;
+    private final UpdateUserTopikUseCase updateUserTopikUseCase;
+    private final UpdateUserSejongInstituteUseCase updateUserSejongInstituteUseCase;
+    private final UpdateUserSocialIntegrationProgramUseCase updateUserSocialIntegrationProgramUseCase;
 
     /**
      * 7.5 (유학생) 경력 생성하기
@@ -90,6 +93,42 @@ public class ResumeUsersCommandV1Controller {
             @RequestBody @Valid UpdateUserEducationRequestDto requestDto
     ) {
         updateUserEducationUseCase.execute(id, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.11 (유학생) TOPIK 레벨 수정하기
+     */
+    @PatchMapping("/languages/topik")
+    public ResponseDto<Void> updateUserTopik(
+            @AccountID UUID accountId,
+            @RequestBody @Valid UpdateUserTopikReqeustDto requestDto
+    ) {
+        updateUserTopikUseCase.execute(accountId, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.12 (유학생) SOCIAL INTEGRATION PROGRAM 레벨 수정하기
+     */
+    @PatchMapping("/languages/social-integration-program")
+    public ResponseDto<Void> updateUserSocialIntegrationProgram(
+            @AccountID UUID accountId,
+            @RequestBody @Valid UpdateUserSocialIntegrationProgramReqeustDto requestDto
+    ) {
+        updateUserSocialIntegrationProgramUseCase.execute(accountId, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.13 (유학생) SEJONG INSTITUTE 레벨 수정하기
+     */
+    @PatchMapping("/languages/sejong-institute")
+    public ResponseDto<Void> updateUserSejongInstitute(
+            @AccountID UUID accountId,
+            @RequestBody @Valid UpdateUserSejongInstituteReqeustDto requestDto
+    ) {
+        updateUserSejongInstituteUseCase.execute(accountId, requestDto);
         return ResponseDto.ok(null);
     }
 }
