@@ -139,6 +139,25 @@ Content-Type: application/json
   "level": {{resume.API_7_14.level}}
 }
 
+### 7.15 (유학생) 자기소개 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/introduction
+Authorization: Bearer {{access_token}}
+
+### 7.16 (유학생) 경력 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/work-experiences/{{resume.API_7_16.id}}
+Authorization: Bearer {{access_token}}
+
+### 7.17 (유학생) 학력 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/educations/{{resume.API_7_17.id}}
+Authorization: Bearer {{access_token}}
+
+### 7.18 (유학생) 언어 - ETC 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/additional-languages/{{resume.API_7_18.id}}
+Authorization: Bearer {{access_token}}
 
 ### 7.19 (고용주) 이력서 조회하기
 // @no-log

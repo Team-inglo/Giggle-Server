@@ -24,6 +24,10 @@ public class ResumeUsersCommandV1Controller {
     private final UpdateUserSejongInstituteUseCase updateUserSejongInstituteUseCase;
     private final UpdateUserSocialIntegrationProgramUseCase updateUserSocialIntegrationProgramUseCase;
     private final UpdateUserAdditionalLanguageSkillUseCase updateUserAdditionalLanguageSkillUseCase;
+    private final DeleteUserIntroductionUseCase deleteUserIntroductionUseCase;
+    private final DeleteUserEducationUseCase deleteUserEducationUseCase;
+    private final DeleteUserAdditionalLanguageUseCase deleteUserAdditionalLanguageUseCase;
+    private final DeleteUserWorkExperienceUseCase deleteUserWorkExperienceUseCase;
 
     /**
      * 7.5 (유학생) 경력 생성하기
@@ -142,6 +146,50 @@ public class ResumeUsersCommandV1Controller {
             @RequestBody @Valid UpdateUserAdditionalLanguageSkillRequestDto requestDto
     ) {
         updateUserAdditionalLanguageSkillUseCase.execute(id, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.15 (유학생) 자기소개 삭제하기
+     */
+    @DeleteMapping("/introduction")
+    public ResponseDto<Void> deleteUserIntroduction(
+            @AccountID UUID accountId
+    ) {
+        deleteUserIntroductionUseCase.execute(accountId);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.16 (유학생) 경력 삭제하기
+     */
+    @DeleteMapping("/work-experiences/{id}")
+    public ResponseDto<Void> deleteUserWorkExperience(
+            @PathVariable Long id
+    ) {
+        deleteUserWorkExperienceUseCase.execute(id);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.17 (유학생) 학력 삭제하기
+     */
+    @DeleteMapping("/educations/{id}")
+    public ResponseDto<Void> deleteUserEducation(
+            @PathVariable Long id
+    ) {
+        deleteUserEducationUseCase.execute(id);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.18 (유학생) 언어-ETC 삭제하기
+     */
+    @DeleteMapping("/additional-languages/{id}")
+    public ResponseDto<Void> deleteUserAdditionalLanguage(
+            @PathVariable Long id
+    ) {
+        deleteUserAdditionalLanguageUseCase.execute(id);
         return ResponseDto.ok(null);
     }
 }
