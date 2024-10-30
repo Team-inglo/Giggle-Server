@@ -8,6 +8,11 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/users/resumes/work-experiences/{{resume.API_7_2.id}}/details
 Authorization: Bearer {{access_token}}
 
+### 7.3 (유학생) 학력 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/users/resumes/educations/{{resume.API_7_3.id}}/details
+Authorization: Bearer {{access_token}}
+
 ### 7.19 (고용주) 이력서 조회하기
 // @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details

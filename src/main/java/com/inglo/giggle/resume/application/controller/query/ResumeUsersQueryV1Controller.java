@@ -2,8 +2,10 @@ package com.inglo.giggle.resume.application.controller.query;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
+import com.inglo.giggle.resume.application.dto.response.ReadUserEducationDetailResponseDto;
 import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDto;
 import com.inglo.giggle.resume.application.dto.response.ReadUserWorkExperienceDetailResponseDto;
+import com.inglo.giggle.resume.application.usecase.ReadUserEducationDetailUseCase;
 import com.inglo.giggle.resume.application.usecase.ReadUserResumeDetailUseCase;
 import com.inglo.giggle.resume.application.usecase.ReadUserWorkExperienceDetailUseCase;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class ResumeUsersQueryV1Controller {
     private final ReadUserResumeDetailUseCase readUserResumeDetailUseCase;
     private final ReadUserWorkExperienceDetailUseCase readUserWorkExperienceDetailUseCase;
+    private final ReadUserEducationDetailUseCase readUserEducationDetailUseCase;
 
     /** 
      * 7.1 (유학생) 이력서 조회하기
@@ -39,6 +42,16 @@ public class ResumeUsersQueryV1Controller {
             @PathVariable Long id
     ) {
         return ResponseDto.ok(readUserWorkExperienceDetailUseCase.execute(id));
+    }
+
+    /**
+     * 7.3 (유학생) 학력 상세 조회하기
+     */
+    @GetMapping("/educations/{id}/details")
+    public ResponseDto<ReadUserEducationDetailResponseDto> readUserEducationDetail(
+            @PathVariable Long id
+    ) {
+        return ResponseDto.ok(readUserEducationDetailUseCase.execute(id));
     }
 
 }
