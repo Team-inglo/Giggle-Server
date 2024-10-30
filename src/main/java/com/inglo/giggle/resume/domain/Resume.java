@@ -59,4 +59,8 @@ public class Resume {
         this.introduction = introduction;
     }
 
+    public void updateIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
 }

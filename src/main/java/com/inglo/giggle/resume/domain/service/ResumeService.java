@@ -13,4 +13,9 @@ public class ResumeService {
                 .user(user)
                 .build();
     }
+
+    public Resume updateIntroduction(Resume resume, String introduction) {
+        resume.updateIntroduction(introduction);
+        return resume;
+    }
 }
