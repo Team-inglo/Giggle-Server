@@ -277,6 +277,11 @@ Content-Type: application/json
 PATCH {{host_url}}/v1/users/documents/{{document.API_8_15.id}}/status/submission
 Authorization: Bearer {{access_token}}
 
+### 8.16 (고용주) 서류 제출하기
+// @no-log
+PATCH {{host_url}}/v1/owners/documents/{{document.API_8_16.id}}/status/submission
+Authorization: Bearer {{access_token}}
+
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log
 PATCH {{host_url}}/v1/users/documents/{{document.API_8_17.id}}/status/confirmation

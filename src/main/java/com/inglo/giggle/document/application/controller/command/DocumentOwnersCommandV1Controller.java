@@ -1,13 +1,17 @@
 package com.inglo.giggle.document.application.controller.command;
 
+import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerStandardLaborContractRequestDto;
+import com.inglo.giggle.document.application.usecase.UpdateOwnerDocumentStatusSubmission;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerPartTimeEmploymentPermitUseCase;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerStandardLaborContractUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +20,7 @@ public class DocumentOwnersCommandV1Controller {
 
     private final UpdateOwnerPartTimeEmploymentPermitUseCase updateOwnerPartTimeEmploymentPermitUseCase;
     private final UpdateOwnerStandardLaborContractUseCase updateOwnerStandardLaborContractUseCase;
-
+    private final UpdateOwnerDocumentStatusSubmission updateOwnerDocumentStatusSubmission;
     /**
      * 8.11 (고용주) 시간제 취업허가서 수정하기
      */
@@ -38,6 +42,18 @@ public class DocumentOwnersCommandV1Controller {
             @RequestBody @Valid UpdateOwnerStandardLaborContractRequestDto requestDto
     ) {
         updateOwnerStandardLaborContractUseCase.execute(id, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 8.16 (고용주) 서류 제출하기
+     */
+    @PatchMapping("/documents/{id}/status/submission")
+    public ResponseDto<Void> updateOwnerDocumentStatusSubmission(
+            @AccountID UUID accountId,
+            @PathVariable Long id
+    ) {
+        updateOwnerDocumentStatusSubmission.execute(accountId, id);
         return ResponseDto.ok(null);
     }
 }

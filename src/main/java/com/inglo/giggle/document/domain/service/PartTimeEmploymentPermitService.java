@@ -64,6 +64,13 @@ public class PartTimeEmploymentPermitService {
         return document;
     }
 
+    public PartTimeEmploymentPermit updateStatusByOwnerSubmission(PartTimeEmploymentPermit document) {
+        document.updateEmployeeStatus(EEmployeeStatus.BEFORE_CONFIRMATION);
+        document.updateEmployerStatus(EEmployerStatus.SUBMITTED);
+
+        return document;
+    }
+
     public PartTimeEmploymentPermit updateStatusByRequest(PartTimeEmploymentPermit document) {
         document.updateEmployeeStatus(EEmployeeStatus.REQUEST);
         document.updateEmployerStatus(EEmployerStatus.REWRITING);

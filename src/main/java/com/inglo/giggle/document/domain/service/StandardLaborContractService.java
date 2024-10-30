@@ -61,9 +61,16 @@ public class StandardLaborContractService {
     @Value("${template.standard-labor-contract.hwp.path}")
     private String hwpTemplatePath;
 
-    public StandardLaborContract updateStatusBySubmission(StandardLaborContract document) {
+    public StandardLaborContract updateStatusByUserSubmission(StandardLaborContract document) {
         document.updateEmployeeStatus(EEmployeeStatus.SUBMITTED);
         document.updateEmployerStatus(EEmployerStatus.TEMPORARY_SAVE);
+
+        return document;
+    }
+
+    public StandardLaborContract updateStatusByOwnerSubmission(StandardLaborContract document) {
+        document.updateEmployeeStatus(EEmployeeStatus.BEFORE_CONFIRMATION);
+        document.updateEmployerStatus(EEmployerStatus.SUBMITTED);
 
         return document;
     }

@@ -1,10 +1,10 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.mysql.UserRepository;
+import com.inglo.giggle.account.domain.Owner;
+import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.document.application.usecase.UpdateUserDocumentStatusSubmissionUseCase;
+import com.inglo.giggle.document.application.usecase.UpdateOwnerDocumentStatusSubmission;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
@@ -25,21 +25,19 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateUserDocumentStatusSubmissionService implements UpdateUserDocumentStatusSubmissionUseCase {
-
-    private final UserRepository userRepository;
+public class UpdateOwnerDocumentStatusService implements UpdateOwnerDocumentStatusSubmission {
+    private final OwnerRepository ownerRepository;
     private final DocumentRepository documentRepository;
-    private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
-    private final StandardLaborContractService standardLaborContractService;
-    private final IntegratedApplicationService integratedApplicationService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
-    private final IntegratedApplicationRepository integratedApplicationRepository;
+    private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
+    private final StandardLaborContractService standardLaborContractService;
 
     @Override
     @Transactional
     public void execute(UUID accountId, Long documentId) {
-        User user = userRepository.findById(accountId)
+
+        Owner owner = ownerRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE));
 
         Document document = documentRepository.findById(documentId)
@@ -51,30 +49,23 @@ public class UpdateUserDocumentStatusSubmissionService implements UpdateUserDocu
             case "PART_TIME_EMPLOYMENT_PERMIT":
                 PartTimeEmploymentPermit partTimeEmploymentPermit = (PartTimeEmploymentPermit) document;
 
-                // 유학생 상태 SUBMITTED , 고용주 상태 TEMPORARY_SAVE로 변경 (유학생 수정 불가, 고용주 작성 및 수정 가능)
+                // 유학생 상태 BEFORE_CONFIRMATION , 고용주 상태 SUBMITTED로 변경 (유학생 수정 불가, 고용주 작성 및 수정 가능)
                 partTimeEmploymentPermit =
-                        partTimeEmploymentPermitService.updateStatusByUserSubmission(partTimeEmploymentPermit);
+                        partTimeEmploymentPermitService.updateStatusByOwnerSubmission(partTimeEmploymentPermit);
                 partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
                 break;
             case "STANDARD_LABOR_CONTRACT":
                 StandardLaborContract standardLaborContract = (StandardLaborContract) document;
                 standardLaborContract =
-                        standardLaborContractService.updateStatusByUserSubmission(standardLaborContract);
+                        standardLaborContractService.updateStatusByOwnerSubmission(standardLaborContract);
 
                 standardLaborContractRepository.save(standardLaborContract);
-                break;
-
-            case "INTEGRATED_APPLICATION":
-                IntegratedApplication integratedApplication = (IntegratedApplication) document;
-                integratedApplication =
-                        integratedApplicationService.updateStatusBySubmission(integratedApplication);
-                integratedApplicationRepository.save(integratedApplication);
-
                 break;
 
             default:
                 throw new CommonException(ErrorCode.INVALID_DOCUMENT_TYPE);
         }
     }
+
 }
