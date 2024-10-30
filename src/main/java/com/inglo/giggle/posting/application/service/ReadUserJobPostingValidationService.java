@@ -64,7 +64,7 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // 이력서 정보 조회
-        Resume resume = resumeRepository.findById(accountId)
+        Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // 유저의 비자에 맵핑되는 educationLevel 조회

@@ -8,7 +8,6 @@ import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.utility.OSRMUtil;
 import com.inglo.giggle.core.utility.RestClientUtil;
 import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingBriefResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingValidationResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadUserJobPostingBriefUseCase;
 import com.inglo.giggle.posting.domain.JobPostAggregate;
 import com.inglo.giggle.posting.domain.JobPosting;
@@ -60,7 +59,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
         List<JobPosting> jobPostings = jobPostingRepository.findAll().stream()
                 .filter(jobPosting -> {
 
-                    Resume resume = resumeRepository.findById(userId)
+                    Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(userId)
                             .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
                     return isUserApplicableForJobPosting(resume, jobPosting);
