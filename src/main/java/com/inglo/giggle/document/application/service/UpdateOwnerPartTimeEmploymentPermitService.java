@@ -29,10 +29,10 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
     public void execute(Long documentId, UpdateOwnerPartTimeEmploymentPermitRequestDto requestDto) {
         PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
-
-        if (!partTimeEmploymentPermit.getEmployerStatus().equals(EEmployerStatus.TEMPORARY_SAVE) &&
-                !partTimeEmploymentPermit.getEmployerStatus().equals(EEmployerStatus.REWRITING))
-            throw new CommonException(ErrorCode.ACCESS_DENIED);
+        if (partTimeEmploymentPermit.getEmployerStatus() != null)
+            if (!partTimeEmploymentPermit.getEmployerStatus().equals(EEmployerStatus.TEMPORARY_SAVE) &&
+                    !partTimeEmploymentPermit.getEmployerStatus().equals(EEmployerStatus.REWRITING))
+                throw new CommonException(ErrorCode.ACCESS_DENIED);
 
         Address address = addressService.createAddress(requestDto.address());
 

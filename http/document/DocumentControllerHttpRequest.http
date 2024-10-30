@@ -177,6 +177,65 @@ Content-Type: application/json
   "signature_base64" : "{{document.API_8_12.signature_base64}}"
 }
 
+### 8.13 (고용주) 근로 계약서 수정하기
+// @no-log
+PUT {{host_url}}/v1/owners/documents/{{document.API_8_13.id}}/standard-labor-contracts
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "company_name" : "{{document.API_8_13.company_name}}",
+  "company_registration_number" : "{{document.API_8_13.company_registration_number}}",
+  "phone_number" : "{{document.API_8_13.phone_number}}",
+  "name" : "{{document.API_8_13.name}}",
+  "start_date" : "{{document.API_8_13.start_date}}",
+  "end_date" : "{{document.API_8_13.end_date}}",
+  "address" :
+  {
+    "address_name" : "{{document.API_8_13.address.address_name}}",
+    "region_1depth_name" : "{{document.API_8_13.address.region_1depth_name}}",
+    "region_2depth_name" : "{{document.API_8_13.address.region_2depth_name}}",
+    "region_3depth_name" : "{{document.API_8_13.address.region_3depth_name}}",
+    "region_4depth_name" : "{{document.API_8_13.address.region_4depth_name}}",
+    "detail_address" : "{{document.API_8_13.address.detail_address}}",
+    "longitude" : {{document.API_8_13.address.longitude}},
+    "latitude" : {{document.API_8_13.address.latitude}}
+  },
+  "description" : "{{document.API_8_13.description}}",
+  "work_day_time_list" : [
+    {
+      "day_of_week" : "{{document.API_8_13.work_day_time_list[0].day_of_week}}",
+      "work_start_time" : "{{document.API_8_13.work_day_time_list[0].work_start_time}}",
+      "work_end_time" : "{{document.API_8_13.work_day_time_list[0].work_end_time}}",
+      "break_start_time" : "{{document.API_8_13.work_day_time_list[0].break_start_time}}",
+      "break_end_time" : "{{document.API_8_13.work_day_time_list[0].break_end_time}}"
+    },
+    {
+      "day_of_week" : "{{document.API_8_13.work_day_time_list[1].day_of_week}}",
+      "work_start_time" : "{{document.API_8_13.work_day_time_list[1].work_start_time}}",
+      "work_end_time" : "{{document.API_8_13.work_day_time_list[1].work_end_time}}",
+      "break_start_time" : "{{document.API_8_13.work_day_time_list[1].break_start_time}}",
+      "break_end_time" : "{{document.API_8_13.work_day_time_list[1].break_end_time}}"
+    },
+    {
+      "day_of_week" : "{{document.API_8_13.work_day_time_list[2].day_of_week}}",
+      "work_start_time" : "{{document.API_8_13.work_day_time_list[2].work_start_time}}",
+      "work_end_time" : "{{document.API_8_13.work_day_time_list[2].work_end_time}}",
+      "break_start_time" : "{{document.API_8_13.work_day_time_list[2].break_start_time}}",
+      "break_end_time" : "{{document.API_8_13.work_day_time_list[2].break_end_time}}"
+    }
+  ],
+  "weekly_last_days" : ["{{document.API_8_13.weekly_last_days1}}", "{{document.API_8_13.weekly_last_days2}}"],
+  "hourly_rate" : {{document.API_8_13.hourly_rate}},
+  "bonus" : {{document.API_8_13.bonus}},
+  "additional_salary" : {{document.API_8_13.additional_salary}},
+  "wage_rate" : {{document.API_8_13.wage_rate}},
+  "payment_day" : {{document.API_8_13.payment_day}},
+  "payment_method" : "{{document.API_8_13.payment_method}}",
+  "insurance" : ["{{document.API_8_13.insurance1}}", "{{document.API_8_13.insurance2}}"],
+  "signature_base64" : "{{document.API_8_13.signature_base64}}"
+}
+
 
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log

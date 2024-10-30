@@ -4,6 +4,7 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
+import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
@@ -49,6 +50,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -108,6 +110,46 @@ public class StandardLaborContractService {
         document.updateEmployeeAddress(employeeAddress);
         document.updateEmployeePhoneNumber(employeePhoneNumber);
         document.updateEmployeeSignatureBase64(employeeSignatureBase64);
+        return document;
+    }
+
+    public StandardLaborContract updateOwnerStandardLaborContract(
+            StandardLaborContract document,
+            String companyName,
+            String companyRegistrationNumber,
+            String phoneNumber,
+            String employerName,
+            LocalDate startDate,
+            LocalDate endDate,
+            Address employerAddress,
+            String description,
+            Set<EDayOfWeek> weeklyLastDays,
+            Integer hourlyRate,
+            Integer bonus,
+            Integer additionalSalary,
+            Double wageRate,
+            Integer paymentDay,
+            EPaymentMethod paymentMethod,
+            Set<EInsurance> insurance,
+            String employerSignatureBase64
+    ) {
+        document.updateCompanyName(companyName);
+        document.updateCompanyRegistrationNumber(companyRegistrationNumber);
+        document.updateEmployerPhoneNumber(phoneNumber);
+        document.updateEmployerName(employerName);
+        document.updateStartDate(startDate);
+        document.updateEndDate(endDate);
+        document.updateEmployerAddress(employerAddress);
+        document.updateDescription(description);
+        document.updateWeeklyRestDays(weeklyLastDays);
+        document.updateHourlyRate(hourlyRate);
+        document.updateBonus(bonus);
+        document.updateAdditionalSalary(additionalSalary);
+        document.updateWageRate(wageRate);
+        document.updatePaymentDay(paymentDay);
+        document.updatePaymentMethod(paymentMethod);
+        document.updateInsurances(insurance);
+        document.updateEmployerSignatureBase64(employerSignatureBase64);
         return document;
     }
 
