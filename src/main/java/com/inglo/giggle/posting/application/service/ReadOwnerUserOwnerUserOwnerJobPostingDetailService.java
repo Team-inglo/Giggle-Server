@@ -21,10 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ReadOwnerUserOwnerUserOwnerJobPostingDetailService implements ReadOwnerUserOwnerJobPostingDetailUseCase {
 
-
-    private final OwnerRepository ownerRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final SchoolRepository schoolRepository;
 
     @Override

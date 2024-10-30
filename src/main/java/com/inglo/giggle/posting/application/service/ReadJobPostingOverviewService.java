@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -36,6 +37,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
     private static final String BOOKMARKED = "BOOKMARKED";
 
     @Override
+    @Transactional(readOnly = true)
     public ReadJobPostingOverviewResponseDto execute(
             Integer page,
             Integer size,

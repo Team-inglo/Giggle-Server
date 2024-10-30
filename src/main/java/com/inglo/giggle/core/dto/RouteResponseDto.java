@@ -42,6 +42,11 @@ public record RouteResponseDto(
     }
 
     public record LegDto(
+
+            @NotNull
+            @JsonProperty("steps")
+            List<String> steps,
+
             @NotNull
             @JsonProperty("distance")
             Double distance,

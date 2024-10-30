@@ -7,8 +7,9 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.utility.OSRMUtil;
 import com.inglo.giggle.core.utility.RestClientUtil;
+import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingBriefResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingValidationResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadUserJobPostingValidationUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserJobPostingBriefUseCase;
 import com.inglo.giggle.posting.domain.JobPostAggregate;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.JobPostAggregateService;
@@ -29,6 +30,7 @@ import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,19 +38,16 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ReadUserJobPostingValidationService implements ReadUserJobPostingValidationUseCase {
+public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUseCase {
 
-    private final JobPostAggregateService jobPostAggregateService;
-    private final ResumeAggregateService resumeAggregateService;
-
-    private final JobPostingService jobPostingService;
-    private final EducationService educationService;
-
-    private final EducationRepository educationRepository;
-    private final SchoolRepository schoolRepository;
     private final JobPostingRepository jobPostingRepository;
     private final ResumeRepository resumeRepository;
-
+    private final EducationRepository educationRepository;
+    private final JobPostingService jobPostingService;
+    private final EducationService educationService;
+    private final ResumeAggregateService resumeAggregateService;
+    private final JobPostAggregateService jobPostAggregateService;
+    private final SchoolRepository schoolRepository;
     private final RestClientUtil restClientUtil;
     private final OSRMUtil osrmUtil;
 
@@ -57,56 +56,63 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
 
     @Override
     @Transactional(readOnly = true)
-    public ReadUserJobPostingValidationResponseDto execute(UUID accountId, Long jobPostingId) throws Exception {
+    public ReadUserJobPostingBriefResponseDto execute(UUID userId) {
+        List<JobPosting> jobPostings = jobPostingRepository.findAll().stream()
+                .filter(jobPosting -> {
 
-        // 공고 조회
-        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                    Resume resume = resumeRepository.findById(userId)
+                            .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        // 이력서 정보 조회
-        Resume resume = resumeRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                    return isUserApplicableForJobPosting(resume, jobPosting);
+                })
+                .limit(4)
+                .toList();
 
-        // 유저의 비자에 맵핑되는 educationLevel 조회
-        EEducationLevel educationLevel = educationService.getEducationLevelByVisa(resume.getUser().getVisa());
-
-        // 유저의 educationLevel에 맞는 학력 정보 조회
-        Education education = educationRepository.findEducationByAccountIdAndEducationLevel(accountId, educationLevel)
-                .orElse(null);
-
-        // 유저 정보 검증 (거리, 학력, 언어 스킬 기반)
-        Boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
-        Boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(resume, jobPosting);
-
-        return ReadUserJobPostingValidationResponseDto.builder()
-                .isQualificationVerified(isApplicableFromEducation&&isApplicableFromSchoolDistance)
-                .build();
-
+        // DTO 변환 후 반환
+        return ReadUserJobPostingBriefResponseDto.fromEntities(
+                jobPostings
+        );
     }
 
     /* -------------------------------------------- */
     /* Private Methods ---------------------------- */
     /* -------------------------------------------- */
+    private boolean isUserApplicableForJobPosting(Resume resume, JobPosting jobPosting) {
+        try {
+            EEducationLevel educationLevel = educationService.getEducationLevelByVisa(resume.getUser().getVisa());
+            Education education = educationRepository.findEducationByAccountIdAndEducationLevel(resume.getUser().getId(), educationLevel)
+                    .orElse(null);
 
-    // 유저의 학력, 이력 정보를 통해 공고에 적합한지 검증하는 메서드
+            boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
+            boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(resume, jobPosting);
+
+            return isApplicableFromEducation && isApplicableFromSchoolDistance;
+
+        } catch (Exception e) {
+            log.error("this is error: {}", e.getMessage());
+            log.error(ErrorCode.INTERNAL_SERVER_ERROR_WITH_OSRM.getMessage());
+            return false;
+        }
+    }
+
+
     private Boolean validateUserIsApplicableFromEducationAndResume(Resume resume, Education education, JobPosting jobPosting) {
-        // ResumeAggregate 생성 및 반환
         ResumeAggregate resumeAggregate = resumeAggregateService.createResumeAggregate(resume.getUser(), resume, education);
 
         Map<String, Integer> userWorkDayTimeMap = resumeAggregateService.calculateWorkHours(resumeAggregate);
         Map<String, Integer> jobPostingWorkDayTimeMap = jobPostingService.calculateWorkHours(jobPosting);
 
         JobPostAggregate jobPostAggregate = jobPostAggregateService.createJobPostAggregate(resume, jobPosting);
-
         return jobPostAggregateService.isUserApplicable(jobPostAggregate, userWorkDayTimeMap, jobPostingWorkDayTimeMap);
     }
 
-    // 유저의 학교의 거리로 부터 공고에 적합한지 검증하는 메서드
+
     private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
         Optional<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(resume.getUser().getId());
-        if(school.isEmpty()) {
+        if (school.isEmpty()) {
             return false;
         }
+
         School graduationSchool = school.get();
         Address schoolAddress = graduationSchool.getAddress();
         Address jobPostingAddress = jobPosting.getAddress();
@@ -115,14 +121,10 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
                 schoolAddress.getLatitude(), schoolAddress.getLongitude(),
                 jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()
         ));
-        log.info("OSRM Response: {}", jsonObject);
 
         RouteResponseDto routeResponseDto = osrmUtil.mapToRouteResponseDto(jsonObject);
 
-        if(graduationSchool.getIsMetropolitan()){
-            return routeResponseDto.routes().get(0).duration() < Double.parseDouble(METROPOLITAN_DURATION);
-        }else{
-            return routeResponseDto.routes().get(0).duration() < Double.parseDouble(NON_METROPOLITAN_DURATION);
-        }
+        double maxDuration = graduationSchool.getIsMetropolitan() ? Double.parseDouble(METROPOLITAN_DURATION) : Double.parseDouble(NON_METROPOLITAN_DURATION);
+        return routeResponseDto.routes().get(0).duration() < maxDuration;
     }
 }

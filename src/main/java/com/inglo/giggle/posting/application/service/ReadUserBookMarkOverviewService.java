@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ public class ReadUserBookMarkOverviewService implements ReadUserBookMarkOverview
     private final UserRepository userRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserBookMarkOverviewResponseDto execute(UUID accountId, Integer page, Integer size) {
 
         User user = userRepository.findById(accountId)

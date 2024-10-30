@@ -21,8 +21,16 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long>{
             "WHERE b.user.id = :userId AND b.jobPosting.id = :jobPostingId")
     Optional<BookMark> findByUserIdAndJobPostingId(@Param("userId") UUID userId, @Param("jobPostingId") Long jobPostingId);
 
-    @EntityGraph(attributePaths = {"jobPosting", "jobPosting.owner", "jobPosting.workDayTimes"})
-    Page<BookMark> findWithOwnerAndWorkDaysTimesByUser(User user, Pageable pageable);
+    @Query("SELECT b FROM BookMark b " +
+            "JOIN FETCH b.jobPosting jp " +
+            "WHERE b.user = :user " +
+            "AND jp.recruitmentDeadLine > CURRENT_DATE " +
+            "ORDER BY jp.recruitmentDeadLine ASC")
+    Page<BookMark> findWithOwnerAndWorkDaysTimesByUser(
+            @Param("user") User user,
+            Pageable pageable
+    );
+
 
     List<BookMark> findByUser(User user);
 }

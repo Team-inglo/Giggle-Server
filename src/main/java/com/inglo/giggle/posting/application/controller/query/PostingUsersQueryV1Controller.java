@@ -22,11 +22,24 @@ public class PostingUsersQueryV1Controller {
     private final ReadUserJobPostingValidationUseCase readUserJobPostingValidationUseCase;
     private final ReadUserBookMarkOverviewUseCase readUserBookMarkOverviewUseCase;
     private final ReadUserBookMarkCountUseCase readUserBookMarkCountUseCase;
+    private final ReadUserJobPostingBriefUseCase readUserJobPostingBriefUseCase;
 
 
     /* -------------------------------------------- */
     /* API 4 -------------------------------------- */
     /* -------------------------------------------- */
+
+    /**
+     * 4.5 (유학생) 추천 공고 리스트 조회하기
+     */
+    @GetMapping("/users/job-postings/briefs")
+    public ResponseDto<ReadUserJobPostingBriefResponseDto> readUserJobPostingList(
+            @AccountID UUID accountId
+    ) {
+        return ResponseDto.ok(readUserJobPostingBriefUseCase.execute(
+                accountId
+        ));
+    }
 
     /**
      * 4.8 (유학생) 공고 지원 자격 확인하기

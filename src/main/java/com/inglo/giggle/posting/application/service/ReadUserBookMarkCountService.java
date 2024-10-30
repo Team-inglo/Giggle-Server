@@ -10,6 +10,7 @@ import com.inglo.giggle.posting.domain.BookMark;
 import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class ReadUserBookMarkCountService implements ReadUserBookMarkCountUseCas
     private final BookMarkRepository bookMarkRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserBookMarkCountResponseDto execute(UUID accountId) {
 
         // 계정 조회
