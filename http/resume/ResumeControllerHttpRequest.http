@@ -18,6 +18,20 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/users/resumes/languages/summaries
 Authorization: Bearer {{access_token}}
 
+### 7.5 (유학생) 경력 생성하기
+// @no-log
+POST {{host_url}}/v1/users/resumes/work-experiences
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "title": "{{resume.API_7_5.title}}",
+  "workplace": "{{resume.API_7_5.workplace}}",
+  "start_date": "{{resume.API_7_5.start_date}}",
+  "end_date": "{{resume.API_7_5.end_date}}",
+  "description": "{{resume.API_7_5.description}}"
+}
+
 ### 7.19 (고용주) 이력서 조회하기
 // @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details
