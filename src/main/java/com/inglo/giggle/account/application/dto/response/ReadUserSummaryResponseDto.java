@@ -206,11 +206,20 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
                 Education education,
                 Map<String, Integer> workHours
         ) {
+            if (education == null) {
+                return MetaDataDto.builder()
+                        .weekendWorkHour(workHours.get(WEEKEND_WORK_HOURS))
+                        .weekdayWorkHour(workHours.get(WEEKDAY_WORK_HOURS))
+                        .isLanguageSkill4OrMore(resume.getLanguageSkill().getTopikLevel() >= 4 && resume.getLanguageSkill().getSocialIntegrationLevel() >= 4)
+                        .isMetropolitanArea(false)
+                        .build();
+            }
+
             return MetaDataDto.builder()
                     .weekendWorkHour(workHours.get(WEEKEND_WORK_HOURS))
                     .weekdayWorkHour(workHours.get(WEEKDAY_WORK_HOURS))
                     .isLanguageSkill4OrMore(resume.getLanguageSkill().getTopikLevel() >= 4 && resume.getLanguageSkill().getSocialIntegrationLevel() >= 4)
-                    .isMetropolitanArea(education.getSchool().getIsMetropolitan())
+                    .isMetropolitanArea(education.getSchool().getIsMetropolitan() )
                     .build();
         }
     }
