@@ -23,6 +23,8 @@ public enum EEducationLevel {
             case "BACHELOR" -> BACHELOR;
             case "ASSOCIATE" -> ASSOCIATE;
             case "HIGHSCOOL" -> HIGHSCHOOL;
+            case "MASTER" -> MASTER;
+            case "DOCTOR" -> DOCTOR;
             default -> throw new IllegalArgumentException("학력이 잘못되었습니다.");
         };
     }

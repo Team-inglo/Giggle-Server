@@ -34,6 +34,26 @@ public class EducationService {
                 .build();
     }
 
+    public Education updateEducation(
+            Education education,
+            EEducationLevel educationLevel,
+            School school,
+            String major,
+            Double gpa,
+            LocalDate startDate,
+            LocalDate endDate,
+            Integer grade
+    ) {
+        education.updateEducationLevel(educationLevel);
+        education.updateSchool(school);
+        education.updateMajor(major);
+        education.updateGpa(gpa);
+        education.updateEnrollmentDate(startDate);
+        education.updateGraduationDate(endDate);
+        education.updateGrade(grade);
+        return education;
+    }
+
     public EEducationLevel getEducationLevelByVisa(EVisa visa) {
         switch (visa) {
             case D_2_1 -> {

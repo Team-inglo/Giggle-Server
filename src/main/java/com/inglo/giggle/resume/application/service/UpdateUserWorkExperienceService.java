@@ -31,5 +31,6 @@ public class UpdateUserWorkExperienceService implements UpdateUserWorkExperience
                 requestDto.endDate(),
                 requestDto.description()
         );
+        workExperienceRepository.save(workExperience);
     }
 }

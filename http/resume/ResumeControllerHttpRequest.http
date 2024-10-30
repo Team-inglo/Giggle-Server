@@ -82,6 +82,22 @@ Content-Type: application/json
   "description": "{{resume.API_7_9.description}}"
 }
 
+### 7.10 (유학생) 학력 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/educations/{{resume.API_7_10.id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "education_level": "{{resume.API_7_10.education_level}}",
+  "school_id": {{resume.API_7_10.school_id}},
+  "major": "{{resume.API_7_10.major}}",
+  "gpa": {{resume.API_7_10.gpa}},
+  "start_date": "{{resume.API_7_10.start_date}}",
+  "end_date": "{{resume.API_7_10.end_date}}",
+  "grade": {{resume.API_7_10.grade}}
+}
+
 ### 7.19 (고용주) 이력서 조회하기
 // @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details

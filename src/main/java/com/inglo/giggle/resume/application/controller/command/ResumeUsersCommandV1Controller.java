@@ -19,6 +19,7 @@ public class ResumeUsersCommandV1Controller {
     private final CreateUserAdditionalLanguageSkillUseCase createUserAdditionalLanguageSkillUseCase;
     private final UpdateUserIntroductionUseCase updateUserIntroductionUseCase;
     private final UpdateUserWorkExperienceUseCase updateUserWorkExperienceUseCase;
+    private final UpdateUserEducationUseCase updateUserEducationUseCase;
 
     /**
      * 7.5 (유학생) 경력 생성하기
@@ -77,6 +78,18 @@ public class ResumeUsersCommandV1Controller {
             @RequestBody @Valid UpdateUserWorkExperienceRequestDto requestDto
     ) {
         updateUserWorkExperienceUseCase.execute(id, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.10 (유학생) 학력 수정하기
+     */
+    @PatchMapping("/educations/{id}")
+    public ResponseDto<Void> updateUserEducation(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateUserEducationRequestDto requestDto
+    ) {
+        updateUserEducationUseCase.execute(id, requestDto);
         return ResponseDto.ok(null);
     }
 }

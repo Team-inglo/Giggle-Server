@@ -52,10 +52,7 @@ public class Education {
     @JoinColumn(name = "resume_id", nullable = false)
     private Resume resume;
 
-    /* -------------------------------------------- */
-    /* One To One Mapping ------------------------- */
-    /* -------------------------------------------- */
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", nullable = false)
     private School school;
 
@@ -73,6 +70,34 @@ public class Education {
         this.grade = grade;
         this.school = school;
         this.resume = resume;
+    }
+
+    public void updateEducationLevel(EEducationLevel educationLevel) {
+        this.educationLevel = educationLevel;
+    }
+
+    public void updateMajor(String major) {
+        this.major = major;
+    }
+
+    public void updateGpa(Double gpa) {
+        this.gpa = gpa;
+    }
+
+    public void updateEnrollmentDate(LocalDate enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
+    }
+
+    public void updateGraduationDate(LocalDate graduationDate) {
+        this.graduationDate = graduationDate;
+    }
+
+    public void updateGrade(Integer grade) {
+        this.grade = grade;
+    }
+
+    public void updateSchool(School school) {
+        this.school = school;
     }
 
 }
