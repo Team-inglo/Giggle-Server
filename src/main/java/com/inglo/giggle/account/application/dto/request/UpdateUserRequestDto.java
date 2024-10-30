@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+
 public record UpdateUserRequestDto(
 
         @NotNull
@@ -18,7 +20,7 @@ public record UpdateUserRequestDto(
 
         @NotNull
         @JsonProperty("birth")
-        String birth,
+        LocalDate birth,
 
         @NotNull
         @JsonProperty("gender")
