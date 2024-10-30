@@ -29,10 +29,12 @@ public enum ErrorCode {
     UNSUPPORTED_MEDIA_TYPE(40006, HttpStatus.BAD_REQUEST, "지원하지 않는 미디어 타입입니다."),
     BAD_REQUEST_JSON(40007, HttpStatus.BAD_REQUEST, "잘못된 JSON 형식입니다."),
     ALREADY_APPLIED_JOB_POSTING(40008, HttpStatus.BAD_REQUEST, "이미 지원한 공고입니다."),
+    INVALID_ACCOUNT_TYPE(40009, HttpStatus.BAD_REQUEST, "Account Type이 잘못되었습니다."),
+    INVALID_DOCUMENT_TYPE(40010, HttpStatus.BAD_REQUEST, "Document Type이 잘못되었습니다."),
+
     // SIGN UP Error
     ALREADY_EXIST_ID(40200, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXIST_EMAIL(40201, HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
-    INVALID_ACCOUNT_TYPE(40202, HttpStatus.BAD_REQUEST, "Account Type이 잘못되었습니다."),
 
     // Access Denied Error
     ACCESS_DENIED(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
@@ -59,8 +61,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR_WITH_OSRM(50003, HttpStatus.INTERNAL_SERVER_ERROR, "OSRM 서버 내부 에러입니다."),
 
     // External Server Error
-    EXTERNAL_SERVER_ERROR(50200, HttpStatus.BAD_GATEWAY, "서버 외부 에러입니다.")
-
+    EXTERNAL_SERVER_ERROR(50200, HttpStatus.BAD_GATEWAY, "서버 외부 에러입니다."),
     ;
 
 

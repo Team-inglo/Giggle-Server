@@ -46,6 +46,7 @@ public class UserService {
         user.updateGender(EGender.fromString(requestDto.gender()));
         user.updateNationality(requestDto.nationality());
         user.updateVisa(EVisa.fromString(requestDto.visa()));
+        user.updateBirth(requestDto.birth());
 
         return user;
     }

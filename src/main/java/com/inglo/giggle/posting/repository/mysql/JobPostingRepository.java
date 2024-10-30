@@ -23,6 +23,13 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     List<JobPosting> findAllByOwner(Owner owner);
 
+    @Query("SELECT jp FROM JobPosting jp " +
+            "JOIN UserOwnerJobPosting uojp ON uojp.jobPosting.id = uojp.jobPosting.id " +
+            "JOIN Document d ON d.userOwnerJobPosting.id = uojp.id " +
+            "WHERE d.id = :documentId"
+    )
+    Optional<JobPosting> findByDocumentId(@org.springframework.data.repository.query.Param("documentId") Long documentId);
+
     @EntityGraph(attributePaths = {"owner"})
     Optional<JobPosting> findWithOwnerById(Long jobPostingId);
 

@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,12 +55,36 @@ public class S3Util {
 
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata);
 
-            PutObjectResult putObjectResult = amazonS3Client.putObject(putObjectRequest);
+            amazonS3Client.putObject(putObjectRequest);
 
             return bucketUrl + key;
         } catch (SdkClientException | IOException e) {
             throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
         }
+    }
+
+    public String uploadWordFile(InputStream inputStream, String type, Long jobPostingId, String jobPostingTitle, String ownerName, String userName) {
+        String uuid = UUID.randomUUID().toString();
+        String fileName = "documents/" + jobPostingTitle + ":id_" + jobPostingId + "/" + type + "-" + ownerName + "_" + userName + "-" + uuid + ".docx";
+
+        try {
+            amazonS3Client.putObject(bucketName, fileName, inputStream, null);
+        } catch (Exception e) {
+            throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
+        }
+        return bucketUrl + fileName;
+    }
+
+    public String uploadHwpFile(InputStream inputStream, String type, Long jobPostingId, String jobPostingTitle, String ownerName, String userName) {
+        String uuid = UUID.randomUUID().toString();
+        String fileName = "documents/" + jobPostingTitle + ":id_" + jobPostingId + "/" + type + "-" + ownerName + "_" + userName + "-" + uuid + ".hwp";
+
+        try {
+            amazonS3Client.putObject(bucketName, fileName, inputStream, null);
+        } catch (Exception e) {
+            throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
+        }
+        return bucketUrl + fileName;
     }
 
     public void deleteFile(String fileUrl, EImageType eImageType, String serialId) {

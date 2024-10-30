@@ -68,9 +68,6 @@ dependencies {
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-    // Sentry
-    implementation 'io.sentry:sentry-spring-boot-starter-jakarta:7.9.0'
-
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -86,15 +83,15 @@ dependencies {
     // Documents
     implementation 'org.docx4j:docx4j-core:11.5.0'
     implementation 'org.docx4j:docx4j-JAXB-ReferenceImpl:11.5.0'
+    implementation 'org.docx4j:docx4j-openxml-objects:11.5.0'
     implementation 'kr.dogfoot:hwplib:1.1.7'
-    implementation 'com.itextpdf:itextpdf:5.5.13.4'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
     implementation 'org.glassfish.jaxb:jaxb-core:4.0.5'
     implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
-
-    // Firebase
-    implementation 'com.google.firebase:firebase-admin:6.8.1'
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+    implementation 'org.apache.xmlgraphics:batik-transcoder:1.17'
+    implementation 'org.apache.xmlgraphics:batik-codec:1.17'
+    implementation 'org.apache.xmlgraphics:batik-dom:1.17'
+    implementation 'org.apache.xmlgraphics:batik-anim:1.17'
 
     // Testing Dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

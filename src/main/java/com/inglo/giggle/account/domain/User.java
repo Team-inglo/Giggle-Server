@@ -141,13 +141,17 @@ public class User extends Account {
         this.language = language;
     }
 
+    public void updateBirth(LocalDate birth) {
+        this.birth = birth;
+    }
+
     @Override
     public ESecurityRole getRole() {
         return ESecurityRole.USER;
     }
     @Override
     public String getName() {
-        return this.firstName + " " + this.lastName;
+        return this.firstName + "-" + this.lastName;
     }
 }
 
