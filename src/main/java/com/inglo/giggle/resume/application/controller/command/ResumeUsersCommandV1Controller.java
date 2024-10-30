@@ -2,14 +2,8 @@ package com.inglo.giggle.resume.application.controller.command;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.resume.application.dto.request.CreateUserAdditionalLanguageSkillRequestDto;
-import com.inglo.giggle.resume.application.dto.request.CreateUserEducationRequestDto;
-import com.inglo.giggle.resume.application.dto.request.CreateUserWorkExperienceRequestDto;
-import com.inglo.giggle.resume.application.dto.request.UpdateUserIntroductionRequestDto;
-import com.inglo.giggle.resume.application.usecase.CreateUserAdditionalLanguageSkillUseCase;
-import com.inglo.giggle.resume.application.usecase.CreateUserEducationUseCase;
-import com.inglo.giggle.resume.application.usecase.CreateUserWorkExperienceUseCase;
-import com.inglo.giggle.resume.application.usecase.UpdateUserIntroductionUseCase;
+import com.inglo.giggle.resume.application.dto.request.*;
+import com.inglo.giggle.resume.application.usecase.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +18,7 @@ public class ResumeUsersCommandV1Controller {
     private final CreateUserEducationUseCase createUserEducationUseCase;
     private final CreateUserAdditionalLanguageSkillUseCase createUserAdditionalLanguageSkillUseCase;
     private final UpdateUserIntroductionUseCase updateUserIntroductionUseCase;
+    private final UpdateUserWorkExperienceUseCase updateUserWorkExperienceUseCase;
 
     /**
      * 7.5 (유학생) 경력 생성하기
@@ -70,6 +65,18 @@ public class ResumeUsersCommandV1Controller {
             @RequestBody @Valid UpdateUserIntroductionRequestDto requestDto
     ) {
         updateUserIntroductionUseCase.execute(accountId, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.9 (유학생) 경력 수정하기
+     */
+    @PatchMapping("/work-experiences/{id}")
+    public ResponseDto<Void> updateUserWorkExperience(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateUserWorkExperienceRequestDto requestDto
+    ) {
+        updateUserWorkExperienceUseCase.execute(id, requestDto);
         return ResponseDto.ok(null);
     }
 }

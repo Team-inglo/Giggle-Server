@@ -68,6 +68,20 @@ Content-Type: application/json
   "introduction": "{{resume.API_7_8.introduction}}"
 }
 
+### 7.9 (유학생) 경력 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/work-experiences/{{resume.API_7_9.id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "title": "{{resume.API_7_9.title}}",
+  "workplace": "{{resume.API_7_9.workplace}}",
+  "start_date": "{{resume.API_7_9.start_date}}",
+  "end_date": "{{resume.API_7_9.end_date}}",
+  "description": "{{resume.API_7_9.description}}"
+}
+
 ### 7.19 (고용주) 이력서 조회하기
 // @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details

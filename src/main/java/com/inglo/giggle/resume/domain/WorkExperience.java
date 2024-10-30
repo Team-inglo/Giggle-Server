@@ -59,4 +59,23 @@ public class WorkExperience {
         this.resume = resume;
     }
 
+    public void updateWorkExperienceTitle(String experienceTitle) {
+        this.experienceTitle = experienceTitle;
+    }
+
+    public void updateWorkplace(String workplace) {
+        this.workplace = workplace;
+    }
+
+    public void updateStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void updateEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
 }

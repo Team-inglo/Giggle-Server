@@ -25,4 +25,20 @@ public class WorkExperienceService {
                 .resume(resume)
                 .build();
     }
+
+    public WorkExperience updateWorkExperience(
+            WorkExperience workExperience,
+            String experienceTitle,
+            String workplace,
+            LocalDate startDate,
+            LocalDate endDate,
+            String description
+    ) {
+        workExperience.updateWorkExperienceTitle(experienceTitle);
+        workExperience.updateWorkplace(workplace);
+        workExperience.updateStartDate(startDate);
+        workExperience.updateEndDate(endDate);
+        workExperience.updateDescription(description);
+        return workExperience;
+    }
 }
