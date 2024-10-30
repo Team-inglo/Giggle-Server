@@ -39,9 +39,10 @@ public class AdditionalLanguage {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public AdditionalLanguage(String languageName, Integer level) {
+    public AdditionalLanguage(String languageName, Integer level, LanguageSkill languageSkill) {
         this.languageName = languageName;
         this.level = level;
+        this.languageSkill = languageSkill;
     }
 
 }

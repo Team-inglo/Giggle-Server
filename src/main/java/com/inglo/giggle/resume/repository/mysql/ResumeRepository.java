@@ -11,4 +11,7 @@ import java.util.UUID;
 public interface ResumeRepository extends JpaRepository<Resume, UUID>{
     @EntityGraph(attributePaths = {"workExperiences"})
     Optional<Resume> findWithWorkExperiencesAndLanguageSkillByAccountId(UUID id);
+
+    @EntityGraph(attributePaths = {"languageSkill"})
+    Optional<Resume> findWithLanguageSkillByAccountId(UUID id);
 }
