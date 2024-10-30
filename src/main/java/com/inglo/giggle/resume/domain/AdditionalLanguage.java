@@ -45,4 +45,11 @@ public class AdditionalLanguage {
         this.languageSkill = languageSkill;
     }
 
+    public void updateLanguageName(String languageName) {
+        this.languageName = languageName;
+    }
+
+    public void updateLevel(Integer level) {
+        this.level = level;
+    }
 }

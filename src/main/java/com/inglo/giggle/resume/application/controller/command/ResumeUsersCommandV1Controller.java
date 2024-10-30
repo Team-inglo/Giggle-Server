@@ -23,6 +23,7 @@ public class ResumeUsersCommandV1Controller {
     private final UpdateUserTopikUseCase updateUserTopikUseCase;
     private final UpdateUserSejongInstituteUseCase updateUserSejongInstituteUseCase;
     private final UpdateUserSocialIntegrationProgramUseCase updateUserSocialIntegrationProgramUseCase;
+    private final UpdateUserAdditionalLanguageSkillUseCase updateUserAdditionalLanguageSkillUseCase;
 
     /**
      * 7.5 (유학생) 경력 생성하기
@@ -129,6 +130,18 @@ public class ResumeUsersCommandV1Controller {
             @RequestBody @Valid UpdateUserSejongInstituteReqeustDto requestDto
     ) {
         updateUserSejongInstituteUseCase.execute(accountId, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.14 (유학생) 언어-ETC 수정하기
+     */
+    @PatchMapping("/languages/additional-languages/{id}")
+    public ResponseDto<Void> updateUserAdditionalLanguageSkill(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateUserAdditionalLanguageSkillRequestDto requestDto
+    ) {
+        updateUserAdditionalLanguageSkillUseCase.execute(id, requestDto);
         return ResponseDto.ok(null);
     }
 }

@@ -17,4 +17,14 @@ public class AdditionalLanguageService {
                 .languageSkill(languageSkill)
                 .build();
     }
+
+    public AdditionalLanguage updateAdditionalLanguage(
+            AdditionalLanguage additionalLanguage,
+            String language,
+            Integer level
+    ) {
+        additionalLanguage.updateLanguageName(language);
+        additionalLanguage.updateLevel(level);
+        return additionalLanguage;
+    }
 }

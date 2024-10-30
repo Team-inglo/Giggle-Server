@@ -128,6 +128,17 @@ Content-Type: application/json
   "level": {{resume.API_7_13.level}}
 }
 
+### 7.14 (유학생) 언어 - ETC 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/languages/additional-languages/{{resume.API_7_14.id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "language_name": "{{resume.API_7_14.language_name}}",
+  "level": {{resume.API_7_14.level}}
+}
+
 
 ### 7.19 (고용주) 이력서 조회하기
 // @no-log
