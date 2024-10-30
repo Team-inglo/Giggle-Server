@@ -64,7 +64,7 @@ public class Education {
     /* -------------------------------------------- */
     @Builder
     public Education(EEducationLevel educationLevel, String major, Double gpa, LocalDate enrollmentDate,
-                     LocalDate graduationDate, Integer grade, School school) {
+                     LocalDate graduationDate, Integer grade, School school, Resume resume) {
         this.educationLevel = educationLevel;
         this.major = major;
         this.gpa = gpa;
@@ -72,6 +72,7 @@ public class Education {
         this.graduationDate = graduationDate;
         this.grade = grade;
         this.school = school;
+        this.resume = resume;
     }
 
 }

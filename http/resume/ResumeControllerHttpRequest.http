@@ -32,6 +32,22 @@ Content-Type: application/json
   "description": "{{resume.API_7_5.description}}"
 }
 
+### 7.6 (유학생) 학력 생성하기
+// @no-log
+POST {{host_url}}/v1/users/resumes/educations
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "education_level": "{{resume.API_7_6.education_level}}",
+  "school_id": {{resume.API_7_6.school_id}},
+  "major": "{{resume.API_7_6.major}}",
+  "gpa": {{resume.API_7_6.gpa}},
+  "start_date": "{{resume.API_7_6.start_date}}",
+  "end_date": "{{resume.API_7_6.end_date}}",
+  "grade": {{resume.API_7_6.grade}}
+}
+
 ### 7.19 (고용주) 이력서 조회하기
 // @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details

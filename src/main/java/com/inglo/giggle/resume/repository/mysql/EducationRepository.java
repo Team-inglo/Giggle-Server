@@ -27,4 +27,7 @@ public interface EducationRepository extends JpaRepository<Education, Long>{
 
     @EntityGraph(attributePaths = {"school"})
     Optional<Education> findWithSchoolById(Long id);
+
+    @EntityGraph(attributePaths = {"school"})
+    Optional<Education> findWithSchoolByResume(Resume resume);
 }

@@ -50,12 +50,13 @@ public class WorkExperience {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public WorkExperience(String experienceTitle, String workplace, LocalDate startDate, LocalDate endDate, String description) {
+    public WorkExperience(String experienceTitle, String workplace, LocalDate startDate, LocalDate endDate, String description, Resume resume) {
         this.experienceTitle = experienceTitle;
         this.workplace = workplace;
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
+        this.resume = resume;
     }
 
 }
