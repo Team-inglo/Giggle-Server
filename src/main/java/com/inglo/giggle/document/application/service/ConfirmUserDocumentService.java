@@ -73,22 +73,26 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 // Document를 PartTimeEmploymentPermit으로 형변환
                 PartTimeEmploymentPermit partTimeEmploymentPermit = (PartTimeEmploymentPermit) document;
 
-                // 시간제 취업 허가서 유학생 상태 Confirmation으로 업데이트
-                partTimeEmploymentPermitService.updateEmployerStatusConfirmation(partTimeEmploymentPermit);
 
-                // 시간제 취업 허가서 고용주 상태 Confirmation으로 업데이트
-                partTimeEmploymentPermitService.updateEmployeeStatusConfirmation(partTimeEmploymentPermit);
+                // 시간제 취업 허가서 유학생, 고용주 상태 Confirmation으로 업데이트
+                partTimeEmploymentPermit =
+                        partTimeEmploymentPermitService.updateStatusByConfirmation(partTimeEmploymentPermit);
+
+                partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
                 // 시간제 취업 허가서 word 파일 생성
-                ByteArrayInputStream partTimeEmploymentPermitWordStream = partTimeEmploymentPermitService.createPartTimeEmploymentPermitDocxFile(partTimeEmploymentPermit);
+                ByteArrayInputStream partTimeEmploymentPermitWordStream
+                        = partTimeEmploymentPermitService.createPartTimeEmploymentPermitDocxFile(partTimeEmploymentPermit);
 
                 // wordFile 업로드
                 String partTimeEmploymentPermitWordUrl = s3Util.uploadWordFile(
-                        partTimeEmploymentPermitWordStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
+                        partTimeEmploymentPermitWordStream, discriminatorValue, jobPosting.getId(),
+                        jobPosting.getTitle(), owner.getOwnerName(), user.getName()
                 );
 
                 // 시간제 취업 허가서 Hwp 파일 생성
-                ByteArrayInputStream partTimeEmploymentPermitHwpStream = partTimeEmploymentPermitService.createPartTimeEmploymentPermitHwpFile(partTimeEmploymentPermit);
+                ByteArrayInputStream partTimeEmploymentPermitHwpStream
+                        = partTimeEmploymentPermitService.createPartTimeEmploymentPermitHwpFile(partTimeEmploymentPermit);
 
                 // hwpFile 업로드
                 String partTimeEmploymentPermitHwpUrl = s3Util.uploadHwpFile(
@@ -96,10 +100,10 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 );
 
                 // Document의 wordUrl, hwpUrl 업데이트
-                PartTimeEmploymentPermit updatedPartTimeEmploymentPermit
+                partTimeEmploymentPermit
                         = (PartTimeEmploymentPermit) documentService.updateUrls(partTimeEmploymentPermit, partTimeEmploymentPermitWordUrl, partTimeEmploymentPermitHwpUrl);
 
-                partTimeEmploymentPermitRepository.save(updatedPartTimeEmploymentPermit);
+                partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
                 break;
 
@@ -108,11 +112,11 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 // Document를 StandardLaborContract으로 형변환
                 StandardLaborContract standardLaborContract = (StandardLaborContract) document;
 
-                // 표준근로계약서 유학생 상태 Confirmation으로 업데이트
-                standardLaborContractService.updateEmployerStatusConfirmation(standardLaborContract);
+                // 표준근로계약서 유학생, 고용주 상태 Confirmation으로 업데이트
+                standardLaborContract =
+                        standardLaborContractService.updateStatusByConfirmation(standardLaborContract);
 
-                // 표준근로계약서 고용주 상태 Confirmation으로 업데이트
-                standardLaborContractService.updateEmployeeStatusConfirmation(standardLaborContract);
+                standardLaborContractRepository.save(standardLaborContract);
 
                 // 표준근로계약서 word 파일 생성
                 ByteArrayInputStream standardLaborContractWordStream = standardLaborContractService.createStandardLaborContractDocxFile(standardLaborContract);
@@ -131,10 +135,10 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 );
 
                 // Document의 wordUrl, hwpUrl 업데이트
-                StandardLaborContract updatedStandardLaborContract
+                standardLaborContract
                         = (StandardLaborContract) documentService.updateUrls(standardLaborContract, standardLaborContractWordUrl, standardLaborContractHwpUrl);
 
-                standardLaborContractRepository.save(updatedStandardLaborContract);
+                standardLaborContractRepository.save(standardLaborContract);
                 break;
 
             case "INTEGRATED_APPLICATION":

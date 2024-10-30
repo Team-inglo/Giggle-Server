@@ -57,20 +57,25 @@ public class PartTimeEmploymentPermitService {
     @Value("${template.part-time-employment-permit.hwp.path}")
     private String hwpTemplatePath;
 
-    public void updateEmployeeStatusRequest(PartTimeEmploymentPermit document) {
+    public PartTimeEmploymentPermit updateStatusByUserSubmission(PartTimeEmploymentPermit document) {
+        document.updateEmployeeStatus(EEmployeeStatus.SUBMITTED);
+        document.updateEmployerStatus(EEmployerStatus.TEMPORARY_SAVE);
+
+        return document;
+    }
+
+    public PartTimeEmploymentPermit updateStatusByRequest(PartTimeEmploymentPermit document) {
         document.updateEmployeeStatus(EEmployeeStatus.REQUEST);
-    }
-
-    public void updateEmployerStatusRewriting(PartTimeEmploymentPermit document) {
         document.updateEmployerStatus(EEmployerStatus.REWRITING);
+
+        return document;
     }
 
-    public void updateEmployeeStatusConfirmation(PartTimeEmploymentPermit document) {
+    public PartTimeEmploymentPermit updateStatusByConfirmation(PartTimeEmploymentPermit document) {
         document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
-    }
-
-    public void updateEmployerStatusConfirmation(PartTimeEmploymentPermit document) {
         document.updateEmployerStatus(EEmployerStatus.CONFIRMATION);
+
+        return document;
     }
 
     public PartTimeEmploymentPermit createPartTimeEmploymentPermit(

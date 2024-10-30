@@ -23,7 +23,6 @@ import kr.dogfoot.hwplib.object.bodytext.paragraph.text.HWPCharNormal;
 import kr.dogfoot.hwplib.object.bodytext.paragraph.text.ParaText;
 import kr.dogfoot.hwplib.reader.HWPReader;
 import kr.dogfoot.hwplib.writer.HWPWriter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
@@ -62,20 +61,25 @@ public class StandardLaborContractService {
     @Value("${template.standard-labor-contract.hwp.path}")
     private String hwpTemplatePath;
 
-    public void updateEmployeeStatusRequest(StandardLaborContract document) {
+    public StandardLaborContract updateStatusBySubmission(StandardLaborContract document) {
+        document.updateEmployeeStatus(EEmployeeStatus.SUBMITTED);
+        document.updateEmployerStatus(EEmployerStatus.TEMPORARY_SAVE);
+
+        return document;
+    }
+
+    public StandardLaborContract updateStatusByRequest(StandardLaborContract document) {
         document.updateEmployeeStatus(EEmployeeStatus.REQUEST);
-    }
-
-    public void updateEmployerStatusRewriting(StandardLaborContract document) {
         document.updateEmployerStatus(EEmployerStatus.REWRITING);
+
+        return document;
     }
 
-    public void updateEmployeeStatusConfirmation(StandardLaborContract document) {
+    public StandardLaborContract updateStatusByConfirmation(StandardLaborContract document) {
         document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
-    }
-
-    public void updateEmployerStatusConfirmation(StandardLaborContract document) {
         document.updateEmployerStatus(EEmployerStatus.CONFIRMATION);
+
+        return document;
     }
 
     public StandardLaborContract createStandardLaborContract(

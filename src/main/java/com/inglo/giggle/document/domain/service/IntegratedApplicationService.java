@@ -60,6 +60,11 @@ public class IntegratedApplicationService {
     @Value("${template.integrated-application.hwp.path}")
     private String hwpTemplatePath;
 
+    public IntegratedApplication updateStatusBySubmission(IntegratedApplication document) {
+        document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
+        return document;
+    }
+
     public void updateEmployeeStatusConfirmation(IntegratedApplication document) {
         document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
     }
