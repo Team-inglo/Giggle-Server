@@ -11,14 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "standard_labor_contracts")
+@DiscriminatorValue("STANDARD_LABOR_CONTRACT")
 @PrimaryKeyJoinColumn(
         name = "document_id",
         foreignKey = @ForeignKey(name = "fk_standard_labor_contract_document")
@@ -38,8 +37,8 @@ public class StandardLaborContract extends Document {
     private String employeePhoneNumber;
 
     @Lob
-    @Column(name = "employee_signature_url", nullable = false)
-    private String employeeSignatureUrl;
+    @Column(name = "employee_signature_base64", nullable = false, columnDefinition = "TEXT")
+    private String employeeSignatureBase64;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "employee_status", nullable = false)
@@ -50,6 +49,12 @@ public class StandardLaborContract extends Document {
     /* -------------------------------------------- */
     @Column(name = "company_name", length = 150)
     private String companyName;
+
+    @Column(name = "employer_phone_number", length = 20)
+    private String employerPhoneNumber;
+
+    @Column(name = "company_registration_number", length = 12)
+    private String companyRegistrationNumber;
 
     @Column(name = "employer_name", length = 150)
     private String employerName;
@@ -63,11 +68,11 @@ public class StandardLaborContract extends Document {
     @Column(name = "description", length = 200)
     private String description;
 
-    @ElementCollection(targetClass = EDayOfWeek.class)
+    @ElementCollection(targetClass = EDayOfWeek.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "contract_weekly_last_days", joinColumns = @JoinColumn(name = "standard_labor_contract_id"))
     @Column(name = "weekly_last_day")
     @Enumerated(EnumType.STRING)
-    private EnumSet<EDayOfWeek> weeklyLastDays;
+    private Set<EDayOfWeek> weeklyRestDays = new HashSet<>();
 
     @Column(name = "hourly_rate")
     private Integer hourlyRate;
@@ -88,15 +93,15 @@ public class StandardLaborContract extends Document {
     @Column(name = "payment_method")
     private EPaymentMethod paymentMethod;
 
-    @ElementCollection(targetClass = EInsurance.class)
+    @ElementCollection(targetClass = EInsurance.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "contract_insurances", joinColumns = @JoinColumn(name = "contract_id"))
     @Column(name = "insurance")
     @Enumerated(EnumType.STRING)
-    private EnumSet<EInsurance> insurances = EnumSet.noneOf(EInsurance.class);
+    private Set<EInsurance> insurances = new HashSet<>();
 
     @Lob
-    @Column(name = "employer_signature_url")
-    private String employerSignatureUrl;
+    @Column(name = "employer_signature_base64", columnDefinition = "TEXT")
+    private String employerSignatureBase64;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "employer_status")
@@ -142,26 +147,28 @@ public class StandardLaborContract extends Document {
     /* -------------------------------------------- */
     @Builder
     public StandardLaborContract(UserOwnerJobPosting userOwnerJobPosting, String employeeFirstName, String employeeLastName,
-                                 String employeePhoneNumber, String employeeSignatureUrl, Address employeeAddress,
-                                 EEmployeeStatus employeeStatus, String companyName, String employerName,
-                                 LocalDate startDate, LocalDate endDate, Address employerAddress, String description,
-                                 EnumSet<EDayOfWeek> weeklyLastDays, Integer hourlyRate, Integer bonus, Integer additionalSalary,
+                                 String employeePhoneNumber, String employeeSignatureBase64, Address employeeAddress,
+                                 EEmployeeStatus employeeStatus, String companyName, String companyRegistrationNumber,
+                                 String employerName, String employerPhoneNumber, LocalDate startDate, LocalDate endDate, Address employerAddress,
+                                 String description, EnumSet<EDayOfWeek> weeklyRestDays, Integer hourlyRate, Integer bonus, Integer additionalSalary,
                                  Double wageRate, Integer paymentDay, EPaymentMethod paymentMethod, EnumSet<EInsurance> insurances,
-                                 String employerSignatureUrl, EEmployerStatus employerStatus) {
+                                 String employerSignatureBase64, EEmployerStatus employerStatus) {
         super(userOwnerJobPosting);
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.employeePhoneNumber = employeePhoneNumber;
-        this.employeeSignatureUrl = employeeSignatureUrl;
+        this.employeeSignatureBase64 = employeeSignatureBase64;
         this.employeeAddress = employeeAddress;
         this.employeeStatus = employeeStatus;
         this.companyName = companyName;
+        this.companyRegistrationNumber = companyRegistrationNumber;
         this.employerName = employerName;
+        this.employerPhoneNumber = employerPhoneNumber;
         this.startDate = startDate;
         this.endDate = endDate;
         this.employerAddress = employerAddress;
         this.description = description;
-        this.weeklyLastDays = weeklyLastDays;
+        this.weeklyRestDays = weeklyRestDays;
         this.hourlyRate = hourlyRate;
         this.bonus = bonus;
         this.additionalSalary = additionalSalary;
@@ -169,7 +176,128 @@ public class StandardLaborContract extends Document {
         this.paymentDay = paymentDay;
         this.paymentMethod = paymentMethod;
         this.insurances = insurances != null ? insurances : EnumSet.noneOf(EInsurance.class);
-        this.employerSignatureUrl = employerSignatureUrl;
+        this.employerSignatureBase64 = employerSignatureBase64;
+        this.employerStatus = employerStatus;
+    }
+
+    public String getRestDays() {
+        StringBuilder restDays = new StringBuilder();
+
+        List<EDayOfWeek> sortedRestDays = new ArrayList<>(this.weeklyRestDays);
+        sortedRestDays.sort(Comparator.comparing(EDayOfWeek::getOrder));
+
+        for (EDayOfWeek day : sortedRestDays) {
+            restDays.append(day.getKrName()).append(", ");
+        }
+        restDays.delete(restDays.length() - 2, restDays.length());
+        return restDays.toString();
+    }
+
+    public String getEmployeeFullName() {
+        return this.employeeFirstName + " " + this.employeeLastName;
+    }
+
+    public String getEmployerFullAddress() {
+        return this.employerAddress.getFullAddress();
+    }
+
+    public void updateEmployeeFirstName(String employeeFirstName) {
+        this.employeeFirstName = employeeFirstName;
+    }
+
+    public void updateEmployeeLastName(String employeeLastName) {
+        this.employeeLastName = employeeLastName;
+    }
+
+    public void updateEmployeePhoneNumber(String employeePhoneNumber) {
+        this.employeePhoneNumber = employeePhoneNumber;
+    }
+
+    public void updateEmployeeSignatureBase64(String employeeSignatureBase64) {
+        this.employeeSignatureBase64 = employeeSignatureBase64;
+    }
+
+    public void updateCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void updateCompanyRegistrationNumber(String companyRegistrationNumber) {
+        this.companyRegistrationNumber = companyRegistrationNumber;
+    }
+
+    public void updateEmployerName(String employerName) {
+        this.employerName = employerName;
+    }
+
+    public void updateEmployerPhoneNumber(String employerPhoneNumber) {
+        this.employerPhoneNumber = employerPhoneNumber;
+    }
+
+    public void updateEmployerSignatureBase64(String employerSignatureBase64) {
+        this.employerSignatureBase64 = employerSignatureBase64;
+    }
+
+    public void updateStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void updateEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
+
+    public void updateHourlyRate(Integer hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public void updateBonus(Integer bonus) {
+        this.bonus = bonus;
+    }
+
+    public void updateAdditionalSalary(Integer additionalSalary) {
+        this.additionalSalary = additionalSalary;
+    }
+
+    public void updateWageRate(Double wageRate) {
+        this.wageRate = wageRate;
+    }
+
+    public void updatePaymentDay(Integer paymentDay) {
+        this.paymentDay = paymentDay;
+    }
+
+    public void updatePaymentMethod(EPaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public void updateInsurances(Set<EInsurance> insurances) {
+        this.insurances = insurances;
+    }
+
+    public void updateWeeklyRestDays(Set<EDayOfWeek> weeklyRestDays) {
+        this.weeklyRestDays = weeklyRestDays;
+    }
+
+    public void updateEmployerAddress(Address employerAddress) {
+        this.employerAddress = employerAddress;
+    }
+
+    public void updateEmployeeAddress(Address employeeAddress) {
+        this.employeeAddress = employeeAddress;
+    }
+
+    public void updateContractWorkDayTimes(List<ContractWorkDayTime> contractWorkDayTimes) {
+        this.contractWorkDayTimes = contractWorkDayTimes;
+    }
+
+    public void updateEmployeeStatus(EEmployeeStatus employeeStatus) {
+        this.employeeStatus = employeeStatus;
+    }
+
+    public void updateEmployerStatus(EEmployerStatus employerStatus) {
         this.employerStatus = employerStatus;
     }
 }

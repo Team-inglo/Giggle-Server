@@ -27,11 +27,12 @@ public enum ErrorCode {
     BAD_REQUEST_PARAMETER(40005, HttpStatus.BAD_REQUEST, "잘못된 요청 파라미터입니다."),
     UNSUPPORTED_MEDIA_TYPE(40006, HttpStatus.BAD_REQUEST, "지원하지 않는 미디어 타입입니다."),
     BAD_REQUEST_JSON(40007, HttpStatus.BAD_REQUEST, "잘못된 JSON 형식입니다."),
+    INVALID_ACCOUNT_TYPE(40008, HttpStatus.BAD_REQUEST, "Account Type이 잘못되었습니다."),
+    INVALID_DOCUMENT_TYPE(40009, HttpStatus.BAD_REQUEST, "Document Type이 잘못되었습니다."),
 
     // SIGN UP Error
     ALREADY_EXIST_ID(40200, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXIST_EMAIL(40201, HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
-    INVALID_ACCOUNT_TYPE(40202, HttpStatus.BAD_REQUEST, "Account Type이 잘못되었습니다."),
 
     // Access Denied Error
     ACCESS_DENIED(40300, HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),

@@ -16,6 +16,124 @@ public class Constants {
     // COOKIE
     public static String ACCESS_TOKEN = "access_token";
     public static String REFRESH_TOKEN = "refresh_token";
+
+    // PartTimeEmploymentPermit
+    public static String KEMPLOYEE_FULL_NAME = "kname";
+    public static String KMAJOR = "kmj";
+    public static String KTERM_OF_COMPLETION = "kterm";
+    public static String KEMPLOYEE_PHONE_NUMBER = "전화번호";
+    public static String KEMPLOYEE_EMAIL = "kemail";
+    public static String KCOMPANY_NAME = "kcname";
+    public static String KCOMPANY_REGISTRATION_NUMBER = "kcrnum";
+    public static String KJOB_TYPE = "kjob";
+    public static String KEMPLOYER_ADDRESS = "kaddr";
+    public static String KEMPLOYER_NAME = "kon";
+    public static String KEMPLOYER_PHONE_NUMBER = "kop";
+    public static String KWORK_PERIOD = "kwp";
+    public static String KHOURLY_RATE = "khr";
+    public static String KWORK_DAYS_WEEKDAYS = "kwd";
+    public static String KWORK_DAYS_WEEKENDS = "kwe";
+
+    public static String EMPLOYEE_FULL_NAME = "name";
+    public static String MAJOR = "전공";
+    public static String TERM_OF_COMPLETION = "학기";
+    public static String EMPLOYEE_PHONE_NUMBER = "번호";
+    public static String EMPLOYEE_EMAIL = "email";
+    public static String COMPANY_NAME = "cname";
+    public static String COMPANY_REGISTRATION_NUMBER = "crnum";
+    public static String JOB_TYPE = "job";
+    public static String EMPLOYER_ADDRESS = "addr";
+    public static String EMPLOYER_NAME = "on";
+    public static String EMPLOYER_PHONE_NUMBER = "op";
+    public static String WORK_PERIOD = "wp";
+    public static String HOURLY_RATE = "hr";
+    public static String WORK_DAYS_WEEKDAYS = "wd";
+    public static String WORK_DAYS_WEEKENDS = "we";
+
+    // StandardLaborContract
+    public static final String EMPLOYER_NAME1 = "employername";
+    public static final String EMPLOYEE_NAME1 = "employeename";
+    public static final String START_YEAR = "startyear";
+    public static final String START_MONTH = "startmonth";
+    public static final String START_DAY = "startday";
+    public static final String ADDRESS = "addr";
+    public static final String DESCRIPTION = "description";
+
+    public static final String DAY_PREFIX = "-day";
+    public static final String START_HOUR_PREFIX = "-start-hour";
+    public static final String START_MINUTE_PREFIX = "-start-minute";
+    public static final String END_HOUR_PREFIX = "-end-hour";
+    public static final String END_MINUTE_PREFIX = "-end-minute";
+    public static final String TIME_PREFIX = "-time";
+    public static final String START_REST_PREFIX = "-rest-start-hour";
+    public static final String START_REST_MINUTE_PREFIX = "-rest-start-minute";
+    public static final String END_REST_PREFIX = "-rest-end-hour";
+    public static final String END_REST_MINUTE_PREFIX = "-rest-end-minute";
+
+    public static final String REST_DAY = "restday";
+
+    public static final String S_HOURLY_RATE = "hourlyrate";
+    public static final String YES_BONUS = "yesbonus";
+    public static final String BONUS = "bonus";
+    public static final String NO_BONUS = "nobonus";
+
+    public static final String YES_ADD = "yesadd";
+    public static final String NO_ADD = "noadd";
+    public static final String WAGE_RATE = "wagerate";
+    public static final String PAYMENT_DAY = "paymentday";
+
+    public static final String DIRECT_PAYMENT = "direct";
+    public static final String BANK_PAYMENT = "bank";
+    public static final String EMPLOYER_PHONE = "employerphone";
+    public static final String EMPLOYER_NAME_2 = "employername2";
+    public static final String COMPANY_NAME_1 = "companyname";
+    public static final String ADDRESS_2 = "addr2";
+
+    public static final String EMPLOYEE_PHONE = "employeephone";
+    public static final String EMPLOYEE_NAME_2 = "employeename2";
+    public static final String ADDRESS_3 = "addr3";
+
+    public static final String EMPLOYMENT_INSURANCE = "고용";
+    public static final String INDUSTRIAL_INSURANCE = "산재";
+    public static final String NATIONAL_PENSION = "국민";
+    public static final String HEALTH_INSURANCE = "건강";
+
+    public static String CHECK = "■";
+    public static String NONECHECK = "□";
+
+    // Integrated Application
+    public static String SURNAME = "surname";
+    public static String GIVEN_NAME = "givenname";
+    public static String BIRTHYEAR = "birthyear";
+    public static String BIRTHMONTH = "birthmonth";
+    public static String BIRTHDAY = "birthday";
+    public static String MALE = "male";
+    public static String FEMALE = "female";
+    public static String NATIONALITY = "nationality";
+    public static String ADDR = "addr";
+    public static String TELENUM = "telenum";
+    public static String CELLNUM = "cellnum";
+    public static String SCHOOLNAME = "schoolname";
+    public static String SCHOOLPHONE = "schoolphone";
+    public static String KYESACC = "kyesacc";
+    public static String YESACC = "yesacc";
+    public static String KNOACC = "knoacc";
+    public static String NOACC = "noacc";
+    public static String WORKPLACE = "workplace";
+    public static String REGNUM = "regnum";
+    public static String WORKNUM = "worknum";
+    public static String ANNUAL = "annual";
+    public static String OCCUPATION = "occupation";
+    public static String EMAIL = "email";
+    public static String SIGNATURE = "signature";
+
+
+
+    public static String BLANK = "";
+    public static String V = "V";
+
+
+
     
     /**
      * 인증이 필요 없는 URL

@@ -141,7 +141,7 @@ public class User extends Account {
     }
     @Override
     public String getName() {
-        return this.firstName + " " + this.lastName;
+        return this.firstName + "-" + this.lastName;
     }
 }
 

@@ -1,6 +1,5 @@
 package com.inglo.giggle.core.dto;
 
-import io.sentry.Sentry;
 import jakarta.validation.*;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
@@ -28,7 +27,6 @@ public abstract class SelfValidating<T> {
     protected void validateSelf() {
         Set<ConstraintViolation<T>> violations = validator.validate((T) this);
         if (!violations.isEmpty()) {
-            Sentry.captureException(new ConstraintViolationException(violations));
             throw new CommonException(ErrorCode.INTERNAL_DATA_ERROR);
         }
     }

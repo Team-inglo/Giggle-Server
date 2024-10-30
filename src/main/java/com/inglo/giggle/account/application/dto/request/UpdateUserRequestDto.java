@@ -12,7 +12,7 @@ public record UpdateUserRequestDto(
         String firstName,
 
         @NotNull
-        @Size(min = 1, max = 50)
+        @Size(min = 1, max = 100)
         @JsonProperty("last_name")
         String lastName,
 
@@ -25,7 +25,7 @@ public record UpdateUserRequestDto(
         String gender,
 
         @NotNull
-        @Size(min = 1, max = 50)
+        @Size(min = 1, max = 56)
         @JsonProperty("nationality")
         String nationality,
 
@@ -34,7 +34,7 @@ public record UpdateUserRequestDto(
         String visa,
 
         @NotNull
-        @Size(min = 10, max = 15)
+        @Size(min = 10, max = 20)
         @JsonProperty("phone_number")
         String phoneNumber,
 

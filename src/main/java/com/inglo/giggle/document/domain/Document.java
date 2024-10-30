@@ -24,6 +24,16 @@ public abstract class Document {
     private Long id;
 
     /* -------------------------------------------- */
+    /* Information Column ------------------------- */
+    /* -------------------------------------------- */
+
+    @Column(name = "hwp_url", length = 320)
+    private String hwpUrl;
+
+    @Column(name = "word_url", length = 320)
+    private String wordUrl;
+
+    /* -------------------------------------------- */
     /* Timestamp Column --------------------------- */
     /* -------------------------------------------- */
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -33,7 +43,7 @@ public abstract class Document {
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_job_postings_id", nullable = false)
+    @JoinColumn(name = "user_owner_job_postings_id", nullable = false)
     private UserOwnerJobPosting userOwnerJobPosting;
 
     /* -------------------------------------------- */
@@ -42,5 +52,13 @@ public abstract class Document {
     protected Document(UserOwnerJobPosting userOwnerJobPosting) {
         this.createdAt = LocalDate.now();
         this.userOwnerJobPosting = userOwnerJobPosting;
+    }
+
+    public void updateWordUrl(String wordUrl) {
+        this.wordUrl = wordUrl;
+    }
+
+    public void updateHwpUrl(String hwpUrl) {
+        this.hwpUrl = hwpUrl;
     }
 }

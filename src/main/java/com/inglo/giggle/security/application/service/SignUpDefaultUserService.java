@@ -6,7 +6,7 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.core.utility.ImageUtil;
+import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.service.LanguageSkillService;
@@ -41,7 +41,7 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final ImageUtil imageUtil;
+    private final S3Util s3Util;
     private final ResumeService resumeService;
     private final LanguageSkillService languageSkillService;
     private final LanguageSkillRepository languageSkillRepository;
@@ -68,7 +68,7 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
                 ESecurityProvider.DEFAULT,
                 tempUserInfo,
                 bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
-                imageUtil.getUserDefaultImgUrl(), requestDto, address
+                s3Util.getUserDefaultImgUrl(), requestDto, address
         );
         User savedUser = accountRepository.save(user);
 
