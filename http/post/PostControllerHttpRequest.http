@@ -25,7 +25,11 @@ GET {{host_url}}/v1/guests/job-postings/{{posting.API_4_2.job_posting_id}}/detai
 Content-Type: application/json
 
 
-
+### 4.4 (유학생/고용주) 공고 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/job-postings/{{posting.API_4_4.job_posting_id}}/details
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
 
 ### 4.6 (고용주) 공고에 대한 지원자 리스트 조회
 // @no-log

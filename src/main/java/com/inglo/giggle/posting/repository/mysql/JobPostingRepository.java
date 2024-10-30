@@ -190,12 +190,6 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("visa") EVisa visa,
             Pageable pageable
     );
-
-    @Query("SELECT jp FROM JobPosting jp " +
-            "JOIN FETCH jp.owner o " +
-            "WHERE jp.id = :jobPostingId"
-    )
-    Optional<JobPosting> findWithOwnerAndWorkDayTimesAndCompanyImagesById(Long jobPostingId);
 }
 
 
