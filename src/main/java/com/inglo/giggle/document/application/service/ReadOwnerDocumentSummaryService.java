@@ -7,8 +7,10 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.dto.response.ReadOwnerDocumentSummaryResponseDto;
 import com.inglo.giggle.document.application.usecase.ReadOwnerDocumentSummaryUseCase;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
+import com.inglo.giggle.document.domain.Reject;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.mysql.RejectRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
     private final OwnerRepository ownerRepository;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
+    private final RejectRepository rejectRepository;
 
     @Override
     public ReadOwnerDocumentSummaryResponseDto readOwnerDocumentSummary(UUID accountId, Long userOwnerJobPostingId) {
@@ -36,6 +39,21 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
         StandardLaborContract standardLaborContract = standardLaborContractRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
                 .orElse(null);
 
-        return ReadOwnerDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract);
+        // 거절 사유 조회
+
+        Reject partTimeEmploymentPermitReject = null;
+        Reject standardLaborContractReject = null;
+
+        if (partTimeEmploymentPermit != null) {
+            partTimeEmploymentPermitReject = rejectRepository.findById(partTimeEmploymentPermit.getId())
+                    .orElse(null);
+        }
+
+        if (standardLaborContract != null) {
+            standardLaborContractReject = rejectRepository.findById(standardLaborContract.getId())
+                    .orElse(null);
+        }
+
+        return ReadOwnerDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract, partTimeEmploymentPermitReject, standardLaborContractReject);
     }
 }
