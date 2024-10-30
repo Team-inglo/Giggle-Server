@@ -1,7 +1,7 @@
 package com.inglo.giggle.school.application.service;
 
-import com.inglo.giggle.school.application.dto.response.ReadSchoolBriefResponseDto;
-import com.inglo.giggle.school.application.usecase.ReadSchoolBriefUseCase;
+import com.inglo.giggle.school.application.dto.response.ReadUserSchoolBriefResponseDto;
+import com.inglo.giggle.school.application.usecase.ReadUserSchoolBriefUseCase;
 import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,24 +16,24 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ReadSchoolBriefService implements ReadSchoolBriefUseCase {
+public class ReadUserSchoolBriefService implements ReadUserSchoolBriefUseCase {
 
     private final SchoolRepository schoolRepository;
 
     @Override
-    public ReadSchoolBriefResponseDto execute(String search, Integer page, Integer size) {
+    public ReadUserSchoolBriefResponseDto execute(String search, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page-1, size);
         Page<School> schoolsPage = schoolRepository.findBySchoolNameContaining(search, pageable);
 
-        List<ReadSchoolBriefResponseDto.SchoolListDto> schoolList = schoolsPage.getContent().stream()
-                .map(school -> ReadSchoolBriefResponseDto.SchoolListDto.builder()
+        List<ReadUserSchoolBriefResponseDto.SchoolListDto> schoolList = schoolsPage.getContent().stream()
+                .map(school -> ReadUserSchoolBriefResponseDto.SchoolListDto.builder()
                         .id(school.getId())
                         .name(school.getSchoolName())
                         .phoneNumber(school.getSchoolPhoneNumber())
                         .build())
                 .collect(Collectors.toList());
 
-        return ReadSchoolBriefResponseDto.builder()
+        return ReadUserSchoolBriefResponseDto.builder()
                 .schoolList(schoolList)
                 .hasNext(schoolsPage.hasNext())
                 .build();

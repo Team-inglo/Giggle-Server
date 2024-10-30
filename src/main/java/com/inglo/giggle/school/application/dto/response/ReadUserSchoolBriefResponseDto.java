@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class ReadSchoolBriefResponseDto extends SelfValidating<ReadSchoolBriefResponseDto> {
+public class ReadUserSchoolBriefResponseDto extends SelfValidating<ReadUserSchoolBriefResponseDto> {
 
     @JsonProperty("school_list")
     private final List<SchoolListDto> schoolList;
@@ -17,7 +17,7 @@ public class ReadSchoolBriefResponseDto extends SelfValidating<ReadSchoolBriefRe
     private final boolean hasNext;
 
     @Builder
-    public ReadSchoolBriefResponseDto(List<SchoolListDto> schoolList, boolean hasNext) {
+    public ReadUserSchoolBriefResponseDto(List<SchoolListDto> schoolList, boolean hasNext) {
         this.schoolList = schoolList;
         this.hasNext = hasNext;
 

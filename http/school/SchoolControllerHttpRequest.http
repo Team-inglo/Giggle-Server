@@ -2,3 +2,8 @@
 // @no-log
 GET {{host_url}}/v1/users/schools/briefs?search={{school.API_9_1.school_name}}&page={{school.API_9_1.page}}&size={{school.API_9_1.size}}
 Authorization: Bearer {{access_token}}
+
+### 9.2 (유학생) 학교 상세 조회
+// @no-log
+GET {{host_url}}/v1/users/resumes/schools/details
+Authorization: Bearer {{access_token}}
