@@ -1,0 +1,4 @@
+### 7.1 (유학생) 이력서 조회하기
+// @no-log
+GET {{host_url}}/v1/users/resumes/details
+Authorization: Bearer {{access_token}}
