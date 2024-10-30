@@ -17,6 +17,7 @@ public enum ErrorCode {
     NOT_FOUND_ACCOUNT(40402, HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
     NOT_FOUND_TEMPORARY_ACCOUNT(40403, HttpStatus.NOT_FOUND, "존재하지 않는 임시 사용자입니다."),
     NOT_FOUND_RESOURCE(40404, HttpStatus.NOT_FOUND, "해당 리소스가 존재하지 않습니다."),
+    NOT_FOUND_TYPE(40404, HttpStatus.NOT_FOUND ,"타입이 존재하지 않습니다." ),
 
     // Invalid Argument Error
     MISSING_REQUEST_PARAMETER(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),
@@ -30,7 +31,8 @@ public enum ErrorCode {
     INVALID_ACCOUNT_TYPE(40008, HttpStatus.BAD_REQUEST, "Account Type이 잘못되었습니다."),
     INVALID_DOCUMENT_TYPE(40009, HttpStatus.BAD_REQUEST, "Document Type이 잘못되었습니다."),
     ALREADY_EXIST_RESOURCE(40010, HttpStatus.BAD_REQUEST, "이미 존재하는 리소스입니다."),
-
+    ALREADY_APPLIED_JOB_POSTING(40011, HttpStatus.BAD_REQUEST, "이미 지원한 공고입니다."),
+  
     // SIGN UP Error
     ALREADY_EXIST_ID(40200, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXIST_EMAIL(40201, HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
@@ -57,6 +59,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러입니다."),
     INTERNAL_DATA_ERROR(50001, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 데이터 에러입니다."),
     UPLOAD_FILE_ERROR(50002, HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패하였습니다."),
+    INTERNAL_SERVER_ERROR_WITH_OSRM(50003, HttpStatus.INTERNAL_SERVER_ERROR, "OSRM 서버 내부 에러입니다."),
 
     // External Server Error
     EXTERNAL_SERVER_ERROR(50200, HttpStatus.BAD_GATEWAY, "서버 외부 에러입니다."),

@@ -1,3 +1,272 @@
+### 4.1 (게스트) 공고 리스트 조회하기
+// @no-log
+GET {{host_url}}/v1/guests/job-postings/overviews?
+    page={{posting.API_4_1.page}}&
+    size={{posting.API_4_1.size}}&
+    sorting={{posting.API_4_1.sorting}}&
+    search={{posting.API_4_1.search}}&
+    region_1depth={{posting.API_4_1.region_1depth_name}}&
+    region_2depth={{posting.API_4_1.region_2depth_name}}&
+    region_3depth={{posting.API_4_1.region_3depth_name}}&
+    industry={{posting.API_4_1.industry}}&
+    work_period={{posting.API_4_1.work_period}}&
+    work_days_per_week={{posting.API_4_1.work_days_per_week}}&
+    working_day={{posting.API_4_1.working_day}}&
+    working_hours={{posting.API_4_1.working_hours}}&
+    recruitment_period={{posting.API_4_1.recruitment_period}}&
+    employment_type={{posting.API_4_1.employment_type}}&
+    visa={{posting.API_4_1.visa}}
+Content-Type: application/json
+
+
+### 4.2 (게스트) 공고 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/guests/job-postings/{{posting.API_4_2.job_posting_id}}/details
+Content-Type: application/json
+
+
+### 4.3 (유학생/고용주) 공고 리스트 조회하기
+// @no-log
+GET {{host_url}}/v1/job-postings/overviews?
+    page={{posting.API_4_3.page}}&
+    size={{posting.API_4_3.size}}&
+    type={{posting.API_4_3.type}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 4.4 (유학생/고용주) 공고 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/job-postings/{{posting.API_4_4.job_posting_id}}/details
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 4.5 (유학생) 추천 공고 리스트 조회하기
+// @no-log
+GET {{host_url}}/v1/users/job-postings/briefs
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+
+### 4.6 (고용주) 공고에 대한 지원자 리스트 조회
+// @no-log
+GET {{host_url}}/v1/owners/job-postings/{{posting.API_4_6.job_posting_id}}/user-owner-job-postings/users/overviews?
+    page={{posting.API_4_6.page}}&
+    size={{posting.API_4_6.size}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 4.7 (유학생/고용주) 공고 요약 정보 조회하기
+// @no-log
+GET {{host_url}}/v1/job-postings/{{posting.API_4_7.job_posting_id}}/summaries
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 4.8 (유학생) 공고 지원 자격 확인하기
+// @no-log
+GET {{host_url}}/v1/users/job-postings/{{posting.API_4_8.job_posting_id}}/validation
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 4.9 (유학생) 공고 지원하기
+// @no-log
+POST {{host_url}}/v1/users/job-postings/{{posting.API_4_9.job_posting_id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 4.10 (고용주) 공고 등록하기
+// @no-log
+POST {{host_url}}/v1/owners/job-postings
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{access_token}}
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "title": "{{posting.API_4_10.title}}",
+  "job_category": "{{posting.API_4_10.job_category}}",
+  "work_day_times": [
+    {
+      "day_of_week": "{{posting.API_4_10.work_day_times[0].day_of_week}}",
+      "work_start_time": "{{posting.API_4_10.work_day_times[0].work_start_time}}",
+      "work_end_time": "{{posting.API_4_10.work_day_times[0].work_end_time}}"
+    },
+    {
+      "day_of_week": "{{posting.API_4_10.work_day_times[1].day_of_week}}",
+      "work_start_time": "{{posting.API_4_10.work_day_times[1].work_start_time}}",
+      "work_end_time": "{{posting.API_4_10.work_day_times[1].work_end_time}}"
+    }
+  ],
+  "work_period": "{{posting.API_4_10.work_period}}",
+  "hourly_rate": {{posting.API_4_10.hourly_rate}},
+  "employment_type": "{{posting.API_4_10.employment_type}}",
+  "address": {
+    "address_name": "{{posting.API_4_10.address.address_name}}",
+    "region_1depth_name": "{{posting.API_4_10.address.region_1depth_name}}",
+    "region_2depth_name": "{{posting.API_4_10.address.region_2depth_name}}",
+    "region_3depth_name": "{{posting.API_4_10.address.region_3depth_name}}",
+    "region_4depth_name": "{{posting.API_4_10.address.region_4depth_name}}",
+    "address_detail": "{{posting.API_4_10.address.address_detail}}",
+    "latitude": {{posting.API_4_10.address.latitude}},
+    "longitude": {{posting.API_4_10.address.longitude}}
+  },
+  "recruitment_dead_line": "{{posting.API_4_10.recruitment_dead_line}}",
+  "recruitment_number": {{posting.API_4_10.recruitment_number}},
+  "gender": "{{posting.API_4_10.gender}}",
+  "age_restriction": {{posting.API_4_10.age_restriction}},
+  "education_level": "{{posting.API_4_10.education_level}}",
+  "visa": "{{posting.API_4_10.visa}}",
+  "recruiter_name": "{{posting.API_4_10.recruiter_name}}",
+  "recruiter_email": "{{posting.API_4_10.recruiter_email}}",
+  "recruiter_phone_number": "{{posting.API_4_10.recruiter_phone_number}}",
+  "description": "{{posting.API_4_10.description}}",
+  "preferred_conditions": "{{posting.API_4_10.preferred_conditions}}"
+}
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image1.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image1.png
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image2.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image2.png
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image3.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image3.png
+
+--boundary
+
+
+
+### 4.11 (고용주) 공고 수정하기
+// @no-log
+PUT {{host_url}}/v1/owners/job-postings/{{posting.API_4_11.job_posting_id}}
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{access_token}}
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "title": "{{posting.API_4_11.title}}",
+  "job_category": "{{posting.API_4_11.job_category}}",
+  "work_day_times": [
+    {
+      "day_of_week": "{{posting.API_4_11.work_day_times[0].day_of_week}}",
+      "work_start_time": "{{posting.API_4_11.work_day_times[0].work_start_time}}",
+      "work_end_time": "{{posting.API_4_11.work_day_times[0].work_end_time}}"
+    },
+    {
+      "day_of_week": "{{posting.API_4_11.work_day_times[1].day_of_week}}",
+      "work_start_time": "{{posting.API_4_11.work_day_times[1].work_start_time}}",
+      "work_end_time": "{{posting.API_4_11.work_day_times[1].work_end_time}}"
+    }
+  ],
+  "work_period": "{{posting.API_4_11.work_period}}",
+  "hourly_rate": {{posting.API_4_11.hourly_rate}},
+  "employment_type": "{{posting.API_4_11.employment_type}}",
+  "address": {
+    "address_name": "{{posting.API_4_11.address.address_name}}",
+    "region_1depth_name": "{{posting.API_4_11.address.region_1depth_name}}",
+    "region_2depth_name": "{{posting.API_4_11.address.region_2depth_name}}",
+    "region_3depth_name": "{{posting.API_4_11.address.region_3depth_name}}",
+    "region_4depth_name": "{{posting.API_4_11.address.region_4depth_name}}",
+    "address_detail": "{{posting.API_4_11.address.address_detail}}",
+    "latitude": {{posting.API_4_11.address.latitude}},
+    "longitude": {{posting.API_4_11.address.longitude}}
+  },
+  "recruitment_dead_line": "{{posting.API_4_11.recruitment_dead_line}}",
+  "recruitment_number": {{posting.API_4_11.recruitment_number}},
+  "gender": "{{posting.API_4_11.gender}}",
+  "age_restriction": {{posting.API_4_11.age_restriction}},
+  "education_level": "{{posting.API_4_11.education_level}}",
+  "visa": "{{posting.API_4_11.visa}}",
+  "recruiter_name": "{{posting.API_4_11.recruiter_name}}",
+  "recruiter_email": "{{posting.API_4_11.recruiter_email}}",
+  "recruiter_phone_number": "{{posting.API_4_11.recruiter_phone_number}}",
+  "description": "{{posting.API_4_11.description}}",
+  "preferred_conditions": "{{posting.API_4_11.preferred_conditions}}",
+  "deleted_img_ids": [
+    {{posting.API_4_11.deleted_img_ids[0]}}, {{posting.API_4_11.deleted_img_ids[1]}}
+  ]
+}
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image1.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image1.png
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image2.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image2.png
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image3.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image3.png
+
+--boundary
+
+
+
+### 4.12 (유학생) 북마크 추가/삭제
+// @no-log
+PUT {{host_url}}/v1/users/job-postings/{{posting.API_4_12.job_posting_id}}/book-marks
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+
+### 4.13 (고용주) 공고 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/owners/job-postings/{{posting.API_4_13.job_posting_id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+
+//======================================================= API 5 =======================================================
+
+
+### 5.1 (유학생) 북마크한 공고 리스트 조회하기
+// @no-log
+GET {{host_url}}/v1/users/book-marks/overviews?
+    page={{posting.API_4_14.page}}&
+    size={{posting.API_4_14.size}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 5.2 (유학생) 북마크 현황(개수) 확인하기
+// @no-log
+GET {{host_url}}/v1/users/book-marks/counts
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+//======================================================= API 6 =======================================================
+
+
 ### 6.1 (유학생) 지원한 공고 리스트 조회하기
 GET {{host_url}}/v1/users/user-owner-job-postings/overviews?
     page=1&
@@ -5,6 +274,7 @@ GET {{host_url}}/v1/users/user-owner-job-postings/overviews?
     sorting={{posting.API_6_1.sorting}}&
     status={{posting.API_6_1.status}}
 Authorization: Bearer {{access_token}}
+
 
 ### 6.2 (유학생) 지원한 공고 상세 조회하기
 GET {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_2.user_owner_job_posting_id}}/details
@@ -64,7 +334,7 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "is_accepted": {{posting.API_6_9.is_accepted}}
+  "is_accepted": {{posting.API_6_10.is_accepted}}
 }
 
 

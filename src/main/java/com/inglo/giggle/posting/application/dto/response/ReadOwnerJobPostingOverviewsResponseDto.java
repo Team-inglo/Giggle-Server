@@ -1,13 +1,16 @@
 package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.core.dto.SelfValidating;
-import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.posting.domain.JobPosting;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -32,11 +35,12 @@ public class ReadOwnerJobPostingOverviewsResponseDto extends SelfValidating<Read
     }
 
     public static ReadOwnerJobPostingOverviewsResponseDto of(
-            Page<UserOwnerJobPosting> userOwnerJobPostingPage
+            Page<JobPosting> userOwnerJobPostingPage,
+            Owner owner
     ) {
         boolean hasNext = userOwnerJobPostingPage.hasNext();
         List<JobPostingOverviewDto> jobPostingOverviewDtoList = userOwnerJobPostingPage.getContent().stream()
-                .map(JobPostingOverviewDto::fromEntity)
+                .map(jobPosting -> JobPostingOverviewDto.fromEntity(jobPosting, owner))
                 .toList();
 
         return ReadOwnerJobPostingOverviewsResponseDto.builder()
@@ -91,18 +95,22 @@ public class ReadOwnerJobPostingOverviewsResponseDto extends SelfValidating<Read
             this.validateSelf();
         }
 
-        public static JobPostingOverviewDto fromEntity(UserOwnerJobPosting userOwnerJobPosting) {
-            int durationOfDays = (int) java.time.Duration.between(
-                    userOwnerJobPosting.getUpdatedAt().atStartOfDay(),
-                    java.time.LocalDate.now().atStartOfDay()
+        public static JobPostingOverviewDto fromEntity(
+                JobPosting jobPosting,
+                Owner owner
+        ) {
+
+            int durationOfDays = (int) Duration.between(
+                    jobPosting.getCreatedAt().atStartOfDay(),
+                    LocalDate.now().atStartOfDay()
             ).toDays();
 
             return JobPostingOverviewDto.builder()
-                    .id(userOwnerJobPosting.getId())
-                    .iconImgUrl(userOwnerJobPosting.getOwner().getProfileImgUrl())
-                    .title(userOwnerJobPosting.getJobPosting().getTitle())
-                    .addressName(userOwnerJobPosting.getJobPosting().getAddress().getAddressName())
-                    .hourlyRate(userOwnerJobPosting.getJobPosting().getHourlyRate())
+                    .id(jobPosting.getId())
+                    .iconImgUrl(owner.getProfileImgUrl())
+                    .title(jobPosting.getTitle())
+                    .addressName(jobPosting.getAddress().getAddressName())
+                    .hourlyRate(jobPosting.getHourlyRate())
                     .durationOfDays(durationOfDays)
                     .build();
         }

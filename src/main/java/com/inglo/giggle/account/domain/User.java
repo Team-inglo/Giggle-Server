@@ -4,6 +4,7 @@ import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.posting.domain.BookMark;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,6 +17,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -67,6 +70,9 @@ public class User extends Account {
     /* -------------------------------------------- */
     @Embedded
     private Address address;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookMark> bookMarks = new ArrayList<>();
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
@@ -133,6 +139,10 @@ public class User extends Account {
 
     public void updateLanguage(ELanguage language) {
         this.language = language;
+    }
+
+    public void updateBirth(LocalDate birth) {
+        this.birth = birth;
     }
 
     @Override

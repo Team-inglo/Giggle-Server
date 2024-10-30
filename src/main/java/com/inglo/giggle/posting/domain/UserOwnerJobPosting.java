@@ -68,11 +68,11 @@ public class UserOwnerJobPosting {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public UserOwnerJobPosting(User user, JobPosting jobPosting, Owner owner, EApplicationStep step) {
+    public UserOwnerJobPosting(User user, JobPosting jobPosting, Owner owner) {
         this.user = user;
         this.jobPosting = jobPosting;
         this.owner = owner;
-        this.step = step;
+        this.step = EApplicationStep.RESUME_UNDER_REVIEW;
         this.lastStepUpdated = LocalDate.now();
         this.createdAt = LocalDate.now();
         this.updatedAt = LocalDate.now();

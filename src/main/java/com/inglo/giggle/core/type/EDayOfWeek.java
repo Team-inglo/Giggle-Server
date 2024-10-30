@@ -6,26 +6,23 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum EDayOfWeek {
-    WEEKDAYS("평일", "WEEKDAYS", 0),
-    WEEKEND("주말", "WEEKEND", 1),
-    MONDAY("월", "MONDAY", 2),
-    TUESDAY("화", "TUESDAY", 3),
-    WEDNESDAY("수", "WEDNESDAY", 4),
-    THURSDAY("목", "THURSDAY", 5),
-    FRIDAY("금", "FRIDAY", 6),
-    SATURDAY("토", "SATURDAY", 7),
-    SUNDAY("일", "SUNDAY", 8),
-    NEGOCIABLE("협의가능", "NEGOCIABLE", 9)
+    MONDAY("월요일", "MONDAY", 0),
+    TUESDAY("화요일", "TUESDAY", 1),
+    WEDNESDAY("수요일", "WEDNESDAY", 2),
+    THURSDAY("목요일", "THURSDAY", 3),
+    FRIDAY("금요일", "FRIDAY", 4),
+    SATURDAY("토요일", "SATURDAY", 5),
+    SUNDAY("일요일", "SUNDAY", 6),
+    NEGOTIABLE("협의가능", "NEGOTIABLE", 7)
     ;
 
     private final String krName;
     private final String enName;
     private final Integer order;
 
+
     public static EDayOfWeek fromString(String value) {
         return switch (value.toUpperCase()) {
-            case "WEEKDAYS" -> WEEKDAYS;
-            case "WEEKEND" -> WEEKEND;
             case "MONDAY" -> MONDAY;
             case "TUESDAY" -> TUESDAY;
             case "WEDNESDAY" -> WEDNESDAY;
@@ -33,7 +30,7 @@ public enum EDayOfWeek {
             case "FRIDAY" -> FRIDAY;
             case "SATURDAY" -> SATURDAY;
             case "SUNDAY" -> SUNDAY;
-            case "NEGOCIABLE" -> NEGOCIABLE;
+            case "NEGOTIABLE" -> NEGOTIABLE;
             default -> throw new IllegalArgumentException("요일이 잘못되었습니다.");
         };
     }

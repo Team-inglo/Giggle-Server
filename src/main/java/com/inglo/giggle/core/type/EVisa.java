@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum EVisa {
+  
     D_2_1("전문학사", "D_2_1", "Associate Degree"),
     D_2_2("학사과정", "D_2_2", "Bachelor's Degree"),
     D_2_3("석사과정", "D_2_3", "Master's Degree"),
@@ -15,7 +16,9 @@ public enum EVisa {
     D_2_8("방문학생", "D_2_8", "Visiting Student"),
     D_4_1("한국어연수", "D_4_1", "Korean Language Trainee"),
     D_4_7("외국어연수", "D_4_7", "Foreign Language Trainee"),
-    F_2("거주", "F_2", "Residence")
+    F_2("거주", "F_2", "Residence"),
+    D_2("일반 유학과정", "D_2, "-"),
+    D_4("연수과정", "D_4", "-")
 
     ;
 
@@ -34,6 +37,8 @@ public enum EVisa {
             case "D_2_8" -> D_2_8;
             case "D_4_1" -> D_4_1;
             case "D_4_7" -> D_4_7;
+            case "D_2" -> D_2;
+            case "D_4" -> D_4;
             case "F_2" -> F_2;
             default -> throw new IllegalArgumentException("비자가 잘못되었습니다.");
         };

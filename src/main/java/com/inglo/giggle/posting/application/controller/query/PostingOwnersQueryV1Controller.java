@@ -2,18 +2,10 @@ package com.inglo.giggle.posting.application.controller.query;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadOwnerJobPostingOverviewsResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadOwnerUserOwnerJobPostingUserBriefResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingDetailResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadOwnerJobPostingOverviewsUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadOwnerUserOwnerJobPostingCountUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadOwnerUserOwnerJobPostingUserBriefUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadUserOwnerJobPostingDetailUseCase;
+import com.inglo.giggle.posting.application.dto.response.*;
+import com.inglo.giggle.posting.application.usecase.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -23,9 +15,32 @@ import java.util.UUID;
 public class PostingOwnersQueryV1Controller {
 
     private final ReadOwnerJobPostingOverviewsUseCase readOwnerJobPostingOverviewsUseCase;
-    private final ReadUserOwnerJobPostingDetailUseCase readUserOwnerJobPostingDetailUseCase;
+    private final ReadOwnerUserOwnerJobPostingDetailUseCase readOwnerUserOwnerJobPostingDetailUseCase;
     private final ReadOwnerUserOwnerJobPostingUserBriefUseCase readOwnerUserOwnerJobPostingUserBriefUseCase;
     private final ReadOwnerUserOwnerJobPostingCountUseCase readOwnerUserOwnerJobPostingCountUseCase;
+    private final ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase readOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase;
+
+    /**
+     * 4.6 (고용주) 공고에 대한 지원자 리스트 조회
+     */
+    @GetMapping("/owners/job-postings/{job-posting-id}/user-owner-job-postings/users/overviews")
+    public ResponseDto<ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto> readUserOwnerJobPostingList(
+            @AccountID UUID accountId,
+            @PathVariable(name = "job-posting-id") Long jobPostingId,
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "10") Integer size
+    ) {
+        return ResponseDto.ok(readOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase.execute(
+                accountId,
+                jobPostingId,
+                page,
+                size
+        ));
+    }
+
+    /* -------------------------------------------- */
+    /* API 6 -------------------------------------- */
+    /* -------------------------------------------- */
 
     /**
      * 6.6 (고용주) 등록한 공고 리스트 조회하기
@@ -47,11 +62,11 @@ public class PostingOwnersQueryV1Controller {
      * 6.7 (고용주) 지원자 지원 상태 상세 조회
      */
     @GetMapping("/owners/user-owner-job-postings/{user-owner-job-postings-id}/details")
-    public ResponseDto<ReadUserOwnerJobPostingDetailResponseDto> readUserOwnerJobPostingDetails(
+    public ResponseDto<ReadOwnerUserOwnerJobPostingDetailResponseDto> readUserOwnerJobPostingDetails(
             @AccountID UUID accountId,
             @PathVariable(name = "user-owner-job-postings-id") Long userOwnerJobPostingsId
     ) {
-        return ResponseDto.ok(readUserOwnerJobPostingDetailUseCase.execute(
+        return ResponseDto.ok(readOwnerUserOwnerJobPostingDetailUseCase.execute(
                 accountId,
                 userOwnerJobPostingsId
         ));

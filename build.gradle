@@ -93,7 +93,6 @@ dependencies {
     implementation 'org.apache.xmlgraphics:batik-dom:1.17'
     implementation 'org.apache.xmlgraphics:batik-anim:1.17'
 
-
     // Testing Dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
