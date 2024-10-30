@@ -24,6 +24,15 @@ Content-Type: application/json
 GET {{host_url}}/v1/guests/job-postings/{{posting.API_4_2.job_posting_id}}/details
 Content-Type: application/json
 
+### 4.3 (유학생/고용주) 공고 리스트 조회하기
+// @no-log
+GET {{host_url}}/v1/job-postings/overviews?
+    page={{posting.API_4_3.page}}&
+    size={{posting.API_4_3.size}}&
+    type={{posting.API_4_3.type}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
 
 ### 4.4 (유학생/고용주) 공고 상세 조회하기
 // @no-log

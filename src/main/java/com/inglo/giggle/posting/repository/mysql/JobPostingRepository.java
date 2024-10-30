@@ -32,7 +32,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     @Query("SELECT jp FROM JobPosting jp " +
             "JOIN FETCH jp.owner o " +
             "JOIN FETCH jp.workDayTimes pw " +
-            "JOIN FETCH jp.bookMarks bm " +
+            "JOIN jp.bookMarks bm " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND (bm.id IS NOT NULL) " +
             "AND ((:region1Depth1 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth1, '%')) " +
@@ -69,7 +69,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "OR (:recruitmentPeriod = 'CLOSED' AND jp.recruitmentDeadLine < :today)) " +
             "AND (:employmentType IS NULL OR jp.employmentType = :employmentType) " +
             "AND (:visa IS NULL OR jp.visa = :visa) " +
-            "GROUP BY jp.id " +
+            "GROUP BY jp.id, o.id, pw.id " +
             "ORDER BY COUNT(bm.id) DESC"
     )
     Page<JobPosting> findPopularJobPostingsWithFilters(
@@ -190,6 +190,32 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("visa") EVisa visa,
             Pageable pageable
     );
+
+    @Query("SELECT jp FROM JobPosting jp " +
+            "LEFT JOIN FETCH jp.owner o " +
+            "LEFT JOIN FETCH jp.workDayTimes wd " +
+            "LEFT JOIN UserOwnerJobPosting uojp ON uojp.jobPosting = jp " +
+            "GROUP BY jp.id, o.id, wd.id " +
+            "ORDER BY COUNT(uojp.id) DESC")
+    List<JobPosting> findTrendingJobPostingsWithFetchJoin();
+
+    @Query("SELECT DISTINCT jp FROM JobPosting jp " +
+            "LEFT JOIN FETCH jp.owner " +
+            "LEFT JOIN FETCH jp.workDayTimes " +
+            "ORDER BY jp.createdAt DESC")
+    List<JobPosting> findRecentlyJobPostingsWithFetchJoin();
+
+    @Query("SELECT jp FROM JobPosting jp " +
+            "LEFT JOIN FETCH jp.owner o " +
+            "LEFT JOIN FETCH jp.workDayTimes wd " +
+            "LEFT JOIN BookMark bm ON bm.jobPosting = jp " +
+            "GROUP BY jp.id, o.id, wd.id " +
+            "ORDER BY COUNT(bm.id) DESC")
+    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin();
+
+
+
+
 }
 
 

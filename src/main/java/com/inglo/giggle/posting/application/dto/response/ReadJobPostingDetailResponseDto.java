@@ -140,7 +140,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     }
 
     @Getter
-    public static class CompanyImageDto extends SelfValidating<ReadGuestJobPostingDetailResponseDto.CompanyImageDto> {
+    public static class CompanyImageDto extends SelfValidating<CompanyImageDto> {
         private final Long id;
         private final String imgUrl;
 
@@ -151,8 +151,8 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             this.validateSelf();
         }
 
-        public static ReadGuestJobPostingDetailResponseDto.CompanyImageDto fromEntity(CompanyImage companyImage) {
-            return ReadGuestJobPostingDetailResponseDto.CompanyImageDto.builder()
+        public static CompanyImageDto fromEntity(CompanyImage companyImage) {
+            return CompanyImageDto.builder()
                     .id(companyImage.getId())
                     .imgUrl(companyImage.getImgUrl())
                     .build();
@@ -160,7 +160,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     }
 
     @Getter
-    public static class Tags extends SelfValidating<ReadGuestJobPostingDetailResponseDto.Tags> {
+    public static class Tags extends SelfValidating<Tags> {
         private final Boolean isRecruiting;
         private final EVisa visa;
         private final EJobCategory jobCategory;
@@ -173,8 +173,8 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             this.validateSelf();
         }
 
-        public static ReadGuestJobPostingDetailResponseDto.Tags fromEntity(JobPosting jobPosting) {
-            return ReadGuestJobPostingDetailResponseDto.Tags.builder()
+        public static Tags fromEntity(JobPosting jobPosting) {
+            return Tags.builder()
                     .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa())
                     .jobCategory(jobPosting.getJobCategory())
@@ -183,7 +183,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     }
 
     @Getter
-    public static class Summaries extends SelfValidating<ReadGuestJobPostingDetailResponseDto.Summaries> {
+    public static class Summaries extends SelfValidating<Summaries> {
         private final String address;
         private final Integer hourlyRate;
         private final EWorkPeriod workPeriod;
@@ -198,8 +198,8 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             this.validateSelf();
         }
 
-        public static ReadGuestJobPostingDetailResponseDto.Summaries fromEntity(JobPosting jobPosting) {
-            return ReadGuestJobPostingDetailResponseDto.Summaries.builder()
+        public static Summaries fromEntity(JobPosting jobPosting) {
+            return Summaries.builder()
                     .address(jobPosting.getAddress().getAddressName())
                     .hourlyRate(jobPosting.getHourlyRate())
                     .workPeriod(jobPosting.getWorkPeriod())
@@ -209,7 +209,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     }
 
     @Getter
-    public static class RecruitmentConditions extends SelfValidating<ReadGuestJobPostingDetailResponseDto.RecruitmentConditions> {
+    public static class RecruitmentConditions extends SelfValidating<RecruitmentConditions> {
         private final String recruitmentDeadline;
         private final String education;
         private final Integer numberOfRecruits;
@@ -229,8 +229,8 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             this.validateSelf();
         }
 
-        public static ReadGuestJobPostingDetailResponseDto.RecruitmentConditions fromEntity(JobPosting jobPosting) {
-            return ReadGuestJobPostingDetailResponseDto.RecruitmentConditions.builder()
+        public static RecruitmentConditions fromEntity(JobPosting jobPosting) {
+            return RecruitmentConditions.builder()
                     .recruitmentDeadline(DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
                     .education(jobPosting.getEducationLevel().toString())
                     .numberOfRecruits(jobPosting.getRecruitmentNumber())
@@ -242,7 +242,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     }
 
     @Getter
-    public static class WorkplaceInformation extends SelfValidating<ReadGuestJobPostingDetailResponseDto.WorkplaceInformation> {
+    public static class WorkplaceInformation extends SelfValidating<WorkplaceInformation> {
         private final String mainAddress;
         private final String detailedAddress;
         private final double latitude;
@@ -257,8 +257,8 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             this.validateSelf();
         }
 
-        public static ReadGuestJobPostingDetailResponseDto.WorkplaceInformation fromEntity(JobPosting jobPosting) {
-            return ReadGuestJobPostingDetailResponseDto.WorkplaceInformation.builder()
+        public static WorkplaceInformation fromEntity(JobPosting jobPosting) {
+            return WorkplaceInformation.builder()
                     .mainAddress(jobPosting.getAddress().getAddressName())
                     .detailedAddress(jobPosting.getAddress().getAddressDetail())
                     .latitude(jobPosting.getAddress().getLatitude())
@@ -268,10 +268,10 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     }
 
     @Getter
-    public static class WorkingConditions extends SelfValidating<ReadGuestJobPostingDetailResponseDto.WorkingConditions> {
+    public static class WorkingConditions extends SelfValidating<WorkingConditions> {
         private final Integer hourlyRate;
         private final EWorkPeriod workPeriod;
-        private final List<ReadGuestJobPostingDetailResponseDto.WorkingConditions.WorkDayTimeDto> workDayTime;
+        private final List<WorkDayTimeDto> workDayTime;
         private final EJobCategory jobCategory;
         private final String employmentType;
 
@@ -279,7 +279,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
         public WorkingConditions(
                 Integer hourlyRate,
                 EWorkPeriod workPeriod,
-                List<ReadGuestJobPostingDetailResponseDto.WorkingConditions.WorkDayTimeDto> workDayTime,
+                List<WorkDayTimeDto> workDayTime,
                 EJobCategory jobCategory,
                 String employmentType
         ) {
@@ -291,18 +291,18 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             this.validateSelf();
         }
 
-        public static ReadGuestJobPostingDetailResponseDto.WorkingConditions of(JobPosting jobPosting, List<PostingWorkDayTime> postingWorkDayTimeList) {
-            return ReadGuestJobPostingDetailResponseDto.WorkingConditions.builder()
+        public static WorkingConditions of(JobPosting jobPosting, List<PostingWorkDayTime> postingWorkDayTimeList) {
+            return WorkingConditions.builder()
                     .hourlyRate(jobPosting.getHourlyRate())
                     .workPeriod(jobPosting.getWorkPeriod())
-                    .workDayTime(postingWorkDayTimeList.stream().map(ReadGuestJobPostingDetailResponseDto.WorkingConditions.WorkDayTimeDto::fromEntity).toList())
+                    .workDayTime(postingWorkDayTimeList.stream().map(WorkDayTimeDto::fromEntity).toList())
                     .jobCategory(jobPosting.getJobCategory())
                     .employmentType(jobPosting.getEmploymentType().toString())
                     .build();
         }
 
         @Getter
-        public static class WorkDayTimeDto extends SelfValidating<ReadGuestJobPostingDetailResponseDto.WorkingConditions.WorkDayTimeDto> {
+        public static class WorkDayTimeDto extends SelfValidating<WorkDayTimeDto> {
             private final String dayOfWeek;
             private final String workStartTime;
             private final String workEndTime;
@@ -315,8 +315,8 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                 this.validateSelf();
             }
 
-            public static ReadGuestJobPostingDetailResponseDto.WorkingConditions.WorkDayTimeDto fromEntity(PostingWorkDayTime postingWorkDayTime) {
-                return ReadGuestJobPostingDetailResponseDto.WorkingConditions.WorkDayTimeDto.builder()
+            public static WorkDayTimeDto fromEntity(PostingWorkDayTime postingWorkDayTime) {
+                return WorkDayTimeDto.builder()
                         .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
                         .workStartTime(DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
                         .workEndTime(DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
@@ -326,7 +326,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     }
 
     @Getter
-    public static class CompanyInformation extends SelfValidating<ReadGuestJobPostingDetailResponseDto.CompanyInformation> {
+    public static class CompanyInformation extends SelfValidating<CompanyInformation> {
         private final String companyAddress;
         private final String representativeName;
         private final String recruiter;
@@ -344,8 +344,8 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             this.validateSelf();
         }
 
-        public static ReadGuestJobPostingDetailResponseDto.CompanyInformation fromEntity(JobPosting jobPosting) {
-            return ReadGuestJobPostingDetailResponseDto.CompanyInformation.builder()
+        public static CompanyInformation fromEntity(JobPosting jobPosting) {
+            return CompanyInformation.builder()
                     .companyAddress(jobPosting.getOwner().getAddress().getAddressName())
                     .representativeName(jobPosting.getOwner().getName())
                     .recruiter(jobPosting.getRecruiterName())
