@@ -2,6 +2,10 @@ package com.inglo.giggle.school.repository.mysql;
 
 import com.inglo.giggle.school.domain.School;
 import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,4 +26,8 @@ public interface SchoolRepository extends JpaRepository<School, Long>{
     Optional<School> findMostRecentGraduationSchoolByUserId(@Param("userId") UUID userId);
 
     Optional<School> findBySchoolName(String schoolName);
+
+    @Query("SELECT s FROM School s WHERE s.schoolName LIKE %:search%")
+    Page<School> findBySchoolNameContaining(@Param("search") String search, Pageable pageable);
+
 }

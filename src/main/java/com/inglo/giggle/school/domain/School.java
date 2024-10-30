@@ -23,13 +23,13 @@ public class School {
     /* -------------------------------------------- */
     /* Information Column ------------------------- */
     /* -------------------------------------------- */
-    @Column(name = "school_name", length = 50, nullable = false)
+    @Column(name = "school_name", length = 100, nullable = false)
     private String schoolName;
 
     @Column(name = "school_phone_number", length = 20, nullable = false)
     private String schoolPhoneNumber;
 
-    @Column(name = "institute_name", length = 50, nullable = false)
+    @Column(name = "institute_name", length = 100, nullable = false)
     private String instituteName;
 
     @Column(name = "coordinator_name", length = 50, nullable = false)
