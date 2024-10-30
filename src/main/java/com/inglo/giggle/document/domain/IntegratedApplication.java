@@ -136,4 +136,72 @@ public class IntegratedApplication extends Document {
         this.employeeStatus = employeeStatus;
     }
 
+    public void updateFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void updateLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void updateBirth(LocalDate birth) {
+        this.birth = birth;
+    }
+
+    public void updateGender(EGender gender) {
+        this.gender = gender;
+    }
+
+    public void updateNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public void updateTelePhoneNumber(String telePhoneNumber) {
+        this.telePhoneNumber = telePhoneNumber;
+    }
+
+    public void updateCellPhoneNumber(String cellPhoneNumber) {
+        this.cellPhoneNumber = cellPhoneNumber;
+    }
+
+    public void updateIsAccredited(Boolean isAccredited) {
+        this.isAccredited = isAccredited;
+    }
+
+    public void updateNewWorkPlaceName(String newWorkPlaceName) {
+        this.newWorkPlaceName = newWorkPlaceName;
+    }
+
+    public void updateNewWorkPlaceRegistrationNumber(String newWorkPlaceRegistrationNumber) {
+        this.newWorkPlaceRegistrationNumber = newWorkPlaceRegistrationNumber;
+    }
+
+    public void updateNewWorkPlacePhoneNumber(String newWorkPlacePhoneNumber) {
+        this.newWorkPlacePhoneNumber = newWorkPlacePhoneNumber;
+    }
+
+    public void updateAnnualIncomeAmount(Integer annualIncomeAmount) {
+        this.annualIncomeAmount = annualIncomeAmount;
+    }
+
+    public void updateOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
+    public void updateEmployeeSignatureBase64(String employeeSignatureBase64) {
+        this.employeeSignatureBase64 = employeeSignatureBase64;
+    }
+
+    public void updateEmployeeAddress(Address employeeAddress) {
+        this.employeeAddress = employeeAddress;
+    }
+
+    public void updateSchool(School school) {
+        this.school = school;
+    }
+
 }

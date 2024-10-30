@@ -236,6 +236,41 @@ Content-Type: application/json
   "signature_base64" : "{{document.API_8_13.signature_base64}}"
 }
 
+### 8.14 (유학생) 통합 신청서 수정하기
+// @no-log
+PUT {{host_url}}/v1/users/documents/{{document.API_8_14.id}}/integrated-applications
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "first_name" : "{{document.API_8_14.first_name}}",
+  "last_name" : "{{document.API_8_14.last_name}}",
+  "birth" : "{{document.API_8_14.birth}}",
+  "gender" : "{{document.API_8_14.gender}}",
+  "nationality" : "{{document.API_8_14.nationality}}",
+  "tele_phone_number" : "{{document.API_8_14.tele_phone_number}}",
+  "cell_phone_number" : "{{document.API_8_14.cell_phone_number}}",
+  "is_accredited" : {{document.API_8_14.is_accredited}},
+  "school_name" : "{{document.API_8_14.school_name}}",
+  "school_phone_number" : "{{document.API_8_14.school_phone_number}}",
+  "new_work_place_name" : "{{document.API_8_14.new_work_place_name}}",
+  "new_work_place_registration_number" : "{{document.API_8_14.new_work_place_registration_number}}",
+  "new_work_place_phone_number" : "{{document.API_8_14.new_work_place_phone_number}}",
+  "annual_income_amount" : {{document.API_8_14.annual_income_amount}},
+  "occupation" : "{{document.API_8_14.occupation}}",
+  "email" : "{{document.API_8_14.email}}",
+  "signature_base64" : "{{document.API_8_14.signature_base64}}",
+  "address" : {
+    "address_name" : "{{document.API_8_14.address.address_name}}",
+    "region_1depth_name" : "{{document.API_8_14.address.region_1depth_name}}",
+    "region_2depth_name" : "{{document.API_8_14.address.region_2depth_name}}",
+    "region_3depth_name" : "{{document.API_8_14.address.region_3depth_name}}",
+    "region_4depth_name" : "{{document.API_8_14.address.region_4depth_name}}",
+    "address_detail" : "{{document.API_8_14.address.address_detail}}",
+    "longitude" : {{document.API_8_14.address.longitude}},
+    "latitude" : {{document.API_8_14.address.latitude}}
+  }
+}
 
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log

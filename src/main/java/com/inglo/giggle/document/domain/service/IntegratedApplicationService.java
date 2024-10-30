@@ -107,6 +107,47 @@ public class IntegratedApplicationService {
                 .build();
     }
 
+    public IntegratedApplication updateUserIntegratedApplication(
+            IntegratedApplication document,
+            String firstName,
+            String lastName,
+            LocalDate birth,
+            EGender gender,
+            String nationality,
+            String telePhoneNumber,
+            String cellPhoneNumber,
+            Boolean isAccredited,
+            String newWorkPlaceName,
+            String newWorkPlaceRegistrationNumber,
+            String newWorkPlacePhoneNumber,
+            Integer annualIncomeAmount,
+            String occupation,
+            String email,
+            String employeeSignatureBase64,
+            School school,
+            Address employeeAddress
+    ) {
+        document.updateFirstName(firstName);
+        document.updateLastName(lastName);
+        document.updateBirth(birth);
+        document.updateGender(gender);
+        document.updateNationality(nationality);
+        document.updateTelePhoneNumber(telePhoneNumber);
+        document.updateCellPhoneNumber(cellPhoneNumber);
+        document.updateIsAccredited(isAccredited);
+        document.updateNewWorkPlaceName(newWorkPlaceName);
+        document.updateNewWorkPlaceRegistrationNumber(newWorkPlaceRegistrationNumber);
+        document.updateNewWorkPlacePhoneNumber(newWorkPlacePhoneNumber);
+        document.updateAnnualIncomeAmount(annualIncomeAmount);
+        document.updateOccupation(occupation);
+        document.updateEmail(email);
+        document.updateEmployeeSignatureBase64(employeeSignatureBase64);
+        document.updateSchool(school);
+        document.updateEmployeeAddress(employeeAddress);
+
+        return document;
+    }
+
     public ByteArrayInputStream createIntegratedApplicationDocxFile(IntegratedApplication document) {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));
