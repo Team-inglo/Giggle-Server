@@ -11,6 +11,10 @@ import lombok.Getter;
 @Getter
 public class ReadUserDetailResponseDto extends SelfValidating<ReadUserDetailResponseDto> {
 
+    @NotNull
+    @JsonProperty("profile_img_url")
+    private String profileImgUrl;
+
     @NotBlank(message = "first_name은 null일 수 없습니다.")
     @JsonProperty("first_name")
     private final String firstName;
@@ -41,6 +45,7 @@ public class ReadUserDetailResponseDto extends SelfValidating<ReadUserDetailResp
 
     @Builder
     public ReadUserDetailResponseDto(
+            String profileImgUrl,
             String firstName,
             String lastName,
             String birth,
@@ -49,6 +54,7 @@ public class ReadUserDetailResponseDto extends SelfValidating<ReadUserDetailResp
             String visa,
             String phoneNumber
     ) {
+        this.profileImgUrl = profileImgUrl;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birth = birth;
@@ -62,6 +68,7 @@ public class ReadUserDetailResponseDto extends SelfValidating<ReadUserDetailResp
 
     public static ReadUserDetailResponseDto fromEntity(User user) {
         return ReadUserDetailResponseDto.builder()
+                .profileImgUrl(user.getProfileImgUrl())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .birth(user.getBirth().toString())
