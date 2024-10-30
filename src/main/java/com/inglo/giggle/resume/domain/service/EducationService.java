@@ -1,7 +1,5 @@
 package com.inglo.giggle.resume.domain.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EVisa;
 import org.springframework.stereotype.Service;

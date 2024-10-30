@@ -61,7 +61,16 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
         temporaryAccountService.validateAccountTypeUser(tempUserInfo);
 
         // Address 생성
-        Address address = addressService.createAddress(requestDto.address());
+        Address address = addressService.createAddress(
+                requestDto.address().addressName(),
+                requestDto.address().region1DepthName(),
+                requestDto.address().region2DepthName(),
+                requestDto.address().region3DepthName(),
+                requestDto.address().region4DepthName(),
+                requestDto.address().addressDetail(),
+                requestDto.address().latitude(),
+                requestDto.address().longitude()
+        );
 
         // User 생성 및 저장
         User user = userService.createUser(

@@ -3,14 +3,14 @@ package com.inglo.giggle.account.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.SelfValidating;
-import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.resume.domain.Education;
-import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.Map;
 
 @Getter
 public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryResponseDto> {
@@ -40,16 +40,21 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
         this.validateSelf();
     }
 
-    public static ReadUserSummaryResponseDto of(User user, Resume resume, Education education) {
+    public static ReadUserSummaryResponseDto of(
+            User user,
+            Resume resume,
+            Education education,
+            Map<String, Integer> workHours
+    ) {
         return ReadUserSummaryResponseDto.builder()
                 .userInformation(UserInfoDto.of(user, education))
                 .languageLevel(LanguageLevelDto.fromEntity(resume))
-                .metaData(MetaDataDto.of(user, resume, education))
+                .metaData(MetaDataDto.of(resume, education, workHours))
                 .build();
     }
 
     @Getter
-    public static class UserInfoDto {
+    public static class UserInfoDto extends SelfValidating<UserInfoDto> {
 
         @NotBlank(message = "profile_img_url은 null일 수 없습니다.")
         @JsonProperty("profile_img_url")
@@ -127,7 +132,7 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
     }
 
     @Getter
-    public static class LanguageLevelDto {
+    public static class LanguageLevelDto extends SelfValidating<LanguageLevelDto> {
 
         @NotNull(message = "topik_level은 null일 수 없습니다.")
         @JsonProperty("topik_level")
@@ -162,7 +167,7 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
     }
 
     @Getter
-    public static class MetaDataDto {
+    public static class MetaDataDto extends SelfValidating<MetaDataDto> {
 
         @NotNull(message = "weekend_work_hour은 null일 수 없습니다.")
         @JsonProperty("weekend_work_hour")
@@ -173,8 +178,8 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
         private final Integer weekdayWorkHour;
 
         @NotNull(message = "is_topik_4_or_more은 null일 수 없습니다.")
-        @JsonProperty("is_topik_4_or_more")
-        private final Boolean isTopik4OrMore;
+        @JsonProperty("is_language_skill_4_or_more")
+        private final Boolean isLanguageSkill4OrMore;
 
         @NotNull(message = "is_metropolitan_area은 null일 수 없습니다.")
         @JsonProperty("is_metropolitan_area")
@@ -184,102 +189,28 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
         public MetaDataDto(
                 Integer weekendWorkHour,
                 Integer weekdayWorkHour,
-                Boolean isTopik4OrMore,
+                Boolean isLanguageSkill4OrMore,
                 Boolean isMetropolitanArea
         ) {
             this.weekendWorkHour = weekendWorkHour;
             this.weekdayWorkHour = weekdayWorkHour;
-            this.isTopik4OrMore = isTopik4OrMore;
+            this.isLanguageSkill4OrMore = isLanguageSkill4OrMore;
             this.isMetropolitanArea = isMetropolitanArea;
         }
 
-        public static MetaDataDto of(User user, Resume resume, Education education) {
-            EVisa visa = user.getVisa();
-            LanguageSkill languageSkill = resume.getLanguageSkill();
-            Integer topicLevel = 0;
-            Integer socialIntegrationLevel = 0;
-            Integer sejongInstituteLevel = 0;
-            int weekendWorkHour = 0;
-            int weekdayWorkHour = 0;
-            boolean isTopik4OrMore = false;
-            Boolean isMetropolitanArea = false;
+        public static final String WEEKEND_WORK_HOURS = "weekendWorkHours";
+        public static final String WEEKDAY_WORK_HOURS = "weekdayWorkHours";
 
-            if (languageSkill != null) {
-                topicLevel = languageSkill.getTopikLevel();
-                socialIntegrationLevel = languageSkill.getSocialIntegrationLevel();
-                sejongInstituteLevel = languageSkill.getSejongInstituteLevel();
-                isTopik4OrMore = topicLevel >= 4;
-            }
-            if (education != null) {
-                isMetropolitanArea = education.getSchool().getIsMetropolitan();
-            }
-
-            switch (visa) {
-                case D_2_1 -> {
-                    if (topicLevel >= 3 && socialIntegrationLevel >= 3 && sejongInstituteLevel >= 3) { // 한국어 능력기준 달성 시
-                        if (education != null && education.getGpa() >= 3.5) { // 성적우수자 혜택(학점 3.5 이상)
-                            weekendWorkHour = 168;
-                            weekdayWorkHour = 30;
-                        } else { // 성적우수자 혜택 미적용
-                            weekendWorkHour = 168;
-                            weekdayWorkHour = 25;
-                        }
-                    } else { // 한국어 능력기준 미달성 시
-                        weekendWorkHour = 10;
-                        weekdayWorkHour = 10;
-                    }
-                }
-                case D_2_2 -> {
-                    if (education != null && education.getGrade() < 3) { // 학년이 3학년 미만일 시
-                        if (topicLevel >= 3 && socialIntegrationLevel >= 3 && sejongInstituteLevel >= 3) { // 한국어 능력기준 달성 시
-                            if (education.getGpa() >= 3.5) { // 성적우수자 혜택(학점 3.5 이상)
-                                weekendWorkHour = 168;
-                                weekdayWorkHour = 30;
-                            } else { // 성적우수자 혜택 미적용
-                                weekendWorkHour = 168;
-                                weekdayWorkHour = 25;
-                            }
-                        } else { // 한국어 능력기준 미달성 시
-                            weekendWorkHour = 10;
-                            weekdayWorkHour = 10;
-                        }
-                    } else { // 학년이 3학년 이상일 시
-                        if (topicLevel >= 4 && socialIntegrationLevel >= 4 && sejongInstituteLevel >= 4) { // 한국어 능력기준 달성 시
-                            if (education != null && education.getGpa() >= 3.5) { // 성적우수자 혜택(학점 3.5 이상)
-                                weekendWorkHour = 168;
-                                weekdayWorkHour = 30;
-                            } else { // 성적우수자 혜택 미적용
-                                weekendWorkHour = 168;
-                                weekdayWorkHour = 25;
-                            }
-                        } else { // 한국어 능력기준 미달성 시
-                            weekendWorkHour = 10;
-                            weekdayWorkHour = 10;
-                        }
-                    }
-                }
-                case D_2_3, D_2_4 -> {
-                    if (topicLevel >= 4 && socialIntegrationLevel >= 4 && sejongInstituteLevel >= 4) { // 한국어 능력기준 달성 시
-                        if (education != null && education.getGpa() >= 3.5) { // 성적우수자 혜택(학점 3.5 이상)
-                            weekendWorkHour = 168;
-                            weekdayWorkHour = 35;
-                        } else { // 성적우수자 혜택 미적용
-                            weekendWorkHour = 168;
-                            weekdayWorkHour = 30;
-                        }
-                    } else { // 한국어 능력기준 미달성 시
-                        weekendWorkHour = 15;
-                        weekdayWorkHour = 15;
-                    }
-                }
-                default -> {
-                }
-            }
+        public static MetaDataDto of(
+                Resume resume,
+                Education education,
+                Map<String, Integer> workHours
+        ) {
             return MetaDataDto.builder()
-                    .weekendWorkHour(weekendWorkHour)
-                    .weekdayWorkHour(weekdayWorkHour)
-                    .isTopik4OrMore(isTopik4OrMore)
-                    .isMetropolitanArea(isMetropolitanArea)
+                    .weekendWorkHour(workHours.get(WEEKEND_WORK_HOURS))
+                    .weekdayWorkHour(workHours.get(WEEKDAY_WORK_HOURS))
+                    .isLanguageSkill4OrMore(resume.getLanguageSkill().getTopikLevel() >= 4 && resume.getLanguageSkill().getSocialIntegrationLevel() >= 4)
+                    .isMetropolitanArea(education.getSchool().getIsMetropolitan())
                     .build();
         }
     }

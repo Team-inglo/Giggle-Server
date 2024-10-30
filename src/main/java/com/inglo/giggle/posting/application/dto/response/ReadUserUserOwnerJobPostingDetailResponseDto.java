@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-public class ReadUserOwnerJobPostingDetailResponseDto extends SelfValidating<ReadUserOwnerJobPostingDetailResponseDto> {
+public class ReadUserUserOwnerJobPostingDetailResponseDto extends SelfValidating<ReadUserUserOwnerJobPostingDetailResponseDto> {
 
     @NotBlank(message = "title은 null일 수 없습니다.")
     @JsonProperty("title")
@@ -41,7 +41,7 @@ public class ReadUserOwnerJobPostingDetailResponseDto extends SelfValidating<Rea
     private final String step;
 
     @Builder
-    public ReadUserOwnerJobPostingDetailResponseDto(
+    public ReadUserUserOwnerJobPostingDetailResponseDto(
             String title,
             String iconImgUrl,
             String addressName,
@@ -59,7 +59,7 @@ public class ReadUserOwnerJobPostingDetailResponseDto extends SelfValidating<Rea
         this.validateSelf();
     }
 
-    public static ReadUserOwnerJobPostingDetailResponseDto fromEntity(
+    public static ReadUserUserOwnerJobPostingDetailResponseDto fromEntity(
             UserOwnerJobPosting userOwnerJobPosting
     ) {
 
@@ -68,7 +68,7 @@ public class ReadUserOwnerJobPostingDetailResponseDto extends SelfValidating<Rea
                 LocalDate.now().atStartOfDay()
         ).toDays();
 
-        return ReadUserOwnerJobPostingDetailResponseDto.builder()
+        return ReadUserUserOwnerJobPostingDetailResponseDto.builder()
                 .title(userOwnerJobPosting.getJobPosting().getTitle())
                 .iconImgUrl(userOwnerJobPosting.getOwner().getProfileImgUrl())
                 .addressName(userOwnerJobPosting.getJobPosting().getAddress().getAddressName())
@@ -125,9 +125,9 @@ public class ReadUserOwnerJobPostingDetailResponseDto extends SelfValidating<Rea
 
         public static WorkDayTime fromEntity(PostingWorkDayTime postingWorkDayTime) {
             return WorkDayTime.builder()
-                    .dayOfWeek(postingWorkDayTime.getDayOfWeek().name())
-                    .workStartTime(postingWorkDayTime.getWorkStartTime().toString())
-                    .workEndTime(postingWorkDayTime.getWorkEndTime().toString())
+                    .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
+                    .workStartTime(postingWorkDayTime.getWorkStartTime() == null ? null : postingWorkDayTime.getWorkStartTime().toString())
+                    .workEndTime(postingWorkDayTime.getWorkEndTime() == null ? null: postingWorkDayTime.getWorkEndTime().toString())
                     .build();
         }
     }

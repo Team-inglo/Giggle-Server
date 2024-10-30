@@ -34,7 +34,16 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
                     !partTimeEmploymentPermit.getEmployerStatus().equals(EEmployerStatus.REWRITING))
                 throw new CommonException(ErrorCode.ACCESS_DENIED);
 
-        Address address = addressService.createAddress(requestDto.address());
+        Address address = addressService.createAddress(
+                requestDto.address().addressName(),
+                requestDto.address().region1DepthName(),
+                requestDto.address().region2DepthName(),
+                requestDto.address().region3DepthName(),
+                requestDto.address().region4DepthName(),
+                requestDto.address().addressDetail(),
+                requestDto.address().latitude(),
+                requestDto.address().longitude()
+        );
 
         PartTimeEmploymentPermit updatedPartTimeEmploymentPermit = partTimeEmploymentPermitService.updateOwnerPartTimeEmploymentPermit(
                 partTimeEmploymentPermit,

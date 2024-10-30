@@ -1,5 +1,6 @@
 package com.inglo.giggle.posting.domain.type;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,18 @@ public enum EWorkDaysPerWeek {
             case "SIX_DAYS" -> SIX_DAYS;
             case "ALL" -> ALL;
             default -> throw new IllegalArgumentException("근무일수가 잘못되었습니다.");
+        };
+    }
+
+    public static Integer toInt(EWorkDaysPerWeek eWorkDaysPerWeek) {
+        return switch (eWorkDaysPerWeek) {
+            case ONE_DAY -> 1;
+            case TWO_DAYS -> 2;
+            case THREE_DAYS -> 3;
+            case FOUR_DAYS -> 4;
+            case FIVE_DAYS -> 5;
+            case SIX_DAYS -> 6;
+            case ALL -> 7;
         };
     }
 }

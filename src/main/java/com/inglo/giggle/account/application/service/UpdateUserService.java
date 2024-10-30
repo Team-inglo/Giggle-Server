@@ -7,6 +7,7 @@ import com.inglo.giggle.account.domain.service.UserService;
 import com.inglo.giggle.account.repository.mysql.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
+import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -44,7 +45,7 @@ public class UpdateUserService implements UpdateUserUseCase {
         if (requestDto.isProfileImgChanged() && image != null) {
 
             // 프로필 이미지 업로드
-            String profileImgUrl = s3Util.uploadUserProfileImageFile(image, account.getSerialId());
+            String profileImgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.USER_PROFILE_IMG);
 
             // 프로필 이미지 URL 업데이트
             account = accountService.updateProfileImgUrl(account, profileImgUrl);

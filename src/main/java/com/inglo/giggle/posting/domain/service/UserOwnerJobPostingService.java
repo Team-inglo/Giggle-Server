@@ -1,5 +1,8 @@
 package com.inglo.giggle.posting.domain.service;
 
+import com.inglo.giggle.account.domain.Owner;
+import com.inglo.giggle.account.domain.User;
+import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,14 @@ public class UserOwnerJobPostingService {
     /* -------------------------------------------- */
     /* Public Method ------------------------------ */
     /* -------------------------------------------- */
+
+    public UserOwnerJobPosting createUserOwnerJobPosting(User user, JobPosting jobPosting, Owner owner) {
+        return UserOwnerJobPosting.builder()
+                .user(user)
+                .jobPosting(jobPosting)
+                .owner(owner)
+                .build();
+    }
 
     public Integer getSuccessFulHireCounts(List<UserOwnerJobPosting> userOwnerJobPostingList) {
         return Math.toIntExact(userOwnerJobPostingList.stream()
@@ -53,7 +64,7 @@ public class UserOwnerJobPostingService {
     }
 
     /* -------------------------------------------- */
-    /* Private Method ------------------------------ */
+    /* Private Method ----------------------------- */
     /* -------------------------------------------- */
     private void saveFeedback(UserOwnerJobPosting userOwnerJobPosting, String feedback) {
         userOwnerJobPosting.updateFeedback(feedback);

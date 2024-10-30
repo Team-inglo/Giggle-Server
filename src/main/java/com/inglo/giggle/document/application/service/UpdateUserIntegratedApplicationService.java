@@ -32,10 +32,20 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         IntegratedApplication integratedApplication = integratedApplicationRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        if (!integratedApplication.getEmployeeStatus().equals(EEmployeeStatus.TEMPORARY_SAVE))
+        if (!integratedApplication.getEmployeeStatus().equals(EEmployeeStatus.TEMPORARY_SAVE)){
             throw new CommonException(ErrorCode.ACCESS_DENIED);
+        }
 
-        Address address = addressService.createAddress(requestDto.address());
+        Address address = addressService.createAddress(
+                requestDto.address().addressName(),
+                requestDto.address().region1DepthName(),
+                requestDto.address().region2DepthName(),
+                requestDto.address().region3DepthName(),
+                requestDto.address().region4DepthName(),
+                requestDto.address().addressDetail(),
+                requestDto.address().latitude(),
+                requestDto.address().longitude()
+        );
 
         School school = schoolRepository.findBySchoolName(requestDto.schoolName())
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));

@@ -9,6 +9,7 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
+import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -47,7 +48,7 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
         if (requestDto.isIconImgChanged() && image != null) {
 
             // 아이콘 이미지 업로드
-            String iconImgUrl = s3Util.uploadOwnerIconImageFile(image, account.getSerialId());
+            String iconImgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.OWNER_PROFILE_IMG);
 
             // 아이콘 이미지 URL 업데이트
             account = accountService.updateProfileImgUrl(account, iconImgUrl);
@@ -64,7 +65,17 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
         }
 
         // 주소 정보 업데이트
-        Address address = addressService.updateAddress(owner.getAddress(), requestDto.address());
+        Address address = addressService.updateAddress(
+                owner.getAddress(),
+                requestDto.address().addressName(),
+                requestDto.address().region1DepthName(),
+                requestDto.address().region2DepthName(),
+                requestDto.address().region3DepthName(),
+                requestDto.address().region4DepthName(),
+                requestDto.address().addressDetail(),
+                requestDto.address().latitude(),
+                requestDto.address().longitude()
+        );
 
         // 고용주 정보 업데이트
         owner = ownerService.updateOwner(owner, requestDto, address);

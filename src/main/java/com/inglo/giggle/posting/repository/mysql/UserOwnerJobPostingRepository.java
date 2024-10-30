@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.repository.mysql;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
+import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import org.springframework.data.domain.Page;
@@ -45,4 +46,9 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
 
     @EntityGraph(attributePaths = {"jobPosting"})
     List<UserOwnerJobPosting> findAllWithJobPostingByOwner(Owner owner);
+
+    @EntityGraph(attributePaths = {"user"})
+    Page<UserOwnerJobPosting> findAllPageWithUserByJobPosting(JobPosting jobPosting, Pageable pageable);
+
+    Boolean existsByUserAndJobPosting(User user, JobPosting jobPosting);
 }

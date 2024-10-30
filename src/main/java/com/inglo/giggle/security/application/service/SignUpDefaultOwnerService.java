@@ -5,6 +5,7 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
+import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultOwnerUseCase;
 import com.inglo.giggle.security.domain.mysql.Account;
@@ -55,11 +56,20 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         // 아이콘 이미지 저장
         String iconUrl = s3Util.getOwnerDefaultImgUrl();
         if (file != null) {
-            iconUrl = s3Util.uploadOwnerIconImageFile(file, tempUserInfo.getId());
+            iconUrl = s3Util.uploadImageFile(file, tempUserInfo.getId(), EImageType.OWNER_PROFILE_IMG);
         }
 
         // Address 생성
-        Address address = addressService.createAddress(requestDto.address());
+        Address address = addressService.createAddress(
+                requestDto.address().addressName(),
+                requestDto.address().region1DepthName(),
+                requestDto.address().region2DepthName(),
+                requestDto.address().region3DepthName(),
+                requestDto.address().region4DepthName(),
+                requestDto.address().addressDetail(),
+                requestDto.address().latitude(),
+                requestDto.address().longitude()
+        );
 
         // Owner 생성 및 저장
         Account account = ownerService.createOwner(

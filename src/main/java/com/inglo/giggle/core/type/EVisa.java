@@ -15,7 +15,10 @@ public enum EVisa {
     D_2_8("방문학생", "D_2_8"),
     D_4_1("한국어연수", "D_4_1"),
     D_4_7("외국어연수", "D_4_7"),
-    F_2("거주", "F_2")
+    F_2("거주", "F_2"),
+
+    D_2("일반 유학과정", "D_2"),
+    D_4("연수과정", "D_4")
 
     ;
 
@@ -33,6 +36,8 @@ public enum EVisa {
             case "D_2_8" -> D_2_8;
             case "D_4_1" -> D_4_1;
             case "D_4_7" -> D_4_7;
+            case "D_2" -> D_2;
+            case "D_4" -> D_4;
             case "F_2" -> F_2;
             default -> throw new IllegalArgumentException("비자가 잘못되었습니다.");
         };
