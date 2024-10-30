@@ -12,4 +12,7 @@ import java.util.UUID;
 public interface LanguageSkillRepository extends JpaRepository<LanguageSkill, UUID>{
     @EntityGraph(attributePaths = {"additionalLanguages"})
     Optional<LanguageSkill> findByResume(Resume resume);
+
+    @EntityGraph(attributePaths = {"additionalLanguages"})
+    Optional<LanguageSkill> findByResumeId(UUID resumeId);
 }
