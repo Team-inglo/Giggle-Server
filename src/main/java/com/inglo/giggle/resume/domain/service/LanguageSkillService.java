@@ -12,4 +12,19 @@ public class LanguageSkillService {
                 .resume(resume)
                 .build();
     }
+
+    public LanguageSkill updateTopik(LanguageSkill languageSkill, Integer level) {
+        languageSkill.updateTopikLevel(level);
+        return languageSkill;
+    }
+
+    public LanguageSkill updateSejongInstitute(LanguageSkill languageSkill, Integer level) {
+        languageSkill.updateSejongInstituteLevel(level);
+        return languageSkill;
+    }
+
+    public LanguageSkill updateSocialIntegrationProgram(LanguageSkill languageSkill, Integer level) {
+        languageSkill.updateSocialIntegrationLevel(level);
+        return languageSkill;
+    }
 }

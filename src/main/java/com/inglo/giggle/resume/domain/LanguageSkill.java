@@ -60,4 +60,15 @@ public class LanguageSkill {
         this.sejongInstituteLevel = 0;
     }
 
+    public void updateTopikLevel(Integer topikLevel) {
+        this.topikLevel = topikLevel;
+    }
+
+    public void updateSocialIntegrationLevel(Integer socialIntegrationLevel) {
+        this.socialIntegrationLevel = socialIntegrationLevel;
+    }
+
+    public void updateSejongInstituteLevel(Integer sejongInstituteLevel) {
+        this.sejongInstituteLevel = sejongInstituteLevel;
+    }
 }

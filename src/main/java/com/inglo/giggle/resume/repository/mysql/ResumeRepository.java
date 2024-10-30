@@ -10,7 +10,14 @@ import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface ResumeRepository extends JpaRepository<Resume, UUID>{
+  
+    @EntityGraph(attributePaths = {"workExperiences"})
+    Optional<Resume> findWithWorkExperiencesAndLanguageSkillByAccountId(UUID id);
+
+    @EntityGraph(attributePaths = {"languageSkill"})
+    Optional<Resume> findWithLanguageSkillByAccountId(UUID id);
 
     @EntityGraph(attributePaths = {"educations", "languageSkill"})
     Optional<Resume> findWithEducationsAndLanguageSkillByAccountId(@Param(value = "accountId") UUID accountId);
+
 }

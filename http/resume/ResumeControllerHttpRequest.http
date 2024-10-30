@@ -1,0 +1,165 @@
+### 7.1 (유학생) 이력서 조회하기
+// @no-log
+GET {{host_url}}/v1/users/resumes/details
+Authorization: Bearer {{access_token}}
+
+### 7.2 (유학생) 경력 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/users/resumes/work-experiences/{{resume.API_7_2.id}}/details
+Authorization: Bearer {{access_token}}
+
+### 7.3 (유학생) 학력 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/users/resumes/educations/{{resume.API_7_3.id}}/details
+Authorization: Bearer {{access_token}}
+
+### 7.4 (유학생) 언어 요약 조회하기
+// @no-log
+GET {{host_url}}/v1/users/resumes/languages/summaries
+Authorization: Bearer {{access_token}}
+
+### 7.5 (유학생) 경력 생성하기
+// @no-log
+POST {{host_url}}/v1/users/resumes/work-experiences
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "title": "{{resume.API_7_5.title}}",
+  "workplace": "{{resume.API_7_5.workplace}}",
+  "start_date": "{{resume.API_7_5.start_date}}",
+  "end_date": "{{resume.API_7_5.end_date}}",
+  "description": "{{resume.API_7_5.description}}"
+}
+
+### 7.6 (유학생) 학력 생성하기
+// @no-log
+POST {{host_url}}/v1/users/resumes/educations
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "education_level": "{{resume.API_7_6.education_level}}",
+  "school_id": {{resume.API_7_6.school_id}},
+  "major": "{{resume.API_7_6.major}}",
+  "gpa": {{resume.API_7_6.gpa}},
+  "start_date": "{{resume.API_7_6.start_date}}",
+  "end_date": "{{resume.API_7_6.end_date}}",
+  "grade": {{resume.API_7_6.grade}}
+}
+
+### 7.7 (유학생) 언어-ETC 생성하기
+// @no-log
+POST {{host_url}}/v1/users/resumes/additional-languages
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "language_name": "{{resume.API_7_7.language_name}}",
+  "level": {{resume.API_7_7.level}}
+}
+
+### 7.8 (유학생) 자기소개 수정하기
+PATCH {{host_url}}/v1/users/resumes/introduction
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "introduction": "{{resume.API_7_8.introduction}}"
+}
+
+### 7.9 (유학생) 경력 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/work-experiences/{{resume.API_7_9.id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "title": "{{resume.API_7_9.title}}",
+  "workplace": "{{resume.API_7_9.workplace}}",
+  "start_date": "{{resume.API_7_9.start_date}}",
+  "end_date": "{{resume.API_7_9.end_date}}",
+  "description": "{{resume.API_7_9.description}}"
+}
+
+### 7.10 (유학생) 학력 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/educations/{{resume.API_7_10.id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "education_level": "{{resume.API_7_10.education_level}}",
+  "school_id": {{resume.API_7_10.school_id}},
+  "major": "{{resume.API_7_10.major}}",
+  "gpa": {{resume.API_7_10.gpa}},
+  "start_date": "{{resume.API_7_10.start_date}}",
+  "end_date": "{{resume.API_7_10.end_date}}",
+  "grade": {{resume.API_7_10.grade}}
+}
+
+### 7.11 (유학생) 언어 - TOPIK 레벨 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/languages/topik
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "level": {{resume.API_7_11.level}}
+}
+
+### 7.12 (유학생) 언어 - SOCIAL INTEGRATION PROGRAM 레벨 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/languages/social-integration-program
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "level": {{resume.API_7_12.level}}
+}
+
+### 7.13 (유학생) 언어 - SEJONG INSTITUTE 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/languages/sejong-institute
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "level": {{resume.API_7_13.level}}
+}
+
+### 7.14 (유학생) 언어 - ETC 수정하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/languages/additional-languages/{{resume.API_7_14.id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "language_name": "{{resume.API_7_14.language_name}}",
+  "level": {{resume.API_7_14.level}}
+}
+
+### 7.15 (유학생) 자기소개 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/introduction
+Authorization: Bearer {{access_token}}
+
+### 7.16 (유학생) 경력 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/work-experiences/{{resume.API_7_16.id}}
+Authorization: Bearer {{access_token}}
+
+### 7.17 (유학생) 학력 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/educations/{{resume.API_7_17.id}}
+Authorization: Bearer {{access_token}}
+
+### 7.18 (유학생) 언어 - ETC 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/additional-languages/{{resume.API_7_18.id}}
+Authorization: Bearer {{access_token}}
+
+### 7.19 (고용주) 이력서 조회하기
+// @no-log
+GET {{host_url}}/v1/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details
+Authorization: Bearer {{access_token}}
