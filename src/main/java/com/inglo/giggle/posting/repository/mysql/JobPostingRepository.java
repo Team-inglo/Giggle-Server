@@ -30,9 +30,9 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     // 인기순 공고 조회 쿼리
     @Query("SELECT jp FROM JobPosting jp " +
-            "LEFT JOIN jp.owner o " +
-            "LEFT JOIN jp.workDayTimes pw " +
-            "LEFT JOIN jp.bookMarks bm " +
+            "JOIN FETCH jp.owner o " +
+            "JOIN FETCH jp.workDayTimes pw " +
+            "JOIN FETCH jp.bookMarks bm " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND (bm.id IS NOT NULL) " +
             "AND ((:region1Depth1 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth1, '%')) " +
@@ -113,8 +113,8 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     // 최신순 공고 조회 쿼리
     @Query("SELECT jp FROM JobPosting jp " +
-            "LEFT JOIN jp.owner o " +
-            "LEFT JOIN jp.workDayTimes pw " +
+            "JOIN FETCH jp.owner o " +
+            "JOIN FETCH jp.workDayTimes pw " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND ((:region1Depth1 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth1, '%')) " +
             "AND (:region1Depth2 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth2, '%')) " +
@@ -190,6 +190,12 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("visa") EVisa visa,
             Pageable pageable
     );
+
+    @Query("SELECT jp FROM JobPosting jp " +
+            "JOIN FETCH jp.owner o " +
+            "WHERE jp.id = :jobPostingId"
+    )
+    Optional<JobPosting> findWithOwnerAndWorkDayTimesAndCompanyImagesById(Long jobPostingId);
 }
 
 

@@ -19,6 +19,10 @@ GET {{host_url}}/v1/guests/job-postings/overviews?
 Content-Type: application/json
 
 
+### 4.2 (게스트) 공고 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/guests/job-postings/{{posting.API_4_2.job_posting_id}}/details
+Content-Type: application/json
 
 
 

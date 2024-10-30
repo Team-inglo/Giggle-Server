@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,8 @@ public class ReadUserOwnerJobPostingBriefListService implements ReadUserOwnerJob
     private final UserRepository userRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
 
+    private static final String UPDATED_AT = "updatedAt";
+
     @Override
     @Transactional(readOnly = true)
     public ReadUserOwnerJobPostingBriefListResponseDto execute(UUID accountId, Integer page, Integer size) {
@@ -32,7 +35,7 @@ public class ReadUserOwnerJobPostingBriefListService implements ReadUserOwnerJob
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // 페이지네이션 설정 UserOwnerJobPosting 조회
-        Pageable pageable = PageRequest.of(page - 1, size);
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(UPDATED_AT).descending());
         Page<UserOwnerJobPosting> userOwnerJobPostingList = userOwnerJobPostingRepository.findAllPagedWithJobPostingAndOwnerByUser(user, pageable);
 
         // DTO 반환
