@@ -10,6 +10,7 @@ import com.inglo.giggle.posting.domain.PostingWorkDayTime;
 import com.inglo.giggle.posting.repository.mysql.CompanyImageRepository;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.posting.repository.mysql.PostingWorkDayTimeRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class ReadJobPostingDetailService implements ReadJobPostingDetailUseCase 
     public ReadJobPostingDetailResponseDto execute(UUID accountId, Long jobPostingId) {
 
         // 계정조회
-        accountRepository.findById(accountId)
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // 공고조회
@@ -47,6 +48,7 @@ public class ReadJobPostingDetailService implements ReadJobPostingDetailUseCase 
         List<PostingWorkDayTime> postingWorkDayTimeList = postingWorkDayTimeRepository.findAllByJobPosting(jobPosting);
 
         return ReadJobPostingDetailResponseDto.of(
+                account,
                 jobPosting,
                 companyImageList,
                 postingWorkDayTimeList,

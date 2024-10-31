@@ -5,7 +5,6 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingOverviewsResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadGuestJobPostingOverviewsUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.*;

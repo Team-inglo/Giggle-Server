@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.repository.mysql;
 
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.posting.domain.BookMark;
+import com.inglo.giggle.posting.domain.JobPosting;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,4 +34,6 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long>{
 
 
     List<BookMark> findByUser(User user);
+
+    List<BookMark> findByJobPosting(JobPosting jobPosting);
 }
