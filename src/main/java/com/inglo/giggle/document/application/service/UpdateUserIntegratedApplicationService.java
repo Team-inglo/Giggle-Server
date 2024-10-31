@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UpdateUserIntegratedApplicationService implements UpdateUserIntegratedApplicationUseCase {
@@ -28,7 +30,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
 
     @Override
     @Transactional
-    public void execute(Long documentId, UpdateUserIntegratedApplicationRequestDto requestDto) {
+    public void execute(UUID accountId, Long documentId, UpdateUserIntegratedApplicationRequestDto requestDto) {
         IntegratedApplication integratedApplication = integratedApplicationRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 

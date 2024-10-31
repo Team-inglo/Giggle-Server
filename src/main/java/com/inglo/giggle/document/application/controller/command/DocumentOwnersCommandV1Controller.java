@@ -26,10 +26,11 @@ public class DocumentOwnersCommandV1Controller {
      */
     @PutMapping("/documents/{id}/part-time-employment-permits")
     public ResponseDto<Void> updateOwnerPartTimeEmploymentPermit(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateOwnerPartTimeEmploymentPermitRequestDto requestDto
     ) {
-        updateOwnerPartTimeEmploymentPermitUseCase.execute(id, requestDto);
+        updateOwnerPartTimeEmploymentPermitUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -38,10 +39,11 @@ public class DocumentOwnersCommandV1Controller {
      */
     @PutMapping("/documents/{id}/standard-labor-contracts")
     public ResponseDto<Void> updateOwnerStandardLaborContract(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateOwnerStandardLaborContractRequestDto requestDto
     ) {
-        updateOwnerStandardLaborContractUseCase.execute(id, requestDto);
+        updateOwnerStandardLaborContractUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 

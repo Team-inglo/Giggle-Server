@@ -38,28 +38,28 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     private final String iconImgUrl;
 
     @JsonProperty("company_img_url_list")
-    private final List<ReadGuestJobPostingDetailResponseDto.CompanyImageDto> companyImgUrlList;
+    private final List<CompanyImageDto> companyImgUrlList;
 
     @JsonProperty("tags")
-    private final ReadGuestJobPostingDetailResponseDto.Tags tags;
+    private final Tags tags;
 
     @JsonProperty("summaries")
-    private final ReadGuestJobPostingDetailResponseDto.Summaries summaries;
+    private final Summaries summaries;
 
     @JsonProperty("recruitment_conditions")
-    private final ReadGuestJobPostingDetailResponseDto.RecruitmentConditions recruitmentConditions;
+    private final RecruitmentConditions recruitmentConditions;
 
     @JsonProperty("detailed_overview")
     private final String detailedOverview;
 
     @JsonProperty("workplace_information")
-    private final ReadGuestJobPostingDetailResponseDto.WorkplaceInformation workplaceInformation;
+    private final WorkplaceInformation workplaceInformation;
 
     @JsonProperty("working_conditions")
-    private final ReadGuestJobPostingDetailResponseDto.WorkingConditions workingConditions;
+    private final WorkingConditions workingConditions;
 
     @JsonProperty("company_information")
-    private final ReadGuestJobPostingDetailResponseDto.CompanyInformation companyInformation;
+    private final CompanyInformation companyInformation;
 
     @JsonProperty("created_at")
     private final String createdAt;
@@ -71,14 +71,14 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             String companyName,
             String title,
             String iconImgUrl,
-            List<ReadGuestJobPostingDetailResponseDto.CompanyImageDto> companyImgUrlList,
-            ReadGuestJobPostingDetailResponseDto.Tags tags,
-            ReadGuestJobPostingDetailResponseDto.Summaries summaries,
-            ReadGuestJobPostingDetailResponseDto.RecruitmentConditions recruitmentConditions,
+            List<CompanyImageDto> companyImgUrlList,
+            Tags tags,
+            Summaries summaries,
+            RecruitmentConditions recruitmentConditions,
             String detailedOverview,
-            ReadGuestJobPostingDetailResponseDto.WorkplaceInformation workplaceInformation,
-            ReadGuestJobPostingDetailResponseDto.WorkingConditions workingConditions,
-            ReadGuestJobPostingDetailResponseDto.CompanyInformation companyInformation,
+            WorkplaceInformation workplaceInformation,
+            WorkingConditions workingConditions,
+            CompanyInformation companyInformation,
             String createdAt) {
         this.id = id;
         this.isMyPost = isMyPost;
@@ -111,29 +111,29 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                 .title(jobPosting.getTitle())
                 .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
                 .companyImgUrlList(companyImageList.stream().map(
-                        ReadGuestJobPostingDetailResponseDto.CompanyImageDto::fromEntity
+                        CompanyImageDto::fromEntity
                 ).toList())
                 .tags(
-                        ReadGuestJobPostingDetailResponseDto.Tags.fromEntity(jobPosting)
+                        Tags.fromEntity(jobPosting)
                 )
                 .summaries(
-                        ReadGuestJobPostingDetailResponseDto.Summaries.fromEntity(jobPosting)
+                        Summaries.fromEntity(jobPosting)
                 )
                 .recruitmentConditions(
-                        ReadGuestJobPostingDetailResponseDto.RecruitmentConditions.fromEntity(jobPosting)
+                        RecruitmentConditions.fromEntity(jobPosting)
                 )
                 .detailedOverview(jobPosting.getDescription())
                 .workplaceInformation(
-                        ReadGuestJobPostingDetailResponseDto.WorkplaceInformation.fromEntity(jobPosting)
+                        WorkplaceInformation.fromEntity(jobPosting)
                 )
                 .workingConditions(
-                        ReadGuestJobPostingDetailResponseDto.WorkingConditions.of(
+                        WorkingConditions.of(
                                 jobPosting,
                                 postingWorkDayTimeList
                         )
                 )
                 .companyInformation(
-                        ReadGuestJobPostingDetailResponseDto.CompanyInformation.fromEntity(jobPosting)
+                        CompanyInformation.fromEntity(jobPosting)
                 )
                 .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
                 .build();
@@ -314,7 +314,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
         @JsonProperty("work_period")
         private final EWorkPeriod workPeriod;
 
-        @JsonProperty("work_day_time")
+        @JsonProperty("work_day_times")
         private final List<WorkDayTimeDto> workDayTime;
 
         @JsonProperty("job_category")

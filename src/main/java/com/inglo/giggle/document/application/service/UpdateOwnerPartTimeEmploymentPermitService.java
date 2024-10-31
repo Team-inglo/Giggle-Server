@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPartTimeEmploymentPermitUseCase {
@@ -26,7 +28,7 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
 
     @Override
     @Transactional
-    public void execute(Long documentId, UpdateOwnerPartTimeEmploymentPermitRequestDto requestDto) {
+    public void execute(UUID accountId, Long documentId, UpdateOwnerPartTimeEmploymentPermitRequestDto requestDto) {
         PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
         if (partTimeEmploymentPermit.getEmployerStatus() != null)
