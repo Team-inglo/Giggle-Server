@@ -70,7 +70,9 @@ Authorization: Bearer {{access_token}}
 // @no-log
 GET {{host_url}}/v1/owners/job-postings/{{posting.API_4_6.job_posting_id}}/user-owner-job-postings/users/overviews?
     page={{posting.API_4_6.page}}&
-    size={{posting.API_4_6.size}}
+    size={{posting.API_4_6.size}}&
+    sorting={{posting.API_4_6.sorting}}&
+    status={{posting.API_4_6.status}}
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 

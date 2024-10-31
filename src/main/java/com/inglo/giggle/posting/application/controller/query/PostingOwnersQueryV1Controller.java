@@ -28,13 +28,18 @@ public class PostingOwnersQueryV1Controller {
             @AccountID UUID accountId,
             @PathVariable(name = "job-posting-id") Long jobPostingId,
             @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @RequestParam(name = "size", defaultValue = "10") Integer size
+            @RequestParam(name = "size", defaultValue = "10") Integer size,
+            @RequestParam(name = "sorting", defaultValue = "DESCENDING") String sorting,
+            @RequestParam(name = "status") String status
+
     ) {
         return ResponseDto.ok(readOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase.execute(
                 accountId,
                 jobPostingId,
                 page,
-                size
+                size,
+                sorting,
+                status
         ));
     }
 

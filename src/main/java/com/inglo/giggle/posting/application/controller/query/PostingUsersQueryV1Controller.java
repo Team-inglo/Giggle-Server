@@ -157,7 +157,7 @@ public class PostingUsersQueryV1Controller {
     /**
      * 6.5 (유학생) 공고 담당자 정보 조회하기
      */
-    @GetMapping("/users/user-owner-job-postings/{user-owner-job-postings-id}/recruiters")
+    @GetMapping("/users/user-owner-job-postings/{user-owner-job-postings-id}/job-postings/recruiters")
     public ResponseDto<ReadUserOwnerJobPostingJobPostingRecruiterResponseDto> readRecruiterInfo(
             @AccountID UUID accountId,
             @PathVariable(name = "user-owner-job-postings-id") Long userOwnerJobPostingsId

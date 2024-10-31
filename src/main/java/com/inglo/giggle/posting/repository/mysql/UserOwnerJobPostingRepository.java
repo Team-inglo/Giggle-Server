@@ -5,10 +5,12 @@ import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -51,4 +53,17 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
     Page<UserOwnerJobPosting> findAllPageWithUserByJobPosting(JobPosting jobPosting, Pageable pageable);
 
     Boolean existsByUserAndJobPosting(User user, JobPosting jobPosting);
+
+    @EntityGraph(attributePaths = {"user"})
+    Page<UserOwnerJobPosting> findAllPageWithUserByJobPostingAndStep(JobPosting jobPosting, EApplicationStep step, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"user"})
+    @Query("SELECT u FROM UserOwnerJobPosting u WHERE u.jobPosting = :jobPosting AND u.step IN :steps")
+    Page<UserOwnerJobPosting> findAllPageWithUserByJobPostingAndSteps(
+            @Param("jobPosting") JobPosting jobPosting,
+            @Param("steps") List<EApplicationStep> steps,
+            Pageable pageable
+    );
+
+
 }
