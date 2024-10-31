@@ -287,7 +287,7 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
                 .name(user.getName())
                 .visa(ReadOwnerResumeDetailResponseDto.VisaDto.fromEntity(user.getVisa()))
                 .personalInformation(ReadOwnerResumeDetailResponseDto.PersonalInformationDto.fromEntity(user))
-                .introduction(resume.getIntroduction() != null ? resume.getIntroduction() : null)
+                .introduction(resume.getIntroduction())
                 .workExperience(!resume.getWorkExperiences().isEmpty() ? resume.getWorkExperiences().stream().map(ReadOwnerResumeDetailResponseDto.WorkExperienceDto::fromEntity).toList() : null)
                 .education(!educations.isEmpty() ? educations.stream().map(ReadOwnerResumeDetailResponseDto.EducationDto::fromEntity).toList() : null)
                 .languages(ReadOwnerResumeDetailResponseDto.LanguagesDto.fromEntity(languageSkill))

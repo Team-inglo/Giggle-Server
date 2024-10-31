@@ -185,7 +185,7 @@ public class ResumeUsersCommandV1Controller {
     /**
      * 7.18 (유학생) 언어-ETC 삭제하기
      */
-    @DeleteMapping("/additional-languages/{id}")
+    @DeleteMapping("/languages/additional-languages/{id}")
     public ResponseDto<Void> deleteUserAdditionalLanguage(
             @PathVariable Long id
     ) {
