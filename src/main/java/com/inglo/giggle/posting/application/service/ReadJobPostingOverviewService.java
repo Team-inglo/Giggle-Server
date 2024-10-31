@@ -8,6 +8,7 @@ import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewR
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingOverviewUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.*;
+import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
@@ -38,6 +39,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
     private static final String RECENTLY = "RECENTLY";
     private static final String BOOKMARKED = "BOOKMARKED";
     private final AccountRepository accountRepository;
+    private final BookMarkRepository bookMarkRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -218,6 +220,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReadJobPostingOverviewResponseDto execute(
             UUID accountId,
             Integer page,
@@ -235,6 +238,9 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin();
             default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
         };
+        // TODO 삭제할 로직
+        jobPostingsList.forEach(bookMarkRepository::findByJobPosting);
+
 
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), jobPostingsList.size());

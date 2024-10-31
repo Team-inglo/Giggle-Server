@@ -9,6 +9,8 @@ import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.PostingWorkDayTime;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.type.ESecurityRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +27,9 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
 
     @JsonProperty("is_my_post")
     private final Boolean isMyPost;
+
+    @JsonProperty("is_book_marked")
+    private final Boolean isBookMarked;
 
     @NotNull
     @JsonProperty("company_name")
@@ -68,6 +73,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     public ReadJobPostingDetailResponseDto(
             Long id,
             Boolean isMyPost,
+            Boolean isBookMarked,
             String companyName,
             String title,
             String iconImgUrl,
@@ -82,6 +88,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             String createdAt) {
         this.id = id;
         this.isMyPost = isMyPost;
+        this.isBookMarked = isBookMarked;
         this.companyName = companyName;
         this.title = title;
         this.iconImgUrl = iconImgUrl;
@@ -99,14 +106,57 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
     }
 
     public static ReadJobPostingDetailResponseDto of(
+            Account account,
             JobPosting jobPosting,
             List<CompanyImage> companyImageList,
             List<PostingWorkDayTime> postingWorkDayTimeList,
             boolean isMyPost
             ) {
+        if(account.getRole() == ESecurityRole.USER){
+            if(jobPosting.getBookMarks().stream().anyMatch(
+                    bookMark -> bookMark.getUser().getId().equals(account.getId())
+            )){
+                return ReadJobPostingDetailResponseDto.builder()
+                        .id(jobPosting.getId())
+                        .isMyPost(isMyPost)
+                        .isBookMarked(true)
+                        .companyName(jobPosting.getOwner().getCompanyName())
+                        .title(jobPosting.getTitle())
+                        .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
+                        .companyImgUrlList(companyImageList.stream().map(
+                                CompanyImageDto::fromEntity
+                        ).toList())
+                        .tags(
+                                Tags.fromEntity(jobPosting)
+                        )
+                        .summaries(
+                                Summaries.fromEntity(jobPosting)
+                        )
+                        .recruitmentConditions(
+                                RecruitmentConditions.fromEntity(jobPosting)
+                        )
+                        .detailedOverview(jobPosting.getDescription())
+                        .workplaceInformation(
+                                WorkplaceInformation.fromEntity(jobPosting)
+                        )
+                        .workingConditions(
+                                WorkingConditions.of(
+                                        jobPosting,
+                                        postingWorkDayTimeList
+                                )
+                        )
+                        .companyInformation(
+                                CompanyInformation.fromEntity(jobPosting)
+                        )
+                        .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
+                        .build();
+            }
+        }
+
         return ReadJobPostingDetailResponseDto.builder()
                 .id(jobPosting.getId())
                 .isMyPost(isMyPost)
+                .isBookMarked(false)
                 .companyName(jobPosting.getOwner().getCompanyName())
                 .title(jobPosting.getTitle())
                 .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
