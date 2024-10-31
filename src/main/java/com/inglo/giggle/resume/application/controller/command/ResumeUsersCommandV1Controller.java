@@ -56,7 +56,7 @@ public class ResumeUsersCommandV1Controller {
     /**
      * 7.7 (유학생) 언어-ETC 생성하기
      */
-    @PostMapping("/additional-languages")
+    @PostMapping("/languages/additional-languages")
     public ResponseDto<Void> createUserAdditionalLanguageSkill(
             @AccountID UUID accountId,
             @RequestBody @Valid CreateUserAdditionalLanguageSkillRequestDto requestDto
