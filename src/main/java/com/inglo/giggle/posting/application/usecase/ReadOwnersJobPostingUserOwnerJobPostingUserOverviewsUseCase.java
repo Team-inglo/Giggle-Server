@@ -15,6 +15,8 @@ public interface ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase {
      * @param jobPostingId 채용공고 ID
      * @param page 페이지
      * @param size 사이즈
+     * @param sorting 정렬
+     * @param status 상태
      *
      * @return 채용공고 사용자 개요
      */
@@ -22,6 +24,8 @@ public interface ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase {
             UUID accountId,
             Long jobPostingId,
             Integer page,
-            Integer size
+            Integer size,
+            String sorting,
+            String status
     );
 }

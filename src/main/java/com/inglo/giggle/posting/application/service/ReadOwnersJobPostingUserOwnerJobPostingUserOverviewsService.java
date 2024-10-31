@@ -7,12 +7,14 @@ import com.inglo.giggle.posting.application.dto.response.ReadOwnersJobPostingUse
 import com.inglo.giggle.posting.application.usecase.ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +36,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
 
     @Override
     @Transactional(readOnly = true)
-    public ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto execute(UUID accountId, Long jobPostingId, Integer page, Integer size) {
+    public ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto execute(UUID accountId, Long jobPostingId, Integer page, Integer size, String sorting, String status) {
 
         // 고용주 조회 및 검증
         ownerRepository.findById(accountId)
@@ -44,11 +46,38 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        // 지원자 리스트 조회
-        Page<UserOwnerJobPosting> userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPosting(
-                jobPosting,
-                PageRequest.of(page - 1, size)
+        // 정렬 방향 설정
+        Sort.Direction direction = "ASCENDING".equalsIgnoreCase(sorting) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(direction, "updatedAt"));
+
+        Page<UserOwnerJobPosting> userOwnerJobPostingPage;
+        EApplicationStep eApplicationStep = EApplicationStep.fromString(status);
+
+        // 특정 상태값들에 해당하는 목록 정의
+        List<EApplicationStep> applicableSteps = List.of(
+                EApplicationStep.RESUME_UNDER_REVIEW,
+                EApplicationStep.WAITING_FOR_INTERVIEW,
+                EApplicationStep.FILLING_OUT_DOCUMENTS,
+                EApplicationStep.DOCUMENT_UNDER_REVIEW,
+                EApplicationStep.APPLICATION_IN_PROGRESS,
+                EApplicationStep.REGISTERING_RESULTS
         );
+
+        if (EApplicationStep.APPLICATION_IN_PROGRESS.equals(eApplicationStep)) {
+            // application_in_progress일 경우, applicableSteps에 해당하는 모든 상태값을 조회
+            userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPostingAndSteps(
+                    jobPosting,
+                    applicableSteps,
+                    pageRequest
+            );
+        } else {
+            // 그 외의 경우, 단일 상태값으로 조회
+            userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPostingAndStep(
+                    jobPosting,
+                    eApplicationStep,
+                    pageRequest
+            );
+        }
 
         // 지원자 리스트의 학교 정보 조회
         List<UUID> userIds = userOwnerJobPostingPage.stream()
@@ -79,6 +108,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
                 userOwnerJobPostingPage.hasNext()
         );
     }
+
 
 
 
