@@ -50,7 +50,7 @@ Content-Type: application/json
 
 ### 7.7 (유학생) 언어-ETC 생성하기
 // @no-log
-POST {{host_url}}/v1/users/resumes/additional-languages
+POST {{host_url}}/v1/users/resumes/languages/additional-languages
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
