@@ -106,7 +106,7 @@ public class Owner extends Account {
 
     @Override
     public ESecurityRole getRole() {
-        return ESecurityRole.USER;
+        return ESecurityRole.OWNER;
     }
     @Override
     public String getName() {

@@ -153,6 +153,14 @@ public class IntegratedApplicationService {
         return document;
     }
 
+    public void checkUpdateOrSubmitUserIntegratedApplicationValidation(IntegratedApplication document) {
+
+        // 유학생이 TEMPORARY_SAVE 가 아니면 접근 거부
+        if (!document.getEmployeeStatus().equals(EEmployeeStatus.TEMPORARY_SAVE)){
+            throw new CommonException(ErrorCode.ACCESS_DENIED);
+        }
+    }
+
     public ByteArrayInputStream createIntegratedApplicationDocxFile(IntegratedApplication document) {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));

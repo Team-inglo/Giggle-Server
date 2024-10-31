@@ -1,7 +1,5 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.dto.response.ReadOwnerDocumentSummaryResponseDto;
@@ -12,6 +10,12 @@ import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.RejectRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +24,31 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummaryUseCase {
-    private final OwnerRepository ownerRepository;
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final RejectRepository rejectRepository;
 
     @Override
     public ReadOwnerDocumentSummaryResponseDto readOwnerDocumentSummary(UUID accountId, Long userOwnerJobPostingId) {
-        // 고용주 정보 조회
-        Owner owner = ownerRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE));
+
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 체크
+        accountService.checkOwnerValidation(account);
+
+        // UserOwnerJobPosting 조회
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findById(userOwnerJobPostingId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 고용주 유효성 체크
+        userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 
         // 시간제 취업 허가서 조회
         PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
@@ -40,7 +59,6 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
                 .orElse(null);
 
         // 거절 사유 조회
-
         Reject partTimeEmploymentPermitReject = null;
         Reject standardLaborContractReject = null;
 

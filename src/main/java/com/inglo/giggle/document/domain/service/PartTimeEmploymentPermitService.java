@@ -155,6 +155,28 @@ public class PartTimeEmploymentPermitService {
         return document;
     }
 
+    public void checkUpdateOrSubmitUserPartTimeEmploymentPermitValidation(PartTimeEmploymentPermit document) {
+
+        // 유학생이 TEMPORARY_SAVE 가 아니거나 고용주가 null 이 아니면 접근 거부
+        if ((!document.getEmployeeStatus().equals(EEmployeeStatus.TEMPORARY_SAVE)) || !(document.getEmployerStatus() == null))
+            throw new CommonException(ErrorCode.ACCESS_DENIED);
+    }
+
+    public void checkUpdateOrSubmitOwnerPartTimeEmploymentPermitValidation(PartTimeEmploymentPermit document) {
+
+        // 고용주가 TEMPORARY_SAVE 이면서 유학생이 SUBMITTED 인 경우와, 고용주가 REWRITING 이면서 유학생이 REQUEST 인 경우를 제외하고 접근 거부
+        if (!((document.getEmployerStatus().equals(EEmployerStatus.TEMPORARY_SAVE) && document.getEmployeeStatus().equals(EEmployeeStatus.SUBMITTED)) ||
+                (document.getEmployerStatus().equals(EEmployerStatus.REWRITING) && document.getEmployeeStatus().equals(EEmployeeStatus.REQUEST))))
+            throw new CommonException(ErrorCode.ACCESS_DENIED);
+    }
+
+    public void checkRequestPartTimeEmploymentPermitValidation(PartTimeEmploymentPermit document) {
+
+        // 유학생이 BEFORE_CONFIRMATION 이면서 고용주가 SUBMITTED 인 경우를 제외하고 접근 거부
+        if (!(document.getEmployeeStatus().equals(EEmployeeStatus.BEFORE_CONFIRMATION) && document.getEmployerStatus().equals(EEmployerStatus.SUBMITTED)))
+            throw new CommonException(ErrorCode.ACCESS_DENIED);
+    }
+
     public ByteArrayInputStream createPartTimeEmploymentPermitDocxFile(PartTimeEmploymentPermit document) {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));

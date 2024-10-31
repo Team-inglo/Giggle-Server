@@ -19,7 +19,7 @@ public class DocumentUsersCommandV1Controller {
     private final CreateUserPartTimeEmploymentPermitUseCase createUserPartTimeEmploymentPermitUseCase;
     private final CreateUserStandardLaborContractUseCase createUserStandardLaborContractUseCase;
     private final CreateUserIntegratedApplicationUseCase createUserIntegratedApplicationUseCase;
-    private final UpdateDocumentStatusRequestionUseCase updateDocumentStatusRequestionUseCase;
+    private final UpdateUserDocumentStatusRequestionUseCase updateUserDocumentStatusRequestionUseCase;
     private final UpdateUserPartTimeEmploymentPermitUseCase updateUserPartTimeEmploymentPermitUseCase;
     private final UpdateUserStandardLaborContractUseCase updateUserStandardLaborContractUseCase;
     private final UpdateUserIntegratedApplicationUseCase updateUserIntegratedApplicationUseCase;
@@ -30,10 +30,11 @@ public class DocumentUsersCommandV1Controller {
      */
     @PostMapping("/user-owner-job-postings/{id}/documents/part-time-employment-permits")
     public ResponseDto<Void> createUserPartTimeEmploymentPermit(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid CreateUserPartTimeEmploymentPermitRequestDto requestDto
     ) {
-        createUserPartTimeEmploymentPermitUseCase.execute(id, requestDto);
+        createUserPartTimeEmploymentPermitUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -42,10 +43,11 @@ public class DocumentUsersCommandV1Controller {
      */
     @PostMapping("/user-owner-job-postings/{id}/documents/standard-labor-contracts")
     public ResponseDto<Void> createUserStandardLaborContract(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid CreateUserStandardLaborContractRequestDto requestDto
     ) {
-        createUserStandardLaborContractUseCase.execute(id, requestDto);
+        createUserStandardLaborContractUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -54,10 +56,11 @@ public class DocumentUsersCommandV1Controller {
      */
     @PostMapping("/user-owner-job-postings/{id}/documents/integrated-applications")
     public ResponseDto<Void> createUserIntegratedApplication(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid CreateUserIntegratedApplicationRequestDto requestDto
     ) {
-       createUserIntegratedApplicationUseCase.execute(id, requestDto);
+       createUserIntegratedApplicationUseCase.execute(accountId, id, requestDto);
          return ResponseDto.ok(null);
     }
 
@@ -70,7 +73,7 @@ public class DocumentUsersCommandV1Controller {
             @PathVariable Long id,
             @RequestBody @Valid UpdateDocumentStatusReqeustionRequestDto requestDto
     ) {
-        updateDocumentStatusRequestionUseCase.updateDocumentStatusRequestion(accountId, id, requestDto);
+        updateUserDocumentStatusRequestionUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 

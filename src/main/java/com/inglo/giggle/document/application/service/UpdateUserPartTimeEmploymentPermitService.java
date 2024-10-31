@@ -4,10 +4,15 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.dto.request.UpdateUserPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateUserPartTimeEmploymentPermitUseCase;
+import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
-import com.inglo.giggle.document.domain.type.EEmployeeStatus;
+import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,18 +22,40 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UpdateUserPartTimeEmploymentPermitService implements UpdateUserPartTimeEmploymentPermitUseCase {
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+    private final DocumentRepository documentRepository;
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
 
     @Override
     @Transactional
     public void execute(UUID accountId, Long documentId, UpdateUserPartTimeEmploymentPermitRequestDto requestDto) {
+
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 체크
+        accountService.checkUserValidation(account);
+
+        // Document 조회
+        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 유저 유효성 체크
+        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+
+        // PartTimeEmploymentPermit 조회
         PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        if (!partTimeEmploymentPermit.getEmployeeStatus().equals(EEmployeeStatus.TEMPORARY_SAVE))
-            throw new CommonException(ErrorCode.ACCESS_DENIED);
+        // PartTimeEmploymentPermit 수정 유효성 체크
+        partTimeEmploymentPermitService.checkUpdateOrSubmitUserPartTimeEmploymentPermitValidation(partTimeEmploymentPermit);
 
+        // PartTimeEmploymentPermit 수정
         PartTimeEmploymentPermit updatedPartTimeEmploymentPermit = partTimeEmploymentPermitService.updateUserPartTimeEmploymentPermit(
                 partTimeEmploymentPermit,
                 requestDto.firstName(),
@@ -38,7 +65,7 @@ public class UpdateUserPartTimeEmploymentPermitService implements UpdateUserPart
                 requestDto.phoneNumber(),
                 requestDto.email()
         );
-
         partTimeEmploymentPermitRepository.save(updatedPartTimeEmploymentPermit);
     }
+
 }
