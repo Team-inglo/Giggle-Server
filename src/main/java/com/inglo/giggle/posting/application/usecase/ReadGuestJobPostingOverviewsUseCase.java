@@ -44,4 +44,20 @@ public interface ReadGuestJobPostingOverviewsUseCase {
             String employmentType,
             String visa
     );
+
+
+    /**
+     * 게스트가 공고 목록을 조회합니다.
+     *
+     * @param page              페이지
+     * @param size              페이지 크기
+     * @param type              타입
+     *
+     * @return 공고 목록 조회 응답 DTO
+     */
+    ReadGuestJobPostingOverviewsResponseDto execute(
+            Integer page,
+            Integer size,
+            String type
+    );
 }

@@ -4,12 +4,14 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingOverviewsResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingOverviewUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.*;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +39,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
     private static final String TRENDING = "TRENDING";
     private static final String RECENTLY = "RECENTLY";
     private static final String BOOKMARKED = "BOOKMARKED";
+    private static final String ANY_KEYWORD = "ANY_KEYWORD";
 
     @Override
     @Transactional(readOnly = true)
@@ -59,9 +64,10 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
         LocalDate today = LocalDate.now();
 
         // region 필터 값들을 ',' 기준으로 리스트로 변환
-        List<String> region1DepthList = parseRegions(region1Depth);
-        List<String> region2DepthList = parseRegions(region2Depth);
-        List<String> region3DepthList = parseRegions(region3Depth);
+        List<List<String>> regionSets = parseRegionSets(region1Depth, region2Depth, region3Depth);
+        List<String> region1DepthList = regionSets.stream().map(list -> list.get(0)).toList();
+        List<String> region2DepthList = regionSets.stream().map(list -> list.get(1)).toList();
+        List<String> region3DepthList = regionSets.stream().map(list -> list.get(2)).toList();
 
         // 필터 파라미터 변환
         List<EJobCategory> industryList = parseEnums(industry, EJobCategory.class);
@@ -69,14 +75,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
         List<Integer> workDaysPerWeekList = parseIntegerToEnums(workDaysPerWeek);
 
         // 요일 설정
-        List<EDayOfWeek> workingDayListBefore = parseEnums(workingDay, EDayOfWeek.class);
-        if (workingDayListBefore == null) {
-            workingDayListBefore = new ArrayList<>();
-        } else {
-            workingDayListBefore = new ArrayList<>(workingDayListBefore);
-        }
-        workingDayListBefore.add(EDayOfWeek.NEGOTIABLE);
-        List<EDayOfWeek> workingDayList = workingDayListBefore.stream().distinct().toList();
+        List<EDayOfWeek> workingDayList = parseEnums(workingDay, EDayOfWeek.class);
 
         // 시간대 설정
         LocalTime morningStart = LocalTime.of(6, 0);
@@ -92,31 +91,34 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
 
         // workingHoursList의 시간대에 따라 선택 여부 설정
         List<EWorkingHours> workingHoursList = parseEnums(workingHours, EWorkingHours.class);
-        if (workingHoursList == null) {
-            workingHoursList = new ArrayList<>();
+
+        boolean morningSelected = false;
+        boolean afternoonSelected= false;
+        boolean eveningSelected= false;
+        boolean fullDaySelected= false;
+        boolean dawnSelected = false;
+
+        if (workingHoursList != null){
+            morningSelected = workingHoursList.contains(EWorkingHours.MORNING);
+            afternoonSelected = workingHoursList.contains(EWorkingHours.AFTERNOON);
+            eveningSelected = workingHoursList.contains(EWorkingHours.EVENING);
+            fullDaySelected = workingHoursList.contains(EWorkingHours.FULLDAY);
+            dawnSelected = workingHoursList.contains(EWorkingHours.DAWN);
         }
-
-        boolean morningSelected = workingHoursList.contains(EWorkingHours.MORNING);
-        boolean afternoonSelected = workingHoursList.contains(EWorkingHours.AFTERNOON);
-        boolean eveningSelected = workingHoursList.contains(EWorkingHours.EVENING);
-        boolean fullDaySelected = workingHoursList.contains(EWorkingHours.FULLDAY);
-        boolean dawnSelected = workingHoursList.contains(EWorkingHours.DAWN);
-
-        Page<JobPosting> jobPostingsPage;
 
         // 인기순 또는 최신순에 따라 다른 메서드 호출
-        if (sorting.equalsIgnoreCase(POPULAR_SORTING)) {
-            jobPostingsPage = jobPostingRepository.findPopularJobPostingsWithFilters(
+        if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
+            List<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
-                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
-                    region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
-                    region1DepthList.size() > 2 ? region1DepthList.get(2) : null,
-                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : null,
-                    region2DepthList.size() > 1 ? region2DepthList.get(1) : null,
-                    region2DepthList.size() > 2 ? region2DepthList.get(2) : null,
-                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : null,
-                    region3DepthList.size() > 1 ? region3DepthList.get(1) : null,
-                    region3DepthList.size() > 2 ? region3DepthList.get(2) : null,
+                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : ANY_KEYWORD,
+                    region1DepthList.size() > 1 ? region1DepthList.get(1) : ANY_KEYWORD,
+                    region1DepthList.size() > 2 ? region1DepthList.get(2) : ANY_KEYWORD,
+                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : ANY_KEYWORD,
+                    region2DepthList.size() > 1 ? region2DepthList.get(1) : ANY_KEYWORD,
+                    region2DepthList.size() > 2 ? region2DepthList.get(2) : ANY_KEYWORD,
+                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : ANY_KEYWORD,
+                    region3DepthList.size() > 1 ? region3DepthList.get(1) : ANY_KEYWORD,
+                    region3DepthList.size() > 2 ? region3DepthList.get(2) : ANY_KEYWORD,
                     industryList,
                     workPeriodList,
                     workDaysPerWeekList,
@@ -140,55 +142,70 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                     EDayOfWeek.NEGOTIABLE,
                     today,
                     recruitmentPeriod,
-                    employmentType == null ? null: EEmploymentType.fromString(employmentType),
-                    visa == null ? null: EVisa.fromString(visa),
-                    pageable
+                    employmentType == null ? null : EEmploymentType.fromString(employmentType),
+                    visa == null ? null : EVisa.fromString(visa)
             );
+
+            Map<Long, Integer> bookmarkCountMap = jobPostingList.stream()
+                    .collect(Collectors.toMap(
+                            JobPosting::getId,
+                            jobPosting -> jobPostingRepository.countBookmarksByJobPostingId(jobPosting.getId())
+                    ));
+
+            jobPostingList.sort((jobPosting1, jobPosting2) ->
+                    Integer.compare(
+                            bookmarkCountMap.getOrDefault(jobPosting2.getId(), 0),
+                            bookmarkCountMap.getOrDefault(jobPosting1.getId(), 0)
+                    )
+            );
+
+            // 정렬된 List를 다시 Page 객체로 변환
+            Page<JobPosting> sortedJobPostingsPage = new PageImpl<>(jobPostingList, pageable, jobPostingList.size());
+
+            // fromPage 메서드를 사용해 응답 생성
+            return ReadJobPostingOverviewResponseDto.fromPage(sortedJobPostingsPage);
+
         } else {
-            jobPostingsPage = jobPostingRepository.findRecentJobPostingsWithFilters(
-                    jobTitle,
-                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
-                    region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
-                    region1DepthList.size() > 2 ? region1DepthList.get(2) : null,
-                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : null,
-                    region2DepthList.size() > 1 ? region2DepthList.get(1) : null,
-                    region2DepthList.size() > 2 ? region2DepthList.get(2) : null,
-                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : null,
-                    region3DepthList.size() > 1 ? region3DepthList.get(1) : null,
-                    region3DepthList.size() > 2 ? region3DepthList.get(2) : null,
-                    industryList,
-                    workPeriodList,
-                    workDaysPerWeekList,
-                    workingDayList,
-                    workingHoursList,
-                    morningStart,
-                    morningEnd,
-                    afternoonStart,
-                    afternoonEnd,
-                    eveningStart,
-                    eveningEnd,
-                    fullDayStart,
-                    fullDayEnd,
-                    dawnStart,
-                    dawnEnd,
-                    morningSelected,
-                    afternoonSelected,
-                    eveningSelected,
-                    fullDaySelected,
-                    dawnSelected,
-                    EDayOfWeek.NEGOTIABLE,
-                    today,
-                    recruitmentPeriod,
-                    employmentType == null ? null: EEmploymentType.fromString(employmentType),
-                    visa == null ? null: EVisa.fromString(visa),
-                    pageable
+            return ReadJobPostingOverviewResponseDto.fromPage(jobPostingRepository.findRecentJobPostingsWithFilters(
+                            jobTitle,
+                            !region1DepthList.isEmpty() ? region1DepthList.get(0) : ANY_KEYWORD,
+                            region1DepthList.size() > 1 ? region1DepthList.get(1) : ANY_KEYWORD,
+                            region1DepthList.size() > 2 ? region1DepthList.get(2) : ANY_KEYWORD,
+                            !region2DepthList.isEmpty() ? region2DepthList.get(0) : ANY_KEYWORD,
+                            region2DepthList.size() > 1 ? region2DepthList.get(1) : ANY_KEYWORD,
+                            region2DepthList.size() > 2 ? region2DepthList.get(2) : ANY_KEYWORD,
+                            !region3DepthList.isEmpty() ? region3DepthList.get(0) : ANY_KEYWORD,
+                            region3DepthList.size() > 1 ? region3DepthList.get(1) : ANY_KEYWORD,
+                            region3DepthList.size() > 2 ? region3DepthList.get(2) : ANY_KEYWORD,
+                            industryList,
+                            workPeriodList,
+                            workDaysPerWeekList,
+                            workingDayList,
+                            workingHoursList,
+                            morningStart,
+                            morningEnd,
+                            afternoonStart,
+                            afternoonEnd,
+                            eveningStart,
+                            eveningEnd,
+                            fullDayStart,
+                            fullDayEnd,
+                            dawnStart,
+                            dawnEnd,
+                            morningSelected,
+                            afternoonSelected,
+                            eveningSelected,
+                            fullDaySelected,
+                            dawnSelected,
+                            EDayOfWeek.NEGOTIABLE,
+                            today,
+                            recruitmentPeriod,
+                            employmentType == null ? null: EEmploymentType.fromString(employmentType),
+                            visa == null ? null: EVisa.fromString(visa),
+                            pageable
+                    )
             );
-
         }
-
-        return ReadJobPostingOverviewResponseDto.fromPage(
-                jobPostingsPage
-        );
     }
 
     @Override
@@ -213,16 +230,35 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
     }
 
 
-
     /* -------------------------------------------- */
     /* Private Methods ---------------------------- */
     /* -------------------------------------------- */
 
-    private List<String> parseRegions(String region) {
+    private List<List<String>> parseRegionSets(String region1Depth, String region2Depth, String region3Depth) {
+        List<String> region1DepthList = parseSingleDepth(region1Depth);
+        List<String> region2DepthList = parseSingleDepth(region2Depth);
+        List<String> region3DepthList = parseSingleDepth(region3Depth);
+
+        List<List<String>> regionSets = new ArrayList<>();
+        int maxSize = Math.max(region1DepthList.size(), Math.max(region2DepthList.size(), region3DepthList.size()));
+
+        for (int i = 0; i < maxSize; i++) {
+            String region1 = i < region1DepthList.size() ? region1DepthList.get(i) : null;
+            String region2 = i < region2DepthList.size() ? region2DepthList.get(i) : null;
+            String region3 = i < region3DepthList.size() ? region3DepthList.get(i) : null;
+
+            if (!(region1 == null && region2 == null && region3 == null)) {
+                regionSets.add(Arrays.asList(region1, region2, region3));
+            }
+        }
+        return regionSets;
+    }
+
+    private List<String> parseSingleDepth(String region) {
         if (region == null || region.isEmpty()) return new ArrayList<>(); // 빈 리스트 반환
         return Arrays.stream(region.split(","))
                 .map(String::trim)
-                .filter(value -> !value.equalsIgnoreCase(NONE)) // "none" 값을 제외
+                .map(value -> value.equalsIgnoreCase(NONE) ? null : value) // "none"을 null로 변환
                 .toList();
     }
 
