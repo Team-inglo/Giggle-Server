@@ -5,21 +5,43 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.resume.application.dto.response.ReadUserEducationDetailResponseDto;
 import com.inglo.giggle.resume.application.usecase.ReadUserEducationDetailUseCase;
 import com.inglo.giggle.resume.domain.Education;
+import com.inglo.giggle.resume.domain.service.EducationService;
 import com.inglo.giggle.resume.repository.mysql.EducationRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ReadUserEducationDetailService implements ReadUserEducationDetailUseCase {
 
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final EducationRepository educationRepository;
+    private final EducationService educationService;
 
     @Override
-    public ReadUserEducationDetailResponseDto execute(Long educationId) {
-        Education eduation = educationRepository.findWithSchoolById(educationId)
+    public ReadUserEducationDetailResponseDto execute(UUID accountId, Long educationId) {
+
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        return ReadUserEducationDetailResponseDto.fromEntity(eduation);
+        // 계정 타입 유효성 체크
+        accountService.checkUserValidation(account);
+
+        // Education 조회
+        Education education = educationRepository.findWithSchoolById(educationId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // Education 유효성 체크
+        educationService.checkEducationValidation(education, accountId);
+
+        return ReadUserEducationDetailResponseDto.fromEntity(education);
     }
+
 }

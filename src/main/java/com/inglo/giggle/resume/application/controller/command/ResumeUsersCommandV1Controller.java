@@ -82,10 +82,11 @@ public class ResumeUsersCommandV1Controller {
      */
     @PatchMapping("/work-experiences/{id}")
     public ResponseDto<Void> updateUserWorkExperience(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateUserWorkExperienceRequestDto requestDto
     ) {
-        updateUserWorkExperienceUseCase.execute(id, requestDto);
+        updateUserWorkExperienceUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -94,10 +95,11 @@ public class ResumeUsersCommandV1Controller {
      */
     @PatchMapping("/educations/{id}")
     public ResponseDto<Void> updateUserEducation(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateUserEducationRequestDto requestDto
     ) {
-        updateUserEducationUseCase.execute(id, requestDto);
+        updateUserEducationUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -142,10 +144,11 @@ public class ResumeUsersCommandV1Controller {
      */
     @PatchMapping("/languages/additional-languages/{id}")
     public ResponseDto<Void> updateUserAdditionalLanguageSkill(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateUserAdditionalLanguageSkillRequestDto requestDto
     ) {
-        updateUserAdditionalLanguageSkillUseCase.execute(id, requestDto);
+        updateUserAdditionalLanguageSkillUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -165,9 +168,10 @@ public class ResumeUsersCommandV1Controller {
      */
     @DeleteMapping("/work-experiences/{id}")
     public ResponseDto<Void> deleteUserWorkExperience(
+            @AccountID UUID accountId,
             @PathVariable Long id
     ) {
-        deleteUserWorkExperienceUseCase.execute(id);
+        deleteUserWorkExperienceUseCase.execute(accountId, id);
         return ResponseDto.ok(null);
     }
 
@@ -176,9 +180,10 @@ public class ResumeUsersCommandV1Controller {
      */
     @DeleteMapping("/educations/{id}")
     public ResponseDto<Void> deleteUserEducation(
+            @AccountID UUID accountId,
             @PathVariable Long id
     ) {
-        deleteUserEducationUseCase.execute(id);
+        deleteUserEducationUseCase.execute(accountId, id);
         return ResponseDto.ok(null);
     }
 
@@ -187,9 +192,10 @@ public class ResumeUsersCommandV1Controller {
      */
     @DeleteMapping("/languages/additional-languages/{id}")
     public ResponseDto<Void> deleteUserAdditionalLanguage(
+            @AccountID UUID accountId,
             @PathVariable Long id
     ) {
-        deleteUserAdditionalLanguageUseCase.execute(id);
+        deleteUserAdditionalLanguageUseCase.execute(accountId, id);
         return ResponseDto.ok(null);
     }
 }
