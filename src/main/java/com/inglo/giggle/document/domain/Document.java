@@ -47,6 +47,12 @@ public abstract class Document {
     private UserOwnerJobPosting userOwnerJobPosting;
 
     /* -------------------------------------------- */
+    /* One To One Mapping ------------------------- */
+    /* -------------------------------------------- */
+    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Reject reject;
+
+    /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     protected Document(UserOwnerJobPosting userOwnerJobPosting) {
@@ -61,4 +67,5 @@ public abstract class Document {
     public void updateHwpUrl(String hwpUrl) {
         this.hwpUrl = hwpUrl;
     }
+
 }

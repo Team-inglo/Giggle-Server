@@ -122,6 +122,9 @@ public class JobPosting {
     @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookMark> bookMarks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserOwnerJobPosting> userOwnerJobPostings = new ArrayList<>();
+
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */

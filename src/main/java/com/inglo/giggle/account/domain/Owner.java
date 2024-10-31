@@ -1,6 +1,7 @@
 package com.inglo.giggle.account.domain;
 
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -52,6 +54,8 @@ public class Owner extends Account {
     /* -------------------------------------------- */
     /* One To Many Mapping ------------------------ */
     /* -------------------------------------------- */
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JobPosting> jobPostings;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
