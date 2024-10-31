@@ -20,4 +20,6 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID>{
     @EntityGraph(attributePaths = {"educations", "languageSkill"})
     Optional<Resume> findWithEducationsAndLanguageSkillByAccountId(@Param(value = "accountId") UUID accountId);
 
+    @EntityGraph(attributePaths = {"educations"})
+    Optional<Resume> findWithEducationsByAccountId(UUID accountId);
 }
