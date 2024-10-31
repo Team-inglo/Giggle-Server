@@ -39,23 +39,34 @@ public class PostingGuestsQueryV1Controller {
             @RequestParam(value = "type", required = false) String type
     ) {
 
-        return ResponseDto.ok(readGuestJobPostingOverviewsUseCase.execute(
-                page,
-                size,
-                jobTitle,
-                sorting,
-                region1Depth,
-                region2Depth,
-                region3Depth,
-                industry,
-                workPeriod,
-                workDaysPerWeek,
-                workingDay,
-                workingHours,
-                recruitmentPeriod,
-                employmentType,
-                visa
-        ));
+        if (type == null) {
+            return ResponseDto.ok(readGuestJobPostingOverviewsUseCase.execute(
+                    page,
+                    size,
+                    jobTitle,
+                    sorting,
+                    region1Depth,
+                    region2Depth,
+                    region3Depth,
+                    industry,
+                    workPeriod,
+                    workDaysPerWeek,
+                    workingDay,
+                    workingHours,
+                    recruitmentPeriod,
+                    employmentType,
+                    visa
+            ));
+        }
+
+        return ResponseDto.ok(
+                readGuestJobPostingOverviewsUseCase.execute(
+                        page,
+                        size,
+                        type
+                )
+        );
+
     }
 
     /**
@@ -69,8 +80,6 @@ public class PostingGuestsQueryV1Controller {
                 jobPostingId
         ));
     }
-
-
 
 
 }

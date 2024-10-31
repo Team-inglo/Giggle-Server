@@ -1,15 +1,16 @@
 package com.inglo.giggle.posting.application.service;
 
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingOverviewsResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadGuestJobPostingOverviewsUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.*;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingOverviewsUseCase {
 
@@ -31,8 +34,11 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
 
     private static final String POPULAR_SORTING = "popular";
     private static final String NONE = "none";
-    private static final String ANY_KEYWORD = "ANY_KEYWORD";
 
+    private static final String TRENDING = "TRENDING";
+    private static final String RECENTLY = "RECENTLY";
+    private static final String BOOKMARKED = "BOOKMARKED";
+    private static final String ANY_KEYWORD = "ANY_KEYWORD";
 
     @Override
     @Transactional(readOnly = true)
@@ -159,8 +165,6 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(sortedJobPostingsPage);
 
         } else {
-            log.info("this is not popular sorting");
-            log.info("jobTitle: {}", jobTitle);
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(jobPostingRepository.findRecentJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : ANY_KEYWORD,
@@ -202,6 +206,27 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             );
 
         }
+    }
+
+    @Override
+    public ReadGuestJobPostingOverviewsResponseDto execute(
+            Integer page,
+            Integer size,
+            String type
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        List<JobPosting> jobPostingsList = switch (type) {
+            case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin();
+            case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin();
+            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin();
+            default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
+        };
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), jobPostingsList.size());
+        Page<JobPosting> jobPostingsPage = new PageImpl<>(jobPostingsList.subList(start, end), pageable, jobPostingsList.size());
+
+        return ReadGuestJobPostingOverviewsResponseDto.fromPage(jobPostingsPage);
     }
 
 

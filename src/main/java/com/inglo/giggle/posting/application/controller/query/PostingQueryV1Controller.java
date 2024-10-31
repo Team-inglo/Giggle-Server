@@ -17,7 +17,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
-@Slf4j
 public class PostingQueryV1Controller {
 
     private final ReadJobPostingSummariesUseCase readJobPostingSummariesUseCase;
@@ -47,7 +46,6 @@ public class PostingQueryV1Controller {
             @RequestParam(value = "type", required = false) String type
     ) {
         if(type == null) {
-            log.info("type is null");
             return ResponseDto.ok(
                     readJobPostingOverviewUseCase.execute(
                             page,
