@@ -1,6 +1,7 @@
 package com.inglo.giggle.notification.domain;
 
 import com.inglo.giggle.account.domain.Owner;
+import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -32,6 +33,10 @@ public class Notification {
     @Column(name = "is_read", nullable = false)
     private Boolean isRead;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "notification_type", nullable = false)
+    private ENotificationType notificationType;
+
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
@@ -48,11 +53,13 @@ public class Notification {
     @Builder
     public Notification(
             String message,
-            UserOwnerJobPosting userOwnerJobPosting
+            UserOwnerJobPosting userOwnerJobPosting,
+            ENotificationType notificationType
     ) {
         this.message = message;
         this.isRead = false;
         this.userOwnerJobPosting = userOwnerJobPosting;
+        this.notificationType = notificationType;
         this.createdAt = LocalDateTime.now();
     }
 }

@@ -14,7 +14,7 @@ public enum EKafkaStatus {
     USER_RESULT("USER_RESULT", "결과 기록", "하이코리아 신청 결과가 나왔나요? 결과를 기록해주세요."),
     USER_STANDARD_LABOR_CONTRACT("USER_STANDARD_LABOR_CONTRACT", "근로계약서 수정", "고용주가 근로계약서를 수정하였습니다. 내용을 다시 확인해주세요!"),
     USER_PART_TIME_EMPLOYMENT_PERMIT("USER_PART_TIME_EMPLOYMENT_PERMIT", "시간제 취업허가서 수정", "고용주가 시간제취업허가서를 수정하였습니다. 내용을 다시 확인해주세요!"),
-    OWNER_NEW_APPLICANT("OWNER_NEW_APPLICANT", "새로운 지원자", "에 새로운 지원자가 들어왔습니다. 앱 내에서 확인해주세요!"),
+    OWNER_NEW_APPLICANT("OWNER_NEW_APPLICANT", "새로운 지원자", "새로운 지원자가 들어왔습니다. 앱 내에서 확인해주세요!"),
     OWNER_DOCUMENT_CONFIRMED("OWNER_DOCUMENT_CONFIRMED", "서류 검토 완료", "지원자가 서류 검토를 끝마쳤습니다."),
     OWNER_DOCUMENT_REQUEST("OWNER_DOCUMENT_REQUEST", "서류 재작성", "지원자가 서류 재작성을 요청하였습니다. 앱 내에서 확인해주세요!"),
     OWNER_COMPLAINT("OWNER_COMPLAINT", "지원자 민원신청 완료", "지원자가 하이코리아 전자민원 신청을 하였습니다."),

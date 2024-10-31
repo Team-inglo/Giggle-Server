@@ -5,6 +5,7 @@ import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EKafkaStatus;
+import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerPartTimeEmploymentPermitUseCase;
 import com.inglo.giggle.document.domain.Document;
@@ -101,7 +102,8 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
 
         Notification notification = notificationService.createNotification(
                 EKafkaStatus.USER_PART_TIME_EMPLOYMENT_PERMIT.getMessage(),
-                document.getUserOwnerJobPosting()
+                document.getUserOwnerJobPosting(),
+                ENotificationType.USER
         );
 
         notificationRepository.save(notification);

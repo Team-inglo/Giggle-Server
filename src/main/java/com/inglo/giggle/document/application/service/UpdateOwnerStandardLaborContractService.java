@@ -6,6 +6,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EKafkaStatus;
+import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerStandardLaborContractRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerStandardLaborContractUseCase;
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
@@ -131,7 +132,8 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
         // Notification 생성
         Notification notification = notificationService.createNotification(
                 EKafkaStatus.USER_STANDARD_LABOR_CONTRACT.getMessage(),
-                document.getUserOwnerJobPosting()
+                document.getUserOwnerJobPosting(),
+                ENotificationType.USER
         );
 
         notificationRepository.save(notification);

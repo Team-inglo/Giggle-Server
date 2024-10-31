@@ -4,6 +4,7 @@ import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EKafkaStatus;
+import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.domain.service.NotificationEventService;
 import com.inglo.giggle.notification.domain.service.NotificationService;
@@ -55,7 +56,8 @@ public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implem
         // Notification 생성 및 저장
         Notification notification = notificationService.createNotification(
                 EKafkaStatus.USER_INTERVIEW_COMPLETED.getMessage(),
-                userOwnerJobPosting
+                userOwnerJobPosting,
+                ENotificationType.USER
         );
 
         notificationRepository.save(notification);
