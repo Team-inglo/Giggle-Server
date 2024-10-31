@@ -3,6 +3,8 @@ package com.inglo.giggle.posting.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.posting.domain.JobPosting;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.type.ESecurityRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,10 +34,13 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
         this.validateSelf();
     }
 
-    public static ReadJobPostingOverviewResponseDto fromPage(Page<JobPosting> jobPostingsPage) {
+    public static ReadJobPostingOverviewResponseDto fromEntities(
+            Page<JobPosting> jobPostingsPage,
+            Account account
+    ) {
         boolean hasNext = jobPostingsPage.hasNext();
         List<JobPostingOverviewDto> jobPostingList = jobPostingsPage.getContent().stream()
-                .map(JobPostingOverviewDto::fromEntity)
+                .map(jobPosting -> JobPostingOverviewDto.fromEntities(jobPosting, account))
                 .toList();
 
         return ReadJobPostingOverviewResponseDto.builder()
@@ -50,6 +55,10 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
         @NotNull(message = "id는 null일 수 없습니다.")
         @JsonProperty("id")
         private final Long id;
+
+        @NotNull(message = "is_book_marked일 수 없습니다.")
+        @JsonProperty("is_book_marked")
+        private final Boolean isBookMarked;
 
         @NotNull(message = "icon_img_url은 null일 수 없습니다.")
         @JsonProperty("icon_img_url")
@@ -82,6 +91,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
         @Builder
         public JobPostingOverviewDto(
                 Long id,
+                Boolean isBookMarked,
                 String iconImgUrl,
                 String title,
                 Summaries summaries,
@@ -91,6 +101,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
                 String createdAt
         ) {
             this.id = id;
+            this.isBookMarked = isBookMarked;
             this.iconImgUrl = iconImgUrl;
             this.title = title;
             this.summaries = summaries;
@@ -102,10 +113,39 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
             this.validateSelf();
         }
 
-        public static JobPostingOverviewDto fromEntity(JobPosting jobPosting) {
+        public static JobPostingOverviewDto fromEntities(
+                JobPosting jobPosting,
+                Account account
+        ) {
+            if(account.getRole() == ESecurityRole.USER){
+                if(jobPosting.getBookMarks().stream().anyMatch(
+                        bookMark -> bookMark.getUser().getId().equals(account.getId()))
+                ){
+                    return JobPostingOverviewDto.builder()
+                            .id(jobPosting.getId())
+                            .isBookMarked(true)
+                            .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
+                            .title(jobPosting.getTitle())
+                            .summaries(
+                                    Summaries.fromEntity(
+                                            jobPosting
+                                    )
+                            )
+                            .tags(
+                                    Tags.fromEntity(
+                                            jobPosting
+                                    )
+                            )
+                            .hourlyRate(jobPosting.getHourlyRate())
+                            .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine().toString())
+                            .createdAt(jobPosting.getCreatedAt().toString())
+                            .build();
+                }
+            }
 
             return JobPostingOverviewDto.builder()
                     .id(jobPosting.getId())
+                    .isBookMarked(false)
                     .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
                     .title(jobPosting.getTitle())
                     .summaries(

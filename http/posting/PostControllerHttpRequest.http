@@ -3,19 +3,20 @@
 GET {{host_url}}/v1/guests/job-postings/overviews?
     page={{posting.API_4_1.page}}&
     size={{posting.API_4_1.size}}&
+    sorting={{posting.API_4_1.sorting}}&
+    region_1depth={{posting.API_4_1.region_1depth_name}}&
+    region_2depth={{posting.API_4_1.region_2depth_name}}&
+    region_3depth={{posting.API_4_1.region_3depth_name}}
+    industry={{posting.API_4_1.industry}}&
+    work_period={{posting.API_4_1.work_period}}&
+    work_days_per_week={{posting.API_4_1.work_days_per_week}}&
+    working_day= {{posting.API_4_1.working_day}}&
+    working_hours= {{posting.API_4_1.working_hours}}&
+    recruitment_period= {{posting.API_4_1.recruitment_period}}&
+    employment_type = {{posting.API_4_1.employment_type}}&
+    visa = {{posting.API_4_1.visa}}&
     type = {{posting.API_4_1.type}}
-#    sorting={{posting.API_4_1.sorting}}&
-#    region_1depth={{posting.API_4_1.region_1depth_name}}&
-#    region_2depth={{posting.API_4_1.region_2depth_name}}&
-#    region_3depth={{posting.API_4_1.region_3depth_name}}&
-#    industry={{posting.API_4_1.industry}}&
-#    work_period={{posting.API_4_1.work_period}}&
-#    work_days_per_week={{posting.API_4_1.work_days_per_week}}&
-#    working_day= {{posting.API_4_1.working_day}}&
-#    working_hours= {{posting.API_4_1.working_hours}}&
-#    recruitment_period= {{posting.API_4_1.recruitment_period}}&
-#    employment_type = {{posting.API_4_1.employment_type}}&
-#    visa = {{posting.API_4_1.visa}}
+
 Content-Type: application/json
 
 
@@ -27,21 +28,21 @@ Content-Type: application/json
 
 ### 4.3 (유학생/고용주) 공고 리스트 조회하기
 // @no-log
-GET {{host_url}}/v1/guests/job-postings/overviews?
+GET {{host_url}}/v1/job-postings/overviews?
     page={{posting.API_4_3.page}}&
     size={{posting.API_4_3.size}}&
     sorting={{posting.API_4_3.sorting}}&
     region_1depth={{posting.API_4_3.region_1depth_name}}&
     region_2depth={{posting.API_4_3.region_2depth_name}}&
-    region_3depth={{posting.API_4_3.region_3depth_name}}&
-    industry={{posting.API_4_3.industry}}&
-    work_period={{posting.API_4_3.work_period}}&
-    work_days_per_week={{posting.API_4_3.work_days_per_week}}&
-    working_day= {{posting.API_4_3.working_day}}&
-    working_hours= {{posting.API_4_3.working_hours}}&
-    recruitment_period= {{posting.API_4_3.recruitment_period}}&
-    employment_type = {{posting.API_4_3.employment_type}}&
-    visa = {{posting.API_4_3.visa}}
+    region_3depth={{posting.API_4_3.region_3depth_name}}
+#    industry={{posting.API_4_3.industry}}&
+#    work_period={{posting.API_4_3.work_period}}&
+#    work_days_per_week={{posting.API_4_3.work_days_per_week}}&
+#    working_day= {{posting.API_4_3.working_day}}&
+#    working_hours= {{posting.API_4_3.working_hours}}&
+#    recruitment_period= {{posting.API_4_3.recruitment_period}}&
+#    employment_type = {{posting.API_4_3.employment_type}}&
+#    visa = {{posting.API_4_3.visa}}
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
