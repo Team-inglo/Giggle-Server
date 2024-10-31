@@ -73,7 +73,8 @@ public class Owner extends Account {
             String companyRegistrationNumber,
             Address address,
             Boolean notificationAllowed,
-            Boolean marketingAllowed
+            Boolean marketingAllowed,
+            String deviceToken
     ) {
         super(
                 provider,
@@ -83,7 +84,8 @@ public class Owner extends Account {
                 profileImgUrl,
                 phoneNumber,
                 notificationAllowed,
-                marketingAllowed
+                marketingAllowed,
+                deviceToken
         );
         this.companyName = companyName;
         this.ownerName = ownerName;

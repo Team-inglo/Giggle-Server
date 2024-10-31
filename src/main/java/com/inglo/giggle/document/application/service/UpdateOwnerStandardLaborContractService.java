@@ -5,6 +5,7 @@ import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
+import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerStandardLaborContractRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerStandardLaborContractUseCase;
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
@@ -17,11 +18,16 @@ import com.inglo.giggle.document.domain.type.EPaymentMethod;
 import com.inglo.giggle.document.repository.mysql.ContractWorkDayTimeRepository;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.notification.domain.Notification;
+import com.inglo.giggle.notification.domain.service.NotificationEventService;
+import com.inglo.giggle.notification.domain.service.NotificationService;
+import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +48,10 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
     private final StandardLaborContractService standardLaborContractService;
     private final AddressService addressService;
     private final ContractWorkDayTimeService contractWorkDayTimeService;
+    private final NotificationService notificationService;
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final NotificationEventService notificationEventService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -117,6 +127,24 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
                 requestDto.signatureBase64()
         );
         standardLaborContractRepository.save(updatedStandardLaborContract);
+
+        // Notification 생성
+        Notification notification = notificationService.createNotification(
+                EKafkaStatus.USER_STANDARD_LABOR_CONTRACT.getMessage(),
+                document.getUserOwnerJobPosting()
+        );
+
+        notificationRepository.save(notification);
+
+        // Notification 발송
+        applicationEventPublisher.publishEvent(
+                notificationEventService.createNotificationEvent(
+                        document.getUserOwnerJobPosting().getJobPosting().getTitle(),
+                        notification.getMessage(),
+                        document.getUserOwnerJobPosting().getUser().getDeviceToken()
+                )
+        );
+
     }
 
 }

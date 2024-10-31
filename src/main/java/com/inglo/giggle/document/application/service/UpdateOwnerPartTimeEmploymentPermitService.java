@@ -4,6 +4,7 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
+import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerPartTimeEmploymentPermitUseCase;
 import com.inglo.giggle.document.domain.Document;
@@ -11,12 +12,17 @@ import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.notification.domain.Notification;
+import com.inglo.giggle.notification.domain.service.NotificationEventService;
+import com.inglo.giggle.notification.domain.service.NotificationService;
+import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +39,11 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
     private final AddressService addressService;
+    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final NotificationEventService notificationEventService;
 
     @Override
     @Transactional
@@ -87,6 +98,23 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
                 address
         );
         partTimeEmploymentPermitRepository.save(updatedPartTimeEmploymentPermit);
+
+        Notification notification = notificationService.createNotification(
+                EKafkaStatus.USER_PART_TIME_EMPLOYMENT_PERMIT.getMessage(),
+                document.getUserOwnerJobPosting()
+        );
+
+        notificationRepository.save(notification);
+
+        applicationEventPublisher.publishEvent(
+                notificationEventService.createNotificationEvent(
+                        document.getUserOwnerJobPosting().getJobPosting().getTitle(),
+                        notification.getMessage(),
+                        document.getUserOwnerJobPosting().getUser().getDeviceToken()
+                )
+        );
+
     }
+
 
 }
