@@ -66,10 +66,11 @@ public class DocumentUsersCommandV1Controller {
      */
     @PostMapping("/documents/{id}/status/requestion")
     public ResponseDto<Void> requestUserDocument(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateDocumentStatusReqeustionRequestDto requestDto
     ) {
-        updateDocumentStatusRequestionUseCase.updateDocumentStatusRequestion(id, requestDto);
+        updateDocumentStatusRequestionUseCase.updateDocumentStatusRequestion(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -78,10 +79,11 @@ public class DocumentUsersCommandV1Controller {
      */
     @PutMapping("/documents/{id}/part-time-employment-permits")
     public ResponseDto<Void> updateUserPartTimeEmploymentPermit(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateUserPartTimeEmploymentPermitRequestDto requestDto
     ) {
-        updateUserPartTimeEmploymentPermitUseCase.execute(id, requestDto);
+        updateUserPartTimeEmploymentPermitUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -90,10 +92,11 @@ public class DocumentUsersCommandV1Controller {
      */
     @PutMapping("/documents/{id}/standard-labor-contracts")
     public ResponseDto<Void> updateUserStandardLaborContract(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateUserStandardLaborContractRequestDto requestDto
     ) {
-        updateUserStandardLaborContractUseCase.execute(id, requestDto);
+        updateUserStandardLaborContractUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 
@@ -102,10 +105,11 @@ public class DocumentUsersCommandV1Controller {
      */
     @PutMapping("/documents/{id}/integrated-applications")
     public ResponseDto<Void> updateUserIntegratedApplication(
+            @AccountID UUID accountId,
             @PathVariable Long id,
             @RequestBody @Valid UpdateUserIntegratedApplicationRequestDto requestDto
     ) {
-        updateUserIntegratedApplicationUseCase.execute(id, requestDto);
+        updateUserIntegratedApplicationUseCase.execute(accountId, id, requestDto);
         return ResponseDto.ok(null);
     }
 

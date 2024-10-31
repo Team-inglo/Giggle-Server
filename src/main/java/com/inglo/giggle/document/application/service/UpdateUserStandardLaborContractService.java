@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UpdateUserStandardLaborContractService implements UpdateUserStandardLaborContractUseCase {
@@ -23,7 +25,7 @@ public class UpdateUserStandardLaborContractService implements UpdateUserStandar
 
     @Override
     @Transactional
-    public void execute(Long documentId, UpdateUserStandardLaborContractRequestDto requestDto) {
+    public void execute(UUID accountId, Long documentId, UpdateUserStandardLaborContractRequestDto requestDto) {
         StandardLaborContract standardLaborContract = standardLaborContractRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 

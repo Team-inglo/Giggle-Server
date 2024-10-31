@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +36,7 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
 
     @Override
     @Transactional
-    public void execute(Long documentId, UpdateOwnerStandardLaborContractRequestDto requestDto) {
+    public void execute(UUID accountId, Long documentId, UpdateOwnerStandardLaborContractRequestDto requestDto) {
         StandardLaborContract standardLaborContract = standardLaborContractRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 

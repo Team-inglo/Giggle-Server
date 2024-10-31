@@ -301,7 +301,7 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
         @JsonProperty("work_period")
         private final EWorkPeriod workPeriod;
 
-        @JsonProperty("work_day_time")
+        @JsonProperty("work_day_times")
         private final List<WorkDayTimeDto> workDayTime;
 
         @JsonProperty("job_category")

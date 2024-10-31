@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UpdateDocumentStatusRequestionService implements UpdateDocumentStatusRequestionUseCase {
@@ -32,7 +34,7 @@ public class UpdateDocumentStatusRequestionService implements UpdateDocumentStat
 
     @Override
     @Transactional
-    public void updateDocumentStatusRequestion(Long documentId, UpdateDocumentStatusReqeustionRequestDto requestDto) {
+    public void updateDocumentStatusRequestion(UUID accountId, Long documentId, UpdateDocumentStatusReqeustionRequestDto requestDto) {
         // Document 정보 조회
         Document document = documentRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
