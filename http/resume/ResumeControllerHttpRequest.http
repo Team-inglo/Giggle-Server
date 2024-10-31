@@ -156,7 +156,7 @@ Authorization: Bearer {{access_token}}
 
 ### 7.18 (유학생) 언어 - ETC 삭제하기
 // @no-log
-DELETE {{host_url}}/v1/users/resumes/additional-languages/{{resume.API_7_18.id}}
+DELETE {{host_url}}/v1/users/resumes/languages/additional-languages/{{resume.API_7_18.id}}
 Authorization: Bearer {{access_token}}
 
 ### 7.19 (고용주) 이력서 조회하기
