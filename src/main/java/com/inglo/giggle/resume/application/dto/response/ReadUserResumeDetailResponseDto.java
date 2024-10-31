@@ -278,16 +278,16 @@ public class ReadUserResumeDetailResponseDto extends SelfValidating<ReadUserResu
         }
     }
 
-    public static ReadOwnerResumeDetailResponseDto of(Resume resume, List<Education> educations, LanguageSkill languageSkill, User user) {
-        return ReadOwnerResumeDetailResponseDto.builder()
+    public static ReadUserResumeDetailResponseDto of(Resume resume, List<Education> educations, LanguageSkill languageSkill, User user) {
+        return ReadUserResumeDetailResponseDto.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
-                .visa(ReadOwnerResumeDetailResponseDto.VisaDto.fromEntity(user.getVisa()))
-                .personalInformation(ReadOwnerResumeDetailResponseDto.PersonalInformationDto.fromEntity(user))
+                .visa(ReadUserResumeDetailResponseDto.VisaDto.fromEntity(user.getVisa()))
+                .personalInformation(ReadUserResumeDetailResponseDto.PersonalInformationDto.fromEntity(user))
                 .introduction(resume.getIntroduction())
-                .workExperience(resume.getWorkExperiences().stream().map(ReadOwnerResumeDetailResponseDto.WorkExperienceDto::fromEntity).toList())
-                .education(educations.stream().map(ReadOwnerResumeDetailResponseDto.EducationDto::fromEntity).toList())
-                .languages(ReadOwnerResumeDetailResponseDto.LanguagesDto.fromEntity(languageSkill))
+                .workExperience(resume.getWorkExperiences().stream().map(ReadUserResumeDetailResponseDto.WorkExperienceDto::fromEntity).toList())
+                .education(educations.stream().map(ReadUserResumeDetailResponseDto.EducationDto::fromEntity).toList())
+                .languages(ReadUserResumeDetailResponseDto.LanguagesDto.fromEntity(languageSkill))
                 .build();
     }
 }
