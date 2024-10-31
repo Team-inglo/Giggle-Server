@@ -281,14 +281,14 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
         }
     }
 
-    public static ReadOwnerResumeDetailResponseDto of(Resume resume, List<Education> educations, LanguageSkill languageSkill, User user) {
+    public static ReadOwnerResumeDetailResponseDto of(Resume resume, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill, User user) {
         return ReadOwnerResumeDetailResponseDto.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
                 .visa(ReadOwnerResumeDetailResponseDto.VisaDto.fromEntity(user.getVisa()))
                 .personalInformation(ReadOwnerResumeDetailResponseDto.PersonalInformationDto.fromEntity(user))
                 .introduction(resume.getIntroduction())
-                .workExperience(!resume.getWorkExperiences().isEmpty() ? resume.getWorkExperiences().stream().map(ReadOwnerResumeDetailResponseDto.WorkExperienceDto::fromEntity).toList() : null)
+                .workExperience(!workExperiences.isEmpty() ? workExperiences.stream().map(ReadOwnerResumeDetailResponseDto.WorkExperienceDto::fromEntity).toList() : null)
                 .education(!educations.isEmpty() ? educations.stream().map(ReadOwnerResumeDetailResponseDto.EducationDto::fromEntity).toList() : null)
                 .languages(ReadOwnerResumeDetailResponseDto.LanguagesDto.fromEntity(languageSkill))
                 .build();

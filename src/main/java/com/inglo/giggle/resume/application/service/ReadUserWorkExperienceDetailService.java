@@ -12,6 +12,7 @@ import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ public class ReadUserWorkExperienceDetailService implements ReadUserWorkExperien
     private final WorkExperienceRepository workExperienceRepository;
     private final WorkExperienceService workExperienceService;
     @Override
+    @Transactional(readOnly = true)
     public ReadUserWorkExperienceDetailResponseDto execute(UUID accountId, Long workExperienceId) {
 
         // Account 조회
