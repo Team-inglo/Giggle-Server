@@ -4,14 +4,15 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
-import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingOverviewsResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingOverviewUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.*;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,11 +37,12 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
     private static final String TRENDING = "TRENDING";
     private static final String RECENTLY = "RECENTLY";
     private static final String BOOKMARKED = "BOOKMARKED";
-    private static final String ANY_KEYWORD = "ANY_KEYWORD";
+    private final AccountRepository accountRepository;
 
     @Override
     @Transactional(readOnly = true)
     public ReadJobPostingOverviewResponseDto execute(
+            UUID accountId,
             Integer page,
             Integer size,
             String jobTitle,
@@ -60,6 +59,9 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String employmentType,
             String visa
     ) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
         Pageable pageable = PageRequest.of(page - 1, size);
         LocalDate today = LocalDate.now();
 
@@ -110,15 +112,15 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
         if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
             List<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
-                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : ANY_KEYWORD,
-                    region1DepthList.size() > 1 ? region1DepthList.get(1) : ANY_KEYWORD,
-                    region1DepthList.size() > 2 ? region1DepthList.get(2) : ANY_KEYWORD,
-                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : ANY_KEYWORD,
-                    region2DepthList.size() > 1 ? region2DepthList.get(1) : ANY_KEYWORD,
-                    region2DepthList.size() > 2 ? region2DepthList.get(2) : ANY_KEYWORD,
-                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : ANY_KEYWORD,
-                    region3DepthList.size() > 1 ? region3DepthList.get(1) : ANY_KEYWORD,
-                    region3DepthList.size() > 2 ? region3DepthList.get(2) : ANY_KEYWORD,
+                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
+                    region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
+                    region1DepthList.size() > 2 ? region1DepthList.get(2) : null,
+                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : null,
+                    region2DepthList.size() > 1 ? region2DepthList.get(1) : null,
+                    region2DepthList.size() > 2 ? region2DepthList.get(2) : null,
+                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : null,
+                    region3DepthList.size() > 1 ? region3DepthList.get(1) : null,
+                    region3DepthList.size() > 2 ? region3DepthList.get(2) : null,
                     industryList,
                     workPeriodList,
                     workDaysPerWeekList,
@@ -146,12 +148,15 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                     visa == null ? null : EVisa.fromString(visa)
             );
 
-            Map<Long, Integer> bookmarkCountMap = jobPostingList.stream()
-                    .collect(Collectors.toMap(
-                            JobPosting::getId,
-                            jobPosting -> jobPostingRepository.countBookmarksByJobPostingId(jobPosting.getId())
-                    ));
+            // jobPostingList의 ID 목록을 수집
+            List<Long> jobPostingIds = jobPostingList.stream()
+                    .map(JobPosting::getId)
+                    .toList();
 
+            // 각 jobPostingId에 대한 북마크 개수를 한 번에 가져옴
+            Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds);
+
+            // bookmark 개수를 기준으로 jobPostingList 정렬
             jobPostingList.sort((jobPosting1, jobPosting2) ->
                     Integer.compare(
                             bookmarkCountMap.getOrDefault(jobPosting2.getId(), 0),
@@ -163,20 +168,23 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             Page<JobPosting> sortedJobPostingsPage = new PageImpl<>(jobPostingList, pageable, jobPostingList.size());
 
             // fromPage 메서드를 사용해 응답 생성
-            return ReadJobPostingOverviewResponseDto.fromPage(sortedJobPostingsPage);
+            return ReadJobPostingOverviewResponseDto.fromEntities(
+                    sortedJobPostingsPage,
+                    account
+            );
 
         } else {
-            return ReadJobPostingOverviewResponseDto.fromPage(jobPostingRepository.findRecentJobPostingsWithFilters(
+            return ReadJobPostingOverviewResponseDto.fromEntities(jobPostingRepository.findRecentJobPostingsWithFilters(
                             jobTitle,
-                            !region1DepthList.isEmpty() ? region1DepthList.get(0) : ANY_KEYWORD,
-                            region1DepthList.size() > 1 ? region1DepthList.get(1) : ANY_KEYWORD,
-                            region1DepthList.size() > 2 ? region1DepthList.get(2) : ANY_KEYWORD,
-                            !region2DepthList.isEmpty() ? region2DepthList.get(0) : ANY_KEYWORD,
-                            region2DepthList.size() > 1 ? region2DepthList.get(1) : ANY_KEYWORD,
-                            region2DepthList.size() > 2 ? region2DepthList.get(2) : ANY_KEYWORD,
-                            !region3DepthList.isEmpty() ? region3DepthList.get(0) : ANY_KEYWORD,
-                            region3DepthList.size() > 1 ? region3DepthList.get(1) : ANY_KEYWORD,
-                            region3DepthList.size() > 2 ? region3DepthList.get(2) : ANY_KEYWORD,
+                            !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
+                            region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
+                            region1DepthList.size() > 2 ? region1DepthList.get(2) : null,
+                            !region2DepthList.isEmpty() ? region2DepthList.get(0) : null,
+                            region2DepthList.size() > 1 ? region2DepthList.get(1) : null,
+                            region2DepthList.size() > 2 ? region2DepthList.get(2) : null,
+                            !region3DepthList.isEmpty() ? region3DepthList.get(0) : null,
+                            region3DepthList.size() > 1 ? region3DepthList.get(1) : null,
+                            region3DepthList.size() > 2 ? region3DepthList.get(2) : null,
                             industryList,
                             workPeriodList,
                             workDaysPerWeekList,
@@ -203,17 +211,23 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                             employmentType == null ? null: EEmploymentType.fromString(employmentType),
                             visa == null ? null: EVisa.fromString(visa),
                             pageable
-                    )
+                    ),
+                    account
             );
         }
     }
 
     @Override
     public ReadJobPostingOverviewResponseDto execute(
+            UUID accountId,
             Integer page,
             Integer size,
             String type
     ) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
         Pageable pageable = PageRequest.of(page - 1, size);
         List<JobPosting> jobPostingsList = switch (type) {
             case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin();
@@ -226,7 +240,10 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
         int end = Math.min((start + pageable.getPageSize()), jobPostingsList.size());
         Page<JobPosting> jobPostingsPage = new PageImpl<>(jobPostingsList.subList(start, end), pageable, jobPostingsList.size());
 
-        return ReadJobPostingOverviewResponseDto.fromPage(jobPostingsPage);
+        return ReadJobPostingOverviewResponseDto.fromEntities(
+                jobPostingsPage,
+                account
+        );
     }
 
 
@@ -278,4 +295,14 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                 .map(value -> Enum.valueOf(enumClass, value))
                 .toList();
     }
+
+    private Map<Long, Integer> getBookmarkCountMap(List<Long> jobPostingIds) {
+        List<Object[]> results = jobPostingRepository.countBookmarksByJobPostingIds(jobPostingIds);
+        Map<Long, Integer> bookmarkCountMap = new HashMap<>();
+        for (Object[] result : results) {
+            bookmarkCountMap.put((Long) result[0], ((Number) result[1]).intValue());
+        }
+        return bookmarkCountMap;
+    }
+
 }

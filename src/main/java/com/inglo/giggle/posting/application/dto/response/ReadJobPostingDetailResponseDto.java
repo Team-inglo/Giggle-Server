@@ -351,8 +351,14 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
 
         @Getter
         public static class WorkDayTimeDto extends SelfValidating<WorkDayTimeDto> {
+
+            @JsonProperty("day_of_week")
             private final String dayOfWeek;
+
+            @JsonProperty("work_start_time")
             private final String workStartTime;
+
+            @JsonProperty("work_end_time")
             private final String workEndTime;
 
             @Builder

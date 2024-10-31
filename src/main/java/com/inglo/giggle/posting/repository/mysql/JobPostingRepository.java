@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -44,21 +45,25 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND ( " +
             "( " +
-            "(:region1Depth1 IS NULL OR jp.address.region1DepthName = :region1Depth1) " +
+            ":region1Depth1 IS NULL AND :region2Depth1 IS NULL AND :region3Depth1 IS NULL AND " +
+            ":region1Depth2 IS NULL AND :region2Depth2 IS NULL AND :region3Depth2 IS NULL AND " +
+            ":region1Depth3 IS NULL AND :region2Depth3 IS NULL AND :region3Depth3 IS NULL " +
+            ") " +
+            "OR ( " +
+            "(:region1Depth1 IS NOT NULL AND jp.address.region1DepthName = :region1Depth1) " +
             "AND (:region2Depth1 IS NULL OR jp.address.region2DepthName = :region2Depth1) " +
             "AND (:region3Depth1 IS NULL OR jp.address.region3DepthName = :region3Depth1) " +
             ") " +
             "OR ( " +
-            "(:region1Depth2 IS NULL OR jp.address.region1DepthName = :region1Depth2) " +
+            "(:region1Depth2 IS NOT NULL AND jp.address.region1DepthName = :region1Depth2) " +
             "AND (:region2Depth2 IS NULL OR jp.address.region2DepthName = :region2Depth2) " +
             "AND (:region3Depth2 IS NULL OR jp.address.region3DepthName = :region3Depth2) " +
             ") " +
             "OR ( " +
-            "(:region1Depth3 IS NULL OR jp.address.region1DepthName = :region1Depth3) " +
+            "(:region1Depth3 IS NOT NULL AND jp.address.region1DepthName = :region1Depth3) " +
             "AND (:region2Depth3 IS NULL OR jp.address.region2DepthName = :region2Depth3) " +
             "AND (:region3Depth3 IS NULL OR jp.address.region3DepthName = :region3Depth3) " +
-            ") " +
-            ") " +
+            ")) " +
             "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
             "AND ((:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList)) " +
             "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
@@ -132,21 +137,25 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND ( " +
             "( " +
-                "(:region1Depth1 IS NULL OR jp.address.region1DepthName = :region1Depth1) " +
-                "AND (:region2Depth1 IS NULL OR jp.address.region2DepthName = :region2Depth1) " +
-                "AND (:region3Depth1 IS NULL OR jp.address.region3DepthName = :region3Depth1) " +
+            ":region1Depth1 IS NULL AND :region2Depth1 IS NULL AND :region3Depth1 IS NULL AND " +
+            ":region1Depth2 IS NULL AND :region2Depth2 IS NULL AND :region3Depth2 IS NULL AND " +
+            ":region1Depth3 IS NULL AND :region2Depth3 IS NULL AND :region3Depth3 IS NULL " +
             ") " +
             "OR ( " +
-                "(:region1Depth2 IS NULL OR jp.address.region1DepthName = :region1Depth2) " +
-                "AND (:region2Depth2 IS NULL OR jp.address.region2DepthName = :region2Depth2) " +
-                "AND (:region3Depth2 IS NULL OR jp.address.region3DepthName = :region3Depth2) " +
+            "(:region1Depth1 IS NOT NULL AND jp.address.region1DepthName = :region1Depth1) " +
+            "AND (:region2Depth1 IS NULL OR jp.address.region2DepthName = :region2Depth1) " +
+            "AND (:region3Depth1 IS NULL OR jp.address.region3DepthName = :region3Depth1) " +
             ") " +
             "OR ( " +
-                "(:region1Depth3 IS NULL OR jp.address.region1DepthName = :region1Depth3) " +
-                "AND (:region2Depth3 IS NULL OR jp.address.region2DepthName = :region2Depth3) " +
-                "AND (:region3Depth3 IS NULL OR jp.address.region3DepthName = :region3Depth3) " +
+            "(:region1Depth2 IS NOT NULL AND jp.address.region1DepthName = :region1Depth2) " +
+            "AND (:region2Depth2 IS NULL OR jp.address.region2DepthName = :region2Depth2) " +
+            "AND (:region3Depth2 IS NULL OR jp.address.region3DepthName = :region3Depth2) " +
             ") " +
-            ") " +
+            "OR ( " +
+            "(:region1Depth3 IS NOT NULL AND jp.address.region1DepthName = :region1Depth3) " +
+            "AND (:region2Depth3 IS NULL OR jp.address.region2DepthName = :region2Depth3) " +
+            "AND (:region3Depth3 IS NULL OR jp.address.region3DepthName = :region3Depth3) " +
+            ")) " +
             "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
             "AND ((:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList)) " +
             "AND ((" +
@@ -234,6 +243,10 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "GROUP BY jp.id, o.id, wd.id " +
             "ORDER BY COUNT(bm.id) DESC")
     List<JobPosting> findBookmarkedJobPostingsWithFetchJoin();
+
+    @Query("SELECT b.jobPosting.id, COUNT(b) FROM BookMark b WHERE b.jobPosting.id IN :jobPostingIds GROUP BY b.jobPosting.id")
+    List<Object[]> countBookmarksByJobPostingIds(@Param("jobPostingIds") List<Long> jobPostingIds);
+
 
     @Query("SELECT COUNT(b) FROM BookMark b WHERE b.jobPosting.id = :jobPostingId")
     int countBookmarksByJobPostingId(@Param("jobPostingId") Long jobPostingId);

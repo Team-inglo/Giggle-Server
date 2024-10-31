@@ -3,6 +3,8 @@ package com.inglo.giggle.posting.application.usecase;
 import com.inglo.giggle.core.annotation.bean.UseCase;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 
+import java.util.UUID;
+
 @UseCase
 public interface ReadJobPostingOverviewUseCase {
 
@@ -28,6 +30,7 @@ public interface ReadJobPostingOverviewUseCase {
      * @return 채용공고 목록 조회 응답 DTO
      */
     ReadJobPostingOverviewResponseDto execute(
+            UUID accountId,
             Integer page,
             Integer size,
             String jobTitle,
@@ -55,6 +58,7 @@ public interface ReadJobPostingOverviewUseCase {
      * @return 채용공고 목록 조회 응답 DTO
      */
     ReadJobPostingOverviewResponseDto execute(
+            UUID accountId,
             Integer page,
             Integer size,
             String type

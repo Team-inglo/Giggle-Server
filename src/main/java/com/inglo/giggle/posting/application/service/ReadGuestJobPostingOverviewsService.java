@@ -11,6 +11,7 @@ import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.*;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingOverviewsUseCase {
 
@@ -109,15 +111,15 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
         if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
             List<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
-                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : ANY_KEYWORD,
-                    region1DepthList.size() > 1 ? region1DepthList.get(1) : ANY_KEYWORD,
-                    region1DepthList.size() > 2 ? region1DepthList.get(2) : ANY_KEYWORD,
-                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : ANY_KEYWORD,
-                    region2DepthList.size() > 1 ? region2DepthList.get(1) : ANY_KEYWORD,
-                    region2DepthList.size() > 2 ? region2DepthList.get(2) : ANY_KEYWORD,
-                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : ANY_KEYWORD,
-                    region3DepthList.size() > 1 ? region3DepthList.get(1) : ANY_KEYWORD,
-                    region3DepthList.size() > 2 ? region3DepthList.get(2) : ANY_KEYWORD,
+                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
+                    region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
+                    region1DepthList.size() > 2 ? region1DepthList.get(2) : null,
+                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : null,
+                    region2DepthList.size() > 1 ? region2DepthList.get(1) : null,
+                    region2DepthList.size() > 2 ? region2DepthList.get(2) : null,
+                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : null,
+                    region3DepthList.size() > 1 ? region3DepthList.get(1) : null,
+                    region3DepthList.size() > 2 ? region3DepthList.get(2) : null,
                     industryList,
                     workPeriodList,
                     workDaysPerWeekList,
@@ -165,17 +167,29 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(sortedJobPostingsPage);
 
         } else {
+            log.info("region1Depth1: {}", !region1DepthList.isEmpty() ? region1DepthList.get(0) : null);
+            log.info("region1Depth2: {}", region1DepthList.size() > 1 ? region1DepthList.get(1) : null);
+            log.info("region1Depth3: {}", region1DepthList.size() > 2 ? region1DepthList.get(2) : null);
+
+            log.info("region2Depth1: {}", !region2DepthList.isEmpty() ? region2DepthList.get(0) : null);
+            log.info("region2Depth2: {}", region2DepthList.size() > 1 ? region2DepthList.get(1) : null);
+            log.info("region2Depth3: {}", region2DepthList.size() > 2 ? region2DepthList.get(2) : null);
+
+            log.info("region3Depth1: {}", !region3DepthList.isEmpty() ? region3DepthList.get(0) : null);
+            log.info("region3Depth2: {}", region3DepthList.size() > 1 ? region3DepthList.get(1) : null);
+            log.info("region3Depth3: {}", region3DepthList.size() > 2 ? region3DepthList.get(2) : null);
+
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(jobPostingRepository.findRecentJobPostingsWithFilters(
                     jobTitle,
-                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : ANY_KEYWORD,
-                    region1DepthList.size() > 1 ? region1DepthList.get(1) : ANY_KEYWORD,
-                    region1DepthList.size() > 2 ? region1DepthList.get(2) : ANY_KEYWORD,
-                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : ANY_KEYWORD,
-                    region2DepthList.size() > 1 ? region2DepthList.get(1) : ANY_KEYWORD,
-                    region2DepthList.size() > 2 ? region2DepthList.get(2) : ANY_KEYWORD,
-                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : ANY_KEYWORD,
-                    region3DepthList.size() > 1 ? region3DepthList.get(1) : ANY_KEYWORD,
-                    region3DepthList.size() > 2 ? region3DepthList.get(2) : ANY_KEYWORD,
+                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
+                    region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
+                    region1DepthList.size() > 2 ? region1DepthList.get(2) : null,
+                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : null,
+                    region2DepthList.size() > 1 ? region2DepthList.get(1) : null,
+                    region2DepthList.size() > 2 ? region2DepthList.get(2) : null,
+                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : null,
+                    region3DepthList.size() > 1 ? region3DepthList.get(1) : null,
+                    region3DepthList.size() > 2 ? region3DepthList.get(2) : null,
                     industryList,
                     workPeriodList,
                     workDaysPerWeekList,

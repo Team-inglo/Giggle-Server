@@ -28,6 +28,7 @@ public class PostingQueryV1Controller {
      */
     @GetMapping("/job-postings/overviews")
     public ResponseDto<ReadJobPostingOverviewResponseDto> readJobPostingList(
+            @AccountID UUID accountId,
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "size") Integer size,
             @RequestParam(value = "search", required = false) String jobTitle,
@@ -48,6 +49,7 @@ public class PostingQueryV1Controller {
         if(type == null) {
             return ResponseDto.ok(
                     readJobPostingOverviewUseCase.execute(
+                            accountId,
                             page,
                             size,
                             jobTitle,
@@ -69,6 +71,7 @@ public class PostingQueryV1Controller {
 
         return ResponseDto.ok(
                 readJobPostingOverviewUseCase.execute(
+                        accountId,
                         page,
                         size,
                         type
