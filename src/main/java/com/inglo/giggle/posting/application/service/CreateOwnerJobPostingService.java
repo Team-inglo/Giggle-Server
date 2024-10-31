@@ -91,16 +91,19 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
                 )
         ));
 
-        // 이미지 업로드 및 저장
-        image.forEach(img -> {
-            String uploadImageFile = s3Util.uploadImageFile(img, owner.getSerialId(), EImageType.COMPANY_IMG);
-            jobPosting.getCompanyImages().add(
-                    companyImageService.createCompanyImage(
-                            uploadImageFile,
-                            jobPosting
-                    )
-            );
-        });
+        if(image != null && !image.isEmpty()) {
+            // 이미지 업로드 및 저장
+            image.forEach(img -> {
+                String uploadImageFile = s3Util.uploadImageFile(img, owner.getSerialId(), EImageType.COMPANY_IMG);
+                jobPosting.getCompanyImages().add(
+                        companyImageService.createCompanyImage(
+                                uploadImageFile,
+                                jobPosting
+                        )
+                );
+            });
+        }
+
 
         JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
 
