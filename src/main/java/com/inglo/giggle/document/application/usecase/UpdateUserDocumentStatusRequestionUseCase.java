@@ -6,7 +6,7 @@ import com.inglo.giggle.document.application.dto.request.UpdateDocumentStatusReq
 import java.util.UUID;
 
 @UseCase
-public interface UpdateDocumentStatusRequestionUseCase {
+public interface UpdateUserDocumentStatusRequestionUseCase {
 
-    void updateDocumentStatusRequestion(UUID accountId, Long documentId, UpdateDocumentStatusReqeustionRequestDto requestDto);
+    void execute(UUID accountId, Long documentId, UpdateDocumentStatusReqeustionRequestDto requestDto);
 }

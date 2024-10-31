@@ -3,7 +3,6 @@ package com.inglo.giggle.document.application.service;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.repository.mysql.OwnerRepository;
-import com.inglo.giggle.account.repository.mysql.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.S3Util;
@@ -20,7 +19,11 @@ import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.JobPosting;
+import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,10 +35,13 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final DocumentRepository documentRepository;
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final JobPostingRepository jobPostingRepository;
     private final OwnerRepository ownerRepository;
-    private final UserRepository userRepository;
     private final DocumentService documentService;
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
     private final StandardLaborContractService standardLaborContractService;
@@ -49,12 +55,22 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
     @Transactional
     public void confirmUserDocument(UUID accountId, Long documentId) {
 
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 체크
+        accountService.checkUserValidation(account);
+
         // Document 정보 조회
-        Document document = documentRepository.findById(documentId)
+        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
-        // User 정보 조회
-        User user = userRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 유저 유효성 체크
+        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+
+        // User 형변환
+        User user = (User) account;
 
         // Owner 정보 조회
         Owner owner = ownerRepository.findByDocumentId(documentId)
@@ -73,11 +89,9 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 // Document를 PartTimeEmploymentPermit으로 형변환
                 PartTimeEmploymentPermit partTimeEmploymentPermit = (PartTimeEmploymentPermit) document;
 
-
                 // 시간제 취업 허가서 유학생, 고용주 상태 Confirmation으로 업데이트
                 partTimeEmploymentPermit =
                         partTimeEmploymentPermitService.updateStatusByConfirmation(partTimeEmploymentPermit);
-
                 partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
                 // 시간제 취업 허가서 word 파일 생성
@@ -102,7 +116,6 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 // Document의 wordUrl, hwpUrl 업데이트
                 partTimeEmploymentPermit
                         = (PartTimeEmploymentPermit) documentService.updateUrls(partTimeEmploymentPermit, partTimeEmploymentPermitWordUrl, partTimeEmploymentPermitHwpUrl);
-
                 partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
                 break;
@@ -115,7 +128,6 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 // 표준근로계약서 유학생, 고용주 상태 Confirmation으로 업데이트
                 standardLaborContract =
                         standardLaborContractService.updateStatusByConfirmation(standardLaborContract);
-
                 standardLaborContractRepository.save(standardLaborContract);
 
                 // 표준근로계약서 word 파일 생성
@@ -137,8 +149,8 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 // Document의 wordUrl, hwpUrl 업데이트
                 standardLaborContract
                         = (StandardLaborContract) documentService.updateUrls(standardLaborContract, standardLaborContractWordUrl, standardLaborContractHwpUrl);
-
                 standardLaborContractRepository.save(standardLaborContract);
+
                 break;
 
             case "INTEGRATED_APPLICATION":
@@ -166,11 +178,13 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 // Document의 wordUrl, hwpUrl 업데이트
                 IntegratedApplication updatedIntegratedApplication
                         = (IntegratedApplication) documentService.updateUrls(integratedApplication, integratedApplicationWordUrl, integratedApplicationHwpUrl);
-
                 documentRepository.save(updatedIntegratedApplication);
+
                 break;
+
             default:
                 throw new CommonException(ErrorCode.INVALID_DOCUMENT_TYPE);
         }
     }
+
 }

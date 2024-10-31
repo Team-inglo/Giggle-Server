@@ -3,7 +3,7 @@ package com.inglo.giggle.document.application.service;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.dto.request.UpdateDocumentStatusReqeustionRequestDto;
-import com.inglo.giggle.document.application.usecase.UpdateDocumentStatusRequestionUseCase;
+import com.inglo.giggle.document.application.usecase.UpdateUserDocumentStatusRequestionUseCase;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.StandardLaborContract;
@@ -14,6 +14,10 @@ import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.RejectRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +27,12 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateDocumentStatusRequestionService implements UpdateDocumentStatusRequestionUseCase {
+public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocumentStatusRequestionUseCase {
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final DocumentRepository documentRepository;
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final RejectRepository rejectRepository;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
@@ -34,11 +42,23 @@ public class UpdateDocumentStatusRequestionService implements UpdateDocumentStat
 
     @Override
     @Transactional
-    public void updateDocumentStatusRequestion(UUID accountId, Long documentId, UpdateDocumentStatusReqeustionRequestDto requestDto) {
-        // Document 정보 조회
-        Document document = documentRepository.findById(documentId)
+    public void execute(UUID accountId, Long documentId, UpdateDocumentStatusReqeustionRequestDto requestDto) {
+
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        // 계정 타입 유효성 체크
+        accountService.checkUserValidation(account);
+
+        // Document 정보 조회
+        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 유저 유효성 체크
+        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+
+        // Document 타입에 따라 상태 변경
         String discriminatorValue = document.getClass().getAnnotation(DiscriminatorValue.class).value();
 
         switch (discriminatorValue) {
@@ -46,6 +66,9 @@ public class UpdateDocumentStatusRequestionService implements UpdateDocumentStat
 
                 // Document를 PartTimeEmploymentPermit으로 형변환
                 PartTimeEmploymentPermit partTimeEmploymentPermit = (PartTimeEmploymentPermit) document;
+
+                // PartTimeEmploymentPermit Request 유효성 체크
+                partTimeEmploymentPermitService.checkRequestPartTimeEmploymentPermitValidation(partTimeEmploymentPermit);
 
                 // employee status를 REQUEST로, employer status를 REWRITING으로 변경
                 partTimeEmploymentPermit =
@@ -61,6 +84,9 @@ public class UpdateDocumentStatusRequestionService implements UpdateDocumentStat
                 // Document를 StandardLaborContract으로 형변환
                 StandardLaborContract standardLaborContract = (StandardLaborContract) document;
 
+                // StandardLaborContract Request 유효성 체크
+                standardLaborContractService.checkRequestStandardLaborContractValidation(standardLaborContract);
+
                 // employee status를 REQUEST로 변경
                 standardLaborContract =
                         standardLaborContractService.updateStatusByRequest(standardLaborContract);
@@ -74,4 +100,5 @@ public class UpdateDocumentStatusRequestionService implements UpdateDocumentStat
                 throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
         }
     }
+
 }

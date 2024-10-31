@@ -4,7 +4,7 @@ import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerStandardLaborContractRequestDto;
-import com.inglo.giggle.document.application.usecase.UpdateOwnerDocumentStatusSubmission;
+import com.inglo.giggle.document.application.usecase.UpdateOwnerDocumentStatusSubmissionUseCase;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerPartTimeEmploymentPermitUseCase;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerStandardLaborContractUseCase;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class DocumentOwnersCommandV1Controller {
 
     private final UpdateOwnerPartTimeEmploymentPermitUseCase updateOwnerPartTimeEmploymentPermitUseCase;
     private final UpdateOwnerStandardLaborContractUseCase updateOwnerStandardLaborContractUseCase;
-    private final UpdateOwnerDocumentStatusSubmission updateOwnerDocumentStatusSubmission;
+    private final UpdateOwnerDocumentStatusSubmissionUseCase updateOwnerDocumentStatusSubmissionUseCase;
     /**
      * 8.11 (고용주) 시간제 취업허가서 수정하기
      */
@@ -55,7 +55,7 @@ public class DocumentOwnersCommandV1Controller {
             @AccountID UUID accountId,
             @PathVariable Long id
     ) {
-        updateOwnerDocumentStatusSubmission.execute(accountId, id);
+        updateOwnerDocumentStatusSubmissionUseCase.execute(accountId, id);
         return ResponseDto.ok(null);
     }
 }

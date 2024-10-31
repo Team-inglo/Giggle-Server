@@ -8,14 +8,19 @@ import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerStandardLaborContractRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerStandardLaborContractUseCase;
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
+import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.service.ContractWorkDayTimeService;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
-import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
 import com.inglo.giggle.document.repository.mysql.ContractWorkDayTimeRepository;
+import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +33,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStandardLaborContractUseCase {
 
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+    private final DocumentRepository documentRepository;
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final ContractWorkDayTimeRepository contractWorkDayTimeRepository;
     private final StandardLaborContractService standardLaborContractService;
@@ -37,18 +46,33 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
     @Override
     @Transactional
     public void execute(UUID accountId, Long documentId, UpdateOwnerStandardLaborContractRequestDto requestDto) {
+
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 체크
+        accountService.checkOwnerValidation(account);
+
+        // Document 조회
+        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 오너 유효성 체크
+        userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+
+        // StandardLaborContract 조회
         StandardLaborContract standardLaborContract = standardLaborContractRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        if (standardLaborContract.getEmployerStatus() != null) {
-            if (!standardLaborContract.getEmployerStatus().equals(EEmployerStatus.TEMPORARY_SAVE) &&
-                    !standardLaborContract.getEmployerStatus().equals(EEmployerStatus.REWRITING))
-                throw new CommonException(ErrorCode.ACCESS_DENIED);
-        }
+        // StandardLaborContract 수정 유효성 체크
+        standardLaborContractService.checkUpdateOrSubmitOwnerStandardLaborContractValidation(standardLaborContract);
 
+        // 저장되어있던 ContractWorkDayTime 전부 삭제
         List<ContractWorkDayTime> contractWorkDayTimes = contractWorkDayTimeRepository.findByStandardLaborContractId(documentId);
         contractWorkDayTimeRepository.deleteAll(contractWorkDayTimes);
 
+        // ContractWorkDayTime 생성
         requestDto.workDayTimeList().stream()
                 .map(workDayTime -> contractWorkDayTimeService.createContractWorkDayTime(
                         EDayOfWeek.fromString(workDayTime.dayOfWeek()),
@@ -59,6 +83,7 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
                         standardLaborContract))
                 .forEach(contractWorkDayTimeRepository::save);
 
+        // Address 생성
         Address address = addressService.createAddress(
                 requestDto.address().addressName(),
                 requestDto.address().region1DepthName(),
@@ -70,6 +95,7 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
                 requestDto.address().longitude()
         );
 
+        // StandardLaborContract 수정
         StandardLaborContract updatedStandardLaborContract = standardLaborContractService.updateOwnerStandardLaborContract(
                 standardLaborContract,
                 requestDto.companyName(),
@@ -90,7 +116,7 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
                 requestDto.insurance().stream().map(EInsurance::fromString).collect(Collectors.toSet()),
                 requestDto.signatureBase64()
         );
-
         standardLaborContractRepository.save(updatedStandardLaborContract);
     }
+
 }

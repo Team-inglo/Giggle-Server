@@ -1,5 +1,6 @@
 package com.inglo.giggle.document.application.controller.query;
 
+import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.document.application.dto.response.ReadIntegratedApplicationDetailResponseDto;
 import com.inglo.giggle.document.application.dto.response.ReadPartTimeEmploymentPermitDetailResponseDto;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/documents")
@@ -25,23 +28,32 @@ public class DocumentQueryV1Controller {
      * 8.3 (유학생/고용주) 시간제 취업 허가서 조회하기
      */
     @GetMapping("{id}/part-time-employment-permit/details")
-    public ResponseDto<ReadPartTimeEmploymentPermitDetailResponseDto> readDocumentPartTimeEmploymentPermitDetail(@PathVariable Long id) {
-        return ResponseDto.ok(readPartTimeEmploymentPermitDetailUseCase.execute(id));
+    public ResponseDto<ReadPartTimeEmploymentPermitDetailResponseDto> readDocumentPartTimeEmploymentPermitDetail(
+            @AccountID UUID accountId,
+            @PathVariable Long id
+    ) {
+        return ResponseDto.ok(readPartTimeEmploymentPermitDetailUseCase.execute(accountId, id));
     }
 
     /**
      * 8.4 (유학생/고용주) 근로계약서 조회하기
      */
     @GetMapping("{id}/standard-labor-contract/details")
-    public ResponseDto<ReadStandardLaborContractDetailResponseDto> readDocumentStandardLaborContractDetail(@PathVariable Long id) {
-        return ResponseDto.ok(readStandardLaborContractDetailUseCase.execute(id));
+    public ResponseDto<ReadStandardLaborContractDetailResponseDto> readDocumentStandardLaborContractDetail(
+            @AccountID UUID accountId,
+            @PathVariable Long id
+    ) {
+        return ResponseDto.ok(readStandardLaborContractDetailUseCase.execute(accountId, id));
     }
 
     /**
      * 8.5 (유학생/고용주) 통합신청서 조회하기
      */
     @GetMapping("{id}/integrated-application/details")
-    public ResponseDto<ReadIntegratedApplicationDetailResponseDto> readDocumentIntegratedApplicationDetail(@PathVariable Long id) {
-        return ResponseDto.ok(readIntegratedApplicationDetailUseCase.execute(id));
+    public ResponseDto<ReadIntegratedApplicationDetailResponseDto> readDocumentIntegratedApplicationDetail(
+            @AccountID UUID accountId,
+            @PathVariable Long id
+    ) {
+        return ResponseDto.ok(readIntegratedApplicationDetailUseCase.execute(accountId, id));
     }
 }

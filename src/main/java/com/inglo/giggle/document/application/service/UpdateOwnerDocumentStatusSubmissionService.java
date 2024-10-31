@@ -1,21 +1,20 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.document.application.usecase.UpdateOwnerDocumentStatusSubmission;
+import com.inglo.giggle.document.application.usecase.UpdateOwnerDocumentStatusSubmissionUseCase;
 import com.inglo.giggle.document.domain.Document;
-import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.domain.service.IntegratedApplicationService;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,12 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateOwnerDocumentStatusService implements UpdateOwnerDocumentStatusSubmission {
-    private final OwnerRepository ownerRepository;
+public class UpdateOwnerDocumentStatusSubmissionService implements UpdateOwnerDocumentStatusSubmissionUseCase {
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final DocumentRepository documentRepository;
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
@@ -37,30 +39,52 @@ public class UpdateOwnerDocumentStatusService implements UpdateOwnerDocumentStat
     @Transactional
     public void execute(UUID accountId, Long documentId) {
 
-        Owner owner = ownerRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE));
-
-        Document document = documentRepository.findById(documentId)
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        // 계정 타입 유효성 체크
+        accountService.checkOwnerValidation(account);
+
+        // Document 조회
+        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 고용주 유효성 체크
+        userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+
+        // Document 타입에 따라 상태 변경
         String discriminatorValue = document.getClass().getAnnotation(DiscriminatorValue.class).value();
 
         switch (discriminatorValue) {
             case "PART_TIME_EMPLOYMENT_PERMIT":
+
+                // PartTimeEmploymentPermit 형변환
                 PartTimeEmploymentPermit partTimeEmploymentPermit = (PartTimeEmploymentPermit) document;
 
-                // 유학생 상태 BEFORE_CONFIRMATION , 고용주 상태 SUBMITTED로 변경 (유학생 수정 불가, 고용주 작성 및 수정 가능)
+                // PartTimeEmploymentPermit 수정 유효성 체크
+                partTimeEmploymentPermitService.checkUpdateOrSubmitOwnerPartTimeEmploymentPermitValidation(partTimeEmploymentPermit);
+
+                // 유학생 상태 BEFORE_CONFIRMATION , 고용주 상태 SUBMITTED로 변경
                 partTimeEmploymentPermit =
                         partTimeEmploymentPermitService.updateStatusByOwnerSubmission(partTimeEmploymentPermit);
                 partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
                 break;
+
             case "STANDARD_LABOR_CONTRACT":
+
+                // StandardLaborContract 형변환
                 StandardLaborContract standardLaborContract = (StandardLaborContract) document;
+
+                // StandardLaborContract 수정 유효성 체크
+                standardLaborContractService.checkUpdateOrSubmitOwnerStandardLaborContractValidation(standardLaborContract);
+
+                // 유학생 상태 BEFORE_CONFIRMATION , 고용주 상태 SUBMITTED로 변경
                 standardLaborContract =
                         standardLaborContractService.updateStatusByOwnerSubmission(standardLaborContract);
-
                 standardLaborContractRepository.save(standardLaborContract);
+
                 break;
 
             default:

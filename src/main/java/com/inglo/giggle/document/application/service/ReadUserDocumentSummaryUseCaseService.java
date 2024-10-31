@@ -1,17 +1,21 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.mysql.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.dto.response.ReadUserDocumentSummaryResponseDto;
 import com.inglo.giggle.document.application.usecase.ReadUserDocumentSummaryUseCase;
+import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.StandardLaborContract;
+import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +24,11 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReadUserDocumentSummaryUseCaseService implements ReadUserDocumentSummaryUseCase {
-    private final UserRepository userRepository;
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+    private final DocumentRepository documentRepository;
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final IntegratedApplicationRepository integratedApplicationRepository;
@@ -28,9 +36,19 @@ public class ReadUserDocumentSummaryUseCaseService implements ReadUserDocumentSu
     @Override
     public ReadUserDocumentSummaryResponseDto readUserDocumentSummary(UUID accountId, Long userOwnerJobPostingId) {
 
-        // 유저 정보 조회
-        User user = userRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE));
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 체크
+        accountService.checkUserValidation(account);
+
+        // Document 정보 조회
+        Document document = documentRepository.findWithUserOwnerJobPostingById(userOwnerJobPostingId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 유저 유효성 체크
+        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
 
         // 시간제 취업 허가서 조회
         PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
@@ -46,4 +64,5 @@ public class ReadUserDocumentSummaryUseCaseService implements ReadUserDocumentSu
 
         return ReadUserDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract, integratedApplication);
     }
+
 }

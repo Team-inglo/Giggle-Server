@@ -7,12 +7,17 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.document.application.dto.request.UpdateUserIntegratedApplicationRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateUserIntegratedApplicationUseCase;
+import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.service.IntegratedApplicationService;
-import com.inglo.giggle.document.domain.type.EEmployeeStatus;
+import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
+import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +28,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UpdateUserIntegratedApplicationService implements UpdateUserIntegratedApplicationUseCase {
 
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+    private final DocumentRepository documentRepository;
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final IntegratedApplicationRepository integratedApplicationRepository;
     private final SchoolRepository schoolRepository;
     private final IntegratedApplicationService integratedApplicationService;
@@ -31,13 +40,29 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
     @Override
     @Transactional
     public void execute(UUID accountId, Long documentId, UpdateUserIntegratedApplicationRequestDto requestDto) {
+
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 체크
+        accountService.checkUserValidation(account);
+
+        // Document 조회
+        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 유저 유효성 체크
+        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+
+        // IntegratedApplication 조회
         IntegratedApplication integratedApplication = integratedApplicationRepository.findById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        if (!integratedApplication.getEmployeeStatus().equals(EEmployeeStatus.TEMPORARY_SAVE)){
-            throw new CommonException(ErrorCode.ACCESS_DENIED);
-        }
+        // IntegratedApplication 수정 유효성 체크
+        integratedApplicationService.checkUpdateOrSubmitUserIntegratedApplicationValidation(integratedApplication);
 
+        // Address 생성
         Address address = addressService.createAddress(
                 requestDto.address().addressName(),
                 requestDto.address().region1DepthName(),
@@ -49,9 +74,11 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
                 requestDto.address().longitude()
         );
 
+        // School 조회
         School school = schoolRepository.findBySchoolName(requestDto.schoolName())
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        // IntegratedApplication 수정
         IntegratedApplication updatedIntegratedApplication = integratedApplicationService.updateUserIntegratedApplication(
                 integratedApplication,
                 requestDto.firstName(),
@@ -72,7 +99,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
                 school,
                 address
         );
-
         integratedApplicationRepository.save(updatedIntegratedApplication);
     }
+
 }

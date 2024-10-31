@@ -164,6 +164,28 @@ public class StandardLaborContractService {
         return document;
     }
 
+    public void checkUpdateOrSubmitUserStandardLaborContractValidation(StandardLaborContract document) {
+
+        // 유학생이 TEMPORARY_SAVE 가 아니거나 고용주가 not null 이면 접근 거부
+        if ((!document.getEmployeeStatus().equals(EEmployeeStatus.TEMPORARY_SAVE)) || !(document.getEmployerStatus() == null))
+            throw new CommonException(ErrorCode.ACCESS_DENIED);
+    }
+
+    public void checkUpdateOrSubmitOwnerStandardLaborContractValidation(StandardLaborContract document) {
+
+        // 고용주가 TEMPORARY_SAVE 이면서 유학생이 SUBMITTED 인 경우와, 고용주가 REWRITING 이면서 유학생이 REQUEST 인 경우를 제외하고 접근 거부
+        if (!((document.getEmployerStatus().equals(EEmployerStatus.TEMPORARY_SAVE) && document.getEmployeeStatus().equals(EEmployeeStatus.SUBMITTED)) ||
+                (document.getEmployerStatus().equals(EEmployerStatus.REWRITING) && document.getEmployeeStatus().equals(EEmployeeStatus.REQUEST))))
+            throw new CommonException(ErrorCode.ACCESS_DENIED);
+    }
+
+    public void checkRequestStandardLaborContractValidation(StandardLaborContract document) {
+
+        // 유학생이 BEFORE_CONFIRMATION 이면서 고용주가 SUBMITTED 인 경우를 제외하고 접근 거부
+        if (!(document.getEmployeeStatus().equals(EEmployeeStatus.BEFORE_CONFIRMATION) && document.getEmployerStatus().equals(EEmployerStatus.SUBMITTED)))
+            throw new CommonException(ErrorCode.ACCESS_DENIED);
+    }
+
     public ByteArrayInputStream createStandardLaborContractDocxFile(StandardLaborContract document) {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));
