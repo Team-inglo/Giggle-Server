@@ -18,7 +18,7 @@ public class ReadUserLanguageSummaryResponseDto extends SelfValidating<ReadUserL
     @JsonProperty("sejong_institute")
     private final Integer sejongInstitute;
 
-    @JsonProperty("addional_language")
+    @JsonProperty("additional_language")
     private final List<AdditionalLanguageDto> additionalLanguageDto;
 
     @Builder

@@ -36,7 +36,7 @@ public class WorkExperience {
     @Column(name = "end_date") // null인 경우 진행중인 일
     private LocalDate endDate;
 
-    @Column(name = "description", length = 50, nullable = false)
+    @Column(name = "description", length = 200, nullable = false)
     private String description;
 
     /* -------------------------------------------- */
