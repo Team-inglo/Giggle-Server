@@ -10,6 +10,8 @@ import com.inglo.giggle.school.domain.School;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -80,5 +82,15 @@ public class EducationService {
     public void checkEducationValidation(Education education, UUID accountId) {
         if (!education.getResume().getAccountId().equals(accountId))
             throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+    }
+
+    public Education getLatestEducation(List<Education> educations) {
+
+        if (educations.isEmpty())
+            return null;
+
+        return educations.stream()
+                .max(Comparator.comparing(Education::getGraduationDate))
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
     }
 }

@@ -13,6 +13,7 @@ import com.inglo.giggle.school.application.usecase.ReadUserSchoolDetailUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,8 +32,9 @@ public class ReadUserSchoolDetailService implements ReadUserSchoolDetailUseCase 
         EEducationLevel educationLevel = educationService.getEducationLevelByVisa(user.getVisa());
 
         // 유저의 educationLevel에 맞는 학력 정보 조회
-        Education education = educationRepository.findEducationByAccountIdAndEducationLevel(accountId, educationLevel)
-                .orElse(null);
+        List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(accountId, educationLevel);
+
+        Education education = educationService.getLatestEducation(educations);
 
         return ReadUserSchoolDetailResponseDto.of(education);
     }

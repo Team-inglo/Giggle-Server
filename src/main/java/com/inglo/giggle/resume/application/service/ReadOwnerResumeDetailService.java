@@ -52,8 +52,7 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
         userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 
         // Resume 조회
-        Resume resume = resumeRepository.findWithWorkExperiencesAndLanguageSkillByAccountId(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Resume resume = userOwnerJobPosting.getUser().getResume();
 
         // education 조회
         List<Education> educations = educationRepository.findAllByResume(resume);
