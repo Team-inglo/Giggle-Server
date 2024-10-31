@@ -8,6 +8,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ public class ReadUserDetailService implements ReadUserDetailUseCase {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserDetailResponseDto execute(UUID accountId) {
         // 유저 정보 조회
         User user = userRepository.findById(accountId)

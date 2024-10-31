@@ -16,6 +16,7 @@ import com.inglo.giggle.resume.repository.mysql.EducationRepository;
 import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
     private final ResumeAggregateService resumeAggregateService;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserSummaryResponseDto execute(UUID accountId) {
         // 유저 정보 조회
         User user = userRepository.findById(accountId)

@@ -12,6 +12,7 @@ import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ public class ReadUserLanguageSummaryService implements ReadUserLanguageSummaryUs
     private final LanguageSkillService languageSkillService;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadUserLanguageSummaryResponseDto execute(UUID accountId) {
 
         // Account 조회
