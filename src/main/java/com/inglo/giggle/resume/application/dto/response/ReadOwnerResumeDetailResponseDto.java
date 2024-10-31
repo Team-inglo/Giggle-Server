@@ -8,6 +8,7 @@ import com.inglo.giggle.resume.domain.*;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -158,9 +159,11 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
                     .title(workExperience.getExperienceTitle())
                     .workplace(workExperience.getWorkplace())
                     .description(workExperience.getDescription())
-                    .startDate(workExperience.getStartDate().toString())
-                    .endDate(workExperience.getEndDate().toString())
-                    .duration((int) ChronoUnit.MONTHS.between(workExperience.getStartDate(), workExperience.getEndDate()))
+                    .startDate(workExperience.getStartDate() != null ? workExperience.getStartDate().toString() : null)
+                    .endDate(workExperience.getEndDate() != null ? workExperience.getEndDate().toString() : null)
+                    .duration(workExperience.getEndDate() != null ?
+                            (int) ChronoUnit.MONTHS.between(workExperience.getStartDate(), workExperience.getEndDate())
+                            : (int) ChronoUnit.MONTHS.between(workExperience.getStartDate(), LocalDate.now()))
                     .build();
         }
     }
@@ -282,12 +285,12 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
         return ReadOwnerResumeDetailResponseDto.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
-                .visa(VisaDto.fromEntity(user.getVisa()))
-                .personalInformation(PersonalInformationDto.fromEntity(user))
-                .introduction(resume.getIntroduction())
-                .workExperience(resume.getWorkExperiences().stream().map(WorkExperienceDto::fromEntity).toList())
-                .education(educations.stream().map(EducationDto::fromEntity).toList())
-                .languages(LanguagesDto.fromEntity(languageSkill))
+                .visa(ReadOwnerResumeDetailResponseDto.VisaDto.fromEntity(user.getVisa()))
+                .personalInformation(ReadOwnerResumeDetailResponseDto.PersonalInformationDto.fromEntity(user))
+                .introduction(resume.getIntroduction() != null ? resume.getIntroduction() : null)
+                .workExperience(!resume.getWorkExperiences().isEmpty() ? resume.getWorkExperiences().stream().map(ReadOwnerResumeDetailResponseDto.WorkExperienceDto::fromEntity).toList() : null)
+                .education(!educations.isEmpty() ? educations.stream().map(ReadOwnerResumeDetailResponseDto.EducationDto::fromEntity).toList() : null)
+                .languages(ReadOwnerResumeDetailResponseDto.LanguagesDto.fromEntity(languageSkill))
                 .build();
     }
 }

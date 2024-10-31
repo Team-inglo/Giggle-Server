@@ -61,7 +61,7 @@ public class ReadUserLanguageSummaryResponseDto extends SelfValidating<ReadUserL
                 .topikLevel(languageSkill.getTopikLevel())
                 .socialIntegrationLevel(languageSkill.getSocialIntegrationLevel())
                 .sejongInstitute(languageSkill.getSejongInstituteLevel())
-                .additionalLanguageDto(languageSkill.getAdditionalLanguages().stream().map(AdditionalLanguageDto::fromEntity).toList())
+                .additionalLanguageDto(!languageSkill.getAdditionalLanguages().isEmpty() ? languageSkill.getAdditionalLanguages().stream().map(AdditionalLanguageDto::fromEntity).toList() : null)
                 .build();
     }
 }

@@ -67,7 +67,7 @@ public class ReadUserEducationDetailResponseDto extends SelfValidating<ReadUserE
                 .major(education.getMajor())
                 .gpa(education.getGpa())
                 .startDate(education.getEnrollmentDate().toString())
-                .endDate(education.getGraduationDate().toString())
+                .endDate(education.getGraduationDate() != null ? education.getGraduationDate().toString() : null)
                 .grade(education.getGrade())
                 .schoolDto(SchoolDto.fromEntity(education.getSchool()))
                 .build();

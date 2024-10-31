@@ -43,7 +43,7 @@ public class ReadUserWorkExperienceDetailResponseDto extends SelfValidating<Read
                 .title(workExperience.getExperienceTitle())
                 .workplace(workExperience.getWorkplace())
                 .startDate(workExperience.getStartDate().toString())
-                .endDate(workExperience.getEndDate().toString())
+                .endDate(workExperience.getEndDate() != null ? workExperience.getEndDate().toString() : null)
                 .description(workExperience.getDescription())
                 .build();
     }
