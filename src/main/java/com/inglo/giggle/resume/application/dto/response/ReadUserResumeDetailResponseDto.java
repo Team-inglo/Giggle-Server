@@ -287,7 +287,7 @@ public class ReadUserResumeDetailResponseDto extends SelfValidating<ReadUserResu
                 .name(user.getName())
                 .visa(VisaDto.fromEntity(user.getVisa()))
                 .personalInformation(PersonalInformationDto.fromEntity(user))
-                .introduction(resume.getIntroduction() != null ? resume.getIntroduction() : null)
+                .introduction(resume.getIntroduction())
                 .workExperience(!resume.getWorkExperiences().isEmpty() ? resume.getWorkExperiences().stream().map(WorkExperienceDto::fromEntity).toList() : null)
                 .education(!educations.isEmpty() ? educations.stream().map(EducationDto::fromEntity).toList() : null)
                 .languages(LanguagesDto.fromEntity(languageSkill))
