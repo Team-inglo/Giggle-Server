@@ -291,7 +291,7 @@ Authorization: Bearer {{access_token}}
 
 
 ### 6.4 (유학생) 지원 현황(개수) 확인하기
-GET {{host_url}}/v1/users/user-owner-job-postings/count
+GET {{host_url}}/v1/users/user-owner-job-postings/counts
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
