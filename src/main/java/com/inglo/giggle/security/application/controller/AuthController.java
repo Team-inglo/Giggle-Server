@@ -34,6 +34,7 @@ public class AuthController {
     private final ValidateAuthenticationCodeUseCase validateAuthenticationCodeUseCase;
     private final ReissueAuthenticationCodeUseCase reissueAuthenticationCodeUseCase;
     private final ReissuePasswordUseCase reissuePasswordUseCase;
+    private final DeleteAccountUseCase deleteAccountUseCase;
 
     /**
      * 2.3 JWT 재발급
@@ -129,6 +130,17 @@ public class AuthController {
             @RequestBody @Valid IssueAuthenticationCodeRequestDto requestDto
     ) {
         return ResponseDto.created(reissueAuthenticationCodeUseCase.execute(requestDto));
+    }
+
+    /**
+     * 2.9 회원 탈퇴
+     */
+    @DeleteMapping("")
+    public ResponseDto<?> deleteAccount(
+            @AccountID UUID accountId
+    ) {
+        deleteAccountUseCase.execute(accountId);
+        return ResponseDto.ok(null);
     }
 
     /**

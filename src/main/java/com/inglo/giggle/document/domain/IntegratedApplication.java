@@ -97,7 +97,7 @@ public class IntegratedApplication extends Document {
     /* -------------------------------------------- */
     /* One To One Mapping ------------------------- */
     /* -------------------------------------------- */
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id", nullable = false)
     private School school;
 

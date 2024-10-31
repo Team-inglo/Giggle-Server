@@ -5,6 +5,8 @@ import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.posting.domain.BookMark;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.resume.domain.Resume;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -73,6 +75,12 @@ public class User extends Account {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookMark> bookMarks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserOwnerJobPosting> userOwnerJobPostings = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Resume resume;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */

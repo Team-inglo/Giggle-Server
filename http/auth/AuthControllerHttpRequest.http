@@ -194,3 +194,8 @@ Content-Type: application/json
   "id" : "{{auth.API_2_8_OWNER.id}}",
   "email" : {{email_owner}}
 }
+
+### 2.9 회원 탈퇴
+// @no-log
+DELETE {{host_url}}/v1/auth
+Authorization: Bearer {{access_token}}

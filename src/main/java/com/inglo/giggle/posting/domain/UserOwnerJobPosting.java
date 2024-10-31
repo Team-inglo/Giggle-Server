@@ -1,6 +1,7 @@
 package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.account.domain.Owner;
+import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import com.inglo.giggle.account.domain.User;
 import jakarta.persistence.*;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -63,6 +66,13 @@ public class UserOwnerJobPosting {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private Owner owner;
+
+
+    /* -------------------------------------------- */
+    /* One To Many Mapping ------------------------ */
+    /* -------------------------------------------- */
+    @OneToMany(mappedBy = "userOwnerJobPosting", cascade = CascadeType.ALL)
+    private List<Document> documents = new ArrayList<>();
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */

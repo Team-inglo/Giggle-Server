@@ -43,7 +43,7 @@ public class Resume {
     /* One To One Mapping ------------------------- */
     /* -------------------------------------------- */
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "account_id")
     private User user;
 
