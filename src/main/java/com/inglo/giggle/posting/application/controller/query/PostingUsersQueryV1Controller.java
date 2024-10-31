@@ -145,7 +145,7 @@ public class PostingUsersQueryV1Controller {
     /**
      * 6.4 (유학생) 지원 현황(개수) 확인하기
      */
-    @GetMapping("/users/user-owner-job-postings/count")
+    @GetMapping("/users/user-owner-job-postings/counts")
     public ResponseDto<ReadUserOwnerJobPostingCountResponseDto> readUserAppliedJobCount(
             @AccountID UUID accountId
     ) {

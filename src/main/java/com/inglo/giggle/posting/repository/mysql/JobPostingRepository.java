@@ -5,12 +5,14 @@ import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.*;
+
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -39,18 +41,26 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     @Query("SELECT jp FROM JobPosting jp " +
             "JOIN FETCH jp.owner o " +
             "JOIN FETCH jp.workDayTimes pw " +
-            "JOIN jp.bookMarks bm " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
-            "AND (bm.id IS NOT NULL) " +
-            "AND ((:region1Depth1 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth1, '%')) " +
-            "AND (:region1Depth2 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth2, '%')) " +
-            "AND (:region1Depth3 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth3, '%'))) " +
-            "AND ((:region2Depth1 IS NULL OR jp.address.region2DepthName LIKE CONCAT('%', :region2Depth1, '%')) " +
-            "AND (:region2Depth2 IS NULL OR jp.address.region2DepthName LIKE CONCAT('%', :region2Depth2, '%')) " +
-            "AND (:region2Depth3 IS NULL OR jp.address.region2DepthName LIKE CONCAT('%', :region2Depth3, '%'))) " +
-            "AND ((:region3Depth1 IS NULL OR jp.address.region3DepthName LIKE CONCAT('%', :region3Depth1, '%')) " +
-            "AND (:region3Depth2 IS NULL OR jp.address.region3DepthName LIKE CONCAT('%', :region3Depth2, '%')) " +
-            "AND (:region3Depth3 IS NULL OR jp.address.region3DepthName LIKE CONCAT('%', :region3Depth3, '%')))" +
+            "AND ( " +
+            "( " +
+            "(:region1Depth1 IS NULL OR jp.address.region1DepthName = :region1Depth1) " +
+            "AND (:region2Depth1 IS NULL OR jp.address.region2DepthName = :region2Depth1) " +
+            "AND (:region3Depth1 IS NULL OR jp.address.region3DepthName = :region3Depth1) " +
+            ") " +
+            "OR ( " +
+            "(:region1Depth2 IS NULL OR jp.address.region1DepthName = :region1Depth2) " +
+            "AND (:region2Depth2 IS NULL OR jp.address.region2DepthName = :region2Depth2) " +
+            "AND (:region3Depth2 IS NULL OR jp.address.region3DepthName = :region3Depth2) " +
+            ") " +
+            "OR ( " +
+            "(:region1Depth3 IS NULL OR jp.address.region1DepthName = :region1Depth3) " +
+            "AND (:region2Depth3 IS NULL OR jp.address.region2DepthName = :region2Depth3) " +
+            "AND (:region3Depth3 IS NULL OR jp.address.region3DepthName = :region3Depth3) " +
+            ") " +
+            ") " +
+            "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
+            "AND ((:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList)) " +
             "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
             "AND ((:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList)) " +
             "AND ((" +
@@ -75,21 +85,19 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "OR (:recruitmentPeriod = 'OPENING' AND jp.recruitmentDeadLine >= :today) " +
             "OR (:recruitmentPeriod = 'CLOSED' AND jp.recruitmentDeadLine < :today)) " +
             "AND (:employmentType IS NULL OR jp.employmentType = :employmentType) " +
-            "AND (:visa IS NULL OR jp.visa = :visa) " +
-            "GROUP BY jp.id, o.id, pw.id " +
-            "ORDER BY COUNT(bm.id) DESC"
+            "AND (:visa IS NULL OR jp.visa = :visa) "
     )
-    Page<JobPosting> findPopularJobPostingsWithFilters(
+    List<JobPosting> findPopularJobPostingsWithFilters(
             @Param("jobTitle") String jobTitle,
-            @Param("region1Depth_1") String region1Depth1,
-            @Param("region1Depth_2") String region1Depth2,
-            @Param("region1Depth_3") String region1Depth3,
-            @Param("region2Depth_1") String region2Depth1,
-            @Param("region2Depth_2") String region2Depth2,
-            @Param("region2Depth_3") String region2Depth3,
-            @Param("region3Depth_1") String region3Depth1,
-            @Param("region3Depth_2") String region3Depth2,
-            @Param("region3Depth_3") String region3Depth3,
+            @Param("region1Depth1") String region1Depth1,
+            @Param("region1Depth2") String region1Depth2,
+            @Param("region1Depth3") String region1Depth3,
+            @Param("region2Depth1") String region2Depth1,
+            @Param("region2Depth2") String region2Depth2,
+            @Param("region2Depth3") String region2Depth3,
+            @Param("region3Depth1") String region3Depth1,
+            @Param("region3Depth2") String region3Depth2,
+            @Param("region3Depth3") String region3Depth3,
             @Param("industryList") List<EJobCategory> industryList,
             @Param("workPeriodList") List<EWorkPeriod> workPeriodList,
             @Param("workDaysPerWeekList") List<Integer> workDaysPerWeekList,
@@ -114,8 +122,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("today") LocalDate today,
             @Param("recruitmentPeriod") String recruitmentPeriod,
             @Param("employmentType") EEmploymentType employmentType,
-            @Param("visa") EVisa visa,
-            Pageable pageable
+            @Param("visa") EVisa visa
     );
 
     // 최신순 공고 조회 쿼리
@@ -123,15 +130,23 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "JOIN FETCH jp.owner o " +
             "JOIN FETCH jp.workDayTimes pw " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
-            "AND ((:region1Depth1 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth1, '%')) " +
-            "AND (:region1Depth2 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth2, '%')) " +
-            "AND (:region1Depth3 IS NULL OR jp.address.region1DepthName LIKE CONCAT('%', :region1Depth3, '%'))) " +
-            "AND ((:region2Depth1 IS NULL OR jp.address.region2DepthName LIKE CONCAT('%', :region2Depth1, '%')) " +
-            "AND (:region2Depth2 IS NULL OR jp.address.region2DepthName LIKE CONCAT('%', :region2Depth2, '%')) " +
-            "AND (:region2Depth3 IS NULL OR jp.address.region2DepthName LIKE CONCAT('%', :region2Depth3, '%'))) " +
-            "AND ((:region3Depth1 IS NULL OR jp.address.region3DepthName LIKE CONCAT('%', :region3Depth1, '%')) " +
-            "AND (:region3Depth2 IS NULL OR jp.address.region3DepthName LIKE CONCAT('%', :region3Depth2, '%')) " +
-            "AND (:region3Depth3 IS NULL OR jp.address.region3DepthName LIKE CONCAT('%', :region3Depth3, '%')))" +
+            "AND ( " +
+            "( " +
+                "(:region1Depth1 IS NULL OR jp.address.region1DepthName = :region1Depth1) " +
+                "AND (:region2Depth1 IS NULL OR jp.address.region2DepthName = :region2Depth1) " +
+                "AND (:region3Depth1 IS NULL OR jp.address.region3DepthName = :region3Depth1) " +
+            ") " +
+            "OR ( " +
+                "(:region1Depth2 IS NULL OR jp.address.region1DepthName = :region1Depth2) " +
+                "AND (:region2Depth2 IS NULL OR jp.address.region2DepthName = :region2Depth2) " +
+                "AND (:region3Depth2 IS NULL OR jp.address.region3DepthName = :region3Depth2) " +
+            ") " +
+            "OR ( " +
+                "(:region1Depth3 IS NULL OR jp.address.region1DepthName = :region1Depth3) " +
+                "AND (:region2Depth3 IS NULL OR jp.address.region2DepthName = :region2Depth3) " +
+                "AND (:region3Depth3 IS NULL OR jp.address.region3DepthName = :region3Depth3) " +
+            ") " +
+            ") " +
             "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
             "AND ((:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList)) " +
             "AND ((" +
@@ -161,15 +176,15 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     )
     Page<JobPosting> findRecentJobPostingsWithFilters(
             @Param("jobTitle") String jobTitle,
-            @Param("region1Depth_1") String region1Depth1,
-            @Param("region1Depth_2") String region1Depth2,
-            @Param("region1Depth_3") String region1Depth3,
-            @Param("region2Depth_1") String region2Depth1,
-            @Param("region2Depth_2") String region2Depth2,
-            @Param("region2Depth_3") String region2Depth3,
-            @Param("region3Depth_1") String region3Depth1,
-            @Param("region3Depth_2") String region3Depth2,
-            @Param("region3Depth_3") String region3Depth3,
+            @Param("region1Depth1") String region1Depth1,
+            @Param("region1Depth2") String region1Depth2,
+            @Param("region1Depth3") String region1Depth3,
+            @Param("region2Depth1") String region2Depth1,
+            @Param("region2Depth2") String region2Depth2,
+            @Param("region2Depth3") String region2Depth3,
+            @Param("region3Depth1") String region3Depth1,
+            @Param("region3Depth2") String region3Depth2,
+            @Param("region3Depth3") String region3Depth3,
             @Param("industryList") List<EJobCategory> industryList,
             @Param("workPeriodList") List<EWorkPeriod> workPeriodList,
             @Param("workDaysPerWeekList") List<Integer> workDaysPerWeekList,
@@ -195,7 +210,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("recruitmentPeriod") String recruitmentPeriod,
             @Param("employmentType") EEmploymentType employmentType,
             @Param("visa") EVisa visa,
-            Pageable pageable
+            @Param("pageable") Pageable pageable
     );
 
     @Query("SELECT jp FROM JobPosting jp " +
@@ -220,7 +235,8 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "ORDER BY COUNT(bm.id) DESC")
     List<JobPosting> findBookmarkedJobPostingsWithFetchJoin();
 
-
+    @Query("SELECT COUNT(b) FROM BookMark b WHERE b.jobPosting.id = :jobPostingId")
+    int countBookmarksByJobPostingId(@Param("jobPostingId") Long jobPostingId);
 
 
 }

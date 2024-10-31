@@ -35,8 +35,10 @@ public class PostingGuestsQueryV1Controller {
             @RequestParam(value = "working_hours", required = false) String workingHours,
             @RequestParam(value = "recruitment_period", required = false) String recruitmentPeriod,
             @RequestParam(value = "employment_type", required = false) String employmentType,
-            @RequestParam(value = "visa", required = false) String visa
+            @RequestParam(value = "visa", required = false) String visa,
+            @RequestParam(value = "type", required = false) String type
     ) {
+
         return ResponseDto.ok(readGuestJobPostingOverviewsUseCase.execute(
                 page,
                 size,
