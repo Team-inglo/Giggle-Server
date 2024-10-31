@@ -1,5 +1,7 @@
 package com.inglo.giggle.resume.domain.service;
 
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.resume.domain.Education;
@@ -8,6 +10,7 @@ import com.inglo.giggle.school.domain.School;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 public class EducationService {
@@ -72,5 +75,10 @@ public class EducationService {
                 return EEducationLevel.HIGHSCHOOL;
             }
         }
+    }
+
+    public void checkEducationValidation(Education education, UUID accountId) {
+        if (!education.getResume().getAccountId().equals(accountId))
+            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
     }
 }

@@ -42,9 +42,10 @@ public class ResumeUsersQueryV1Controller {
      */
     @GetMapping("/work-experiences/{id}/details")
     public ResponseDto<ReadUserWorkExperienceDetailResponseDto> readUserWorkExperienceDetail(
+            @AccountID UUID accountId,
             @PathVariable Long id
     ) {
-        return ResponseDto.ok(readUserWorkExperienceDetailUseCase.execute(id));
+        return ResponseDto.ok(readUserWorkExperienceDetailUseCase.execute(accountId, id));
     }
 
     /**
@@ -52,9 +53,10 @@ public class ResumeUsersQueryV1Controller {
      */
     @GetMapping("/educations/{id}/details")
     public ResponseDto<ReadUserEducationDetailResponseDto> readUserEducationDetail(
+            @AccountID UUID accountId,
             @PathVariable Long id
     ) {
-        return ResponseDto.ok(readUserEducationDetailUseCase.execute(id));
+        return ResponseDto.ok(readUserEducationDetailUseCase.execute(accountId, id));
     }
 
     /**

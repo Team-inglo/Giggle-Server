@@ -1,10 +1,13 @@
 package com.inglo.giggle.resume.domain.service;
 
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.WorkExperience;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 public class WorkExperienceService {
@@ -40,5 +43,10 @@ public class WorkExperienceService {
         workExperience.updateEndDate(endDate);
         workExperience.updateDescription(description);
         return workExperience;
+    }
+
+    public void checkWorkExperienceValidation(WorkExperience workExperience, UUID accountId) {
+        if (!workExperience.getResume().getAccountId().equals(accountId))
+            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
     }
 }

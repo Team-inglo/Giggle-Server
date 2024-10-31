@@ -130,7 +130,10 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
     @Getter
     public static class CompanyImageDto extends SelfValidating<CompanyImageDto> {
+        @JsonProperty("id")
         private final Long id;
+
+        @JsonProperty("img_url")
         private final String imgUrl;
 
         @Builder
@@ -150,8 +153,13 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
     @Getter
     public static class Tags extends SelfValidating<Tags> {
+        @JsonProperty("is_recruiting")
         private final Boolean isRecruiting;
+
+        @JsonProperty("visa")
         private final EVisa visa;
+
+        @JsonProperty("job_category")
         private final EJobCategory jobCategory;
 
         @Builder
@@ -173,9 +181,17 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
     @Getter
     public static class Summaries extends SelfValidating<Summaries> {
+
+        @JsonProperty("address")
         private final String address;
+
+        @JsonProperty("hourly_rate")
         private final Integer hourlyRate;
+
+        @JsonProperty("work_period")
         private final EWorkPeriod workPeriod;
+
+        @JsonProperty("work_days_per_week")
         private final String workDaysPerWeek;
 
         @Builder
@@ -199,11 +215,23 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
     @Getter
     public static class RecruitmentConditions extends SelfValidating<RecruitmentConditions> {
+
+        @JsonProperty("recruitment_deadline")
         private final String recruitmentDeadline;
+
+        @JsonProperty("education")
         private final String education;
+
+        @JsonProperty("number_of_recruits")
         private final Integer numberOfRecruits;
+
+        @JsonProperty("visa")
         private final EVisa visa;
+
+        @JsonProperty("gender")
         private final String gender;
+
+        @JsonProperty("preferred_conditions")
         private final String preferredConditions;
 
         @Builder
@@ -232,9 +260,17 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
     @Getter
     public static class WorkplaceInformation extends SelfValidating<WorkplaceInformation> {
+
+        @JsonProperty("main_address")
         private final String mainAddress;
+
+        @JsonProperty("detailed_address")
         private final String detailedAddress;
+
+        @JsonProperty("latitude")
         private final double latitude;
+
+        @JsonProperty("longitude")
         private final double longitude;
 
         @Builder
@@ -258,10 +294,20 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
     @Getter
     public static class WorkingConditions extends SelfValidating<WorkingConditions> {
+
+        @JsonProperty("hourly_rate")
         private final Integer hourlyRate;
+
+        @JsonProperty("work_period")
         private final EWorkPeriod workPeriod;
+
+        @JsonProperty("work_day_time")
         private final List<WorkDayTimeDto> workDayTime;
+
+        @JsonProperty("job_category")
         private final EJobCategory jobCategory;
+
+        @JsonProperty("employment_type")
         private final String employmentType;
 
         @Builder
@@ -292,8 +338,14 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
         @Getter
         public static class WorkDayTimeDto extends SelfValidating<WorkDayTimeDto> {
+
+            @JsonProperty("day_of_week")
             private final String dayOfWeek;
+
+            @JsonProperty("work_start_time")
             private final String workStartTime;
+
+            @JsonProperty("work_end_time")
             private final String workEndTime;
 
             @Builder
@@ -316,10 +368,20 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
     @Getter
     public static class CompanyInformation extends SelfValidating<CompanyInformation> {
+
+        @JsonProperty("company_address")
         private final String companyAddress;
+
+        @JsonProperty("representative_name")
         private final String representativeName;
+
+        @JsonProperty("recruiter")
         private final String recruiter;
+
+        @JsonProperty("contact")
         private final String contact;
+
+        @JsonProperty("email")
         private final String email;
 
         @Builder
