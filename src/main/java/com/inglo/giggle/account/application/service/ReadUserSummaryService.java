@@ -17,6 +17,7 @@ import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,8 +45,10 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
         EEducationLevel educationLevel = educationService.getEducationLevelByVisa(user.getVisa());
 
         // 유저의 educationLevel에 맞는 학력 정보 조회
-        Education education = educationRepository.findEducationByAccountIdAndEducationLevel(accountId, educationLevel)
-                .orElse(null);
+        List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(accountId, educationLevel);
+
+        // 가장 졸업일자가 늦은 학력 정보 조회
+        Education education = educationService.getLatestEducation(educations);
 
         // ResumeAggregate 생성 및 반환
         ResumeAggregate resumeAggregate = resumeAggregateService.createResumeAggregate(user, resume, education);

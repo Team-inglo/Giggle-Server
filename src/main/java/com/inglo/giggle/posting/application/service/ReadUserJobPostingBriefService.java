@@ -79,8 +79,9 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
     private boolean isUserApplicableForJobPosting(Resume resume, JobPosting jobPosting) {
         try {
             EEducationLevel educationLevel = educationService.getEducationLevelByVisa(resume.getUser().getVisa());
-            Education education = educationRepository.findEducationByAccountIdAndEducationLevel(resume.getUser().getId(), educationLevel)
-                    .orElse(null);
+            List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(resume.getUser().getId(), educationLevel);
+
+            Education education = educationService.getLatestEducation(educations);
 
             boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
             boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(resume, jobPosting);

@@ -29,6 +29,7 @@ import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -71,8 +72,9 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
         EEducationLevel educationLevel = educationService.getEducationLevelByVisa(resume.getUser().getVisa());
 
         // 유저의 educationLevel에 맞는 학력 정보 조회
-        Education education = educationRepository.findEducationByAccountIdAndEducationLevel(accountId, educationLevel)
-                .orElse(null);
+        List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(resume.getUser().getId(), educationLevel);
+
+        Education education = educationService.getLatestEducation(educations);
 
         // 유저 정보 검증 (거리, 학력, 언어 스킬 기반)
         Boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
