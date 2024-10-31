@@ -166,17 +166,6 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(sortedJobPostingsPage);
 
         } else {
-            log.info("region1Depth1: {}", !region1DepthList.isEmpty() ? region1DepthList.get(0) : null);
-            log.info("region1Depth2: {}", region1DepthList.size() > 1 ? region1DepthList.get(1) : null);
-            log.info("region1Depth3: {}", region1DepthList.size() > 2 ? region1DepthList.get(2) : null);
-
-            log.info("region2Depth1: {}", !region2DepthList.isEmpty() ? region2DepthList.get(0) : null);
-            log.info("region2Depth2: {}", region2DepthList.size() > 1 ? region2DepthList.get(1) : null);
-            log.info("region2Depth3: {}", region2DepthList.size() > 2 ? region2DepthList.get(2) : null);
-
-            log.info("region3Depth1: {}", !region3DepthList.isEmpty() ? region3DepthList.get(0) : null);
-            log.info("region3Depth2: {}", region3DepthList.size() > 1 ? region3DepthList.get(1) : null);
-            log.info("region3Depth3: {}", region3DepthList.size() > 2 ? region3DepthList.get(2) : null);
 
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(jobPostingRepository.findRecentJobPostingsWithFilters(
                     jobTitle,
