@@ -84,6 +84,7 @@ public class EducationService {
             throw new CommonException(ErrorCode.INVALID_ARGUMENT);
     }
 
+
     public Education getLatestEducation(List<Education> educations) {
 
         if (educations.isEmpty())
@@ -91,6 +92,6 @@ public class EducationService {
 
         return educations.stream()
                 .max(Comparator.comparing(Education::getGraduationDate))
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                .orElse(null);
     }
 }
