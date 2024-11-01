@@ -20,7 +20,7 @@ public interface EducationRepository extends JpaRepository<Education, Long>{
             "JOIN Resume r ON e.resume.accountId = r.accountId " +
             "WHERE e.educationLevel = :educationLevel AND r.accountId = :userId"
     )
-    List<Education> findEducationByAccountIdAndEducationLevel(@Param("userId")UUID userId, @Param("eduationLevel") EEducationLevel educationLevel);
+    List<Education> findEducationByAccountIdAndEducationLevel(@Param("userId")UUID userId, @Param("educationLevel") EEducationLevel educationLevel);
 
     @EntityGraph(attributePaths = {"school"})
     List<Education> findAllByResume(Resume resume);
