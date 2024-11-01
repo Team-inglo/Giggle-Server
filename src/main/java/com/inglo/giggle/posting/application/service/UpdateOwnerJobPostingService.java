@@ -96,8 +96,8 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
 
             requestDto.workDayTimes().forEach(workDayTime -> postWorkDayTimeService.createPostingWorkDayTime(
                     workDayTime.dayOfWeek(),
-                    workDayTime.workStartTime() == null ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()),
-                    workDayTime.workEndTime() == null ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workEndTime()),
+                    (workDayTime.workStartTime() == null || workDayTime.workStartTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()),
+                    (workDayTime.workEndTime() == null || workDayTime.workEndTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workEndTime()),
                     jobPosting
             ));
         }
