@@ -19,4 +19,8 @@ public class NotificationService {
                 .notificationType(notificationType)
                 .build();
     }
+
+    public void updateNotificationIsRead(Notification notification) {
+        notification.updateIsRead();
+    }
 }

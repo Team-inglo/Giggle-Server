@@ -1,0 +1,11 @@
+### 10.1 (유학생/고용주) 알림 조회
+GET {{host_url}}/v1/notifications/overviews?
+    page={{notification.API_10_1.page}}&
+    size={{notification.API_10_1.size}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### 10.2 (유학생/고용주) 읽음 상태변경
+PATCH {{host_url}}/v1/notifications/{{notification.API_10_2.notification_id}}/is-read
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
