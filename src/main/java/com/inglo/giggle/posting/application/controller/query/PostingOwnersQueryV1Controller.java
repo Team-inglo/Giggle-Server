@@ -30,7 +30,7 @@ public class PostingOwnersQueryV1Controller {
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "sorting", defaultValue = "DESCENDING") String sorting,
-            @RequestParam(name = "status") String status
+            @RequestParam(name = "status", required = false) String status
 
     ) {
         return ResponseDto.ok(readOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase.execute(

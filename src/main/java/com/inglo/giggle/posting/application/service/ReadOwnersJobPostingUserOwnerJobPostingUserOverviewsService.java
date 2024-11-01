@@ -51,33 +51,39 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
         PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(direction, "updatedAt"));
 
         Page<UserOwnerJobPosting> userOwnerJobPostingPage;
-        EApplicationStep eApplicationStep = EApplicationStep.fromString(status);
 
-        // 특정 상태값들에 해당하는 목록 정의
-        List<EApplicationStep> applicableSteps = List.of(
-                EApplicationStep.RESUME_UNDER_REVIEW,
-                EApplicationStep.WAITING_FOR_INTERVIEW,
-                EApplicationStep.FILLING_OUT_DOCUMENTS,
-                EApplicationStep.DOCUMENT_UNDER_REVIEW,
-                EApplicationStep.APPLICATION_IN_PROGRESS,
-                EApplicationStep.REGISTERING_RESULTS
-        );
+        if(status == null) {
+            userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPosting(jobPosting, pageRequest);
+        } else{
+            EApplicationStep eApplicationStep = EApplicationStep.fromString(status);
 
-        if (EApplicationStep.APPLICATION_IN_PROGRESS.equals(eApplicationStep)) {
-            // application_in_progress일 경우, applicableSteps에 해당하는 모든 상태값을 조회
-            userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPostingAndSteps(
-                    jobPosting,
-                    applicableSteps,
-                    pageRequest
+            // 특정 상태값들에 해당하는 목록 정의
+            List<EApplicationStep> applicableSteps = List.of(
+                    EApplicationStep.RESUME_UNDER_REVIEW,
+                    EApplicationStep.WAITING_FOR_INTERVIEW,
+                    EApplicationStep.FILLING_OUT_DOCUMENTS,
+                    EApplicationStep.DOCUMENT_UNDER_REVIEW,
+                    EApplicationStep.APPLICATION_IN_PROGRESS,
+                    EApplicationStep.REGISTERING_RESULTS
             );
-        } else {
-            // 그 외의 경우, 단일 상태값으로 조회
-            userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPostingAndStep(
-                    jobPosting,
-                    eApplicationStep,
-                    pageRequest
-            );
+
+            if (EApplicationStep.APPLICATION_IN_PROGRESS.equals(eApplicationStep)) {
+                // application_in_progress일 경우, applicableSteps에 해당하는 모든 상태값을 조회
+                userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPostingAndSteps(
+                        jobPosting,
+                        applicableSteps,
+                        pageRequest
+                );
+            } else {
+                // 그 외의 경우, 단일 상태값으로 조회
+                userOwnerJobPostingPage = userOwnerJobPostingRepository.findAllPageWithUserByJobPostingAndStep(
+                        jobPosting,
+                        eApplicationStep,
+                        pageRequest
+                );
+            }
         }
+
 
         // 지원자 리스트의 학교 정보 조회
         List<UUID> userIds = userOwnerJobPostingPage.stream()
