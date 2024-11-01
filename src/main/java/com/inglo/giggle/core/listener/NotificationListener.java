@@ -22,7 +22,7 @@ public class NotificationListener {
     @Async
     @EventListener(classes = {NotificationEvent.class})
     public void handleNotificationEvent(NotificationEvent event) {
-        log.info("NotificationEvent: {}", event);
-        kafkaTemplate.send(TOPIC, event.toPayload());
+//        log.info("NotificationEvent: {}", event);
+//        kafkaTemplate.send(TOPIC, event.toPayload());
     }
 }

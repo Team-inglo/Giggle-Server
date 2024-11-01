@@ -2,6 +2,8 @@ package com.inglo.giggle.document.application.service;
 
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
+import com.inglo.giggle.core.type.EKafkaStatus;
+import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.document.application.dto.request.UpdateDocumentStatusReqeustionRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateUserDocumentStatusRequestionUseCase;
 import com.inglo.giggle.document.domain.Document;
@@ -14,6 +16,9 @@ import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.RejectRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.notification.domain.Notification;
+import com.inglo.giggle.notification.domain.service.NotificationEventService;
+import com.inglo.giggle.notification.domain.service.NotificationService;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -39,6 +44,8 @@ public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocu
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
     private final StandardLaborContractService standardLaborContractService;
     private final RejectService rejectService;
+    private final NotificationService notificationService;
+    private final NotificationEventService notificationEventService;
 
     @Override
     @Transactional
@@ -99,6 +106,20 @@ public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocu
             default:
                 throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
         }
+
+        Notification notification = notificationService.createNotification(
+                EKafkaStatus.OWNER_DOCUMENT_REQUEST.getMessage(),
+                document.getUserOwnerJobPosting(),
+                ENotificationType.OWNER
+        );
+
+        notificationEventService.createNotificationEvent(
+                document.getUserOwnerJobPosting().getJobPosting().getTitle(),
+                notification.getMessage(),
+                document.getUserOwnerJobPosting().getOwner().getDeviceToken()
+        );
+
+
     }
 
 }

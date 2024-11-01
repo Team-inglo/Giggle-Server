@@ -54,7 +54,7 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
         Notification notification = notificationService.createNotification(
                 EKafkaStatus.USER_DOCUMENT_COMPLETED.getMessage(),
                 userOwnerJobPosting,
-                ENotificationType.USER
+                ENotificationType.OWNER
         );
 
         notificationRepository.save(notification);
@@ -63,7 +63,7 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
                 notificationEventService.createNotificationEvent(
                         userOwnerJobPosting.getJobPosting().getTitle(),
                         notification.getMessage(),
-                        userOwnerJobPosting.getUser().getDeviceToken()
+                        userOwnerJobPosting.getOwner().getDeviceToken()
                 )
         );
 
