@@ -235,7 +235,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
 
         public static Tags fromEntity(JobPosting jobPosting) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null ? Boolean.TRUE : jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa())
                     .jobCategory(jobPosting.getJobCategory())
                     .build();
@@ -311,7 +311,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
 
         public static RecruitmentConditions fromEntity(JobPosting jobPosting) {
             return RecruitmentConditions.builder()
-                    .recruitmentDeadline(DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
+                    .recruitmentDeadline(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
                     .education(jobPosting.getEducationLevel().toString())
                     .numberOfRecruits(jobPosting.getRecruitmentNumber())
                     .visa(jobPosting.getVisa())

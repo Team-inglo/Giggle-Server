@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.posting.domain.JobPosting;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -119,7 +120,7 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
                             )
                     )
                     .hourlyRate(jobPosting.getHourlyRate())
-                    .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine().toString())
+                    .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
                     .createdAt(jobPosting.getCreatedAt().toString())
                     .build();
         }
@@ -184,7 +185,7 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
 
         public static Tags fromEntity(JobPosting jobPosting) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null ? Boolean.TRUE : jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa().toString())
                     .jobCategory(jobPosting.getJobCategory().toString())
                     .build();
