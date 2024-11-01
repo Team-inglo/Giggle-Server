@@ -70,6 +70,9 @@ public abstract class Account {
     @Column(name = "notification_allowed", nullable = false)
     private Boolean notificationAllowed;
 
+    @Column(name = "device_token")
+    private String deviceToken;
+
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
@@ -81,7 +84,8 @@ public abstract class Account {
             String profileImgUrl,
             String phoneNumber,
             Boolean marketingAllowed,
-            Boolean notificationAllowed
+            Boolean notificationAllowed,
+            String deviceToken
     ) {
         this.provider = provider;
         this.serialId = serialId;
@@ -91,6 +95,7 @@ public abstract class Account {
         this.phoneNumber = phoneNumber;
         this.marketingAllowed = marketingAllowed;
         this.notificationAllowed = notificationAllowed;
+        this.deviceToken = deviceToken;
     }
 
     public void updatePassword(String password) {

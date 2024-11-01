@@ -1,9 +1,11 @@
 package com.inglo.giggle.core.utility;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * 날짜 및 시간 관련 유틸리티 클래스
@@ -14,6 +16,7 @@ public class DateTimeUtil {
     public static final DateTimeFormatter ISODateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter ISOTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     public static final DateTimeFormatter KORDateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"); // 새로운 포맷터 추가
+    public static final DateTimeFormatter NotificationDateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd (EEE)", Locale.KOREAN);
 
     /**
      * String을 LocalDateTime으로 변환
@@ -104,5 +107,25 @@ public class DateTimeUtil {
      */
     public static Integer calculateDaysBetween(LocalDate startDate, LocalDate endDate) {
         return (int) (endDate.toEpochDay() - startDate.toEpochDay());
+    }
+
+    /**
+     * 알림 시간 포맷팅: "mins ago", "hours ago", "yyyy.MM.dd (요일)"
+     *
+     * @param dateTime LocalDateTime
+     * @return String
+     */
+    public static String formatNotificationTime(LocalDateTime dateTime) {
+        Duration duration = Duration.between(dateTime, LocalDateTime.now());
+        long minutesAgo = duration.toMinutes();
+        long hoursAgo = duration.toHours();
+
+        if (minutesAgo < 60) {
+            return minutesAgo + " mins ago";
+        } else if (hoursAgo < 24) {
+            return hoursAgo + " hours ago";
+        } else {
+            return dateTime.format(NotificationDateFormatter);
+        }
     }
 }

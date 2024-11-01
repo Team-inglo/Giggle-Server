@@ -102,7 +102,8 @@ public class User extends Account {
             EVisa visa,
             Address address,
             Boolean notificationAllowed,
-            Boolean marketingAllowed
+            Boolean marketingAllowed,
+            String deviceToken
     ) {
         super(
                 provider,
@@ -112,7 +113,8 @@ public class User extends Account {
                 profileImgUrl,
                 phoneNumber,
                 notificationAllowed,
-                marketingAllowed
+                marketingAllowed,
+                deviceToken
         );
         this.firstName = firstName;
         this.lastName = lastName;

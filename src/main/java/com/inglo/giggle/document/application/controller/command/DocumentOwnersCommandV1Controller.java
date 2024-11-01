@@ -35,7 +35,7 @@ public class DocumentOwnersCommandV1Controller {
     }
 
     /**
-     * 8.12 (고용주) 근로계약서 수정하기
+     * 8.13 (고용주) 근로계약서 수정하기
      */
     @PutMapping("/documents/{id}/standard-labor-contracts")
     public ResponseDto<Void> updateOwnerStandardLaborContract(
