@@ -162,6 +162,9 @@ public class ReadStandardLaborContractDetailResponseDto extends SelfValidating<R
         }
 
         public static EmployerInformationDto fromEntity(StandardLaborContract standardLaborContract, List<ContractWorkDayTime> contractWorkDayTimes) {
+            if (standardLaborContract.getCompanyName() == null) {
+                return null;
+            }
             return EmployerInformationDto.builder()
                     .companyName(standardLaborContract.getCompanyName())
                     .phoneNumber(standardLaborContract.getEmployerPhoneNumber())

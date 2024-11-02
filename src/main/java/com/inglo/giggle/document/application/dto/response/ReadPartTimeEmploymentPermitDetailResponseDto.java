@@ -123,6 +123,9 @@ public class ReadPartTimeEmploymentPermitDetailResponseDto extends SelfValidatin
         }
 
         public static EmployerInformationDto fromEntity(PartTimeEmploymentPermit partTimeEmploymentPermit) {
+            if (partTimeEmploymentPermit.getCompanyName() == null) {
+                return null;
+            }
             return EmployerInformationDto.builder()
                     .companyName(partTimeEmploymentPermit.getCompanyName())
                     .companyRegistrationNumber(partTimeEmploymentPermit.getCompanyRegistrationNumber())
