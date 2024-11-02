@@ -6,7 +6,7 @@ import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.Reject;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.domain.type.EEmployeeStatus;
+import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,7 +51,7 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
         private final String reason;
 
         @Builder
-        public DocumentDetailDto(Long id, String hwpUrl, String wordUrl, EEmployeeStatus status, String reason) {
+        public DocumentDetailDto(Long id, String hwpUrl, String wordUrl, EEmployerStatus status, String reason) {
             this.id = id;
             this.hwpUrl = hwpUrl;
             this.wordUrl = wordUrl;
@@ -59,7 +59,7 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
             this.reason = reason;
         }
 
-        public static DocumentDetailDto fromEntity(Document document, EEmployeeStatus status, String reason) {
+        public static DocumentDetailDto fromEntity(Document document, EEmployerStatus status, String reason) {
             return DocumentDetailDto.builder()
                     .id(document.getId())
                     .hwpUrl(document.getHwpUrl())
@@ -81,14 +81,14 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
                         partTimeEmploymentPermits != null ?
                                 DocumentDetailDto.fromEntity(
                                         partTimeEmploymentPermits,
-                                        partTimeEmploymentPermits.getEmployeeStatus() != null ? partTimeEmploymentPermits.getEmployeeStatus() : null,
+                                        partTimeEmploymentPermits.getEmployerStatus() != null ? partTimeEmploymentPermits.getEmployerStatus() : null,
                                         partTimeEmploymentPermitReject != null ? partTimeEmploymentPermitReject.getReason() : null)
                                 : null)
                 .standardLaborContract(
                         standardLaborContract != null ?
                                 DocumentDetailDto.fromEntity(
                                         standardLaborContract,
-                                        standardLaborContract.getEmployeeStatus() != null ? standardLaborContract.getEmployeeStatus() : null,
+                                        standardLaborContract.getEmployerStatus() != null ? standardLaborContract.getEmployerStatus() : null,
                                         standardLaborContractReject != null ? standardLaborContractReject.getReason() : null)
                                 : null)
                 .build();
