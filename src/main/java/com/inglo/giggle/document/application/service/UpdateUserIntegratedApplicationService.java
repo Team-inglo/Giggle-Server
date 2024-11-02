@@ -5,14 +5,19 @@ import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EGender;
+import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.document.application.dto.request.UpdateUserIntegratedApplicationRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateUserIntegratedApplicationUseCase;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.IntegratedApplication;
+import com.inglo.giggle.document.domain.service.DocumentService;
 import com.inglo.giggle.document.domain.service.IntegratedApplicationService;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
+import com.inglo.giggle.posting.domain.JobPosting;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
@@ -22,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
 @Service
@@ -31,11 +37,14 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final DocumentRepository documentRepository;
+    private final DocumentService documentService;
+    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final IntegratedApplicationRepository integratedApplicationRepository;
     private final SchoolRepository schoolRepository;
     private final IntegratedApplicationService integratedApplicationService;
     private final AddressService addressService;
+    private final S3Util s3Util;
 
     @Override
     @Transactional
@@ -51,6 +60,13 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         // Document 조회
         Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 조회
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithOwnerAndUserJobPostingById(document.getUserOwnerJobPosting().getId())
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // JobPosting 조회
+        JobPosting jobPosting = userOwnerJobPosting.getJobPosting();
 
         // UserOwnerJobPosting 유저 유효성 체크
         userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
@@ -99,6 +115,29 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
                 school,
                 address
         );
+        integratedApplicationRepository.save(updatedIntegratedApplication);
+
+        // 통합신청서 유학생 상태 Confirmation으로 업데이트
+        integratedApplicationService.updateEmployeeStatusConfirmation(integratedApplication);
+
+        // 통합신청서 word 파일 생성
+        ByteArrayInputStream integratedApplicationWordStream = integratedApplicationService.createIntegratedApplicationDocxFile(integratedApplication);
+
+        // wordFile 업로드
+        String integratedApplicationWordUrl = s3Util.uploadWordFile(
+                integratedApplicationWordStream, "INTEGRATED_APPLICATION", jobPosting.getId(), jobPosting.getTitle(), userOwnerJobPosting.getOwner().getOwnerName(), userOwnerJobPosting.getUser().getName()
+        );
+        // 통합신청서 hwp 파일 생성
+        ByteArrayInputStream integratedApplicationHwpStream = integratedApplicationService.createIntegratedApplicationHwpFile(integratedApplication);
+
+        // hwpFile 업로드
+        String integratedApplicationHwpUrl = s3Util.uploadHwpFile(
+                integratedApplicationHwpStream, "INTEGRATED_APPLICATION", jobPosting.getId(), jobPosting.getTitle(), userOwnerJobPosting.getOwner().getOwnerName(), userOwnerJobPosting.getUser().getName()
+        );
+
+        // Document의 wordUrl, hwpUrl 업데이트
+        updatedIntegratedApplication
+                = (IntegratedApplication) documentService.updateUrls(integratedApplication, integratedApplicationWordUrl, integratedApplicationHwpUrl);
         integratedApplicationRepository.save(updatedIntegratedApplication);
     }
 
