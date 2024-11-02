@@ -201,21 +201,6 @@ public class PartTimeEmploymentPermitService {
             variables.put(Constants.KHOURLY_RATE, document.getHourlyRate().toString());
             variables.put(Constants.KWORK_DAYS_WEEKDAYS, document.getWorkDaysWeekDays());
             variables.put(Constants.KWORK_DAYS_WEEKENDS, document.getWorkDaysWeekends());
-            variables.put(Constants.EMPLOYEE_FULL_NAME, document.getEmployeeFullName());
-            variables.put(Constants.MAJOR, document.getMajor());
-            variables.put(Constants.TERM_OF_COMPLETION, document.getTermOfCompletion().toString());
-            variables.put(Constants.EMPLOYEE_PHONE_NUMBER, document.getEmployeePhoneNumber());
-            variables.put(Constants.EMPLOYEE_EMAIL, document.getEmployeeEmail());
-            variables.put(Constants.COMPANY_NAME, document.getCompanyName());
-            variables.put(Constants.COMPANY_REGISTRATION_NUMBER, document.getCompanyRegistrationNumber());
-            variables.put(Constants.JOB_TYPE, document.getJobType());
-            variables.put(Constants.EMPLOYER_ADDRESS, document.getEmployerAddress().getAddressName() + " " + document.getEmployerAddress().getAddressDetail());
-            variables.put(Constants.EMPLOYER_NAME, document.getEmployerName());
-            variables.put(Constants.EMPLOYER_PHONE_NUMBER, document.getEmployerPhoneNumber());
-            variables.put(Constants.WORK_PERIOD, document.getWorkPeriod().getKrName());
-            variables.put(Constants.HOURLY_RATE, document.getHourlyRate().toString());
-            variables.put(Constants.WORK_DAYS_WEEKDAYS, document.getWorkDaysWeekDays());
-            variables.put(Constants.WORK_DAYS_WEEKENDS, document.getWorkDaysWeekends());
 
             documentPart.variableReplace(variables);
 
@@ -233,7 +218,7 @@ public class PartTimeEmploymentPermitService {
                 assert imageBytes != null;
                 BinaryPartAbstractImage imagePart = BinaryPartAbstractImage.createImagePart(wordMLPackage, imageBytes);
                 // Inline 이미지 생성
-                Inline inlineImage = imagePart.createImageInline("Signature", "User Signature", 1, 2, 600000L, 300000L, false);
+                Inline inlineImage = imagePart.createImageInline("Signature", "User Signature", 1, 2, 1000000L, 300000L, false);
                 Anchor anchor = new Anchor();
 
                 // Inline의 extent 속성 값을 Anchor에 설정
@@ -412,7 +397,6 @@ public class PartTimeEmploymentPermitService {
     private void insertImageAtPlaceholder(MainDocumentPart documentPart, Anchor anchor) {
         try {
             boolean isPlaceholerText1Inserted = false;
-            boolean isPlaceholerText2Inserted = false;
             String xpathExpression = "//w:p";
             List<Object> paragraphNodes = documentPart.getJAXBNodesViaXPath(xpathExpression, true);
 
@@ -440,16 +424,9 @@ public class PartTimeEmploymentPermitService {
                         paragraph.getContent().add(drawing);
                         isPlaceholerText1Inserted = true;
                     }
-                    if (combinedText.toString().contains("Sig)") && !isPlaceholerText2Inserted) {
-                        // 문단에 이미지 삽입 로직
-                        Drawing drawing = new Drawing();
-                        drawing.getAnchorOrInline().add(anchor);
-                        paragraph.getContent().add(drawing);
-                        isPlaceholerText2Inserted = true;
-                    }
                 }
             }
-            if (!isPlaceholerText1Inserted || !isPlaceholerText2Inserted) {
+            if (!isPlaceholerText1Inserted) {
                 throw new Exception("Placeholder text not found in document");
             }
         } catch (Exception e) {

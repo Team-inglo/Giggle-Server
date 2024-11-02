@@ -342,7 +342,7 @@ public class StandardLaborContractService {
                 assert employerImageBytes != null;
                 BinaryPartAbstractImage employerImagePart = BinaryPartAbstractImage.createImagePart(wordMLPackage, employerImageBytes);
                 // Inline 이미지 생성
-                Inline employerInlineImage = employerImagePart.createImageInline("Signature", "Employer Signature", 1,2, 600000L, 300000L, false);
+                Inline employerInlineImage = employerImagePart.createImageInline("Signature", "Employer Signature", 1,2, 1000000L, 300000L, false);
                 Anchor employerAnchor = new Anchor();
 
                 // Inline의 extent 속성 값을 Anchor에 설정
@@ -417,7 +417,7 @@ public class StandardLaborContractService {
                 assert employeeImageBytes != null;
                 BinaryPartAbstractImage employeeImagePart = BinaryPartAbstractImage.createImagePart(wordMLPackage, employeeImageBytes);
                 // Inline 이미지 생성
-                Inline employeeInlineImage = employeeImagePart.createImageInline("Signature", "Employee Signature", 3, 4, 600000L, 300000L, false);
+                Inline employeeInlineImage = employeeImagePart.createImageInline("Signature", "Employee Signature", 3, 4, 1000000L, 300000L, false);
                 Anchor employeeAnchor = new Anchor();
 
                 // Inline의 extent 속성 값을 Anchor에 설정

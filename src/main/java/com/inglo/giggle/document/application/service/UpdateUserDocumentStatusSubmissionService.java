@@ -4,14 +4,11 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.usecase.UpdateUserDocumentStatusSubmissionUseCase;
 import com.inglo.giggle.document.domain.Document;
-import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.domain.service.IntegratedApplicationService;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
@@ -37,8 +34,6 @@ public class UpdateUserDocumentStatusSubmissionService implements UpdateUserDocu
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final StandardLaborContractService standardLaborContractService;
-    private final IntegratedApplicationRepository integratedApplicationRepository;
-    private final IntegratedApplicationService integratedApplicationService;
 
     @Override
     @Transactional
@@ -89,21 +84,6 @@ public class UpdateUserDocumentStatusSubmissionService implements UpdateUserDocu
                 standardLaborContract =
                         standardLaborContractService.updateStatusByUserSubmission(standardLaborContract);
                 standardLaborContractRepository.save(standardLaborContract);
-
-                break;
-
-            case "INTEGRATED_APPLICATION":
-
-                // IntegratedApplication 형변환
-                IntegratedApplication integratedApplication = (IntegratedApplication) document;
-
-                // IntegratedApplication 제출 유효성 체크
-                integratedApplicationService.checkUpdateOrSubmitUserIntegratedApplicationValidation(integratedApplication);
-
-                // 유학생 상태 CONFIRMATION 으로 변경 (유학생 수정 불가)
-                integratedApplication =
-                        integratedApplicationService.updateStatusBySubmission(integratedApplication);
-                integratedApplicationRepository.save(integratedApplication);
 
                 break;
 

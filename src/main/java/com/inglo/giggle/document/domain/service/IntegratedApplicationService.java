@@ -156,7 +156,7 @@ public class IntegratedApplicationService {
     public void checkUpdateOrSubmitUserIntegratedApplicationValidation(IntegratedApplication document) {
 
         // 유학생이 TEMPORARY_SAVE 가 아니면 접근 거부
-        if (!document.getEmployeeStatus().equals(EEmployeeStatus.TEMPORARY_SAVE)){
+        if (!document.getEmployeeStatus().equals(EEmployeeStatus.CONFIRMATION)){
             throw new CommonException(ErrorCode.ACCESS_DENIED);
         }
     }
@@ -222,7 +222,7 @@ public class IntegratedApplicationService {
                 assert imageBytes != null;
                 BinaryPartAbstractImage imagePart = BinaryPartAbstractImage.createImagePart(wordMLPackage, imageBytes);
                 // Inline 이미지 생성
-                Inline inlineImage = imagePart.createImageInline("Signature", "User Signature", 1, 2, 600000L, 300000L, false);
+                Inline inlineImage = imagePart.createImageInline("Signature", "User Signature", 1, 2, 1000000L, 300000L, false);
                 List<Object> paragraphNodes = documentPart.getJAXBNodesViaXPath("//w:p", true);
                 for (Object paragraphNode : paragraphNodes) {
                     if (paragraphNode instanceof P paragraph) {

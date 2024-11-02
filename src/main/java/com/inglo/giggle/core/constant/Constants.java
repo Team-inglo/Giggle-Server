@@ -34,22 +34,6 @@ public class Constants {
     public static String KWORK_DAYS_WEEKDAYS = "kwd";
     public static String KWORK_DAYS_WEEKENDS = "kwe";
 
-    public static String EMPLOYEE_FULL_NAME = "name";
-    public static String MAJOR = "전공";
-    public static String TERM_OF_COMPLETION = "학기";
-    public static String EMPLOYEE_PHONE_NUMBER = "번호";
-    public static String EMPLOYEE_EMAIL = "email";
-    public static String COMPANY_NAME = "cname";
-    public static String COMPANY_REGISTRATION_NUMBER = "crnum";
-    public static String JOB_TYPE = "job";
-    public static String EMPLOYER_ADDRESS = "addr";
-    public static String EMPLOYER_NAME = "on";
-    public static String EMPLOYER_PHONE_NUMBER = "op";
-    public static String WORK_PERIOD = "wp";
-    public static String HOURLY_RATE = "hr";
-    public static String WORK_DAYS_WEEKDAYS = "wd";
-    public static String WORK_DAYS_WEEKENDS = "we";
-
     // StandardLaborContract
     public static final String EMPLOYER_NAME1 = "employername";
     public static final String EMPLOYEE_NAME1 = "employeename";

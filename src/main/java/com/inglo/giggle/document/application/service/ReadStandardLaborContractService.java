@@ -71,9 +71,15 @@ public class ReadStandardLaborContractService implements ReadStandardLaborContra
                 throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
         }
 
-        // StandardLaborContract 조회
+        // StandardLaborContract 조회 -> null이면 유학생만 작성한 경우 or 아예 없는 경우
         StandardLaborContract standardLaborContract = standardLaborContractRepository.findWithWeeklyRestDaysAndInsurancesById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                .orElse(null);
+
+        // StandardLaborContract가 null이면 다시 조회. 예외가 발생하면 아예 없는경우, 아니면 유학생만 작성한 경우
+        if (standardLaborContract == null) {
+            standardLaborContract = standardLaborContractRepository.findById(documentId)
+                    .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        }
 
         // ContractWorkDayTime 조회
         List<ContractWorkDayTime> contractWorkDayTimes = contractWorkDayTimeRepository.findByStandardLaborContractId(documentId);
