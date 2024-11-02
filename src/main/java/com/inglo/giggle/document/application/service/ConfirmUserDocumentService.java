@@ -8,11 +8,9 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.document.application.usecase.ConfirmUserDocumentUseCase;
 import com.inglo.giggle.document.domain.Document;
-import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.service.DocumentService;
-import com.inglo.giggle.document.domain.service.IntegratedApplicationService;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
@@ -45,7 +43,6 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
     private final DocumentService documentService;
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
     private final StandardLaborContractService standardLaborContractService;
-    private final IntegratedApplicationService integratedApplicationService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
 
@@ -150,35 +147,6 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 standardLaborContract
                         = (StandardLaborContract) documentService.updateUrls(standardLaborContract, standardLaborContractWordUrl, standardLaborContractHwpUrl);
                 standardLaborContractRepository.save(standardLaborContract);
-
-                break;
-
-            case "INTEGRATED_APPLICATION":
-                // Document를 IntegratedApplication으로 형변환
-                IntegratedApplication integratedApplication = (IntegratedApplication) document;
-
-                // 통합신청서 유학생 상태 Confirmation으로 업데이트
-                integratedApplicationService.updateEmployeeStatusConfirmation(integratedApplication);
-
-                // 통합신청서 word 파일 생성
-                ByteArrayInputStream integratedApplicationWordStream = integratedApplicationService.createIntegratedApplicationDocxFile(integratedApplication);
-
-                // wordFile 업로드
-                String integratedApplicationWordUrl = s3Util.uploadWordFile(
-                        integratedApplicationWordStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
-                );
-                // 통합신청서 hwp 파일 생성
-                ByteArrayInputStream integratedApplicationHwpStream = integratedApplicationService.createIntegratedApplicationHwpFile(integratedApplication);
-
-                // hwpFile 업로드
-                String integratedApplicationHwpUrl = s3Util.uploadHwpFile(
-                        integratedApplicationHwpStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
-                );
-
-                // Document의 wordUrl, hwpUrl 업데이트
-                IntegratedApplication updatedIntegratedApplication
-                        = (IntegratedApplication) documentService.updateUrls(integratedApplication, integratedApplicationWordUrl, integratedApplicationHwpUrl);
-                documentRepository.save(updatedIntegratedApplication);
 
                 break;
 
