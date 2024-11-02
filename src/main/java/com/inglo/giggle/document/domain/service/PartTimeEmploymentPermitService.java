@@ -325,21 +325,6 @@ public class PartTimeEmploymentPermitService {
             variables.put("${" + Constants.KHOURLY_RATE + "}", document.getHourlyRate().toString());
             variables.put("${" + Constants.KWORK_DAYS_WEEKDAYS + "}", document.getWorkDaysWeekDays());
             variables.put("${" + Constants.KWORK_DAYS_WEEKENDS + "}", document.getWorkDaysWeekends());
-            variables.put("${" + Constants.EMPLOYEE_FULL_NAME + "}", document.getEmployeeFullName());
-            variables.put("${" + Constants.MAJOR + "}", document.getMajor());
-            variables.put("${" + Constants.TERM_OF_COMPLETION + "}", document.getTermOfCompletion().toString());
-            variables.put("${" + Constants.EMPLOYEE_PHONE_NUMBER + "}", document.getEmployeePhoneNumber());
-            variables.put("${" + Constants.EMPLOYEE_EMAIL + "}", document.getEmployeeEmail());
-            variables.put("${" + Constants.COMPANY_NAME + "}", document.getCompanyName());
-            variables.put("${" + Constants.COMPANY_REGISTRATION_NUMBER + "}", document.getCompanyRegistrationNumber());
-            variables.put("${" + Constants.JOB_TYPE + "}", document.getJobType());
-            variables.put("${" + Constants.EMPLOYER_ADDRESS + "}", document.getEmployerAddress().getAddressName() + " " + document.getEmployerAddress().getAddressDetail());
-            variables.put("${" + Constants.EMPLOYER_NAME + "}", document.getEmployerName());
-            variables.put("${" + Constants.EMPLOYER_PHONE_NUMBER + "}", document.getEmployerPhoneNumber());
-            variables.put("${" + Constants.WORK_PERIOD + "}", document.getWorkPeriod().getKrName());
-            variables.put("${" + Constants.HOURLY_RATE + "}", document.getHourlyRate().toString());
-            variables.put("${" + Constants.WORK_DAYS_WEEKDAYS + "}", document.getWorkDaysWeekDays());
-            variables.put("${" + Constants.WORK_DAYS_WEEKENDS + "}", document.getWorkDaysWeekends());
 
             modifyHwpContent(hwpFile, variables);
 
