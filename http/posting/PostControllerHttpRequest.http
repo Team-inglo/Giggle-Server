@@ -2,11 +2,9 @@
 // @no-log
 GET {{host_url}}/v1/guests/job-postings/overviews?
     page={{posting.API_4_1.page}}&
-    size={{posting.API_4_1.size}}
-#    sorting={{posting.API_4_1.sorting}}
+    size={{posting.API_4_1.size}}&
+    type = {{posting.API_4_1.type}}
 Content-Type: application/json
-
-#    type = {{posting.API_4_1.type}}
 
 #    sorting={{posting.API_4_1.sorting}}&
 #    region_1depth={{posting.API_4_1.region_1depth_name}}&

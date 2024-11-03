@@ -12,7 +12,9 @@ import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
@@ -27,7 +29,7 @@ public class ReadUserDocumentSummaryUseCaseService implements ReadUserDocumentSu
 
     private final AccountRepository accountRepository;
     private final AccountService accountService;
-    private final DocumentRepository documentRepository;
+    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
@@ -43,12 +45,12 @@ public class ReadUserDocumentSummaryUseCaseService implements ReadUserDocumentSu
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);
 
-        // Document 정보 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingById(userOwnerJobPostingId)
+        // UserOwnerJobPosting 조회
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithOwnerAndUserJobPostingById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // UserOwnerJobPosting 유저 유효성 체크
-        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 
         // 시간제 취업 허가서 조회
         PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
