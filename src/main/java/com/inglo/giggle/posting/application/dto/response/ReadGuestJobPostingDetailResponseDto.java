@@ -14,7 +14,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGuestJobPostingDetailResponseDto> {
@@ -331,11 +333,18 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
             return WorkingConditions.builder()
                     .hourlyRate(jobPosting.getHourlyRate())
                     .workPeriod(jobPosting.getWorkPeriod())
-                    .workDayTime(postingWorkDayTimeList.stream().map(WorkDayTimeDto::fromEntity).toList())
+                    .workDayTime(
+                            Optional.ofNullable(postingWorkDayTimeList)
+                                    .orElse(Collections.emptyList())
+                                    .stream()
+                                    .map(WorkDayTimeDto::fromEntity)
+                                    .toList()
+                    )
                     .jobCategory(jobPosting.getJobCategory())
                     .employmentType(jobPosting.getEmploymentType().toString())
                     .build();
         }
+
 
         @Getter
         public static class WorkDayTimeDto extends SelfValidating<WorkDayTimeDto> {
@@ -362,7 +371,7 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
                 return WorkDayTimeDto.builder()
                         .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
-                        .workStartTime(postingWorkDayTime.getJobPosting() == null ?
+                        .workStartTime(postingWorkDayTime.getWorkStartTime() == null ?
                                 NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
                         .workEndTime(postingWorkDayTime.getWorkEndTime() == null ?
                                 NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))

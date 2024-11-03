@@ -80,6 +80,9 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
         Boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
         Boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(resume, jobPosting);
 
+        log.info("isApplicableFromEducation: {}", isApplicableFromEducation);
+        log.info("isApplicableFromSchoolDistance: {}", isApplicableFromSchoolDistance);
+
         return ReadUserJobPostingValidationResponseDto.builder()
                 .isQualificationVerified(isApplicableFromEducation&&isApplicableFromSchoolDistance)
                 .build();
@@ -105,21 +108,26 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
 
     // 유저의 학교의 거리로 부터 공고에 적합한지 검증하는 메서드
     private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        Optional<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(resume.getUser().getId());
+        List<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(resume.getUser().getId());
+
         if(school.isEmpty()) {
+            log.info("School is empty");
             return false;
         }
-        School graduationSchool = school.get();
+
+        School graduationSchool = school.get(0);
         Address schoolAddress = graduationSchool.getAddress();
         Address jobPostingAddress = jobPosting.getAddress();
 
+        log.info("before OSRM Request");
         JSONObject jsonObject = restClientUtil.sendGetMethod(osrmUtil.createOSRMRequestUrl(
                 schoolAddress.getLatitude(), schoolAddress.getLongitude(),
                 jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()
         ));
-        log.info("OSRM Response: {}", jsonObject);
+        log.info("OSRM Response: {}", jsonObject.toString());
 
         RouteResponseDto routeResponseDto = osrmUtil.mapToRouteResponseDto(jsonObject);
+        log.info("RouteResponseDto: {}", routeResponseDto.toString());
 
         if(graduationSchool.getIsMetropolitan()){
             return routeResponseDto.routes().get(0).duration() < Double.parseDouble(METROPOLITAN_DURATION);

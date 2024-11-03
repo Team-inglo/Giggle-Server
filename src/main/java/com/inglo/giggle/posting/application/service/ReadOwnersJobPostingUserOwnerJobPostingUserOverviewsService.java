@@ -93,7 +93,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
         // 학교 정보 조회
         Map<UUID, String> userSchoolMap = schoolRepository.findUserIdsWithMostRecentSchoolNames(userIds).stream()
                 .collect(Collectors.toMap(
-                        result -> (UUID) result[0],
+                        result -> UUID.fromString((String) result[0]),
                         result -> (String) result[1],
                         (existing, replacement) -> existing
                 ));

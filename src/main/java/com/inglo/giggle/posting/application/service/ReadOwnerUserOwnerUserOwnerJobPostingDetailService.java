@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,14 +34,14 @@ public class ReadOwnerUserOwnerUserOwnerJobPostingDetailService implements ReadO
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // User에 속한 School 조회
-        Optional<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(
+        List<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(
                 userOwnerJobPosting.getUser().getId()
         );
 
         // DTO 변환
         return ReadOwnerUserOwnerJobPostingDetailResponseDto.of(
                 userOwnerJobPosting,
-                school.orElse(null)
+                school.isEmpty() ? null : school.get(0)
         );
     }
 }

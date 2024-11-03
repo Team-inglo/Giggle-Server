@@ -55,7 +55,6 @@ public record CreateOwnerJobPostingRequestDto(
         @JsonProperty("gender")
         EGender gender,
 
-        @NotNull
         @JsonProperty("age_restriction")
         Integer ageRestriction,
 

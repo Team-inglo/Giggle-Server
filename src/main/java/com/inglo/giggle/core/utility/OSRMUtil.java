@@ -16,7 +16,7 @@ public class OSRMUtil {
     @Value("${osrm.path}")
     private String path;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String createOSRMRequestUrl(double startLat, double startLon, double endLat, double endLon) {
         return UriComponentsBuilder.fromHttpUrl(osrmUrl)

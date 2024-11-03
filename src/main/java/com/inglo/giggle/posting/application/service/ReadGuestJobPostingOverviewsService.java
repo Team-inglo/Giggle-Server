@@ -39,7 +39,6 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
     private static final String TRENDING = "TRENDING";
     private static final String RECENTLY = "RECENTLY";
     private static final String BOOKMARKED = "BOOKMARKED";
-    private static final String ANY_KEYWORD = "ANY_KEYWORD";
 
     @Override
     @Transactional(readOnly = true)
@@ -166,7 +165,6 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(sortedJobPostingsPage);
 
         } else {
-
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(jobPostingRepository.findRecentJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,

@@ -79,7 +79,7 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
                 requestDto.workPeriod(),
                 requestDto.recruitmentNumber() == null ? null : requestDto.recruitmentNumber(), // null인 경우 모집인원 무관
                 requestDto.gender(),
-                requestDto.ageRestriction(),
+                requestDto.ageRestriction() == null ? null : requestDto.ageRestriction(),
                 requestDto.educationLevel(),
                 requestDto.visa(),
                 requestDto.recruiterName(),

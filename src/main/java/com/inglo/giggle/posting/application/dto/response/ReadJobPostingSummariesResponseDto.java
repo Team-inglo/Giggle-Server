@@ -90,7 +90,7 @@ public class ReadJobPostingSummariesResponseDto extends SelfValidating<ReadJobPo
                 JobPosting jobPosting
         ) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null ? null : jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa().toString())
                     .jobCategory(jobPosting.getJobCategory().toString())
                     .build();

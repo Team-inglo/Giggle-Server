@@ -69,7 +69,7 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
                 requestDto.workPeriod(),
                 requestDto.recruitmentNumber() == null ? null: requestDto.recruitmentNumber(),
                 requestDto.gender(),
-                requestDto.ageRestriction(),
+                requestDto.ageRestriction() == null ? null : requestDto.ageRestriction(),
                 requestDto.educationLevel(),
                 requestDto.visa(),
                 requestDto.recruiterName(),

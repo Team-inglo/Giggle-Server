@@ -16,7 +16,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPostingDetailResponseDto> {
@@ -393,7 +395,13 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             return WorkingConditions.builder()
                     .hourlyRate(jobPosting.getHourlyRate())
                     .workPeriod(jobPosting.getWorkPeriod())
-                    .workDayTime(postingWorkDayTimeList.stream().map(WorkDayTimeDto::fromEntity).toList())
+                    .workDayTime(
+                            Optional.ofNullable(postingWorkDayTimeList)
+                                    .orElse(Collections.emptyList())
+                                    .stream()
+                                    .map(WorkDayTimeDto::fromEntity)
+                                    .toList()
+                    )
                     .jobCategory(jobPosting.getJobCategory())
                     .employmentType(jobPosting.getEmploymentType().toString())
                     .build();
@@ -423,8 +431,10 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             public static WorkDayTimeDto fromEntity(PostingWorkDayTime postingWorkDayTime) {
                 return WorkDayTimeDto.builder()
                         .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
-                        .workStartTime(postingWorkDayTime.getWorkEndTime() == null ? NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
-                        .workEndTime(postingWorkDayTime.getWorkEndTime() == null ? NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
+                        .workStartTime(postingWorkDayTime.getWorkEndTime() == null ?
+                                NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
+                        .workEndTime(postingWorkDayTime.getWorkEndTime() == null ?
+                                NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
                         .build();
             }
         }
