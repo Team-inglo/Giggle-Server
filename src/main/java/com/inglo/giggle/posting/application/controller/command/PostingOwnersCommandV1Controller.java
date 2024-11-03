@@ -1,6 +1,5 @@
 package com.inglo.giggle.posting.application.controller.command;
 
-import com.inglo.giggle.account.application.dto.request.UpdateOwnerRequestDto;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.request.CreateOwnerJobPostingRequestDto;
