@@ -53,13 +53,17 @@ public class PostingOwnersQueryV1Controller {
     @GetMapping("/owners/job-postings/overviews")
     public ResponseDto<ReadOwnerJobPostingOverviewsResponseDto> readOwnerJobPostingList(
             @AccountID UUID accountId,
-            Integer page,
-            Integer size
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "size") Integer size,
+            @RequestParam(value = "sorting", defaultValue = "DESCENDING") String sorting
+
+
     ) {
         return ResponseDto.ok(readOwnerJobPostingOverviewsUseCase.execute(
                 accountId,
                 page,
-                size
+                size,
+                sorting
         ));
     }
 

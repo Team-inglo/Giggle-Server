@@ -223,7 +223,7 @@ public class JobPosting {
         int weekendHours = 0;
 
         for (PostingWorkDayTime workDayTime : workDayTimes) {
-            if (workDayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE) {
+            if (workDayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE || workDayTime.getWorkStartTime() == null || workDayTime.getWorkEndTime() == null) {
                 continue;
             }
 

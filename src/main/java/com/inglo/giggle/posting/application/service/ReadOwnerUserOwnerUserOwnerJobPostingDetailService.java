@@ -34,14 +34,14 @@ public class ReadOwnerUserOwnerUserOwnerJobPostingDetailService implements ReadO
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // User에 속한 School 조회
-        List<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDesc(
                 userOwnerJobPosting.getUser().getId()
         );
 
         // DTO 변환
         return ReadOwnerUserOwnerJobPostingDetailResponseDto.of(
                 userOwnerJobPosting,
-                school.isEmpty() ? null : school.get(0)
+                school.orElse(null)
         );
     }
 }

@@ -20,6 +20,7 @@ public interface ReadOwnerJobPostingOverviewsUseCase {
     ReadOwnerJobPostingOverviewsResponseDto execute(
             UUID accountId,
             Integer page,
-            Integer size
+            Integer size,
+            String sorting
     );
 }

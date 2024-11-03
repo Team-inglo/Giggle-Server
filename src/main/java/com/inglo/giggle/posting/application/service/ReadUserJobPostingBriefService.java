@@ -108,12 +108,12 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
 
 
     private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        List<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(resume.getUser().getId());
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDesc(resume.getUser().getId());
         if (school.isEmpty()) {
             return false;
         }
 
-        School graduationSchool = school.get(0);
+        School graduationSchool = school.get();
         Address schoolAddress = graduationSchool.getAddress();
         Address jobPostingAddress = jobPosting.getAddress();
 

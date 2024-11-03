@@ -108,14 +108,14 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
 
     // 유저의 학교의 거리로 부터 공고에 적합한지 검증하는 메서드
     private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        List<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(resume.getUser().getId());
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDesc(resume.getUser().getId());
 
         if(school.isEmpty()) {
             log.info("School is empty");
             return false;
         }
 
-        School graduationSchool = school.get(0);
+        School graduationSchool = school.get();
         Address schoolAddress = graduationSchool.getAddress();
         Address jobPostingAddress = jobPosting.getAddress();
 

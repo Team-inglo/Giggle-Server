@@ -237,7 +237,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
 
         public static Tags fromEntity(JobPosting jobPosting) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null ? Boolean.TRUE : jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa())
                     .jobCategory(jobPosting.getJobCategory())
                     .build();

@@ -174,7 +174,7 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
         public static Tags fromEntity(JobPosting jobPosting) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa())
                     .jobCategory(jobPosting.getJobCategory())
                     .build();
@@ -250,7 +250,7 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
         public static RecruitmentConditions fromEntity(JobPosting jobPosting) {
             return RecruitmentConditions.builder()
-                    .recruitmentDeadline(DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
+                    .recruitmentDeadline(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
                     .education(jobPosting.getEducationLevel().toString())
                     .numberOfRecruits(jobPosting.getRecruitmentNumber())
                     .visa(jobPosting.getVisa())

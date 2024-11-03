@@ -74,7 +74,6 @@ public class ReadUserBookMarkOverviewResponseDto extends SelfValidating<ReadUser
         @JsonProperty("hourly_rate")
         private final Integer hourlyRate;
 
-        @NotNull(message = "recruitment_dead_line은 null이 될 수 없습니다.")
         @JsonProperty("recruitment_dead_line")
         private final String recruitmentDeadLine;
 
@@ -113,7 +112,7 @@ public class ReadUserBookMarkOverviewResponseDto extends SelfValidating<ReadUser
                     .summaries(Summaries.of(jobPosting))
                     .tags(Tags.of(jobPosting))
                     .hourlyRate(jobPosting.getHourlyRate())
-                    .recruitmentDeadLine(DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
+                    .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
                     .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
                     .build();
         }
@@ -177,7 +176,7 @@ public class ReadUserBookMarkOverviewResponseDto extends SelfValidating<ReadUser
 
             public static Tags of(JobPosting jobPosting) {
                 return Tags.builder()
-                        .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                        .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                         .visa(jobPosting.getVisa())
                         .jobCategory(jobPosting.getJobCategory())
                         .build();

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,18 +26,23 @@ public class ReadOwnerJobPostingOverviewsService implements ReadOwnerJobPostingO
     private final OwnerRepository ownerRepository;
     private final JobPostingRepository jobPostingRepository;
 
+    private final static String DESCENDING = "DESCENDING";
+
     @Override
     @Transactional(readOnly = true)
-    public ReadOwnerJobPostingOverviewsResponseDto execute(UUID accountId, Integer page, Integer size) {
+    public ReadOwnerJobPostingOverviewsResponseDto execute(UUID accountId, Integer page, Integer size, String sorting) {
 
         // 고용주 조회 및 검증
         Owner owner = ownerRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        Sort sort = sorting.equals(DESCENDING) ?
+                Sort.by(Sort.Order.desc("createdAt")) : Sort.by(Sort.Order.asc("createdAt"));
+
         // 고용주가 등록한 공고 리스트 조회
         Page<JobPosting> jobPostingPageList = jobPostingRepository.findWithPageByOwner(
                 owner,
-                PageRequest.of(page - 1, size)
+                PageRequest.of(page - 1, size, sort)
         );
 
         // DTO 반환

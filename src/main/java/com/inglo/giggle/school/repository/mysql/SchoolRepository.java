@@ -15,14 +15,13 @@ import java.util.UUID;
 @Repository
 public interface SchoolRepository extends JpaRepository<School, Long>{
 
-    @Query("SELECT DISTINCT s FROM School s " +
+    @Query("SELECT s FROM School s " +
             "JOIN Education e ON s.id = e.school.id " +
             "JOIN Resume r ON e.resume.accountId = r.accountId " +
             "JOIN User u ON r.accountId = u.id " +
-            "JOIN UserOwnerJobPosting uojp ON uojp.user.id = u.id " +
-            "WHERE uojp.user.id = :userId " +
+            "WHERE u.id = :userId " +
             "ORDER BY e.graduationDate DESC")
-    List<School> findMostRecentGraduationSchoolByUserId(@Param("userId") UUID userId);
+    Optional<School> findTopByUserIdOrderByGraduationDateDesc(@Param("userId") UUID userId);
 
 
     @Query(value = "SELECT BIN_TO_UUID(u.account_id) AS userId, s.school_name AS schoolName FROM schools s " +
