@@ -356,12 +356,16 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
                 this.workEndTime = workEndTime;
                 this.validateSelf();
             }
+            private static final String NEGOTIABLE_TO_KO_STRING = "협의가능";
 
             public static WorkDayTimeDto fromEntity(PostingWorkDayTime postingWorkDayTime) {
+
                 return WorkDayTimeDto.builder()
                         .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
-                        .workStartTime(DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
-                        .workEndTime(DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
+                        .workStartTime(postingWorkDayTime.getJobPosting() == null ?
+                                NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
+                        .workEndTime(postingWorkDayTime.getWorkEndTime() == null ?
+                                NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
                         .build();
             }
         }
