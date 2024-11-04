@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,6 +28,14 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
 
     @EntityGraph(attributePaths = {"jobPosting"})
     Page<UserOwnerJobPosting> findAllPagedWithJobPostingByUserAndStep(User user, EApplicationStep step, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"jobPosting"})
+    @Query("SELECT u FROM UserOwnerJobPosting u WHERE u.user = :user AND u.step IN :steps")
+    Page<UserOwnerJobPosting> findAllPagedWithJobPostingByUserAndSteps(
+            @Param("user") User user,
+            @Param("steps") List<EApplicationStep> steps,
+            Pageable pageable
+    );
 
     @EntityGraph(attributePaths = {"jobPosting", "owner", "user","jobPosting.workDayTimes"})
     Optional<UserOwnerJobPosting> findWithJobPostingAndOwnerAndJobPostingsWorkDayTimesById(Long id);

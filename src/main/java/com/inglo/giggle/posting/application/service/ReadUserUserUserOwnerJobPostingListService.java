@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,6 +29,15 @@ public class ReadUserUserUserOwnerJobPostingListService implements ReadUserUserO
     private final static String property = "updatedAt";
     private final static String ASCENDING = "ASCENDING";
     private final static String ALL = "ALL";
+
+    private final static List<EApplicationStep> applicationSteps = List.of(
+            EApplicationStep.RESUME_UNDER_REVIEW,
+            EApplicationStep.WAITING_FOR_INTERVIEW,
+            EApplicationStep.FILLING_OUT_DOCUMENTS,
+            EApplicationStep.DOCUMENT_UNDER_REVIEW,
+            EApplicationStep.APPLICATION_IN_PROGRESS,
+            EApplicationStep.REGISTERING_RESULTS
+    );
 
     @Override
     @Transactional(readOnly = true)
@@ -70,16 +80,26 @@ public class ReadUserUserUserOwnerJobPostingListService implements ReadUserUserO
         }
 
         EApplicationStep step = EApplicationStep.fromString(status);
+
+        if (step.equals(EApplicationStep.APPLICATION_IN_PROGRESS)) {
+            return userOwnerJobPostingRepository.findAllPagedWithJobPostingByUserAndSteps(
+                    user,
+                    applicationSteps,
+                    pageable
+            );
+        }
+
         return userOwnerJobPostingRepository.findAllPagedWithJobPostingByUserAndStep(
                 user,
                 step,
                 pageable
         );
+
     }
 
     // 정렬 기준에 따라 정렬하는 메서드
     private Sort getSortByProperty(String sortingType) {
-        if(sortingType.equals(ASCENDING)) {
+        if (sortingType.equals(ASCENDING)) {
             return Sort.by(ReadUserUserUserOwnerJobPostingListService.property).ascending();
         }
         return Sort.by(ReadUserUserUserOwnerJobPostingListService.property).descending();
