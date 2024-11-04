@@ -4,11 +4,9 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.dto.response.ReadUserDocumentSummaryResponseDto;
 import com.inglo.giggle.document.application.usecase.ReadUserDocumentSummaryUseCase;
-import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
@@ -25,7 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ReadUserDocumentSummaryUseCaseService implements ReadUserDocumentSummaryUseCase {
+public class ReadUserDocumentSummaryService implements ReadUserDocumentSummaryUseCase {
 
     private final AccountRepository accountRepository;
     private final AccountService accountService;

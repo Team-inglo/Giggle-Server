@@ -1,9 +1,9 @@
 package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.account.domain.Owner;
+import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
-import com.inglo.giggle.account.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

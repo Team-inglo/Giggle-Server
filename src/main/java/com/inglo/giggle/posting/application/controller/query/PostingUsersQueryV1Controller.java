@@ -16,9 +16,9 @@ public class PostingUsersQueryV1Controller {
 
     private final ReadUserUserOwnerJobPostingListUseCase readUserUserOwnerJobPostingListUseCase;
     private final ReadUserUserOwnerJobPostingDetailUseCase readUserUserOwnerJobPostingDetailUseCase;
-    private final ReadUserOwnerJobPostingBriefListUseCase readUserOwnerJobPostingBriefListUseCase;
-    private final ReadUserOwnerJobPostingCountUseCase readUserOwnerJobPostingCountUseCase;
-    private final ReadUserOwnerJobPostingJobPostingRecruiterUserCase readUserOwnerJobPostingJobPostingRecruiterUserCase;
+    private final ReadUserUserOwnerJobPostingBriefListUseCase readUserUserOwnerJobPostingBriefListUseCase;
+    private final ReadUserUserOwnerJobPostingCountUseCase readUserUserOwnerJobPostingCountUseCase;
+    private final ReadUserUserOwnerJobPostingJobPostingRecruiterUserCase readUserUserOwnerJobPostingJobPostingRecruiterUserCase;
     private final ReadUserJobPostingValidationUseCase readUserJobPostingValidationUseCase;
     private final ReadUserBookMarkOverviewUseCase readUserBookMarkOverviewUseCase;
     private final ReadUserBookMarkCountUseCase readUserBookMarkCountUseCase;
@@ -135,7 +135,7 @@ public class PostingUsersQueryV1Controller {
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size
     ) {
-       return ResponseDto.ok(readUserOwnerJobPostingBriefListUseCase.execute(
+       return ResponseDto.ok(readUserUserOwnerJobPostingBriefListUseCase.execute(
                accountId,
                page,
                size
@@ -149,7 +149,7 @@ public class PostingUsersQueryV1Controller {
     public ResponseDto<ReadUserOwnerJobPostingCountResponseDto> readUserAppliedJobCount(
             @AccountID UUID accountId
     ) {
-        return ResponseDto.ok(readUserOwnerJobPostingCountUseCase.execute(
+        return ResponseDto.ok(readUserUserOwnerJobPostingCountUseCase.execute(
                 accountId
         ));
     }
@@ -162,7 +162,7 @@ public class PostingUsersQueryV1Controller {
             @AccountID UUID accountId,
             @PathVariable(name = "user-owner-job-postings-id") Long userOwnerJobPostingsId
     ) {
-        return ResponseDto.ok(readUserOwnerJobPostingJobPostingRecruiterUserCase.execute(
+        return ResponseDto.ok(readUserUserOwnerJobPostingJobPostingRecruiterUserCase.execute(
                 accountId,
                 userOwnerJobPostingsId
         ));

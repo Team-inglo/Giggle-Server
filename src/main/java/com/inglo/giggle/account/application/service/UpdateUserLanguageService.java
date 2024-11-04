@@ -15,16 +15,21 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UpdateUserLanguageService implements UpdateUserLanguageUseCase {
+
     private final UserRepository userRepository;
     private final UserService userService;
 
     @Override
     @Transactional
     public void execute(UUID accountId, UpdateUserLanguageRequestDto requestDto) {
+
+        // 유저 정보 조회
         User user = userRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        // 언어 업데이트
         user = userService.updateLanguage(user, requestDto.language());
         userRepository.save(user);
     }
+
 }

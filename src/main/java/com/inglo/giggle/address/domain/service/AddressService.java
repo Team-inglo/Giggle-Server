@@ -1,7 +1,6 @@
 package com.inglo.giggle.address.domain.service;
 
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.address.dto.request.AddressRequestDto;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -6,5 +6,5 @@ import java.util.UUID;
 
 @UseCase
 public interface ConfirmUserDocumentUseCase {
-    void confirmUserDocument(UUID accountId, Long documentId);
+    void execute(UUID accountId, Long documentId);
 }

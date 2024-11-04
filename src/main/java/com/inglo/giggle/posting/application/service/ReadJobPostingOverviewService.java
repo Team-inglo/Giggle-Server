@@ -11,7 +11,6 @@ import com.inglo.giggle.posting.domain.type.*;
 import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +59,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String employmentType,
             String visa
     ) {
+        // Account 조회
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 

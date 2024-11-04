@@ -1,7 +1,6 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.mysql.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.dto.response.ReadUserUserOwnerJobPostingListResponseDto;
@@ -9,6 +8,9 @@ import com.inglo.giggle.posting.application.usecase.ReadUserUserOwnerJobPostingL
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +23,11 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ReadUserUserUserOwnerJobPostingListService implements ReadUserUserOwnerJobPostingListUseCase {
+public class ReadUserUserOwnerJobPostingListService implements ReadUserUserOwnerJobPostingListUseCase {
 
-    private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final static String property = "updatedAt";
     private final static String ASCENDING = "ASCENDING";
@@ -38,9 +42,15 @@ public class ReadUserUserUserOwnerJobPostingListService implements ReadUserUserO
             String sortingType,
             String status
     ) {
-        // 유학생 조회
-        User user = userRepository.findById(accountId)
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 검사
+        accountService.checkUserValidation(account);
+
+        // User 조회
+        User user = (User) account;
 
         // 정렬 기준 및 페이지네이션 설정
         Pageable pageable = PageRequest.of(page - 1, size, getSortByProperty(sortingType));
@@ -80,9 +90,9 @@ public class ReadUserUserUserOwnerJobPostingListService implements ReadUserUserO
     // 정렬 기준에 따라 정렬하는 메서드
     private Sort getSortByProperty(String sortingType) {
         if(sortingType.equals(ASCENDING)) {
-            return Sort.by(ReadUserUserUserOwnerJobPostingListService.property).ascending();
+            return Sort.by(ReadUserUserOwnerJobPostingListService.property).ascending();
         }
-        return Sort.by(ReadUserUserUserOwnerJobPostingListService.property).descending();
+        return Sort.by(ReadUserUserOwnerJobPostingListService.property).descending();
     }
 
 }

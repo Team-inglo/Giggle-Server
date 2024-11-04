@@ -1,7 +1,6 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
@@ -16,8 +15,10 @@ import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.CompanyImageService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
 import com.inglo.giggle.posting.domain.service.PostWorkDayTimeService;
-import com.inglo.giggle.posting.repository.mysql.CompanyImageRepository;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +31,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCase {
 
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+
     private final JobPostingService jobPostingService;
     private final PostWorkDayTimeService postWorkDayTimeService;
 
-    private final OwnerRepository ownerRepository;
     private final JobPostingRepository jobPostingRepository;
 
     private final S3Util s3Util;
@@ -44,9 +47,15 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
     @Transactional
     public CreateOwnerJobPostingResponseDto execute(UUID accountId, List<MultipartFile> image, CreateOwnerJobPostingRequestDto requestDto) {
 
-        // 고용주 조회
-        Owner owner = ownerRepository.findById(accountId)
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 검사
+        accountService.checkOwnerValidation(account);
+
+        // 고용주 조회
+        Owner owner = (Owner) account;
 
         // 주소 생성
         Address address = addressService.createAddress(

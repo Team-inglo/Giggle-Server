@@ -1,8 +1,8 @@
 package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.account.domain.User;
+import com.inglo.giggle.core.dto.SelfValidating;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;

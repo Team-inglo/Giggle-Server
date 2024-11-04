@@ -7,7 +7,7 @@ import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPosting
 import java.util.UUID;
 
 @UseCase
-public interface ReadUserOwnerJobPostingBriefListUseCase {
+public interface ReadUserUserOwnerJobPostingBriefListUseCase {
 
     /**
      * 유저가 현재 진행중인 인터뷰 리스트를 조회합니다.

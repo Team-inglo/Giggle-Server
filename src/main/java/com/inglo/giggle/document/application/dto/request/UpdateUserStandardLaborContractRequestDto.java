@@ -7,26 +7,26 @@ import jakarta.validation.constraints.Size;
 
 public record UpdateUserStandardLaborContractRequestDto(
 
-        @NotNull
-        @Size(min = 1, max = 50)
+        @NotNull(message = "first name 을 입력해주세요.")
+        @Size(min = 1, max = 50, message = "first name은 50자 이하로 입력해주세요.")
         @JsonProperty("first_name")
         String firstName,
 
-        @NotNull
-        @Size(min = 1, max = 100)
+        @NotNull(message = "last name 을 입력해주세요.")
+        @Size(min = 1, max = 100, message = "last name은 100자 이하로 입력해주세요.")
         @JsonProperty("last_name")
         String lastName,
 
-        @NotNull
+        @NotNull(message = "주소를 입력해주세요.")
         @JsonProperty("address")
         AddressRequestDto address,
 
-        @NotNull
-        @Size(min = 10, max = 20)
+        @NotNull(message = "전화번호를 입력해주세요.")
+        @Size(min = 10, max = 20, message = "전화번호는 10자 이상, 20자 이하로 입력해주세요.")
         @JsonProperty("phone_number")
         String phoneNumber,
 
-        @NotNull
+        @NotNull(message = "서명을 입력해주세요.")
         @JsonProperty("signature_base64")
         String signatureBase64
 ) {}

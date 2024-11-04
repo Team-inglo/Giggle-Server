@@ -1,20 +1,20 @@
 package com.inglo.giggle.account.domain;
 
-import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.account.domain.type.ELanguage;
-import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.type.EGender;
+import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.BookMark;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.type.ESecurityProvider;
+import com.inglo.giggle.security.domain.type.ESecurityRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;

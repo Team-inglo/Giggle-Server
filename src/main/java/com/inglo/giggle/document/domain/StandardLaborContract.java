@@ -2,7 +2,10 @@ package com.inglo.giggle.document.domain;
 
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.type.EDayOfWeek;
-import com.inglo.giggle.document.domain.type.*;
+import com.inglo.giggle.document.domain.type.EEmployeeStatus;
+import com.inglo.giggle.document.domain.type.EEmployerStatus;
+import com.inglo.giggle.document.domain.type.EInsurance;
+import com.inglo.giggle.document.domain.type.EPaymentMethod;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

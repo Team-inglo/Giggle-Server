@@ -1,19 +1,23 @@
 package com.inglo.giggle.resume.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public record CreateUserWorkExperienceRequestDto(
         @JsonProperty("title")
-        @Size(min = 1, max = 20)
+        @NotNull(message = "title은 필수 입력 값입니다.")
+        @Size(min = 1, max = 20, message = "title은 1자 이상 20자 이하로 입력 가능합니다.")
         String title,
 
         @JsonProperty("workplace")
-        @Size(min = 1, max = 20)
+        @NotNull(message = "workplace은 필수 입력 값입니다.")
+        @Size(min = 1, max = 20, message = "workplace은 1자 이상 20자 이하로 입력 가능합니다.")
         String workplace,
 
+        @NotNull(message = "start_date은 필수 입력 값입니다.")
         @JsonProperty("start_date")
         LocalDate startDate,
 
@@ -21,7 +25,7 @@ public record CreateUserWorkExperienceRequestDto(
         LocalDate endDate,
 
         @JsonProperty("description")
-        @Size(min = 1, max = 200)
+        @Size(min = 1, max = 200, message = "description은 1자 이상 200자 이하로 입력 가능합니다.")
         String description
 ) {
 }
