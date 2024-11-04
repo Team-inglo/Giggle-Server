@@ -60,7 +60,7 @@ public class JobPosting {
     @Column(name = "gender", nullable = false)
     private EGender gender;
 
-    @Column(name = "age_restriction", nullable = false)
+    @Column(name = "age_restriction")
     private Integer ageRestriction;
 
     @Enumerated(EnumType.STRING)

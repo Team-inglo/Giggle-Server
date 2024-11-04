@@ -54,7 +54,6 @@ public record UpdateOwnerJobPostingRequestDto(
         @JsonProperty("gender")
         EGender gender,
 
-        @NotNull(message = "연령 제한은 필수 입력 값입니다.")
         @JsonProperty("age_restriction")
         Integer ageRestriction,
 
