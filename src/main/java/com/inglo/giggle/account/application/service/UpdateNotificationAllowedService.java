@@ -16,16 +16,21 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UpdateNotificationAllowedService implements UpdateNotificationAllowedUseCase {
+
     private final AccountRepository accountRepository;
     private final AccountService accountService;
 
     @Override
     @Transactional
     public void execute(UUID accountId, UpdateNotificationAllowedRequestDto requestDto) {
+
+        // 계정 정보 조회
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        // 알림 허용 여부 업데이트
         account = accountService.updateNotificationAllowed(account, requestDto.isNotificationAllowed());
         accountRepository.save(account);
     }
+
 }

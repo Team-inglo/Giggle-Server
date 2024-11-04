@@ -23,6 +23,9 @@ import com.inglo.giggle.resume.repository.mysql.EducationRepository;
 import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -38,6 +41,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class ReadUserJobPostingValidationService implements ReadUserJobPostingValidationUseCase {
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     private final JobPostAggregateService jobPostAggregateService;
     private final ResumeAggregateService resumeAggregateService;
@@ -59,6 +65,13 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
     @Override
     @Transactional(readOnly = true)
     public ReadUserJobPostingValidationResponseDto execute(UUID accountId, Long jobPostingId) throws Exception {
+
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 검사
+        accountService.checkUserValidation(account);
 
         // 공고 조회
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)

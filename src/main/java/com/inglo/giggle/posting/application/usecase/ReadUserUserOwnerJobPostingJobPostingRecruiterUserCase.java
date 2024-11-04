@@ -6,7 +6,7 @@ import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPosting
 import java.util.UUID;
 
 @UseCase
-public interface ReadUserOwnerJobPostingJobPostingRecruiterUserCase {
+public interface ReadUserUserOwnerJobPostingJobPostingRecruiterUserCase {
 
     /**
      * 유저가 지원한 공고의 담당자 정보 조회하기

@@ -4,34 +4,27 @@ import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.domain.type.*;
-
+import com.inglo.giggle.posting.domain.type.EEmploymentType;
+import com.inglo.giggle.posting.domain.type.EJobCategory;
+import com.inglo.giggle.posting.domain.type.EWorkPeriod;
+import com.inglo.giggle.posting.domain.type.EWorkingHours;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
 public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     List<JobPosting> findAllByOwner(Owner owner);
-
-    @Query("SELECT jp FROM JobPosting jp " +
-            "JOIN UserOwnerJobPosting uojp ON uojp.jobPosting.id = uojp.jobPosting.id " +
-            "JOIN Document d ON d.userOwnerJobPosting.id = uojp.id " +
-            "WHERE d.id = :documentId"
-    )
-    Optional<JobPosting> findByDocumentId(@org.springframework.data.repository.query.Param("documentId") Long documentId);
 
     @EntityGraph(attributePaths = {"owner"})
     Optional<JobPosting> findWithOwnerById(Long jobPostingId);

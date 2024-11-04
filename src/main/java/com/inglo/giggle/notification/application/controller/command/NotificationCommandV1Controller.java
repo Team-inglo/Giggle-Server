@@ -3,7 +3,6 @@ package com.inglo.giggle.notification.application.controller.command;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.notification.application.dto.ReadNotificationOverviewResponseDto;
-import com.inglo.giggle.notification.application.usecase.ReadNotificationOverviewUseCase;
 import com.inglo.giggle.notification.application.usecase.UpdateNotificationIsReadUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;

@@ -27,12 +27,12 @@ public class UpdateUserService implements UpdateUserUseCase {
     private final AccountRepository accountRepository;
     private final UserService userService;
     private final AccountService accountService;
-
     private final S3Util s3Util;
 
     @Override
     @Transactional
     public void execute(UUID accountId, UpdateUserRequestDto requestDto, MultipartFile image) {
+
         // Account 조회
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
@@ -69,4 +69,5 @@ public class UpdateUserService implements UpdateUserUseCase {
         account = accountService.updatePhoneNumber(account, requestDto.phoneNumber());
         accountRepository.save(account);
     }
+
 }

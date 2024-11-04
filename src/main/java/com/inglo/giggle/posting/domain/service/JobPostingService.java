@@ -2,6 +2,8 @@ package com.inglo.giggle.posting.domain.service;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
@@ -108,4 +110,9 @@ public class JobPostingService {
         return jobPosting.getWorkDaysPerWeekToString();
     }
 
+    public void validateUpdateJobPosting(JobPosting jobPosting, Owner owner) {
+        if (!jobPosting.getOwner().equals(owner)) {
+            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+        }
+    }
 }

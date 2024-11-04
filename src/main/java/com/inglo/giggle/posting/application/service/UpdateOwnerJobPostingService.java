@@ -11,7 +11,6 @@ import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.posting.application.dto.request.UpdateOwnerJobPostingRequestDto;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerJobPostingUseCase;
-import com.inglo.giggle.posting.domain.CompanyImage;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.CompanyImageService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
@@ -19,6 +18,9 @@ import com.inglo.giggle.posting.domain.service.PostWorkDayTimeService;
 import com.inglo.giggle.posting.repository.mysql.CompanyImageRepository;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.posting.repository.mysql.PostingWorkDayTimeRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCase {
 
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     private final OwnerRepository ownerRepository;
     private final JobPostingRepository jobPostingRepository;
@@ -49,13 +54,22 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
     @Transactional
     public void execute(List<MultipartFile> image, UUID accountId, Long jobPostingId, UpdateOwnerJobPostingRequestDto requestDto) {
 
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 검사
+        accountService.checkOwnerValidation(account);
+
         // 고용주 조회
-        Owner owner = ownerRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE));
+        Owner owner = (Owner) account;
 
         // 공고 조회
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 공고 수정 유효성 검사
+        jobPostingService.validateUpdateJobPosting(jobPosting, owner);
 
         // 주소 생성
         Address address = addressService.createAddress(

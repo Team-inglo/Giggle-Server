@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.domain.Address;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
@@ -30,6 +31,7 @@ public record AddressRequestDto(
 
         @JsonProperty("address_detail")
         @NotBlank(message = "상세 주소를 입력해주세요.")
+        @Size(max = 50, message = "상세 주소는 50자 이내로 입력해주세요.")
         String addressDetail,
 
         @JsonProperty("latitude")

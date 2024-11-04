@@ -1,8 +1,8 @@
 package com.inglo.giggle.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 import com.inglo.giggle.core.exception.error.ErrorCode;
+import lombok.Getter;
 
 @Getter
 public sealed class ExceptionDto permits ArgumentNotValidExceptionDto {

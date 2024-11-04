@@ -26,4 +26,5 @@ public class ReadOwnerDetailService implements ReadOwnerDetailUseCase {
 
         return ReadOwnerDetailResponseDto.fromEntity(owner);
     }
+
 }

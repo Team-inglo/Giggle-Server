@@ -1,10 +1,10 @@
 package com.inglo.giggle.core.listener;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import com.inglo.giggle.core.utility.MailUtil;
 import com.inglo.giggle.security.event.ChangePasswordBySystemEvent;
 import com.inglo.giggle.security.event.CompleteEmailValidationEvent;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
