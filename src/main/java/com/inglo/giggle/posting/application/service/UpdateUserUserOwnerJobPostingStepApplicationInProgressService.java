@@ -48,7 +48,7 @@ public class UpdateUserUserOwnerJobPostingStepApplicationInProgressService imple
         accountService.checkUserValidation(account);
 
         // UserOwnerJobPosting 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingById(userOwnerJobPostingId)
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithOwnerAndUserJobPostingById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // UserOwnerJobPosting 유저 유효성 체크
@@ -76,23 +76,24 @@ public class UpdateUserUserOwnerJobPostingStepApplicationInProgressService imple
         notificationRepository.save(ownerNotification);
 
         // Notification 발송
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        userOwnerJobPosting.getJobPosting().getTitle(),
-                        userNotification.getMessage(),
-                        userOwnerJobPosting.getUser().getDeviceToken()
-                )
-        );
+        if(userOwnerJobPosting.getUser().getNotificationAllowed()){
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            userNotification.getMessage(),
+                            userOwnerJobPosting.getUser().getDeviceToken()
+                    )
+            );
+        }
 
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        userOwnerJobPosting.getJobPosting().getTitle(),
-                        ownerNotification.getMessage(),
-                        userOwnerJobPosting.getOwner().getDeviceToken()
-                )
-        );
-
-
-
+        if(userOwnerJobPosting.getOwner().getNotificationAllowed()){
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            ownerNotification.getMessage(),
+                            userOwnerJobPosting.getOwner().getDeviceToken()
+                    )
+            );
+        }
     }
 }

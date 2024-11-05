@@ -100,22 +100,24 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
         );
         partTimeEmploymentPermitRepository.save(updatedPartTimeEmploymentPermit);
 
+        // Notification 생성 및 저장
         Notification notification = notificationService.createNotification(
                 EKafkaStatus.USER_PART_TIME_EMPLOYMENT_PERMIT.getMessage(),
                 document.getUserOwnerJobPosting(),
                 ENotificationType.USER
         );
-
         notificationRepository.save(notification);
 
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        document.getUserOwnerJobPosting().getJobPosting().getTitle(),
-                        notification.getMessage(),
-                        document.getUserOwnerJobPosting().getUser().getDeviceToken()
-                )
-        );
-
+        // NotificationEvent 생성 및 발행
+        if(account.getNotificationAllowed()) {
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            document.getUserOwnerJobPosting().getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            document.getUserOwnerJobPosting().getUser().getDeviceToken()
+                    )
+            );
+        }
     }
 
 

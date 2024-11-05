@@ -46,8 +46,11 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
     @EntityGraph(attributePaths = {"jobPosting"})
     Optional<UserOwnerJobPosting> findWithJobPostingById(Long id);
 
-    @EntityGraph(attributePaths = {"jobPosting"})
-    Page<UserOwnerJobPosting> findWithJobPostingByOwner(Owner owner, Pageable pageable);
+    @EntityGraph(attributePaths = {"jobPosting", "owner"})
+    Optional<UserOwnerJobPosting> findWithJobPostingAndOwnerById(Long id);
+
+    @EntityGraph(attributePaths = {"jobPosting", "user"})
+    Optional<UserOwnerJobPosting> findWithJobPostingAndUserById(Long id);
 
     @EntityGraph(attributePaths = {"jobPosting", "owner", "user"})
     Optional<UserOwnerJobPosting> findWithOwnerAndUserJobPostingById(Long id);

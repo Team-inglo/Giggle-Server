@@ -48,7 +48,7 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
         accountService.checkUserValidation(account);
 
         // UserOwnerJobPosting 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingById(userOwnerJobPostingId)
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingAndOwnerById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // UserOwnerJobPosting 유저 유효성 체크
@@ -69,13 +69,15 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
 
         notificationRepository.save(notification);
 
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        userOwnerJobPosting.getJobPosting().getTitle(),
-                        notification.getMessage(),
-                        userOwnerJobPosting.getOwner().getDeviceToken()
-                )
-        );
-
+        // Notification 발송
+        if(userOwnerJobPosting.getOwner().getNotificationAllowed()){
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            userOwnerJobPosting.getOwner().getDeviceToken()
+                    )
+            );
+        }
     }
 }

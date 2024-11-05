@@ -69,16 +69,17 @@ public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implem
                 userOwnerJobPosting,
                 ENotificationType.USER
         );
-
         notificationRepository.save(notification);
 
         // NotificationEvent 생성 및 발행
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        userOwnerJobPosting.getJobPosting().getTitle(),
-                        notification.getMessage(),
-                        userOwnerJobPosting.getUser().getDeviceToken()
-                )
-        );
+        if(account.getNotificationAllowed()){
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            userOwnerJobPosting.getUser().getDeviceToken()
+                    )
+            );
+        }
     }
 }

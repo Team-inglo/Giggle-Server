@@ -75,21 +75,24 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
         // 유저-공고 매핑 저장
         UserOwnerJobPosting savedUserOwnerJobPosting = userOwnerJobPostingRepository.save(userOwnerJobPosting);
 
+        // Notification 생성 및 저장
         Notification notification = notificationService.createNotification(
                 EKafkaStatus.OWNER_NEW_APPLICANT.getMessage(),
                 userOwnerJobPosting,
                 ENotificationType.OWNER
         );
-
         notificationRepository.save(notification);
 
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        userOwnerJobPosting.getJobPosting().getTitle(),
-                        notification.getMessage(),
-                        userOwnerJobPosting.getOwner().getDeviceToken()
-                )
-        );
+        // NotificationEvent 발행
+        if(account.getNotificationAllowed()){
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            userOwnerJobPosting.getOwner().getDeviceToken()
+                    )
+            );
+        }
 
         // DTO 반환
         return CreateUserJobPostingResponseDto.of(

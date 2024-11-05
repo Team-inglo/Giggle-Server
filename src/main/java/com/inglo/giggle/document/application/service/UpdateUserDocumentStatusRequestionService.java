@@ -19,6 +19,7 @@ import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepositor
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.domain.service.NotificationEventService;
 import com.inglo.giggle.notification.domain.service.NotificationService;
+import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -46,6 +47,7 @@ public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocu
     private final RejectService rejectService;
     private final NotificationService notificationService;
     private final NotificationEventService notificationEventService;
+    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -107,19 +109,22 @@ public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocu
                 throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
         }
 
+        // Notification 생성 및 저장
         Notification notification = notificationService.createNotification(
                 EKafkaStatus.OWNER_DOCUMENT_REQUEST.getMessage(),
                 document.getUserOwnerJobPosting(),
                 ENotificationType.OWNER
         );
+        notificationRepository.save(notification);
 
-        notificationEventService.createNotificationEvent(
-                document.getUserOwnerJobPosting().getJobPosting().getTitle(),
-                notification.getMessage(),
-                document.getUserOwnerJobPosting().getOwner().getDeviceToken()
-        );
-
-
+        // NotificationEvent 발행
+        if(account.getNotificationAllowed()) {
+            notificationEventService.createNotificationEvent(
+                    document.getUserOwnerJobPosting().getJobPosting().getTitle(),
+                    notification.getMessage(),
+                    document.getUserOwnerJobPosting().getOwner().getDeviceToken()
+            );
+        }
     }
 
 }
