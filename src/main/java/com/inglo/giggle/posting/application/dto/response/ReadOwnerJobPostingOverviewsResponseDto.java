@@ -10,7 +10,7 @@ import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 import java.time.Duration;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -101,8 +101,8 @@ public class ReadOwnerJobPostingOverviewsResponseDto extends SelfValidating<Read
         ) {
 
             int durationOfDays = (int) Duration.between(
-                    jobPosting.getCreatedAt().atStartOfDay(),
-                    LocalDate.now().atStartOfDay()
+                    jobPosting.getCreatedAt(),
+                    LocalDateTime.now()
             ).toDays();
 
             return JobPostingOverviewDto.builder()

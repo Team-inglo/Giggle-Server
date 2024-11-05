@@ -303,7 +303,8 @@ public class PartTimeEmploymentPermitService {
             return new ByteArrayInputStream(outputStream.toByteArray());
 
         } catch (Exception e) {
-            throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
+            log.error("Error creating PartTimeEmploymentPermit docx file: ", e);
+            return null;
         }
     }
 

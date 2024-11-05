@@ -106,10 +106,6 @@ public class JobPostingService {
         return jobPosting.calculateWorkHours();
     }
 
-    public String getWorkDaysPerWeekToString(JobPosting jobPosting) {
-        return jobPosting.getWorkDaysPerWeekToString();
-    }
-
     public void validateUpdateJobPosting(JobPosting jobPosting, Owner owner) {
         if (!jobPosting.getOwner().equals(owner)) {
             throw new CommonException(ErrorCode.INVALID_ARGUMENT);

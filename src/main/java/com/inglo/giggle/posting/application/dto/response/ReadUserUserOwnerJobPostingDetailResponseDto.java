@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.PostingWorkDayTime;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
@@ -126,8 +127,8 @@ public class ReadUserUserOwnerJobPostingDetailResponseDto extends SelfValidating
         public static WorkDayTime fromEntity(PostingWorkDayTime postingWorkDayTime) {
             return WorkDayTime.builder()
                     .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
-                    .workStartTime(postingWorkDayTime.getWorkStartTime() == null ? null : postingWorkDayTime.getWorkStartTime().toString())
-                    .workEndTime(postingWorkDayTime.getWorkEndTime() == null ? null: postingWorkDayTime.getWorkEndTime().toString())
+                    .workStartTime(postingWorkDayTime.getWorkStartTime() == null ? null : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
+                    .workEndTime(postingWorkDayTime.getWorkEndTime() == null ? null: DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
                     .build();
         }
     }

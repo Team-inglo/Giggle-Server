@@ -120,7 +120,7 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
                     )
                     .hourlyRate(jobPosting.getHourlyRate())
                     .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
-                    .createdAt(jobPosting.getCreatedAt().toString())
+                    .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                     .build();
         }
     }

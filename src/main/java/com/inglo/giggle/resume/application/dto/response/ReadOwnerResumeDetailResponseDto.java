@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.resume.domain.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -159,8 +160,8 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
                     .title(workExperience.getExperienceTitle())
                     .workplace(workExperience.getWorkplace())
                     .description(workExperience.getDescription())
-                    .startDate(workExperience.getStartDate() != null ? workExperience.getStartDate().toString() : null)
-                    .endDate(workExperience.getEndDate() != null ? workExperience.getEndDate().toString() : null)
+                    .startDate(workExperience.getStartDate() != null ? DateTimeUtil.convertLocalDateToString(workExperience.getStartDate()) : null)
+                    .endDate(workExperience.getEndDate() != null ? DateTimeUtil.convertLocalDateToString(workExperience.getEndDate()) : null)
                     .duration(workExperience.getEndDate() != null ?
                             (int) ChronoUnit.MONTHS.between(workExperience.getStartDate(), workExperience.getEndDate())
                             : (int) ChronoUnit.MONTHS.between(workExperience.getStartDate(), LocalDate.now()))
@@ -209,8 +210,8 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
                     .educationLevel(education.getEducationLevel().name())
                     .schoolName(education.getSchool().getSchoolName())
                     .major(education.getMajor())
-                    .startDate(education.getEnrollmentDate().toString())
-                    .endDate(education.getGraduationDate().toString())
+                    .startDate(DateTimeUtil.convertLocalDateToString(education.getEnrollmentDate()))
+                    .endDate(DateTimeUtil.convertLocalDateToString(education.getGraduationDate()))
                     .grade(education.getGrade())
                     .build();
         }

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +98,7 @@ public class JobPosting {
     /* Timestamp Column --------------------------- */
     /* -------------------------------------------- */
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     /* -------------------------------------------- */
     /* Embedded Column ---------------------------- */
@@ -152,7 +153,7 @@ public class JobPosting {
         this.description = description;
         this.preferredConditions = preferredConditions;
         this.employmentType = employmentType;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
         this.owner = owner;
         this.address = address;
     }
