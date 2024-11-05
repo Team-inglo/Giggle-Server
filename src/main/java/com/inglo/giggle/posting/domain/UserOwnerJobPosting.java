@@ -3,6 +3,7 @@ package com.inglo.giggle.posting.domain;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.document.domain.Document;
+import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -73,6 +74,9 @@ public class UserOwnerJobPosting {
     /* -------------------------------------------- */
     @OneToMany(mappedBy = "userOwnerJobPosting", cascade = CascadeType.ALL)
     private List<Document> documents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userOwnerJobPosting", cascade = CascadeType.ALL)
+    private List<Notification> notifications = new ArrayList<>();
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
