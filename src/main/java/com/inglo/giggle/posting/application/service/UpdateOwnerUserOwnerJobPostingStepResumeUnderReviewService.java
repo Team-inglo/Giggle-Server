@@ -50,7 +50,7 @@ public class UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewService implemen
         accountService.checkOwnerValidation(account);
 
         // UserOwnerJobPosting 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingById(userOwnerJobPostingId)
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingAndUserById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // UserOwnerJobPosting 고용주 유효성 체크
@@ -77,19 +77,20 @@ public class UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewService implemen
             notification = notificationService.createNotification(
                     EKafkaStatus.USER_RESUME_REJECTED.getMessage(),
                     savedUserOwnerJobPosting,
-                    ENotificationType.OWNER
+                    ENotificationType.USER
             );
         }
-
         notificationRepository.save(notification);
 
-        // NotificationEvent 생성 및 발행
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        savedUserOwnerJobPosting.getJobPosting().getTitle(),
-                        notification.getMessage(),
-                        userOwnerJobPosting.getUser().getDeviceToken()
-                )
-        );
+        // NotificationEvent 발행
+        if(account.getNotificationAllowed()){
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            savedUserOwnerJobPosting.getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            userOwnerJobPosting.getUser().getDeviceToken()
+                    )
+            );
+        }
     }
 }

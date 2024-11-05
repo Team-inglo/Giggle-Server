@@ -129,24 +129,24 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
         );
         standardLaborContractRepository.save(updatedStandardLaborContract);
 
-        // Notification 생성
+        // Notification 생성 및 저장
         Notification notification = notificationService.createNotification(
                 EKafkaStatus.USER_STANDARD_LABOR_CONTRACT.getMessage(),
                 document.getUserOwnerJobPosting(),
                 ENotificationType.USER
         );
-
         notificationRepository.save(notification);
 
         // Notification 발송
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        document.getUserOwnerJobPosting().getJobPosting().getTitle(),
-                        notification.getMessage(),
-                        document.getUserOwnerJobPosting().getUser().getDeviceToken()
-                )
-        );
-
+        if(account.getNotificationAllowed()){
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            document.getUserOwnerJobPosting().getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            document.getUserOwnerJobPosting().getUser().getDeviceToken()
+                    )
+            );
+        }
     }
 
 }

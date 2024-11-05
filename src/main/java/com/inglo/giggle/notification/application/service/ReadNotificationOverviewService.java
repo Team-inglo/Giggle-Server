@@ -12,6 +12,7 @@ import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,8 @@ public class ReadNotificationOverviewService implements ReadNotificationOverview
     private final AccountRepository accountRepository;
     private final NotificationRepository notificationRepository;
 
+    private final static String DESCENDING = "DESC";
+
     @Override
     @Transactional(readOnly = true)
     public ReadNotificationOverviewResponseDto execute(UUID accountId, Integer page, Integer size) {
@@ -31,11 +34,12 @@ public class ReadNotificationOverviewService implements ReadNotificationOverview
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        Sort sort = Sort.by(Sort.Order.desc("createdAt"));
         Page<Notification> notificationList;
         if (account.getRole().equals(ESecurityRole.USER)) {
-            notificationList = notificationRepository.findByUserOwnerJobPostingUserId(accountId, PageRequest.of(page - 1, size));
+            notificationList = notificationRepository.findByUserOwnerJobPostingUserId(accountId, PageRequest.of(page - 1, size, sort));
         } else {
-            notificationList = notificationRepository.findByUserOwnerJobPostingOwnerId(accountId, PageRequest.of(page - 1, size));
+            notificationList = notificationRepository.findByUserOwnerJobPostingOwnerId(accountId, PageRequest.of(page - 1, size, sort));
         }
 
         return ReadNotificationOverviewResponseDto.fromPages(notificationList);
