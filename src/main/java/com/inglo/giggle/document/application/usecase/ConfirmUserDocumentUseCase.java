@@ -6,5 +6,12 @@ import java.util.UUID;
 
 @UseCase
 public interface ConfirmUserDocumentUseCase {
+
+    /**
+     * (유학생) 서류 컨펌하기
+     *
+     * @param accountId 계정 ID
+     * @param documentId 문서 ID
+     */
     void execute(UUID accountId, Long documentId);
 }

@@ -7,5 +7,11 @@ import java.util.UUID;
 
 @UseCase
 public interface CreateUserWorkExperienceUseCase {
+
+    /**
+     * (유학생) 경력 추가하기 유스케이스
+     * @param accountId 계정 ID
+     * @param requestDto 경력 추가하기 요청 DTO
+     */
     void execute(UUID accountId, CreateUserWorkExperienceRequestDto requestDto);
 }

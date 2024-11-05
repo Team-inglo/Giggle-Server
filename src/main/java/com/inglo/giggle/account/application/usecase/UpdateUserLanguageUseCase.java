@@ -7,5 +7,12 @@ import java.util.UUID;
 
 @UseCase
 public interface UpdateUserLanguageUseCase {
+
+    /**
+     * 유저 언어 변경하기
+     *
+     * @param accountId 계정 ID
+     * @param requestDto 유저 언어 변경하기
+     */
     void execute(UUID accountId, UpdateUserLanguageRequestDto requestDto);
 }
