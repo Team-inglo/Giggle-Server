@@ -3,6 +3,7 @@ package com.inglo.giggle.account.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
 import jakarta.validation.constraints.NotBlank;
@@ -122,7 +123,7 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
                     .profileImgUrl(user.getProfileImgUrl())
                     .firstName(user.getFirstName())
                     .lastName(user.getLastName())
-                    .birth(user.getBirth().toString())
+                    .birth(DateTimeUtil.convertLocalDateToString(user.getBirth()))
                     .schoolName(schoolName)
                     .grade(grade)
                     .gpa(gpa)

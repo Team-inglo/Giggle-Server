@@ -138,7 +138,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
                             )
                             .hourlyRate(jobPosting.getHourlyRate())
                             .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
-                            .createdAt(jobPosting.getCreatedAt().toString())
+                            .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                             .build();
                 }
             }
@@ -160,7 +160,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
                     )
                     .hourlyRate(jobPosting.getHourlyRate())
                     .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
-                    .createdAt(jobPosting.getCreatedAt().toString())
+                    .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                     .build();
         }
     }

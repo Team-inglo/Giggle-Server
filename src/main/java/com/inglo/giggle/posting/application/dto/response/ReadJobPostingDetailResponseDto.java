@@ -150,7 +150,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                         .companyInformation(
                                 CompanyInformation.fromEntity(jobPosting)
                         )
-                        .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
+                        .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                         .build();
             }
         }
@@ -187,7 +187,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                 .companyInformation(
                         CompanyInformation.fromEntity(jobPosting)
                 )
-                .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
+                .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                 .build();
     }
 

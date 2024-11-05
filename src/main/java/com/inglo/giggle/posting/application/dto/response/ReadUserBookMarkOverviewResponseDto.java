@@ -112,7 +112,7 @@ public class ReadUserBookMarkOverviewResponseDto extends SelfValidating<ReadUser
                     .tags(Tags.of(jobPosting))
                     .hourlyRate(jobPosting.getHourlyRate())
                     .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
-                    .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
+                    .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                     .build();
         }
 

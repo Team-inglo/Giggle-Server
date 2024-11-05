@@ -126,7 +126,7 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
                 .companyInformation(
                         CompanyInformation.fromEntity(jobPosting)
                 )
-                .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
+                .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                 .build();
     }
 
@@ -302,7 +302,6 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
         @JsonProperty("work_period")
         private final EWorkPeriod workPeriod;
-
 
         @JsonProperty("work_day_times")
         private final List<WorkDayTimeDto> workDayTime;

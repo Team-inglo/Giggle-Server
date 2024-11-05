@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.dto.request.AddressRequestDto;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.type.EDayOfWeek;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.type.EInsurance;
@@ -170,8 +171,8 @@ public class ReadStandardLaborContractDetailResponseDto extends SelfValidating<R
                     .phoneNumber(standardLaborContract.getEmployerPhoneNumber())
                     .companyRegistrationNumber(standardLaborContract.getCompanyRegistrationNumber())
                     .name(standardLaborContract.getEmployerName())
-                    .startDate(standardLaborContract.getStartDate().toString())
-                    .endDate(standardLaborContract.getEndDate().toString())
+                    .startDate(DateTimeUtil.convertLocalDateToString(standardLaborContract.getStartDate()))
+                    .endDate(DateTimeUtil.convertLocalDateToString(standardLaborContract.getEndDate()))
                     .address(AddressRequestDto.builder()
                             .addressName(standardLaborContract.getEmployerAddress().getAddressName())
                             .region1DepthName(standardLaborContract.getEmployerAddress().getRegion1DepthName())
@@ -186,10 +187,10 @@ public class ReadStandardLaborContractDetailResponseDto extends SelfValidating<R
                     .workDayTimeList(contractWorkDayTimes.stream().map(workDayTime ->
                             WorkDayTimeDto.builder()
                                     .dayOfWeek(workDayTime.getDayOfWeek().toString())
-                                    .workStartTime(workDayTime.getWorkStartTime().toString())
-                                    .workEndTime(workDayTime.getWorkEndTime().toString())
-                                    .breakStartTime(workDayTime.getBreakStartTime().toString())
-                                    .breakEndTime(workDayTime.getBreakEndTime().toString())
+                                    .workStartTime(DateTimeUtil.convertLocalTimeToString(workDayTime.getWorkStartTime()))
+                                    .workEndTime(DateTimeUtil.convertLocalTimeToString(workDayTime.getWorkEndTime()))
+                                    .breakStartTime(DateTimeUtil.convertLocalTimeToString(workDayTime.getBreakStartTime()))
+                                    .breakEndTime(DateTimeUtil.convertLocalTimeToString(workDayTime.getBreakEndTime()))
                                     .build()
                     ).toList())
                     .weeklyLastDays(standardLaborContract.getWeeklyRestDays().stream().map(EDayOfWeek::toString).toList())
@@ -234,10 +235,10 @@ public class ReadStandardLaborContractDetailResponseDto extends SelfValidating<R
             public static WorkDayTimeDto fromEntity(ContractWorkDayTime contractWorkDayTime) {
                 return WorkDayTimeDto.builder()
                         .dayOfWeek(contractWorkDayTime.getDayOfWeek().toString())
-                        .workStartTime(contractWorkDayTime.getWorkStartTime().toString())
-                        .workEndTime(contractWorkDayTime.getWorkEndTime().toString())
-                        .breakStartTime(contractWorkDayTime.getBreakStartTime().toString())
-                        .breakEndTime(contractWorkDayTime.getBreakEndTime().toString())
+                        .workStartTime(DateTimeUtil.convertLocalTimeToString(contractWorkDayTime.getWorkStartTime()))
+                        .workEndTime(DateTimeUtil.convertLocalTimeToString(contractWorkDayTime.getWorkEndTime()))
+                        .breakStartTime(DateTimeUtil.convertLocalTimeToString(contractWorkDayTime.getBreakStartTime()))
+                        .breakEndTime(DateTimeUtil.convertLocalTimeToString(contractWorkDayTime.getBreakEndTime()))
                         .build();
             }
         }
