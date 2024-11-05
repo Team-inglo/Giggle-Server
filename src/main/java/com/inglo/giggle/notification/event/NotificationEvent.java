@@ -1,5 +1,6 @@
 package com.inglo.giggle.notification.event;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 import java.util.Map;
@@ -9,6 +10,8 @@ public record NotificationEvent(
 
         String title,
         String description,
+
+        @JsonProperty("device_token")
         String deviceToken
 ) {
     public Map<String, Object> toPayload() {

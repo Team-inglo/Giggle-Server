@@ -83,9 +83,10 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "OR (:recruitmentPeriod = 'OPENING' AND jp.recruitmentDeadLine >= :today) " +
             "OR (:recruitmentPeriod = 'CLOSED' AND jp.recruitmentDeadLine < :today)) " +
             "AND (:employmentType IS NULL OR jp.employmentType = :employmentType) " +
-            "AND (:visa IS NULL OR jp.visa = :visa) "
+            "AND (:visa IS NULL OR jp.visa = :visa) " +
+            "ORDER BY (SELECT COUNT(b.id) FROM BookMark b WHERE b.jobPosting = jp) DESC "
     )
-    List<JobPosting> findPopularJobPostingsWithFilters(
+    Page<JobPosting> findPopularJobPostingsWithFilters(
             @Param("jobTitle") String jobTitle,
             @Param("region1Depth1") String region1Depth1,
             @Param("region1Depth2") String region1Depth2,
@@ -120,7 +121,8 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("today") LocalDate today,
             @Param("recruitmentPeriod") String recruitmentPeriod,
             @Param("employmentType") EEmploymentType employmentType,
-            @Param("visa") EVisa visa
+            @Param("visa") EVisa visa,
+            Pageable pageable
     );
 
     // 최신순 공고 조회 쿼리
@@ -239,10 +241,6 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     @Query("SELECT b.jobPosting.id, COUNT(b) FROM BookMark b WHERE b.jobPosting.id IN :jobPostingIds GROUP BY b.jobPosting.id")
     List<Object[]> countBookmarksByJobPostingIds(@Param("jobPostingIds") List<Long> jobPostingIds);
-
-
-    @Query("SELECT COUNT(b) FROM BookMark b WHERE b.jobPosting.id = :jobPostingId")
-    int countBookmarksByJobPostingId(@Param("jobPostingId") Long jobPostingId);
 
 
 }

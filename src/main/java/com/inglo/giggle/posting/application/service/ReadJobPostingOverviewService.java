@@ -111,7 +111,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
 
         // 인기순 또는 최신순에 따라 다른 메서드 호출
         if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
-            List<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
+            Page<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
                     region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
@@ -146,31 +146,13 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                     today,
                     recruitmentPeriod,
                     employmentType == null ? null : EEmploymentType.fromString(employmentType),
-                    visa == null ? null : EVisa.fromString(visa)
+                    visa == null ? null : EVisa.fromString(visa),
+                    pageable
             );
-
-            // jobPostingList의 ID 목록을 수집
-            List<Long> jobPostingIds = jobPostingList.stream()
-                    .map(JobPosting::getId)
-                    .toList();
-
-            // 각 jobPostingId에 대한 북마크 개수를 한 번에 가져옴
-            Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds);
-
-            // bookmark 개수를 기준으로 jobPostingList 정렬
-            jobPostingList.sort((jobPosting1, jobPosting2) ->
-                    Integer.compare(
-                            bookmarkCountMap.getOrDefault(jobPosting2.getId(), 0),
-                            bookmarkCountMap.getOrDefault(jobPosting1.getId(), 0)
-                    )
-            );
-
-            // 정렬된 List를 다시 Page 객체로 변환
-            Page<JobPosting> sortedJobPostingsPage = new PageImpl<>(jobPostingList, pageable, jobPostingList.size());
 
             // fromPage 메서드를 사용해 응답 생성
             return ReadJobPostingOverviewResponseDto.fromEntities(
-                    sortedJobPostingsPage,
+                    jobPostingList,
                     account
             );
 
