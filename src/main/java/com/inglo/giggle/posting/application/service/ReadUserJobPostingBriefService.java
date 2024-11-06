@@ -74,9 +74,13 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
         List<JobPosting> jobPostings = jobPostingRepository.findAll().stream()
                 .filter(jobPosting -> {
 
-                    Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId)
-                            .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                    // Resume 조회 및 null 체크
+                    Optional<Resume> optionalResume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId);
+                    if (optionalResume.isEmpty()) {
+                        return false;
+                    }
 
+                    Resume resume = optionalResume.get();
                     return isUserApplicableForJobPosting(resume, jobPosting);
                 })
                 .limit(2)

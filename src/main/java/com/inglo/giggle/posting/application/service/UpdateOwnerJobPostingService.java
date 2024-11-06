@@ -108,6 +108,8 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
         if (requestDto.workDayTimes() != null) {
             postingWorkDayTimeRepository.deleteAll(jobPosting.getWorkDayTimes());
 
+            jobPosting.getWorkDayTimes().clear();
+
             requestDto.workDayTimes().forEach(workDayTime -> postWorkDayTimeService.createPostingWorkDayTime(
                     workDayTime.dayOfWeek(),
                     (workDayTime.workStartTime() == null || workDayTime.workStartTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()),
@@ -116,7 +118,7 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
             ));
         }
 
-        if (!requestDto.deletedImgIds().isEmpty()) {
+        if (requestDto.deletedImgIds() != null && !requestDto.deletedImgIds().isEmpty()) {
             companyImageRepository.findAllById(requestDto.deletedImgIds())
                     .forEach(companyImage -> s3Util.deleteFile(
                             companyImage.getImgUrl(),
