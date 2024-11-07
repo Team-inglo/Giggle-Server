@@ -7,5 +7,14 @@ import java.util.UUID;
 
 @UseCase
 public interface ReadStandardLaborContractDetailUseCase {
+
+    /**
+     * 표준 근로계약서 상세 조회하기
+     *
+     * @param accountId 계정 ID
+     * @param documentId 문서 ID
+     *
+     * @return 표준 근로계약서 상세 조회하기
+     */
     ReadStandardLaborContractDetailResponseDto execute(UUID accountId, Long documentId);
 }
