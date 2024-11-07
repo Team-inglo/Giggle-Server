@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
@@ -232,12 +233,15 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     List<JobPosting> findRecentlyJobPostingsWithFetchJoin();
 
     @Query("SELECT jp FROM JobPosting jp " +
-            "LEFT JOIN FETCH jp.owner o " +
-            "LEFT JOIN FETCH jp.workDayTimes wd " +
-            "LEFT JOIN BookMark bm ON bm.jobPosting = jp " +
+            "JOIN FETCH jp.owner o " +
+            "JOIN FETCH jp.workDayTimes wd " +
+            "JOIN BookMark bm ON bm.jobPosting = jp " +
+            "WHERE bm.user.id = :accountId " +
             "GROUP BY jp.id, o.id, wd.id " +
             "ORDER BY COUNT(bm.id) DESC")
-    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin();
+    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin(@Param("accountId") UUID accountId);
+
+
 
     @Query("SELECT b.jobPosting.id, COUNT(b) FROM BookMark b WHERE b.jobPosting.id IN :jobPostingIds GROUP BY b.jobPosting.id")
     List<Object[]> countBookmarksByJobPostingIds(@Param("jobPostingIds") List<Long> jobPostingIds);

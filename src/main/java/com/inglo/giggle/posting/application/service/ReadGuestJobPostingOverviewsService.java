@@ -205,7 +205,6 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
         List<JobPosting> jobPostingsList = switch (type) {
             case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin();
             case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin();
-            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin();
             default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
         };
 
