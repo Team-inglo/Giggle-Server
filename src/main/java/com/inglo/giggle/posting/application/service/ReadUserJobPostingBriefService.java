@@ -23,6 +23,9 @@ import com.inglo.giggle.resume.repository.mysql.EducationRepository;
 import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -38,6 +41,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUseCase {
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     private final JobPostingRepository jobPostingRepository;
     private final ResumeRepository resumeRepository;
@@ -55,16 +61,29 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
 
     @Override
     @Transactional(readOnly = true)
-    public ReadUserJobPostingBriefResponseDto execute(UUID userId) {
+    public ReadUserJobPostingBriefResponseDto execute(UUID accountId) {
+
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 검사
+        accountService.checkUserValidation(account);
+
+        // JobPosting 조회
         List<JobPosting> jobPostings = jobPostingRepository.findAll().stream()
                 .filter(jobPosting -> {
 
-                    Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(userId)
-                            .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                    // Resume 조회 및 null 체크
+                    Optional<Resume> optionalResume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId);
+                    if (optionalResume.isEmpty()) {
+                        return false;
+                    }
 
+                    Resume resume = optionalResume.get();
                     return isUserApplicableForJobPosting(resume, jobPosting);
                 })
-                .limit(4)
+                .limit(2)
                 .toList();
 
         // DTO 변환 후 반환
@@ -108,7 +127,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
 
 
     private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        Optional<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(resume.getUser().getId());
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDesc(resume.getUser().getId());
         if (school.isEmpty()) {
             return false;
         }

@@ -1,7 +1,6 @@
 package com.inglo.giggle.account.repository.mysql;
 
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.document.domain.Document;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -2,6 +2,7 @@ package com.inglo.giggle.resume.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.school.domain.School;
 import lombok.Builder;
@@ -66,8 +67,8 @@ public class ReadUserEducationDetailResponseDto extends SelfValidating<ReadUserE
                 .educationLevel(education.getEducationLevel().toString())
                 .major(education.getMajor())
                 .gpa(education.getGpa())
-                .startDate(education.getEnrollmentDate().toString())
-                .endDate(education.getGraduationDate() != null ? education.getGraduationDate().toString() : null)
+                .startDate(DateTimeUtil.convertLocalDateToString(education.getEnrollmentDate()))
+                .endDate(education.getGraduationDate() != null ? DateTimeUtil.convertLocalDateToString(education.getGraduationDate()) : null)
                 .grade(education.getGrade())
                 .schoolDto(SchoolDto.fromEntity(education.getSchool()))
                 .build();

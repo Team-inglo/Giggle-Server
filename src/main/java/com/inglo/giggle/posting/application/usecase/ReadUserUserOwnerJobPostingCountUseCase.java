@@ -6,7 +6,7 @@ import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPosting
 import java.util.UUID;
 
 @UseCase
-public interface ReadUserOwnerJobPostingCountUseCase {
+public interface ReadUserUserOwnerJobPostingCountUseCase {
     /**
      * 유저가 지원 현황(개수) 확인하기
      *

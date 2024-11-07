@@ -9,7 +9,6 @@ import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
 
 import java.util.List;
 
@@ -33,6 +32,7 @@ public record UpdateOwnerJobPostingRequestDto(
         EWorkPeriod workPeriod,
 
         @NotNull(message = "시급은 필수 입력 값입니다.")
+        @Max(value = 2000000000, message = "시급은 2,000,000,000원 이하로 입력 가능합니다.")
         @JsonProperty("hourly_rate")
         Integer hourlyRate,
 
@@ -47,6 +47,8 @@ public record UpdateOwnerJobPostingRequestDto(
         @JsonProperty("recruitment_dead_line")
         String recruitmentDeadLine,  // null if 상시모집
 
+        @Min(value = 0, message = "모집 인원은 0명 이상으로 입력 가능합니다.")
+        @Max(value = 1000, message = "모집 인원은 1000명 이하로 입력 가능합니다.")
         @JsonProperty("recruitment_number")
         Integer recruitmentNumber,
 
@@ -54,7 +56,8 @@ public record UpdateOwnerJobPostingRequestDto(
         @JsonProperty("gender")
         EGender gender,
 
-        @NotNull(message = "연령 제한은 필수 입력 값입니다.")
+        @Max(value = 100, message = "나이 제한은 100세 이하로 입력 가능합니다.")
+        @Min(value = 0, message = "나이 제한은 0세 이상으로 입력 가능합니다.")
         @JsonProperty("age_restriction")
         Integer ageRestriction,
 
@@ -128,6 +131,7 @@ public record UpdateOwnerJobPostingRequestDto(
             String region4DepthName,
 
             @NotNull(message = "상세 주소는 필수 입력 값입니다.")
+            @Size(max = 100, message = "상세 주소는 최대 100자까지 입력 가능합니다.")
             @JsonProperty("address_detail")
             String addressDetail,
 

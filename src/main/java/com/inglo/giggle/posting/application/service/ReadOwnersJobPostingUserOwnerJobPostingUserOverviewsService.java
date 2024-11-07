@@ -1,6 +1,5 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.dto.response.ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto;
@@ -11,6 +10,9 @@ import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +29,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService implements ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase {
 
-    private final OwnerRepository ownerRepository;
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+
     private final JobPostingRepository jobPostingRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final SchoolRepository schoolRepository;
@@ -38,9 +42,12 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
     @Transactional(readOnly = true)
     public ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto execute(UUID accountId, Long jobPostingId, Integer page, Integer size, String sorting, String status) {
 
-        // 고용주 조회 및 검증
-        ownerRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE));
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 검사
+        accountService.checkOwnerValidation(account);
 
         // 채용공고 조회
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
@@ -93,7 +100,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
         // 학교 정보 조회
         Map<UUID, String> userSchoolMap = schoolRepository.findUserIdsWithMostRecentSchoolNames(userIds).stream()
                 .collect(Collectors.toMap(
-                        result -> (UUID) result[0],
+                        result -> UUID.fromString((String) result[0]),
                         result -> (String) result[1],
                         (existing, replacement) -> existing
                 ));

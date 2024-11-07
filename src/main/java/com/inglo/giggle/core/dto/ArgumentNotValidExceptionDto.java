@@ -1,10 +1,10 @@
 package com.inglo.giggle.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.inglo.giggle.core.exception.error.ErrorCode;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
-import com.inglo.giggle.core.exception.error.ErrorCode;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;

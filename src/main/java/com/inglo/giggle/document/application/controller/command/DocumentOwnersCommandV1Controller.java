@@ -21,6 +21,7 @@ public class DocumentOwnersCommandV1Controller {
     private final UpdateOwnerPartTimeEmploymentPermitUseCase updateOwnerPartTimeEmploymentPermitUseCase;
     private final UpdateOwnerStandardLaborContractUseCase updateOwnerStandardLaborContractUseCase;
     private final UpdateOwnerDocumentStatusSubmissionUseCase updateOwnerDocumentStatusSubmissionUseCase;
+
     /**
      * 8.11 (고용주) 시간제 취업허가서 수정하기
      */

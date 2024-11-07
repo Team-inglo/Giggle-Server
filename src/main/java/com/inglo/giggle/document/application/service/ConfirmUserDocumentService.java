@@ -50,7 +50,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
 
     @Override
     @Transactional
-    public void confirmUserDocument(UUID accountId, Long documentId) {
+    public void execute(UUID accountId, Long documentId) {
 
         // Account 조회
         Account account = accountRepository.findById(accountId)
@@ -74,7 +74,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // JobPosting 정보 조회
-        JobPosting jobPosting = jobPostingRepository.findByDocumentId(documentId)
+        JobPosting jobPosting = jobPostingRepository.findById(document.getUserOwnerJobPosting().getJobPosting().getId())
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // Document의 DiscriminatorValue에 따라 생성할 파일을 결정

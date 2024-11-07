@@ -39,7 +39,6 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
     private static final String TRENDING = "TRENDING";
     private static final String RECENTLY = "RECENTLY";
     private static final String BOOKMARKED = "BOOKMARKED";
-    private static final String ANY_KEYWORD = "ANY_KEYWORD";
 
     @Override
     @Transactional(readOnly = true)
@@ -108,7 +107,7 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
 
         // 인기순 또는 최신순에 따라 다른 메서드 호출
         if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
-            List<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
+            Page<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
                     region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
@@ -143,30 +142,16 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
                     today,
                     recruitmentPeriod,
                     employmentType == null ? null : EEmploymentType.fromString(employmentType),
-                    visa == null ? null : EVisa.fromString(visa)
+                    visa == null ? null : EVisa.fromString(visa),
+                    pageable
             );
-
-            Map<Long, Integer> bookmarkCountMap = jobPostingList.stream()
-                    .collect(Collectors.toMap(
-                            JobPosting::getId,
-                            jobPosting -> jobPostingRepository.countBookmarksByJobPostingId(jobPosting.getId())
-                    ));
-
-            jobPostingList.sort((jobPosting1, jobPosting2) ->
-                    Integer.compare(
-                            bookmarkCountMap.getOrDefault(jobPosting2.getId(), 0),
-                            bookmarkCountMap.getOrDefault(jobPosting1.getId(), 0)
-                    )
-            );
-
-            // 정렬된 List를 다시 Page 객체로 변환
-            Page<JobPosting> sortedJobPostingsPage = new PageImpl<>(jobPostingList, pageable, jobPostingList.size());
 
             // fromPage 메서드를 사용해 응답 생성
-            return ReadGuestJobPostingOverviewsResponseDto.fromPage(sortedJobPostingsPage);
+            return ReadGuestJobPostingOverviewsResponseDto.fromPage(
+                    jobPostingList
+            );
 
         } else {
-
             return ReadGuestJobPostingOverviewsResponseDto.fromPage(jobPostingRepository.findRecentJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
@@ -220,7 +205,6 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
         List<JobPosting> jobPostingsList = switch (type) {
             case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin();
             case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin();
-            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin();
             default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
         };
 

@@ -11,7 +11,8 @@ public enum EEducationLevel {
     ASSOCIATE("2년제", "ASSOCIATE"),
     HIGHSCHOOL("고졸", "HIGHSCHOOL"),
     MASTER("석사", "MASTER"),
-    DOCTOR("박사", "DOCTOR")
+    DOCTOR("박사", "DOCTOR"),
+    NONE("무관", "NONE")
 
     ;
 
@@ -25,6 +26,7 @@ public enum EEducationLevel {
             case "HIGHSCOOL" -> HIGHSCHOOL;
             case "MASTER" -> MASTER;
             case "DOCTOR" -> DOCTOR;
+            case "NONE" -> NONE;
             default -> throw new IllegalArgumentException("학력이 잘못되었습니다.");
         };
     }

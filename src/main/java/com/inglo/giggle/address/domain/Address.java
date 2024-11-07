@@ -1,6 +1,5 @@
 package com.inglo.giggle.address.domain;
 
-import com.inglo.giggle.address.dto.request.AddressRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;

@@ -30,12 +30,12 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
     private final OwnerService ownerService;
     private final AccountService accountService;
     private final AddressService addressService;
-
     private final S3Util s3Util;
 
     @Override
     @Transactional
     public void execute(UUID accountId, UpdateOwnerRequestDto requestDto, MultipartFile image) {
+
         // Account 조회
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
@@ -85,4 +85,5 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
         account = accountService.updatePhoneNumber(account, requestDto.ownerInfo().phoneNumber());
         accountRepository.save(account);
     }
+
 }

@@ -1,6 +1,5 @@
 package com.inglo.giggle.posting.application.controller.command;
 
-import com.inglo.giggle.account.application.dto.request.UpdateOwnerRequestDto;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.request.CreateOwnerJobPostingRequestDto;
@@ -103,7 +102,7 @@ public class PostingOwnersCommandV1Controller {
     /**
      * 6.11 (고용주) 인터뷰 완료하기
      */
-    @PatchMapping("/owners/user-owner-job-postings/{user-owner-job-posting-id}/step-waiting-for-review")
+    @PatchMapping("/owners/user-owner-job-postings/{user-owner-job-posting-id}/step-waiting-for-interview")
     public ResponseDto<Void> completeInterview(
             @AccountID UUID accountId,
             @PathVariable(name = "user-owner-job-posting-id") Long userOwnerJobPostingId

@@ -6,7 +6,9 @@ import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
-import com.inglo.giggle.posting.domain.type.*;
+import com.inglo.giggle.posting.domain.type.EEmploymentType;
+import com.inglo.giggle.posting.domain.type.EJobCategory;
+import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +63,7 @@ public class JobPosting {
     @Column(name = "gender", nullable = false)
     private EGender gender;
 
-    @Column(name = "age_restriction", nullable = false)
+    @Column(name = "age_restriction")
     private Integer ageRestriction;
 
     @Enumerated(EnumType.STRING)
@@ -95,7 +98,7 @@ public class JobPosting {
     /* Timestamp Column --------------------------- */
     /* -------------------------------------------- */
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     /* -------------------------------------------- */
     /* Embedded Column ---------------------------- */
@@ -150,7 +153,7 @@ public class JobPosting {
         this.description = description;
         this.preferredConditions = preferredConditions;
         this.employmentType = employmentType;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
         this.owner = owner;
         this.address = address;
     }
@@ -223,7 +226,7 @@ public class JobPosting {
         int weekendHours = 0;
 
         for (PostingWorkDayTime workDayTime : workDayTimes) {
-            if (workDayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE) {
+            if (workDayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE || workDayTime.getWorkStartTime() == null || workDayTime.getWorkEndTime() == null) {
                 continue;
             }
 

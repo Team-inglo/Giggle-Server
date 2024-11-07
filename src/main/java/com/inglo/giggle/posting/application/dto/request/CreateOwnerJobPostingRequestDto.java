@@ -8,92 +8,95 @@ import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
 public record CreateOwnerJobPostingRequestDto(
 
-        @NotNull
-        @Size(max = 100)
+        @NotNull(message = "제목을 입력해주세요.")
+        @Size(max = 100, message = "제목은 100자 이하로 입력해주세요.")
         @JsonProperty("title")
         String title,
 
-        @NotNull
+        @NotNull(message = "직종을 선택해주세요.")
         @JsonProperty("job_category")
         EJobCategory jobCategory,
 
-        @NotNull
+        @NotNull(message = "근무시간을 선택해주세요.")
         @JsonProperty("work_day_times")
         List<WorkDayTimeDto> workDayTimes,
 
-        @NotNull
+        @NotNull(message = "근무기간을 선택해주세요.")
         @JsonProperty("work_period")
         EWorkPeriod workPeriod,
 
-        @NotNull
+        @NotNull(message = "시급을 입력해주세요.")
+        @Max(value = 1000000, message = "시급은 1,000,000원 이하로 입력해주세요.")
+        @Min(value = 0, message = "시급은 0원 이상으로 입력해주세요.")
         @JsonProperty("hourly_rate")
         Integer hourlyRate,
 
-        @NotNull
+        @NotNull(message = "고용형태를 선택해주세요.")
         @JsonProperty("employment_type")
         EEmploymentType employmentType,
 
-        @NotNull
+        @NotNull(message = "근무지 주소를 입력해주세요.")
         @JsonProperty("address")
         AddressDto address,
 
         @JsonProperty("recruitment_dead_line")
         String recruitmentDeadLine,  // null if 상시모집
 
+        @Max(value = 1000, message = "모집인원은 1000명 이하로 입력해주세요.")
+        @Min(value = 0, message = "모집인원은 0명 이상으로 입력해주세요.")
         @JsonProperty("recruitment_number")
         Integer recruitmentNumber,
 
-        @NotNull
+        @NotNull(message = "성별을 선택해주세요.")
         @JsonProperty("gender")
         EGender gender,
 
-        @NotNull
+        @Max(value = 100, message = "나이제한은 100세 이하로 입력해주세요.")
+        @Min(value = 0, message = "나이제한은 0세 이상으로 입력해주세요.")
         @JsonProperty("age_restriction")
         Integer ageRestriction,
 
-        @NotNull
+        @NotNull(message = "학력을 선택해주세요.")
         @JsonProperty("education_level")
         EEducationLevel educationLevel,
 
-        @NotNull
+        @NotNull(message = "비자를 입력해주세요.")
         @JsonProperty("visa")
         EVisa visa,
 
-        @NotNull
-        @Size(max = 10)
+        @NotNull(message = "담당자명을 입력해주세요.")
+        @Size(max = 10, message = "담당자명은 10자 이하로 입력해주세요.")
         @JsonProperty("recruiter_name")
         String recruiterName,
 
-        @NotNull
-        @Email
-        @Size(max = 320)
+        @NotNull(message = "담당자 이메일을 입력해주세요.")
+        @Email(message = "이메일 형식에 맞게 입력해주세요.")
+        @Size(max = 320, message = "이메일은 320자 이하로 입력해주세요.")
         @JsonProperty("recruiter_email")
         String recruiterEmail,
 
-        @NotNull
-        @Size(max = 20)
+        @NotNull(message = "담당자 전화번호를 입력해주세요.")
+        @Size(min = 8, max = 20, message = "전화번호는 8자 이상 20자 이하로 입력해주세요.")
         @JsonProperty("recruiter_phone_number")
         String recruiterPhoneNumber,
 
-        @NotNull
-        @Size(max = 1000)
+        @NotNull(message = "공고 설명을 입력해주세요.")
+        @Size(max = 1000, message = "공고 설명은 1000자 이하로 입력해주세요.")
         @JsonProperty("description")
         String description,
 
-        @Size(max = 50)
+        @Size(max = 50, message = "우대사항은 50자 이하로 입력해주세요.")
         @JsonProperty("preferred_conditions")
         String preferredConditions
 ) {
     public record WorkDayTimeDto(
-            @NotNull
+            @NotNull(message = "요일을 선택해주세요.")
             @JsonProperty("day_of_week")
             EDayOfWeek dayOfWeek,
 
@@ -125,7 +128,8 @@ public record CreateOwnerJobPostingRequestDto(
             @JsonProperty("region_4depth_name")
             String region4DepthName,
 
-            @NotNull
+            @NotNull(message = "상세주소를 입력해주세요.")
+            @Size(max = 100, message = "상세주소는 100자 이하로 입력해주세요.")
             @JsonProperty("address_detail")
             String addressDetail,
 

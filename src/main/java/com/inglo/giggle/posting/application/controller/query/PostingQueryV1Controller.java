@@ -9,7 +9,6 @@ import com.inglo.giggle.posting.application.usecase.ReadJobPostingDetailUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingOverviewUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingSummariesUseCase;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;

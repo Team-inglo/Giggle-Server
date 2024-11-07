@@ -7,5 +7,12 @@ import java.util.UUID;
 
 @UseCase
 public interface UpdateNotificationAllowedUseCase {
+
+    /**
+     * 알림 허용 변경하기
+     *
+     * @param accountId 계정 ID
+     * @param requestDto 알림 허용 변경하기
+     */
     void execute(UUID accountId, UpdateNotificationAllowedRequestDto requestDto);
 }

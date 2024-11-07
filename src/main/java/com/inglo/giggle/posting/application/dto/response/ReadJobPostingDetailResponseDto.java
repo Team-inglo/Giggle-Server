@@ -16,7 +16,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPostingDetailResponseDto> {
@@ -148,7 +150,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                         .companyInformation(
                                 CompanyInformation.fromEntity(jobPosting)
                         )
-                        .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
+                        .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                         .build();
             }
         }
@@ -185,7 +187,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                 .companyInformation(
                         CompanyInformation.fromEntity(jobPosting)
                 )
-                .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
+                .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                 .build();
     }
 
@@ -235,7 +237,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
 
         public static Tags fromEntity(JobPosting jobPosting) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null ? Boolean.TRUE : jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa())
                     .jobCategory(jobPosting.getJobCategory())
                     .build();
@@ -393,7 +395,13 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
             return WorkingConditions.builder()
                     .hourlyRate(jobPosting.getHourlyRate())
                     .workPeriod(jobPosting.getWorkPeriod())
-                    .workDayTime(postingWorkDayTimeList.stream().map(WorkDayTimeDto::fromEntity).toList())
+                    .workDayTime(
+                            Optional.ofNullable(postingWorkDayTimeList)
+                                    .orElse(Collections.emptyList())
+                                    .stream()
+                                    .map(WorkDayTimeDto::fromEntity)
+                                    .toList()
+                    )
                     .jobCategory(jobPosting.getJobCategory())
                     .employmentType(jobPosting.getEmploymentType().toString())
                     .build();
@@ -418,12 +426,15 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                 this.workEndTime = workEndTime;
                 this.validateSelf();
             }
+            private static final String NEGOTIABLE_TO_KO_STRING = "협의가능";
 
             public static WorkDayTimeDto fromEntity(PostingWorkDayTime postingWorkDayTime) {
                 return WorkDayTimeDto.builder()
                         .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
-                        .workStartTime(DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
-                        .workEndTime(DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
+                        .workStartTime(postingWorkDayTime.getWorkEndTime() == null ?
+                                NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
+                        .workEndTime(postingWorkDayTime.getWorkEndTime() == null ?
+                                NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
                         .build();
             }
         }

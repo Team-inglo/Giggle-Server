@@ -1,6 +1,5 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.account.repository.mysql.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EKafkaStatus;
@@ -13,6 +12,9 @@ import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPosti
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -24,11 +26,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implements UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase {
 
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final NotificationService notificationService;
 
-    private final OwnerRepository ownerRepository;
     private final NotificationRepository notificationRepository;
 
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -39,13 +43,19 @@ public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implem
     @Transactional
     public void execute(UUID accountId, Long userOwnerJobPostingId) {
 
-        // Owner 조회
-        ownerRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE));
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 검사
+        accountService.checkOwnerValidation(account);
 
         // UserOwnerJobPosting 조회
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 고용주 유효성 체크
+        userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 
         // UserOwnerJobPosting의 상태 변경
         userOwnerJobPostingService.updateStepFromStepWaitingForInterview(userOwnerJobPosting);
@@ -59,16 +69,17 @@ public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implem
                 userOwnerJobPosting,
                 ENotificationType.USER
         );
-
         notificationRepository.save(notification);
 
         // NotificationEvent 생성 및 발행
-        applicationEventPublisher.publishEvent(
-                notificationEventService.createNotificationEvent(
-                        userOwnerJobPosting.getJobPosting().getTitle(),
-                        notification.getMessage(),
-                        userOwnerJobPosting.getUser().getDeviceToken()
-                )
-        );
+        if(account.getNotificationAllowed()){
+            applicationEventPublisher.publishEvent(
+                    notificationEventService.createNotificationEvent(
+                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            userOwnerJobPosting.getUser().getDeviceToken()
+                    )
+            );
+        }
     }
 }

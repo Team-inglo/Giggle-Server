@@ -1,0 +1,13 @@
+### 11.1 (유학생) 이전 챗봇 내용 조회하기
+GET {{host_url}}/v1/chatbot?size={{chat.API_11_1.size}}&page={{chat.API_11_1.page}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+### 11.2 (유학생) 챗봇 질문하기
+POST {{host_url}}/v1/chatbot
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "prompt": "{{chat.API_11_2.prompt}}"
+}

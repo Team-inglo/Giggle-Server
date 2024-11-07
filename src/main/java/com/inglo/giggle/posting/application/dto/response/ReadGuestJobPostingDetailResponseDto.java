@@ -14,7 +14,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGuestJobPostingDetailResponseDto> {
@@ -124,7 +126,7 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
                 .companyInformation(
                         CompanyInformation.fromEntity(jobPosting)
                 )
-                .createdAt(DateTimeUtil.convertLocalDateToString(jobPosting.getCreatedAt()))
+                .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                 .build();
     }
 
@@ -172,7 +174,7 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
         public static Tags fromEntity(JobPosting jobPosting) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa())
                     .jobCategory(jobPosting.getJobCategory())
                     .build();
@@ -248,7 +250,7 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
 
         public static RecruitmentConditions fromEntity(JobPosting jobPosting) {
             return RecruitmentConditions.builder()
-                    .recruitmentDeadline(DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
+                    .recruitmentDeadline(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
                     .education(jobPosting.getEducationLevel().toString())
                     .numberOfRecruits(jobPosting.getRecruitmentNumber())
                     .visa(jobPosting.getVisa())
@@ -301,7 +303,6 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
         @JsonProperty("work_period")
         private final EWorkPeriod workPeriod;
 
-
         @JsonProperty("work_day_times")
         private final List<WorkDayTimeDto> workDayTime;
 
@@ -331,11 +332,18 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
             return WorkingConditions.builder()
                     .hourlyRate(jobPosting.getHourlyRate())
                     .workPeriod(jobPosting.getWorkPeriod())
-                    .workDayTime(postingWorkDayTimeList.stream().map(WorkDayTimeDto::fromEntity).toList())
+                    .workDayTime(
+                            Optional.ofNullable(postingWorkDayTimeList)
+                                    .orElse(Collections.emptyList())
+                                    .stream()
+                                    .map(WorkDayTimeDto::fromEntity)
+                                    .toList()
+                    )
                     .jobCategory(jobPosting.getJobCategory())
                     .employmentType(jobPosting.getEmploymentType().toString())
                     .build();
         }
+
 
         @Getter
         public static class WorkDayTimeDto extends SelfValidating<WorkDayTimeDto> {
@@ -356,12 +364,16 @@ public class ReadGuestJobPostingDetailResponseDto extends SelfValidating<ReadGue
                 this.workEndTime = workEndTime;
                 this.validateSelf();
             }
+            private static final String NEGOTIABLE_TO_KO_STRING = "협의가능";
 
             public static WorkDayTimeDto fromEntity(PostingWorkDayTime postingWorkDayTime) {
+
                 return WorkDayTimeDto.builder()
                         .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
-                        .workStartTime(DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
-                        .workEndTime(DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
+                        .workStartTime(postingWorkDayTime.getWorkStartTime() == null ?
+                                NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
+                        .workEndTime(postingWorkDayTime.getWorkEndTime() == null ?
+                                NEGOTIABLE_TO_KO_STRING : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
                         .build();
             }
         }

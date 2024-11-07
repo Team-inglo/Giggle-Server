@@ -18,6 +18,9 @@ import java.util.UUID;
 public class ResumeOwnersQueryV1Controller {
     private final ReadOwnerResumeDetailUseCase readOwnerResumeDetailUseCase;
 
+    /**
+     * 7.19 (고용주) 이력서 조회하기
+     */
     @GetMapping("/user-owner-job-postings/{id}/users/resumes/details")
     public ResponseDto<ReadOwnerResumeDetailResponseDto> readOwnerResumeDetail(
             @AccountID UUID accountId,

@@ -135,7 +135,7 @@ public class DocumentUsersCommandV1Controller {
     public ResponseDto<Void> confirmUserDocument(
             @AccountID UUID accountId,
             @PathVariable Long id) {
-        confirmUserDocumentUseCase.confirmUserDocument(accountId, id);
+        confirmUserDocumentUseCase.execute(accountId, id);
         return ResponseDto.ok(null);
     }
 }

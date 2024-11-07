@@ -4,34 +4,28 @@ import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.domain.type.*;
-
+import com.inglo.giggle.posting.domain.type.EEmploymentType;
+import com.inglo.giggle.posting.domain.type.EJobCategory;
+import com.inglo.giggle.posting.domain.type.EWorkPeriod;
+import com.inglo.giggle.posting.domain.type.EWorkingHours;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     List<JobPosting> findAllByOwner(Owner owner);
-
-    @Query("SELECT jp FROM JobPosting jp " +
-            "JOIN UserOwnerJobPosting uojp ON uojp.jobPosting.id = uojp.jobPosting.id " +
-            "JOIN Document d ON d.userOwnerJobPosting.id = uojp.id " +
-            "WHERE d.id = :documentId"
-    )
-    Optional<JobPosting> findByDocumentId(@org.springframework.data.repository.query.Param("documentId") Long documentId);
 
     @EntityGraph(attributePaths = {"owner"})
     Optional<JobPosting> findWithOwnerById(Long jobPostingId);
@@ -90,9 +84,10 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "OR (:recruitmentPeriod = 'OPENING' AND jp.recruitmentDeadLine >= :today) " +
             "OR (:recruitmentPeriod = 'CLOSED' AND jp.recruitmentDeadLine < :today)) " +
             "AND (:employmentType IS NULL OR jp.employmentType = :employmentType) " +
-            "AND (:visa IS NULL OR jp.visa = :visa) "
+            "AND (:visa IS NULL OR jp.visa = :visa) " +
+            "ORDER BY (SELECT COUNT(b.id) FROM BookMark b WHERE b.jobPosting = jp) DESC "
     )
-    List<JobPosting> findPopularJobPostingsWithFilters(
+    Page<JobPosting> findPopularJobPostingsWithFilters(
             @Param("jobTitle") String jobTitle,
             @Param("region1Depth1") String region1Depth1,
             @Param("region1Depth2") String region1Depth2,
@@ -127,7 +122,8 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("today") LocalDate today,
             @Param("recruitmentPeriod") String recruitmentPeriod,
             @Param("employmentType") EEmploymentType employmentType,
-            @Param("visa") EVisa visa
+            @Param("visa") EVisa visa,
+            Pageable pageable
     );
 
     // 최신순 공고 조회 쿼리
@@ -237,19 +233,18 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     List<JobPosting> findRecentlyJobPostingsWithFetchJoin();
 
     @Query("SELECT jp FROM JobPosting jp " +
-            "LEFT JOIN FETCH jp.owner o " +
-            "LEFT JOIN FETCH jp.workDayTimes wd " +
-            "LEFT JOIN BookMark bm ON bm.jobPosting = jp " +
+            "JOIN FETCH jp.owner o " +
+            "JOIN FETCH jp.workDayTimes wd " +
+            "JOIN BookMark bm ON bm.jobPosting = jp " +
+            "WHERE bm.user.id = :accountId " +
             "GROUP BY jp.id, o.id, wd.id " +
             "ORDER BY COUNT(bm.id) DESC")
-    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin();
+    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin(@Param("accountId") UUID accountId);
+
+
 
     @Query("SELECT b.jobPosting.id, COUNT(b) FROM BookMark b WHERE b.jobPosting.id IN :jobPostingIds GROUP BY b.jobPosting.id")
     List<Object[]> countBookmarksByJobPostingIds(@Param("jobPostingIds") List<Long> jobPostingIds);
-
-
-    @Query("SELECT COUNT(b) FROM BookMark b WHERE b.jobPosting.id = :jobPostingId")
-    int countBookmarksByJobPostingId(@Param("jobPostingId") Long jobPostingId);
 
 
 }

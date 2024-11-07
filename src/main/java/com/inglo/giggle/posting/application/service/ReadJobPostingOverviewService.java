@@ -11,7 +11,6 @@ import com.inglo.giggle.posting.domain.type.*;
 import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +59,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String employmentType,
             String visa
     ) {
+        // Account 조회
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
@@ -112,7 +111,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
 
         // 인기순 또는 최신순에 따라 다른 메서드 호출
         if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
-            List<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
+            Page<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
                     region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
@@ -147,31 +146,13 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                     today,
                     recruitmentPeriod,
                     employmentType == null ? null : EEmploymentType.fromString(employmentType),
-                    visa == null ? null : EVisa.fromString(visa)
+                    visa == null ? null : EVisa.fromString(visa),
+                    pageable
             );
-
-            // jobPostingList의 ID 목록을 수집
-            List<Long> jobPostingIds = jobPostingList.stream()
-                    .map(JobPosting::getId)
-                    .toList();
-
-            // 각 jobPostingId에 대한 북마크 개수를 한 번에 가져옴
-            Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds);
-
-            // bookmark 개수를 기준으로 jobPostingList 정렬
-            jobPostingList.sort((jobPosting1, jobPosting2) ->
-                    Integer.compare(
-                            bookmarkCountMap.getOrDefault(jobPosting2.getId(), 0),
-                            bookmarkCountMap.getOrDefault(jobPosting1.getId(), 0)
-                    )
-            );
-
-            // 정렬된 List를 다시 Page 객체로 변환
-            Page<JobPosting> sortedJobPostingsPage = new PageImpl<>(jobPostingList, pageable, jobPostingList.size());
 
             // fromPage 메서드를 사용해 응답 생성
             return ReadJobPostingOverviewResponseDto.fromEntities(
-                    sortedJobPostingsPage,
+                    jobPostingList,
                     account
             );
 
@@ -235,7 +216,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
         List<JobPosting> jobPostingsList = switch (type) {
             case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin();
             case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin();
-            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin();
+            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin(accountId);
             default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
         };
         // TODO 삭제할 로직

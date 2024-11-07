@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -18,14 +17,14 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             "JOIN FETCH n.userOwnerJobPosting u " +
             "JOIN FETCH u.user " +
             "JOIN FETCH u.jobPosting " +
-            "WHERE u.user.id = :userId")
+            "WHERE u.user.id = :userId And n.notificationType = 'USER'")
     Page<Notification> findByUserOwnerJobPostingUserId(@Param("userId") UUID userId, Pageable pageable);
 
     @Query("SELECT n FROM Notification n " +
             "JOIN FETCH n.userOwnerJobPosting u " +
             "JOIN FETCH u.owner " +
             "JOIN FETCH u.jobPosting " +
-            "WHERE u.owner.id = :ownerId")
+            "WHERE u.owner.id = :ownerId And n.notificationType = 'OWNER'")
     Page<Notification> findByUserOwnerJobPostingOwnerId(@Param("ownerId") UUID ownerId, Pageable pageable);
 
 

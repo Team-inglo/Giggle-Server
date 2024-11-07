@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +41,6 @@ public class ReadUserJobPostingBriefResponseDto extends SelfValidating<ReadUserJ
         @JsonProperty("title")
         private final String title;
 
-        @NotNull(message = "recruitment_dead_line는 null이 될 수 없습니다.")
         @JsonProperty("recruitment_dead_line")
         private final String recruitmentDeadLine;
 
@@ -61,7 +61,7 @@ public class ReadUserJobPostingBriefResponseDto extends SelfValidating<ReadUserJ
             return JobPostingBriefDto.builder()
                     .id(jobPosting.getId())
                     .title(jobPosting.getTitle())
-                    .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine().toString())
+                    .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
                     .jobCategory(jobPosting.getJobCategory())
                     .build();
         }

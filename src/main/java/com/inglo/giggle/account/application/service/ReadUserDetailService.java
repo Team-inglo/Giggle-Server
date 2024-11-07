@@ -21,6 +21,7 @@ public class ReadUserDetailService implements ReadUserDetailUseCase {
     @Override
     @Transactional(readOnly = true)
     public ReadUserDetailResponseDto execute(UUID accountId) {
+
         // 유저 정보 조회
         User user = userRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));

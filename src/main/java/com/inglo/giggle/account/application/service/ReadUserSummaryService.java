@@ -29,13 +29,13 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
     private final EducationRepository educationRepository;
-
     private final EducationService educationService;
     private final ResumeAggregateService resumeAggregateService;
 
     @Override
     @Transactional(readOnly = true)
     public ReadUserSummaryResponseDto execute(UUID accountId) {
+
         // 유저 정보 조회
         User user = userRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
@@ -63,4 +63,5 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
                 stringIntegerMap
         );
     }
+
 }

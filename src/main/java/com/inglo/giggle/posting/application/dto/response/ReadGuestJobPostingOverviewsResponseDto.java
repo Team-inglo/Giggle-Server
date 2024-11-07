@@ -72,7 +72,6 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
         @JsonProperty("hourly_rate")
         private final Integer hourlyRate;
 
-        @NotNull(message = "recruitment_dead_line은 null일 수 없습니다.")
         @JsonProperty("recruitment_dead_line")
         private final String recruitmentDeadLine;
 
@@ -121,7 +120,7 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
                     )
                     .hourlyRate(jobPosting.getHourlyRate())
                     .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
-                    .createdAt(jobPosting.getCreatedAt().toString())
+                    .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
                     .build();
         }
     }
@@ -185,7 +184,7 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
 
         public static Tags fromEntity(JobPosting jobPosting) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null ? Boolean.TRUE : jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa().toString())
                     .jobCategory(jobPosting.getJobCategory().toString())
                     .build();

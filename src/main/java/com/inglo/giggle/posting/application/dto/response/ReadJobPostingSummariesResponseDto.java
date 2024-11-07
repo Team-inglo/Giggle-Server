@@ -12,15 +12,15 @@ import java.time.LocalDate;
 @Getter
 public class ReadJobPostingSummariesResponseDto extends SelfValidating<ReadJobPostingSummariesResponseDto> {
 
-    @NotNull
+    @NotNull(message = "iconImgUrl 은(는) 필수 입력값입니다.")
     @JsonProperty("icon_img_url")
     private final String iconImgUrl;
 
-    @NotNull
+    @NotNull(message = "companyName 은(는) 필수 입력값입니다.")
     @JsonProperty("company_name")
     private final String companyName;
 
-    @NotNull
+    @NotNull(message = "title 은(는) 필수 입력값입니다.")
     @JsonProperty("title")
     private final String title;
 
@@ -65,15 +65,15 @@ public class ReadJobPostingSummariesResponseDto extends SelfValidating<ReadJobPo
     @Getter
     public static class Tags extends SelfValidating<Tags> {
 
-        @NotNull
+        @NotNull(message = "isRecruiting 은(는) 필수 입력값입니다.")
         @JsonProperty("is_recruiting")
         private final Boolean isRecruiting;
 
-        @NotNull
+        @NotNull(message = "visa 은(는) 필수 입력값입니다.")
         @JsonProperty("visa")
         private final String visa;
 
-        @NotNull
+        @NotNull(message = "jobCategory 은(는) 필수 입력값입니다.")
         @JsonProperty("job_category")
         private final String jobCategory;
 
@@ -90,7 +90,7 @@ public class ReadJobPostingSummariesResponseDto extends SelfValidating<ReadJobPo
                 JobPosting jobPosting
         ) {
             return Tags.builder()
-                    .isRecruiting(jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
+                    .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa().toString())
                     .jobCategory(jobPosting.getJobCategory().toString())
                     .build();
@@ -100,19 +100,19 @@ public class ReadJobPostingSummariesResponseDto extends SelfValidating<ReadJobPo
     @Getter
     public static class Summaries extends SelfValidating<Summaries> {
 
-        @NotNull
+        @NotNull(message = "address 은(는) 필수 입력값입니다.")
         @JsonProperty("address")
         private final String address;
 
-        @NotNull
+        @NotNull(message = "hourlyRate 은(는) 필수 입력값입니다.")
         @JsonProperty("hourly_rate")
         private final Integer hourlyRate;
 
-        @NotNull
+        @NotNull(message = "workPeriod 은(는) 필수 입력값입니다.")
         @JsonProperty("work_period")
         private final String workPeriod;
 
-        @NotNull
+        @NotNull(message = "workDaysPerWeek 은(는) 필수 입력값입니다.")
         @JsonProperty("work_days_per_week")
         private final String workDaysPerWeek;
 

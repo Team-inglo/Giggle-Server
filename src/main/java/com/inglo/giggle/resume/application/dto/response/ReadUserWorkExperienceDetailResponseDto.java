@@ -2,6 +2,7 @@ package com.inglo.giggle.resume.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.resume.domain.WorkExperience;
 import lombok.Builder;
 
@@ -42,8 +43,8 @@ public class ReadUserWorkExperienceDetailResponseDto extends SelfValidating<Read
         return ReadUserWorkExperienceDetailResponseDto.builder()
                 .title(workExperience.getExperienceTitle())
                 .workplace(workExperience.getWorkplace())
-                .startDate(workExperience.getStartDate().toString())
-                .endDate(workExperience.getEndDate() != null ? workExperience.getEndDate().toString() : null)
+                .startDate(DateTimeUtil.convertLocalDateToString(workExperience.getStartDate()))
+                .endDate(workExperience.getEndDate() != null ? DateTimeUtil.convertLocalDateToString(workExperience.getEndDate()) : null)
                 .description(workExperience.getDescription())
                 .build();
     }

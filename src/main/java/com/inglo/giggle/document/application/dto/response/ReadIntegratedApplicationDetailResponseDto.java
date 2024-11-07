@@ -3,6 +3,7 @@ package com.inglo.giggle.document.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.dto.request.AddressRequestDto;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import lombok.Builder;
 import lombok.Getter;
@@ -111,7 +112,7 @@ public class ReadIntegratedApplicationDetailResponseDto extends SelfValidating<R
         return ReadIntegratedApplicationDetailResponseDto.builder()
                 .firstName(application.getFirstName())
                 .lastName(application.getLastName())
-                .birth(application.getBirth().toString())
+                .birth(DateTimeUtil.convertLocalDateToString(application.getBirth()))
                 .gender(application.getGender().name())
                 .nationality(application.getNationality())
                 .telePhoneNumber(application.getTelePhoneNumber())

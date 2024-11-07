@@ -1,6 +1,5 @@
 package com.inglo.giggle.posting.domain.service;
 
-import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.posting.domain.JobPostAggregate;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.resume.domain.Resume;

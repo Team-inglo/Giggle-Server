@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.dto.request.AddressRequestDto;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.resume.domain.Education;
-import com.inglo.giggle.school.domain.School;
 import lombok.Builder;
 
 public class ReadUserSchoolDetailResponseDto extends SelfValidating<ReadUserSchoolDetailResponseDto> {

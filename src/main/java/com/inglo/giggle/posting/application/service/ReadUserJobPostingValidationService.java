@@ -23,6 +23,9 @@ import com.inglo.giggle.resume.repository.mysql.EducationRepository;
 import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -38,6 +41,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class ReadUserJobPostingValidationService implements ReadUserJobPostingValidationUseCase {
+
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     private final JobPostAggregateService jobPostAggregateService;
     private final ResumeAggregateService resumeAggregateService;
@@ -60,6 +66,13 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
     @Transactional(readOnly = true)
     public ReadUserJobPostingValidationResponseDto execute(UUID accountId, Long jobPostingId) throws Exception {
 
+        // Account 조회
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 계정 타입 유효성 검사
+        accountService.checkUserValidation(account);
+
         // 공고 조회
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
@@ -79,6 +92,9 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
         // 유저 정보 검증 (거리, 학력, 언어 스킬 기반)
         Boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
         Boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(resume, jobPosting);
+
+        log.info("isApplicableFromEducation: {}", isApplicableFromEducation);
+        log.info("isApplicableFromSchoolDistance: {}", isApplicableFromSchoolDistance);
 
         return ReadUserJobPostingValidationResponseDto.builder()
                 .isQualificationVerified(isApplicableFromEducation&&isApplicableFromSchoolDistance)
@@ -105,21 +121,26 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
 
     // 유저의 학교의 거리로 부터 공고에 적합한지 검증하는 메서드
     private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        Optional<School> school = schoolRepository.findMostRecentGraduationSchoolByUserId(resume.getUser().getId());
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDesc(resume.getUser().getId());
+
         if(school.isEmpty()) {
+            log.info("School is empty");
             return false;
         }
+
         School graduationSchool = school.get();
         Address schoolAddress = graduationSchool.getAddress();
         Address jobPostingAddress = jobPosting.getAddress();
 
+        log.info("before OSRM Request");
         JSONObject jsonObject = restClientUtil.sendGetMethod(osrmUtil.createOSRMRequestUrl(
                 schoolAddress.getLatitude(), schoolAddress.getLongitude(),
                 jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()
         ));
-        log.info("OSRM Response: {}", jsonObject);
+        log.info("OSRM Response: {}", jsonObject.toString());
 
         RouteResponseDto routeResponseDto = osrmUtil.mapToRouteResponseDto(jsonObject);
+        log.info("RouteResponseDto: {}", routeResponseDto.toString());
 
         if(graduationSchool.getIsMetropolitan()){
             return routeResponseDto.routes().get(0).duration() < Double.parseDouble(METROPOLITAN_DURATION);

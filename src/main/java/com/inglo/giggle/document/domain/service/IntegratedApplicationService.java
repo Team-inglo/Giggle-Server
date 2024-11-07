@@ -60,11 +60,6 @@ public class IntegratedApplicationService {
     @Value("${template.integrated-application.hwp.path}")
     private String hwpTemplatePath;
 
-    public IntegratedApplication updateStatusBySubmission(IntegratedApplication document) {
-        document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
-        return document;
-    }
-
     public void updateEmployeeStatusConfirmation(IntegratedApplication document) {
         document.updateEmployeeStatus(EEmployeeStatus.CONFIRMATION);
     }
@@ -233,14 +228,12 @@ public class IntegratedApplicationService {
                                 for (Object runContent : run.getContent()) {
                                     if (runContent instanceof JAXBElement<?> element) {
                                         if (element.getValue() instanceof Text textElement) {
-                                            log.info("textElement: {}", textElement.getValue());
                                             combinedText.append(textElement.getValue());
                                         }
                                     }
                                 }
                             }
                         }
-                        log.info("combinedText: {}", combinedText.toString());
                         if (combinedText.toString().contains("signature")) {
                             Drawing drawing = new Drawing();
                             drawing.getAnchorOrInline().add(inlineImage);

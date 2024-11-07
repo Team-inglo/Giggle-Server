@@ -7,5 +7,11 @@ import java.util.UUID;
 
 @UseCase
 public interface UpdateUserIntroductionUseCase {
+
+    /**
+     * (유학생) 자기소개 수정하기 유스케이스
+     * @param accountId 계정 ID
+     * @param requestDto 자기소개 수정 요청 DTO
+     */
     void execute(UUID accountId, UpdateUserIntroductionRequestDto requestDto);
 }

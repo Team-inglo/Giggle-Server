@@ -1,7 +1,5 @@
 package com.inglo.giggle.document.domain;
 
-import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.resume.domain.Resume;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

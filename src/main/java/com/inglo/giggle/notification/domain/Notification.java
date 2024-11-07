@@ -1,6 +1,5 @@
 package com.inglo.giggle.notification.domain;
 
-import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.persistence.*;

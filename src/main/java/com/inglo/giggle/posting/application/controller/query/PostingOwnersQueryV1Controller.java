@@ -2,7 +2,10 @@ package com.inglo.giggle.posting.application.controller.query;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.posting.application.dto.response.*;
+import com.inglo.giggle.posting.application.dto.response.ReadOwnerJobPostingOverviewsResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadOwnerUserOwnerJobPostingDetailResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadOwnerUserOwnerJobPostingUserBriefResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto;
 import com.inglo.giggle.posting.application.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -53,13 +56,17 @@ public class PostingOwnersQueryV1Controller {
     @GetMapping("/owners/job-postings/overviews")
     public ResponseDto<ReadOwnerJobPostingOverviewsResponseDto> readOwnerJobPostingList(
             @AccountID UUID accountId,
-            Integer page,
-            Integer size
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "size") Integer size,
+            @RequestParam(value = "sorting", defaultValue = "DESCENDING") String sorting
+
+
     ) {
         return ResponseDto.ok(readOwnerJobPostingOverviewsUseCase.execute(
                 accountId,
                 page,
-                size
+                size,
+                sorting
         ));
     }
 
