@@ -225,14 +225,14 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "WHERE jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today " +
             "GROUP BY jp.id, o.id, wd.id " +
             "ORDER BY COUNT(uojp.id) DESC")
-    List<JobPosting> findTrendingJobPostingsWithFetchJoin();
+    List<JobPosting> findTrendingJobPostingsWithFetchJoin(@Param("today") LocalDate today);
 
     @Query("SELECT DISTINCT jp FROM JobPosting jp " +
             "LEFT JOIN FETCH jp.owner " +
             "LEFT JOIN FETCH jp.workDayTimes " +
             "WHERE jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today " +
             "ORDER BY jp.createdAt DESC")
-    List<JobPosting> findRecentlyJobPostingsWithFetchJoin();
+    List<JobPosting> findRecentlyJobPostingsWithFetchJoin(@Param("today") LocalDate today);
 
     @Query("SELECT jp FROM JobPosting jp " +
             "JOIN FETCH jp.owner o " +
@@ -242,7 +242,9 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "AND (jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today) " +
             "GROUP BY jp.id, o.id, wd.id " +
             "ORDER BY COUNT(bm.id) DESC")
-    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin(@Param("accountId") UUID accountId);
+    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin(
+            @Param("accountId") UUID accountId,
+            @Param("today") LocalDate today);
 
 
 

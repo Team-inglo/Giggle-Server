@@ -214,9 +214,9 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
 
         Pageable pageable = PageRequest.of(page - 1, size);
         List<JobPosting> jobPostingsList = switch (type) {
-            case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin();
-            case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin();
-            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin(accountId);
+            case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin(LocalDate.now());
+            case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin(LocalDate.now());
+            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin(accountId, LocalDate.now());
             default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
         };
         // TODO 삭제할 로직
