@@ -203,8 +203,8 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
         List<JobPosting> jobPostingsList = switch (type) {
-            case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin();
-            case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin();
+            case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin(LocalDate.now());
+            case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin(LocalDate.now());
             default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
         };
 
