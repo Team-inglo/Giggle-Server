@@ -3,9 +3,9 @@
 GET {{host_url}}/v1/guests/job-postings/overviews?
     page={{posting.API_4_1.page}}&
     sorting={{posting.API_4_1.sorting}}&
-    size={{posting.API_4_1.size}}
+    size={{posting.API_4_1.size}}&
+    type={{posting.API_4_1.type}}
 Content-Type: application/json
-#    type = {{posting.API_4_1.type}}
 
 #    region_1depth={{posting.API_4_1.region_1depth_name}}&
 #    region_2depth={{posting.API_4_1.region_2depth_name}}&
