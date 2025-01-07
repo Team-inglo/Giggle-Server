@@ -34,7 +34,7 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
     private final RejectRepository rejectRepository;
 
     @Override
-    public ReadOwnerDocumentSummaryResponseDto readOwnerDocumentSummary(UUID accountId, Long userOwnerJobPostingId) {
+    public ReadOwnerDocumentSummaryResponseDto execute(UUID accountId, Long userOwnerJobPostingId) {
 
         // Account 조회
         Account account = accountRepository.findById(accountId)

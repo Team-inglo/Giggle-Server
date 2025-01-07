@@ -43,8 +43,8 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         @JsonProperty("id")
         private final Long id;
 
-        @JsonProperty("hwp_url")
-        private final String hwpUrl;
+//        @JsonProperty("hwp_url")
+//        private final String hwpUrl;
 
         @JsonProperty("word_url")
         private final String wordUrl;
@@ -53,9 +53,9 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         private final String status;
 
         @Builder
-        public DocumentDetailDto(Long id, String hwpUrl, String wordUrl, EEmployeeStatus status) {
+        public DocumentDetailDto(Long id, String wordUrl, EEmployeeStatus status) {
             this.id = id;
-            this.hwpUrl = hwpUrl;
+//            this.hwpUrl = hwpUrl;
             this.wordUrl = wordUrl;
             this.status = status.getEnName();
         }
@@ -63,7 +63,7 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         public static DocumentDetailDto fromEntity(Document document, EEmployeeStatus status) {
             return DocumentDetailDto.builder()
                     .id(document.getId())
-                    .hwpUrl(document.getHwpUrl())
+//                    .hwpUrl(document.getHwpUrl())
                     .wordUrl(document.getWordUrl())
                     .status(status)
                     .build();
@@ -77,23 +77,23 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
         @JsonProperty("id")
         private final Long id;
 
-        @JsonProperty("hwp_url")
-        private final String hwpUrl;
+//        @JsonProperty("hwp_url")
+//        private final String hwpUrl;
 
         @JsonProperty("word_url")
         private final String wordUrl;
 
         @Builder
-        public SimpleDocumentDto(Long id, String hwpUrl, String wordUrl) {
+        public SimpleDocumentDto(Long id, String wordUrl) {
             this.id = id;
-            this.hwpUrl = hwpUrl;
+//            this.hwpUrl = hwpUrl;
             this.wordUrl = wordUrl;
         }
 
         public static SimpleDocumentDto fromEntity(Document document) {
             return SimpleDocumentDto.builder()
                     .id(document.getId())
-                    .hwpUrl(document.getHwpUrl())
+//                    .hwpUrl(document.getHwpUrl())
                     .wordUrl(document.getWordUrl())
                     .build();
         }
