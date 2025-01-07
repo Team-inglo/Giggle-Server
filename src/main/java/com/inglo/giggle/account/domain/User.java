@@ -155,6 +155,10 @@ public class User extends Account {
         this.birth = birth;
     }
 
+    public void updateAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public ESecurityRole getRole() {
         return ESecurityRole.USER;

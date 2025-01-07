@@ -42,7 +42,17 @@ Content-Type: application/json
   "nationality": "{{account.API_3_5.nationality}}",
   "visa": "{{account.API_3_5.visa}}",
   "phone_number": "{{account.API_3_5.phone_number}}",
-  "is_profile_img_changed": "{{account.API_3_5.is_profile_img_changed}}"
+  "is_profile_img_changed": "{{account.API_3_5.is_profile_img_changed}}",
+  "address": {
+    "address_name": "{{account.API_3_5.address.address_name}}",
+    "region_1depth_name": "{{account.API_3_5.address.region_1depth_name}}",
+    "region_2depth_name": "{{account.API_3_5.address.region_2depth_name}}",
+    "region_3depth_name": "{{account.API_3_5.address.region_3depth_name}}",
+    "region_4depth_name": "{{account.API_3_5.address.region_4depth_name}}",
+    "address_detail": "{{account.API_3_5.address.address_detail}}",
+    "longitude": "{{account.API_3_5.address.longitude}}",
+    "latitude": "{{account.API_3_5.address.latitude}}"
+  }
 }
 
 ### 3.6 (고용주) 회사 정보 수정하기
