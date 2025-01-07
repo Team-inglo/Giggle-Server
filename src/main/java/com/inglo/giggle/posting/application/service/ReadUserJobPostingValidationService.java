@@ -135,8 +135,9 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
         log.info("before OSRM Request");
         JSONObject jsonObject = restClientUtil.sendGetMethod(osrmUtil.createOSRMRequestUrl(
                 schoolAddress.getLatitude(), schoolAddress.getLongitude(),
-                jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()
-        ));
+                jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()),
+                null
+        );
         log.info("OSRM Response: {}", jsonObject.toString());
 
         RouteResponseDto routeResponseDto = osrmUtil.mapToRouteResponseDto(jsonObject);
