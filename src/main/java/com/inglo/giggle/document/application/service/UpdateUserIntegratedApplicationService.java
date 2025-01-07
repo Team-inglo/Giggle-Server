@@ -137,7 +137,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
 
         // Document의 wordUrl, hwpUrl 업데이트
         updatedIntegratedApplication
-                = (IntegratedApplication) documentService.updateUrls(integratedApplication, integratedApplicationWordUrl, integratedApplicationHwpUrl);
+                = (IntegratedApplication) documentService.updateUrls(integratedApplication, integratedApplicationWordUrl);
         integratedApplicationRepository.save(updatedIntegratedApplication);
     }
 

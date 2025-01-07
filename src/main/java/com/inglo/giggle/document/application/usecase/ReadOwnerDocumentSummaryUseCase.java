@@ -16,5 +16,5 @@ public interface ReadOwnerDocumentSummaryUseCase {
      *
      * @return (고용주) 서류 요약 조회하기
      */
-    ReadOwnerDocumentSummaryResponseDto readOwnerDocumentSummary(UUID accountId, Long userOwnerJobPostingId);
+    ReadOwnerDocumentSummaryResponseDto execute(UUID accountId, Long userOwnerJobPostingId);
 }
