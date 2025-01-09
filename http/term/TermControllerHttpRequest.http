@@ -1,0 +1,14 @@
+### 11.1 약관 종류별 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/terms/{{term.API_11_1.termType}}/details
+Authorization: Bearer {{access_token}}
+
+### 11.2 약관 동의하기
+// @no-log
+POST {{host_url}}/v1/term-accounts
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+    "term_types": ["personal-service-terms", "privacy-policy"]
+}
