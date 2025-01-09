@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record SignUpDefaultUserRequestDto(
         @JsonProperty("temporary_token")
@@ -28,7 +29,11 @@ public record SignUpDefaultUserRequestDto(
 
         @JsonProperty("language")
         @NotNull(message = "사용 언어 선택은 필수입니다.")
-        String language
+        String language,
+
+        @JsonProperty("term_types")
+        @NotNull(message = "약관 동의는 필수입니다.")
+        List<String> termTypes
 ) {
         public record SignUpDefaultUserUserInfo(
                 @JsonProperty("first_name")
