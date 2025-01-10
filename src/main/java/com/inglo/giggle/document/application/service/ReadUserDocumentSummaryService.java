@@ -62,7 +62,7 @@ public class ReadUserDocumentSummaryService implements ReadUserDocumentSummaryUs
         IntegratedApplication integratedApplication = integratedApplicationRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
                 .orElse(null);
 
-        return ReadUserDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract, integratedApplication);
+        return ReadUserDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract, integratedApplication, userOwnerJobPosting.getStep().getLevel() > 3);
     }
 
 }
