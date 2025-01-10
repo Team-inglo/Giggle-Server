@@ -2,19 +2,15 @@
 // @no-log
 GET {{host_url}}/v1/guests/job-postings/overviews?
     page={{posting.API_4_1.page}}&
-    size={{posting.API_4_1.size}}&
-    region_1depth={{posting.API_4_1.region_1depth_name}}&
-    region_2depth={{posting.API_4_1.region_2depth_name}}&
-    region_3depth={{posting.API_4_1.region_3depth_name}}&
     sorting={{posting.API_4_1.sorting}}&
-    industry={{posting.API_4_1.industry}}
-
-#    type={{posting.API_4_1.type}}
+    size={{posting.API_4_1.size}}
 Content-Type: application/json
+#    type = {{posting.API_4_1.type}}
 
 #    region_1depth={{posting.API_4_1.region_1depth_name}}&
 #    region_2depth={{posting.API_4_1.region_2depth_name}}&
 #    region_3depth={{posting.API_4_1.region_3depth_name}}
+#    industry={{posting.API_4_1.industry}}&
 #    work_period={{posting.API_4_1.work_period}}&
 #    work_days_per_week={{posting.API_4_1.work_days_per_week}}&
 #    working_day= {{posting.API_4_1.working_day}}&
@@ -157,19 +153,19 @@ Content-Type: application/json
 Content-Disposition: form-data; name="image"; filename="image1.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image.png
+< /Users/kyeom/Desktop/updated-image.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image2.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image.png
+< /Users/kyeom/Desktop/updated-image.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image3.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image.png
+< /Users/kyeom/Desktop/updated-image.png
 
 --boundary
 
