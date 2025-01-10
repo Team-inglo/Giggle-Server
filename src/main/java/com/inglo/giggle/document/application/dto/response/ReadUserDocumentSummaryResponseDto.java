@@ -23,15 +23,21 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
     @JsonProperty("integrated_application")
     private final SimpleDocumentDto integratedApplication;
 
+    @JsonProperty("is_completed")
+    private final Boolean isCompleted;
+
     @Builder
     public ReadUserDocumentSummaryResponseDto(
             DocumentDetailDto partTimeEmploymentPermits,
             DocumentDetailDto standardLaborContract,
-            SimpleDocumentDto integratedApplication
+            SimpleDocumentDto integratedApplication,
+            Boolean isCompleted
+
     ) {
         this.partTimeEmploymentPermits = partTimeEmploymentPermits;
         this.standardLaborContract = standardLaborContract;
         this.integratedApplication = integratedApplication;
+        this.isCompleted = isCompleted;
 
         this.validateSelf();
     }
@@ -102,12 +108,14 @@ public class ReadUserDocumentSummaryResponseDto extends SelfValidating<ReadUserD
     public static ReadUserDocumentSummaryResponseDto of(
             PartTimeEmploymentPermit partTimeEmploymentPermits,
             StandardLaborContract standardLaborContract,
-            IntegratedApplication integratedApplication
+            IntegratedApplication integratedApplication,
+            Boolean isCompleted
     ) {
         return ReadUserDocumentSummaryResponseDto.builder()
                 .partTimeEmploymentPermits(partTimeEmploymentPermits != null ? DocumentDetailDto.fromEntity(partTimeEmploymentPermits, partTimeEmploymentPermits.getEmployeeStatus()) : null)
                 .standardLaborContract(standardLaborContract != null ? DocumentDetailDto.fromEntity(standardLaborContract, standardLaborContract.getEmployeeStatus()) : null)
                 .integratedApplication(integratedApplication != null ? SimpleDocumentDto.fromEntity(integratedApplication) : null)
+                .isCompleted(isCompleted)
                 .build();
     }
 }

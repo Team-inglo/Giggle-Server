@@ -7,19 +7,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum EApplicationStep {
 
-    RESUME_UNDER_REVIEW("이력서 확인중", "RESUME_UNDER_REVIEW"),
-    WAITING_FOR_INTERVIEW("면접 대기중", "WAITING_FOR_INTERVIEW"),
-    FILLING_OUT_DOCUMENTS("서류 작성중", "FILLING_OUT_DOCUMENTS"),
-    DOCUMENT_UNDER_REVIEW("서류 검토중", "DOCUMENT_UNDER_REVIEW"),
-    APPLICATION_IN_PROGRESS("신청 허가중", "APPLICATION_IN_PROGRESS"),
-    APPLICATION_SUCCESS("신청 성공", "APPLICATION_SUCCESS"),
-    APPLICATION_REJECTED("리젝", "APPLICATION_REJECTED"),
-    RESUME_REJECTED("고용주 이력서 거절", "RESUME_REJECTED"),
-    PENDING("2주 이상 지연", "PENDING"),
-    REGISTERING_RESULTS("결과보고", "REGISTERING_RESULTS")
+    RESUME_UNDER_REVIEW("이력서 확인중", "RESUME_UNDER_REVIEW", 1),
+    WAITING_FOR_INTERVIEW("면접 대기중", "WAITING_FOR_INTERVIEW", 2),
+    FILLING_OUT_DOCUMENTS("서류 작성중", "FILLING_OUT_DOCUMENTS", 3),
+    DOCUMENT_UNDER_REVIEW("서류 검토중", "DOCUMENT_UNDER_REVIEW", 4),
+    APPLICATION_IN_PROGRESS("신청 허가중", "APPLICATION_IN_PROGRESS", 5),
+    APPLICATION_SUCCESS("신청 성공", "APPLICATION_SUCCESS", 6),
+    APPLICATION_REJECTED("리젝", "APPLICATION_REJECTED", 7),
+    RESUME_REJECTED("고용주 이력서 거절", "RESUME_REJECTED", 8),
+    PENDING("2주 이상 지연", "PENDING", 9),
+    REGISTERING_RESULTS("결과보고", "REGISTERING_RESULTS", 10)
     ;
     private final String krName;
     private final String enName;
+    private final Integer level;
 
     public static EApplicationStep fromString(String value) {
         return switch (value.toUpperCase()) {

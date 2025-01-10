@@ -72,6 +72,6 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
                     .orElse(null);
         }
 
-        return ReadOwnerDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract, partTimeEmploymentPermitReject, standardLaborContractReject);
+        return ReadOwnerDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract, partTimeEmploymentPermitReject, standardLaborContractReject, userOwnerJobPosting.getStep().getLevel() > 3);
     }
 }

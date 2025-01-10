@@ -20,13 +20,19 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
     @JsonProperty("standard_labor_contract")
     private final DocumentDetailDto standardLaborContract;
 
+    @JsonProperty("is_completed")
+    private final Boolean isCompleted;
+
     @Builder
     public ReadOwnerDocumentSummaryResponseDto(
             DocumentDetailDto partTimeEmploymentPermits,
-            DocumentDetailDto standardLaborContract
+            DocumentDetailDto standardLaborContract,
+            Boolean isCompleted
+
     ) {
         this.partTimeEmploymentPermits = partTimeEmploymentPermits;
         this.standardLaborContract = standardLaborContract;
+        this.isCompleted = isCompleted;
 
         this.validateSelf();
     }
@@ -74,7 +80,8 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
             PartTimeEmploymentPermit partTimeEmploymentPermits,
             StandardLaborContract standardLaborContract,
             Reject partTimeEmploymentPermitReject,
-            Reject standardLaborContractReject
+            Reject standardLaborContractReject,
+            Boolean isCompleted
     ) {
         return ReadOwnerDocumentSummaryResponseDto.builder()
                 .partTimeEmploymentPermits(
@@ -91,6 +98,7 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
                                         standardLaborContract.getEmployerStatus() != null ? standardLaborContract.getEmployerStatus() : null,
                                         standardLaborContractReject != null ? standardLaborContractReject.getReason() : null)
                                 : null)
+                .isCompleted(isCompleted)
                 .build();
     }
 }
