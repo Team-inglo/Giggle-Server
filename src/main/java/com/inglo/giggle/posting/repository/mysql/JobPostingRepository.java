@@ -3,6 +3,8 @@ package com.inglo.giggle.posting.repository.mysql;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.posting.application.dto.request.JobPostingSearchId;
+import com.inglo.giggle.posting.application.dto.request.JobPostingSearchIdRequestDto;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
@@ -33,9 +35,9 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     Page<JobPosting> findWithPageByOwner(Owner owner, Pageable pageRequest);
 
     // 인기순 공고 조회 쿼리
-    @Query("SELECT jp FROM JobPosting jp " +
-            "JOIN FETCH jp.owner o " +
-            "JOIN FETCH jp.workDayTimes pw " +
+    @Query("SELECT DISTINCT jp.id AS jobPostingId, jp AS jobPosting " +
+            "FROM JobPosting jp " +
+            "JOIN jp.workDayTimes pw " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND ( " +
             "( " +
@@ -59,16 +61,9 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "AND (:region3Depth3 IS NULL OR jp.address.region3DepthName = :region3Depth3) " +
             ")) " +
             "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
-            "AND ((:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList)) " +
-            "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
-            "AND ((:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList)) " +
-            "AND ((" +
-            "(:workDaysPerWeekList IS NULL OR " +
-            "(:workDaysPerWeekList IS NOT NULL AND " +
+            "AND (:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList) " +
+            "AND (:workDaysPerWeekList IS NULL OR " +
             "(SELECT COUNT(wdt) FROM jp.workDayTimes wdt WHERE wdt.dayOfWeek <> :negotiableDay) IN :workDaysPerWeekList) " +
-            ") " +
-            "OR EXISTS (SELECT 1 FROM jp.workDayTimes wdt WHERE wdt.dayOfWeek = :negotiableDay)) " +
-            ")" +
             "AND (:workingDayList IS NULL OR pw.dayOfWeek IN :workingDayList " +
             "OR EXISTS (SELECT 1 FROM jp.workDayTimes wdt WHERE wdt.dayOfWeek = :negotiableDay)) " +
             "AND (:workingHoursList IS NULL OR " +
@@ -79,15 +74,14 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "OR (:fullDayStart BETWEEN pw.workStartTime AND pw.workEndTime OR :fullDayEnd BETWEEN pw.workStartTime AND pw.workEndTime) AND :fullDaySelected = TRUE " +
             "OR (:dawnStart BETWEEN pw.workStartTime AND pw.workEndTime OR :dawnEnd BETWEEN pw.workStartTime AND pw.workEndTime) AND :dawnSelected = TRUE " +
             "OR (pw.dayOfWeek = :negotiableDay) " +
-            ") "+
+            ") " +
             "AND ((:recruitmentPeriod IS NULL) " +
             "OR (:recruitmentPeriod = 'OPENING' AND jp.recruitmentDeadLine >= :today) " +
             "OR (:recruitmentPeriod = 'CLOSED' AND jp.recruitmentDeadLine < :today)) " +
             "AND (:employmentType IS NULL OR jp.employmentType = :employmentType) " +
             "AND (:visa IS NULL OR jp.visa = :visa) " +
-            "ORDER BY (SELECT COUNT(b.id) FROM BookMark b WHERE b.jobPosting = jp) DESC "
-    )
-    Page<JobPosting> findPopularJobPostingsWithFilters(
+            "ORDER BY (SELECT COUNT(b.id) FROM BookMark b WHERE b.jobPosting = jp) DESC")
+    Page<JobPostingProjection> findPopularJobPostingsWithFilters(
             @Param("jobTitle") String jobTitle,
             @Param("region1Depth1") String region1Depth1,
             @Param("region1Depth2") String region1Depth2,
@@ -127,9 +121,9 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     );
 
     // 최신순 공고 조회 쿼리
-    @Query("SELECT jp FROM JobPosting jp " +
-            "JOIN FETCH jp.owner o " +
-            "JOIN FETCH jp.workDayTimes pw " +
+    @Query("SELECT DISTINCT jp.id AS jobPostingId, jp AS jobPosting " +
+            "FROM JobPosting jp " +
+            "JOIN jp.workDayTimes pw " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND ( " +
             "( " +
@@ -179,7 +173,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "AND (:visa IS NULL OR jp.visa = :visa) " +
             "ORDER BY jp.createdAt DESC"
     )
-    Page<JobPosting> findRecentJobPostingsWithFilters(
+    Page<JobPostingProjection> findRecentJobPostingsWithFilters(
             @Param("jobTitle") String jobTitle,
             @Param("region1Depth1") String region1Depth1,
             @Param("region1Depth2") String region1Depth2,
@@ -219,39 +213,51 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     );
 
     @Query("SELECT jp FROM JobPosting jp " +
-            "LEFT JOIN FETCH jp.owner o " +
-            "LEFT JOIN FETCH jp.workDayTimes wd " +
-            "LEFT JOIN UserOwnerJobPosting uojp ON uojp.jobPosting = jp " +
-            "WHERE jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today " +
-            "GROUP BY jp.id, o.id, wd.id " +
-            "ORDER BY COUNT(uojp.id) DESC")
-    List<JobPosting> findTrendingJobPostingsWithFetchJoin(@Param("today") LocalDate today);
+            "JOIN FETCH jp.owner o " +
+            "JOIN FETCH jp.workDayTimes wdt " +
+            "WHERE jp.id IN :jobPostingIds")
+    List<JobPosting> findJobPostingsWithDetailsByIds(
+            @Param("jobPostingIds") List<Long> jobPostingIds
+    );
 
-    @Query("SELECT DISTINCT jp FROM JobPosting jp " +
-            "LEFT JOIN FETCH jp.owner " +
-            "LEFT JOIN FETCH jp.workDayTimes " +
+    @Query("SELECT DISTINCT jp.id AS jobPostingId, COUNT(uojp.id) AS popularity " +
+            "FROM JobPosting jp " +
+            "LEFT JOIN jp.userOwnerJobPostings uojp " +
+            "WHERE jp.recruitmentDeadLine IS NULL OR jp.recruitmentDeadLine >= :today " +
+            "GROUP BY jp.id " +
+            "ORDER BY COUNT(uojp.id) DESC")
+    Page<JobPostingProjection> findTrendingJobPostingsWithFetchJoin(
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
+
+    @Query("SELECT DISTINCT jp.id AS jobPostingId, jp AS jobPosting FROM JobPosting jp " +
             "WHERE jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today " +
             "ORDER BY jp.createdAt DESC")
-    List<JobPosting> findRecentlyJobPostingsWithFetchJoin(@Param("today") LocalDate today);
+    Page<JobPostingProjection> findRecentlyJobPostingsWithFetchJoin(
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
 
-    @Query("SELECT jp FROM JobPosting jp " +
-            "JOIN FETCH jp.owner o " +
-            "JOIN FETCH jp.workDayTimes wd " +
-            "JOIN BookMark bm ON bm.jobPosting = jp " +
+    @Query("SELECT DISTINCT jp AS jobPosting, jp.id AS jobPostingId FROM JobPosting jp " +
+            "JOIN jp.bookMarks bm " +
             "WHERE bm.user.id = :accountId " +
-            "AND (jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today) " +
-            "GROUP BY jp.id, o.id, wd.id " +
-            "ORDER BY COUNT(bm.id) DESC")
-    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin(
+            "AND (jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today) ")
+    Page<JobPostingProjection> findBookmarkedJobPostingsWithFetchJoin(
             @Param("accountId") UUID accountId,
-            @Param("today") LocalDate today);
-
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
 
 
     @Query("SELECT b.jobPosting.id, COUNT(b) FROM BookMark b WHERE b.jobPosting.id IN :jobPostingIds GROUP BY b.jobPosting.id")
     List<Object[]> countBookmarksByJobPostingIds(@Param("jobPostingIds") List<Long> jobPostingIds);
 
+    public interface JobPostingProjection {
+        Long getJobPostingId();
+        UUID getOwnerId();
+        List<Long> getWorkDayTimeIds();
+    }
 
 }
-
 

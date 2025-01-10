@@ -1,6 +1,5 @@
 package com.inglo.giggle.posting.domain.type;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
