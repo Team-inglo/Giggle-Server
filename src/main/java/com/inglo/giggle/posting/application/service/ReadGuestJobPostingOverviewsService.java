@@ -4,6 +4,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.posting.application.dto.request.JobPostingSearchId;
 import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingOverviewsResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadGuestJobPostingOverviewsUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
@@ -23,8 +24,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -59,6 +58,9 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             String employmentType,
             String visa
     ) {
+        log.info("region1Depth: {}", region1Depth);
+        log.info("region2Depth: {}", region2Depth);
+        log.info("region3Depth: {}", region3Depth);
         Pageable pageable = PageRequest.of(page - 1, size);
         LocalDate today = LocalDate.now();
 
@@ -67,13 +69,15 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
         List<String> region1DepthList = regionSets.stream().map(list -> list.get(0)).toList();
         List<String> region2DepthList = regionSets.stream().map(list -> list.get(1)).toList();
         List<String> region3DepthList = regionSets.stream().map(list -> list.get(2)).toList();
+        log.info("region1DepthList: {}", region1DepthList);
+        log.info("region2DepthList: {}", region2DepthList);
+        log.info("region3DepthList: {}", region3DepthList);
+
 
         // 필터 파라미터 변환
         List<EJobCategory> industryList = parseEnums(industry, EJobCategory.class);
         List<EWorkPeriod> workPeriodList = parseEnums(workPeriod, EWorkPeriod.class);
         List<Integer> workDaysPerWeekList = parseIntegerToEnums(workDaysPerWeek);
-
-        // 요일 설정
         List<EDayOfWeek> workingDayList = parseEnums(workingDay, EDayOfWeek.class);
 
         // 시간대 설정
@@ -92,12 +96,12 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
         List<EWorkingHours> workingHoursList = parseEnums(workingHours, EWorkingHours.class);
 
         boolean morningSelected = false;
-        boolean afternoonSelected= false;
-        boolean eveningSelected= false;
-        boolean fullDaySelected= false;
+        boolean afternoonSelected = false;
+        boolean eveningSelected = false;
+        boolean fullDaySelected = false;
         boolean dawnSelected = false;
 
-        if (workingHoursList != null){
+        if (workingHoursList != null) {
             morningSelected = workingHoursList.contains(EWorkingHours.MORNING);
             afternoonSelected = workingHoursList.contains(EWorkingHours.AFTERNOON);
             eveningSelected = workingHoursList.contains(EWorkingHours.EVENING);
@@ -105,9 +109,10 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             dawnSelected = workingHoursList.contains(EWorkingHours.DAWN);
         }
 
+        Page<JobPostingRepository.JobPostingProjection> jobPostingSearches;
         // 인기순 또는 최신순에 따라 다른 메서드 호출
-        if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
-            Page<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
+        if (sorting != null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
+            jobPostingSearches = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
                     region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
@@ -145,14 +150,8 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
                     visa == null ? null : EVisa.fromString(visa),
                     pageable
             );
-
-            // fromPage 메서드를 사용해 응답 생성
-            return ReadGuestJobPostingOverviewsResponseDto.fromPage(
-                    jobPostingList
-            );
-
         } else {
-            return ReadGuestJobPostingOverviewsResponseDto.fromPage(jobPostingRepository.findRecentJobPostingsWithFilters(
+            jobPostingSearches = jobPostingRepository.findRecentJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
                     region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
@@ -186,13 +185,30 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
                     EDayOfWeek.NEGOTIABLE,
                     today,
                     recruitmentPeriod,
-                    employmentType == null ? null: EEmploymentType.fromString(employmentType),
-                    visa == null ? null: EVisa.fromString(visa),
+                    employmentType == null ? null : EEmploymentType.fromString(employmentType),
+                    visa == null ? null : EVisa.fromString(visa),
                     pageable
-                    )
             );
-
         }
+        // Step 2: JobPosting IDs 추출
+        List<Long> jobPostingIds = jobPostingSearches.stream()
+                .map(JobPostingRepository.JobPostingProjection::getJobPostingId)
+                .toList();
+        log.info("jobPostingIds: {}", jobPostingIds);
+
+        // Step 3: 상세 데이터 가져오기
+        List<JobPosting> jobPostings = jobPostingRepository.findJobPostingsWithDetailsByIds(jobPostingIds);
+
+        // fromPage 메서드를 사용해 응답 생성
+        // Step 4: hasNext 정보와 상세 데이터를 활용해 응답 생성
+        return ReadGuestJobPostingOverviewsResponseDto.builder()
+                .hasNext(jobPostingSearches.hasNext())
+                .jobPostingList(
+                        jobPostings.stream()
+                                .map(ReadGuestJobPostingOverviewsResponseDto.JobPostingOverviewDto::fromEntity)
+                                .toList()
+                )
+                .build();
     }
 
     @Override

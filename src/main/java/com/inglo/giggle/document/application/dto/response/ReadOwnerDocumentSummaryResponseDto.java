@@ -38,8 +38,8 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
         @JsonProperty("id")
         private final Long id;
 
-        @JsonProperty("hwp_url")
-        private final String hwpUrl;
+//        @JsonProperty("hwp_url")
+//        private final String hwpUrl;
 
         @JsonProperty("word_url")
         private final String wordUrl;
@@ -51,9 +51,9 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
         private final String reason;
 
         @Builder
-        public DocumentDetailDto(Long id, String hwpUrl, String wordUrl, EEmployerStatus status, String reason) {
+        public DocumentDetailDto(Long id, String wordUrl, EEmployerStatus status, String reason) {
             this.id = id;
-            this.hwpUrl = hwpUrl;
+//            this.hwpUrl = hwpUrl;
             this.wordUrl = wordUrl;
             this.status = status != null ? status.getEnName() : null;
             this.reason = reason;
@@ -62,7 +62,7 @@ public class ReadOwnerDocumentSummaryResponseDto extends SelfValidating<ReadOwne
         public static DocumentDetailDto fromEntity(Document document, EEmployerStatus status, String reason) {
             return DocumentDetailDto.builder()
                     .id(document.getId())
-                    .hwpUrl(document.getHwpUrl())
+//                    .hwpUrl(document.getHwpUrl())
                     .wordUrl(document.getWordUrl())
                     .status(status)
                     .reason(reason)

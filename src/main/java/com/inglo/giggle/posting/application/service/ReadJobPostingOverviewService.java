@@ -4,6 +4,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.posting.application.dto.request.JobPostingSearchId;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingOverviewUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
@@ -55,7 +56,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String workDaysPerWeek,
             String workingDay,
             String workingHours,
-            String recruitmentPeriod,
+            String recruitmentPeriod, // OPENED, CLOSED
             String employmentType,
             String visa
     ) {
@@ -78,7 +79,12 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
         List<Integer> workDaysPerWeekList = parseIntegerToEnums(workDaysPerWeek);
 
         // 요일 설정
-        List<EDayOfWeek> workingDayList = parseEnums(workingDay, EDayOfWeek.class);
+        List<EDayOfWeek> workingDayList;
+        if(workingDay.equals(EDayOfWeek.NEGOTIABLE.toString())){
+            workingDayList = null;
+        }else{
+            workingDayList = parseEnums(workingDay, EDayOfWeek.class);
+        }
 
         // 시간대 설정
         LocalTime morningStart = LocalTime.of(6, 0);
@@ -109,9 +115,10 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             dawnSelected = workingHoursList.contains(EWorkingHours.DAWN);
         }
 
+        Page<JobPostingRepository.JobPostingProjection> jobPostingSearches;
         // 인기순 또는 최신순에 따라 다른 메서드 호출
         if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
-            Page<JobPosting> jobPostingList = jobPostingRepository.findPopularJobPostingsWithFilters(
+            jobPostingSearches = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
                     region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
@@ -149,55 +156,63 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                     visa == null ? null : EVisa.fromString(visa),
                     pageable
             );
-
-            // fromPage 메서드를 사용해 응답 생성
-            return ReadJobPostingOverviewResponseDto.fromEntities(
-                    jobPostingList,
-                    account
-            );
-
         } else {
-            return ReadJobPostingOverviewResponseDto.fromEntities(jobPostingRepository.findRecentJobPostingsWithFilters(
-                            jobTitle,
-                            !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
-                            region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
-                            region1DepthList.size() > 2 ? region1DepthList.get(2) : null,
-                            !region2DepthList.isEmpty() ? region2DepthList.get(0) : null,
-                            region2DepthList.size() > 1 ? region2DepthList.get(1) : null,
-                            region2DepthList.size() > 2 ? region2DepthList.get(2) : null,
-                            !region3DepthList.isEmpty() ? region3DepthList.get(0) : null,
-                            region3DepthList.size() > 1 ? region3DepthList.get(1) : null,
-                            region3DepthList.size() > 2 ? region3DepthList.get(2) : null,
-                            industryList,
-                            workPeriodList,
-                            workDaysPerWeekList,
-                            workingDayList,
-                            workingHoursList,
-                            morningStart,
-                            morningEnd,
-                            afternoonStart,
-                            afternoonEnd,
-                            eveningStart,
-                            eveningEnd,
-                            fullDayStart,
-                            fullDayEnd,
-                            dawnStart,
-                            dawnEnd,
-                            morningSelected,
-                            afternoonSelected,
-                            eveningSelected,
-                            fullDaySelected,
-                            dawnSelected,
-                            EDayOfWeek.NEGOTIABLE,
-                            today,
-                            recruitmentPeriod,
-                            employmentType == null ? null: EEmploymentType.fromString(employmentType),
-                            visa == null ? null: EVisa.fromString(visa),
-                            pageable
-                    ),
-                    account
+            jobPostingSearches = jobPostingRepository.findRecentJobPostingsWithFilters(
+                    jobTitle,
+                    !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
+                    region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
+                    region1DepthList.size() > 2 ? region1DepthList.get(2) : null,
+                    !region2DepthList.isEmpty() ? region2DepthList.get(0) : null,
+                    region2DepthList.size() > 1 ? region2DepthList.get(1) : null,
+                    region2DepthList.size() > 2 ? region2DepthList.get(2) : null,
+                    !region3DepthList.isEmpty() ? region3DepthList.get(0) : null,
+                    region3DepthList.size() > 1 ? region3DepthList.get(1) : null,
+                    region3DepthList.size() > 2 ? region3DepthList.get(2) : null,
+                    industryList,
+                    workPeriodList,
+                    workDaysPerWeekList,
+                    workingDayList,
+                    workingHoursList,
+                    morningStart,
+                    morningEnd,
+                    afternoonStart,
+                    afternoonEnd,
+                    eveningStart,
+                    eveningEnd,
+                    fullDayStart,
+                    fullDayEnd,
+                    dawnStart,
+                    dawnEnd,
+                    morningSelected,
+                    afternoonSelected,
+                    eveningSelected,
+                    fullDaySelected,
+                    dawnSelected,
+                    EDayOfWeek.NEGOTIABLE,
+                    today,
+                    recruitmentPeriod,
+                    employmentType == null ? null : EEmploymentType.fromString(employmentType),
+                    visa == null ? null : EVisa.fromString(visa),
+                    pageable
             );
         }
+
+        // Step 2: JobPosting IDs 추출
+        List<Long> jobPostingIds = jobPostingSearches.stream()
+                .map(JobPostingRepository.JobPostingProjection::getJobPostingId)
+                .toList();
+
+        // Step 3: 상세 데이터 가져오기
+        List<JobPosting> jobPostings = jobPostingRepository.findJobPostingsWithDetailsByIds(jobPostingIds);
+
+        return ReadJobPostingOverviewResponseDto.builder()
+                .hasNext(jobPostingSearches.hasNext())
+                .jobPostingList(
+                        jobPostings.stream()
+                                .map(jobPosting -> ReadJobPostingOverviewResponseDto.JobPostingOverviewDto.fromEntities(jobPosting, account))
+                                .toList()
+                )
+                .build();
     }
 
     @Override

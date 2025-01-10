@@ -101,18 +101,18 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                         jobPosting.getTitle(), owner.getOwnerName(), user.getName()
                 );
 
-                // 시간제 취업 허가서 Hwp 파일 생성
-                ByteArrayInputStream partTimeEmploymentPermitHwpStream
-                        = partTimeEmploymentPermitService.createPartTimeEmploymentPermitHwpFile(partTimeEmploymentPermit);
-
-                // hwpFile 업로드
-                String partTimeEmploymentPermitHwpUrl = s3Util.uploadHwpFile(
-                        partTimeEmploymentPermitHwpStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
-                );
+//                // 시간제 취업 허가서 Hwp 파일 생성
+//                ByteArrayInputStream partTimeEmploymentPermitHwpStream
+//                        = partTimeEmploymentPermitService.createPartTimeEmploymentPermitHwpFile(partTimeEmploymentPermit);
+//
+//                // hwpFile 업로드
+//                String partTimeEmploymentPermitHwpUrl = s3Util.uploadHwpFile(
+//                        partTimeEmploymentPermitHwpStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
+//                );
 
                 // Document의 wordUrl, hwpUrl 업데이트
                 partTimeEmploymentPermit
-                        = (PartTimeEmploymentPermit) documentService.updateUrls(partTimeEmploymentPermit, partTimeEmploymentPermitWordUrl, partTimeEmploymentPermitHwpUrl);
+                        = (PartTimeEmploymentPermit) documentService.updateUrls(partTimeEmploymentPermit, partTimeEmploymentPermitWordUrl);
                 partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
                 break;
@@ -135,17 +135,17 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                         standardLaborContractWordStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
                 );
 
-                // 표준근로계약서 Hwp 파일 생성
-                ByteArrayInputStream standardLaborContractHwpStream = standardLaborContractService.createStandardLaborContractHwpFile(standardLaborContract);
-
-                // hwpFile 업로드
-                String standardLaborContractHwpUrl = s3Util.uploadHwpFile(
-                        standardLaborContractHwpStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
-                );
+//                // 표준근로계약서 Hwp 파일 생성
+//                ByteArrayInputStream standardLaborContractHwpStream = standardLaborContractService.createStandardLaborContractHwpFile(standardLaborContract);
+//
+//                // hwpFile 업로드
+//                String standardLaborContractHwpUrl = s3Util.uploadHwpFile(
+//                        standardLaborContractHwpStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
+//                );
 
                 // Document의 wordUrl, hwpUrl 업데이트
                 standardLaborContract
-                        = (StandardLaborContract) documentService.updateUrls(standardLaborContract, standardLaborContractWordUrl, standardLaborContractHwpUrl);
+                        = (StandardLaborContract) documentService.updateUrls(standardLaborContract, standardLaborContractWordUrl);
                 standardLaborContractRepository.save(standardLaborContract);
 
                 break;

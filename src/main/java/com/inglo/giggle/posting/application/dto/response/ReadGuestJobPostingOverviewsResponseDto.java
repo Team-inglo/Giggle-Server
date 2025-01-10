@@ -7,11 +7,13 @@ import com.inglo.giggle.posting.domain.JobPosting;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @Getter
 public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<ReadGuestJobPostingOverviewsResponseDto> {
 
@@ -44,6 +46,18 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
                 .jobPostingList(jobPostingList)
                 .build();
     }
+
+    public static ReadGuestJobPostingOverviewsResponseDto of(Boolean hasNext, List<JobPosting> jobPostings){
+        List<JobPostingOverviewDto> jobPostingList = jobPostings.stream()
+                .map(JobPostingOverviewDto::fromEntity)
+                .toList();
+
+        return ReadGuestJobPostingOverviewsResponseDto.builder()
+                .hasNext(hasNext)
+                .jobPostingList(jobPostingList)
+                .build();
+    }
+
 
     @Getter
     public static class JobPostingOverviewDto extends SelfValidating<JobPostingOverviewDto> {

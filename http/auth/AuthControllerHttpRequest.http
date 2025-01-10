@@ -64,7 +64,7 @@ Content-Type: application/json
 
 ### 2.4 기본 임시 회원가입 - 고용주
 // @no-log
-@email_owner = "jdk0304@naver.com"
+@email_owner = "jake991110@naver.com"
 POST {{host_url}}/v1/auth/sign-up
 Content-Type: application/json
 
@@ -103,7 +103,8 @@ Content-Type: application/json
   },
   "marketing_allowed": "{{auth.API_2_5.marketing_allowed}}",
   "notification_allowed": "{{auth.API_2_5.notification_allowed}}",
-  "language": "{{auth.API_2_5.language}}"
+  "language": "{{auth.API_2_5.language}}",
+  "term_types": ["personal-service-terms", "privacy-policy","location-based-terms"]
 }
 
 ### 2.6 기본 고용주 회원가입
@@ -115,7 +116,7 @@ Content-Type: multipart/form-data; boundary=boundary
 Content-Disposition: form-data; name="image"; filename="image.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image1.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="body"
@@ -140,12 +141,13 @@ Content-Type: application/json
       "longitude": "{{auth.API_2_6.address.longitude}}"
     },
     "marketing_allowed": "{{auth.API_2_6.marketing_allowed}}",
-    "notification_allowed": "{{auth.API_2_6.notification_allowed}}"
+    "notification_allowed": "{{auth.API_2_6.notification_allowed}}",
+    "term_types": ["enterprise-service-terms", "privacy-policy","location-based-terms"]
 }
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "567089"
+@authentication_code_user = "100876"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
@@ -161,7 +163,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 고용주
 // @no-log
-@authentication_code_owner = "347405"
+@authentication_code_owner = "962621"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 

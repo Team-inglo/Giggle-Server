@@ -138,8 +138,9 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
 
         JSONObject jsonObject = restClientUtil.sendGetMethod(osrmUtil.createOSRMRequestUrl(
                 schoolAddress.getLatitude(), schoolAddress.getLongitude(),
-                jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()
-        ));
+                jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()),
+                null
+        );
 
         RouteResponseDto routeResponseDto = osrmUtil.mapToRouteResponseDto(jsonObject);
 

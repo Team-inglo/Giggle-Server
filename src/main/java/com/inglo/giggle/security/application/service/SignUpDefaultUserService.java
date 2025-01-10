@@ -21,23 +21,33 @@ import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
+import com.inglo.giggle.term.domain.Term;
+import com.inglo.giggle.term.domain.TermAccount;
+import com.inglo.giggle.term.domain.service.TermAccountService;
+import com.inglo.giggle.term.domain.type.ETermType;
+import com.inglo.giggle.term.repository.mysql.TermAccountRepository;
+import com.inglo.giggle.term.repository.mysql.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
 
     private final AccountRepository accountRepository;
-
     private final TemporaryTokenRepository temporaryTokenRepository;
     private final TemporaryAccountRepository temporaryAccountRepository;
+    private final TermRepository termRepository;
+    private final TermAccountRepository termAccountRepository;
 
     private final AddressService addressService;
     private final UserService userService;
     private final TemporaryAccountService temporaryAccountService;
+    private final TermAccountService termAccountService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -86,12 +96,28 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
         LanguageSkill savedLanguageSkill = languageSkillService.createLanguageSkill(savedResume);
         languageSkillRepository.save(savedLanguageSkill);
 
-
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());
 
         // temporary User Info 삭제
         temporaryAccountRepository.deleteById(tempUserInfo.getCompositeKey());
+
+        // 약관 타입 파싱
+        List<ETermType> termTypes = requestDto.termTypes().stream()
+                .map(ETermType::fromString)
+                .toList();
+
+        // Account TermType 검증
+        termAccountService.validateAccountTermType(savedUser, termTypes);
+
+        // Term 조회
+        List<Term> terms = termRepository.findLatestTermsByTermType(termTypes);
+
+        // 약관 동의 생성
+        List<TermAccount> termAccounts = termAccountService.createTermAccount(savedUser, terms);
+
+        // 약관 동의 저장
+        termAccountRepository.saveAll(termAccounts);
 
     }
 }

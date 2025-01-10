@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.application.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
 
 public record ReadGuestJobPostingOverviewsRequestDto(
@@ -21,13 +21,13 @@ public record ReadGuestJobPostingOverviewsRequestDto(
         @JsonProperty("sorting")
         String sorting,
 
-        @JsonProperty("region_1depth")
+        @JsonProperty("region1Depth")
         String region1Depth,
 
-        @JsonProperty("region_2depth")
+        @JsonProperty("region2Depth")
         String region2Depth,
 
-        @JsonProperty("region_3depth")
+        @JsonValue()
         String region3Depth,
 
         @JsonProperty("industry")

@@ -72,9 +72,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // KAFKA
-    implementation 'org.springframework.kafka:spring-kafka'
-
     // AWS
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation 'org.springframework.cloud:spring-cloud-aws-context:2.2.6.RELEASE'

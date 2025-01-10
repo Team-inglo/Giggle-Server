@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class DocumentService {
 
-    public Document updateUrls(Document document, String wordUrl, String hwpUrl) {
+    public Document updateUrls(Document document, String wordUrl) {
         document.updateWordUrl(wordUrl);
-        document.updateHwpUrl(hwpUrl);
+//        document.updateHwpUrl(hwpUrl);
         return document;
     }
 

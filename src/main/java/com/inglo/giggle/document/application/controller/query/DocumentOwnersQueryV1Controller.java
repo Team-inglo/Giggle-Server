@@ -26,7 +26,7 @@ public class DocumentOwnersQueryV1Controller {
             @AccountID UUID accountId,
             @PathVariable Long id
     ) {
-        return ResponseDto.ok(readOwnerDocumentSummaryUseCase.readOwnerDocumentSummary(accountId, id));
+        return ResponseDto.ok(readOwnerDocumentSummaryUseCase.execute(accountId, id));
     }
 
 }

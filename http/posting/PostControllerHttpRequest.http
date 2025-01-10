@@ -2,15 +2,19 @@
 // @no-log
 GET {{host_url}}/v1/guests/job-postings/overviews?
     page={{posting.API_4_1.page}}&
-    sorting={{posting.API_4_1.sorting}}&
     size={{posting.API_4_1.size}}&
-    type={{posting.API_4_1.type}}
+    region_1depth={{posting.API_4_1.region_1depth_name}}&
+    region_2depth={{posting.API_4_1.region_2depth_name}}&
+    region_3depth={{posting.API_4_1.region_3depth_name}}&
+    sorting={{posting.API_4_1.sorting}}&
+    industry={{posting.API_4_1.industry}}
+
+#    type={{posting.API_4_1.type}}
 Content-Type: application/json
 
 #    region_1depth={{posting.API_4_1.region_1depth_name}}&
 #    region_2depth={{posting.API_4_1.region_2depth_name}}&
 #    region_3depth={{posting.API_4_1.region_3depth_name}}
-#    industry={{posting.API_4_1.industry}}&
 #    work_period={{posting.API_4_1.work_period}}&
 #    work_days_per_week={{posting.API_4_1.work_days_per_week}}&
 #    working_day= {{posting.API_4_1.working_day}}&
@@ -153,19 +157,19 @@ Content-Type: application/json
 Content-Disposition: form-data; name="image"; filename="image1.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image1.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image2.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image2.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image3.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image3.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 
@@ -286,6 +290,7 @@ Authorization: Bearer {{access_token}}
 
 
 ### 6.1 (유학생) 지원한 공고 리스트 조회하기
+// @no-log
 GET {{host_url}}/v1/users/user-owner-job-postings/overviews?
     page=1&
     size=100&
@@ -295,12 +300,14 @@ Authorization: Bearer {{access_token}}
 
 
 ### 6.2 (유학생) 지원한 공고 상세 조회하기
+// @no-log
 GET {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_2.user_owner_job_posting_id}}/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.3 (유학생) 현재 진행중인 인터뷰 리스트 조회하기
+// @no-log
 GET http://localhost:8080/v1/users/user-owner-job-postings/briefs?
     page={{posting.API_6_3.page}}&
     size={{posting.API_6_3.size}}
@@ -309,18 +316,21 @@ Authorization: Bearer {{access_token}}
 
 
 ### 6.4 (유학생) 지원 현황(개수) 확인하기
+// @no-log
 GET {{host_url}}/v1/users/user-owner-job-postings/counts
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.5 (유학생) 공고 담당자 정보 조회하기
+// @no-log
 GET {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_5.user_owner_job_posting_id}}/recruiters
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.6 (고용주) 등록한 공고 리스트 조회하기
+// @no-log
 GET {{host_url}}/v1/owners/job-postings/overviews?
     page={{posting.API_6_6.page}}&
     size={{posting.API_6_6.size}}
@@ -329,24 +339,28 @@ Authorization: Bearer {{access_token}}
 
 
 ### 6.7 (고용주) 지원자 지원 상태 상세 조회
+// @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_7.user_owner_job_posting_id}}/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.8 (고용주) 지원자 간단 정보 조회하기
+// @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_8.user_owner_job_posting_id}}/users/briefs
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.9 (고용주) 지원 현황(개수) 확인하기
+// @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/counts
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.10 (고용주) 이력서 수락/거절하기
+// @no-log
 PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_10.user_owner_job_posting_id}}/step-resume-under-review
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
@@ -357,30 +371,35 @@ Authorization: Bearer {{access_token}}
 
 
 ### 6.11 (고용주) 인터뷰 완료하기
-PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_11.user_owner_job_posting_id}}/step-waiting-for-review
+// @no-log
+PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_11.user_owner_job_posting_id}}/step-waiting-for-interview
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.12 (유학생) 서류 작성 완료하기
+// @no-log
 PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_12.user_owner_job_posting_id}}/step-filling-out-documents
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.13 (유학생) 담당자 검토 완료
+// @no-log
 PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_13.user_owner_job_posting_id}}/step-document-under-review
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.14 (유학생) 하이코리아 지원
+// @no-log
 PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_14.user_owner_job_posting_id}}/step-application-in-progress
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.15 (유학생) 하이코리아 처리결과 등록하기
+// @no-log
 PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_15.user_owner_job_posting_id}}/step-registering-results
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
