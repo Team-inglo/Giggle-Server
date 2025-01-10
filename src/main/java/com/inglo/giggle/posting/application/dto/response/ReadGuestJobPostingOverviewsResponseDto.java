@@ -35,18 +35,6 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
         this.validateSelf();
     }
 
-    public static ReadGuestJobPostingOverviewsResponseDto fromPage(Page<JobPosting> jobPostingsPage) {
-        boolean hasNext = jobPostingsPage.hasNext();
-        List<JobPostingOverviewDto> jobPostingList = jobPostingsPage.getContent().stream()
-                .map(JobPostingOverviewDto::fromEntity)
-                .toList();
-
-        return ReadGuestJobPostingOverviewsResponseDto.builder()
-                .hasNext(hasNext)
-                .jobPostingList(jobPostingList)
-                .build();
-    }
-
     public static ReadGuestJobPostingOverviewsResponseDto of(Boolean hasNext, List<JobPosting> jobPostings){
         List<JobPostingOverviewDto> jobPostingList = jobPostings.stream()
                 .map(JobPostingOverviewDto::fromEntity)

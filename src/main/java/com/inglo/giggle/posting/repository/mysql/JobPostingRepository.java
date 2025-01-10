@@ -220,34 +220,34 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("jobPostingIds") List<Long> jobPostingIds
     );
 
-
-    @Query("SELECT jp FROM JobPosting jp " +
-            "LEFT JOIN FETCH jp.owner o " +
-            "LEFT JOIN FETCH jp.workDayTimes wd " +
-            "LEFT JOIN UserOwnerJobPosting uojp ON uojp.jobPosting = jp " +
-            "WHERE jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today " +
-            "GROUP BY jp.id, o.id, wd.id " +
+    @Query("SELECT DISTINCT jp.id AS jobPostingId, COUNT(uojp.id) AS popularity " +
+            "FROM JobPosting jp " +
+            "LEFT JOIN jp.userOwnerJobPostings uojp " +
+            "WHERE jp.recruitmentDeadLine IS NULL OR jp.recruitmentDeadLine >= :today " +
+            "GROUP BY jp.id " +
             "ORDER BY COUNT(uojp.id) DESC")
-    List<JobPosting> findTrendingJobPostingsWithFetchJoin(@Param("today") LocalDate today);
+    Page<JobPostingProjection> findTrendingJobPostingsWithFetchJoin(
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
 
-    @Query("SELECT DISTINCT jp FROM JobPosting jp " +
-            "LEFT JOIN FETCH jp.owner " +
-            "LEFT JOIN FETCH jp.workDayTimes " +
+    @Query("SELECT DISTINCT jp.id AS jobPostingId, jp AS jobPosting FROM JobPosting jp " +
             "WHERE jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today " +
             "ORDER BY jp.createdAt DESC")
-    List<JobPosting> findRecentlyJobPostingsWithFetchJoin(@Param("today") LocalDate today);
+    Page<JobPostingProjection> findRecentlyJobPostingsWithFetchJoin(
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
 
-    @Query("SELECT jp FROM JobPosting jp " +
-            "JOIN FETCH jp.owner o " +
-            "JOIN FETCH jp.workDayTimes wd " +
-            "JOIN BookMark bm ON bm.jobPosting = jp " +
+    @Query("SELECT DISTINCT jp AS jobPosting, jp.id AS jobPostingId FROM JobPosting jp " +
+            "JOIN jp.bookMarks bm " +
             "WHERE bm.user.id = :accountId " +
-            "AND (jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today) " +
-            "GROUP BY jp.id, o.id, wd.id " +
-            "ORDER BY COUNT(bm.id) DESC")
-    List<JobPosting> findBookmarkedJobPostingsWithFetchJoin(
+            "AND (jp.recruitmentDeadLine is null OR jp.recruitmentDeadLine >= :today) ")
+    Page<JobPostingProjection> findBookmarkedJobPostingsWithFetchJoin(
             @Param("accountId") UUID accountId,
-            @Param("today") LocalDate today);
+            @Param("today") LocalDate today,
+            Pageable pageable
+    );
 
 
     @Query("SELECT b.jobPosting.id, COUNT(b) FROM BookMark b WHERE b.jobPosting.id IN :jobPostingIds GROUP BY b.jobPosting.id")

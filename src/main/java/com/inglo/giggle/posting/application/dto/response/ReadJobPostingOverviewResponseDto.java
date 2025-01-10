@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPostingDetailResponseDto> {
@@ -35,19 +36,23 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
         this.validateSelf();
     }
 
-    public static ReadJobPostingOverviewResponseDto fromEntities(
-            Page<JobPosting> jobPostingsPage,
-            Account account
+    public static ReadJobPostingOverviewResponseDto of(
+            Boolean hasNext,
+            List<JobPosting> jobPostings,
+            Map<Long, Integer> bookMarkCountMap
     ) {
-        boolean hasNext = jobPostingsPage.hasNext();
-        List<JobPostingOverviewDto> jobPostingList = jobPostingsPage.getContent().stream()
-                .map(jobPosting -> JobPostingOverviewDto.fromEntities(jobPosting, account))
+        List<JobPostingOverviewDto> jobPostingList = jobPostings.stream()
+                .map(jobPosting -> JobPostingOverviewDto.of(
+                        jobPosting,
+                        bookMarkCountMap)
+                )
                 .toList();
 
         return ReadJobPostingOverviewResponseDto.builder()
                 .hasNext(hasNext)
                 .jobPostingList(jobPostingList)
                 .build();
+
     }
 
     @Getter
@@ -113,39 +118,13 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
             this.validateSelf();
         }
 
-        public static JobPostingOverviewDto fromEntities(
+        public static JobPostingOverviewDto of(
                 JobPosting jobPosting,
-                Account account
+                Map<Long, Integer> bookMarkCountMap
         ) {
-            if(account.getRole() == ESecurityRole.USER){
-                if(jobPosting.getBookMarks().stream().anyMatch(
-                        bookMark -> bookMark.getUser().getId().equals(account.getId()))
-                ){
-                    return JobPostingOverviewDto.builder()
-                            .id(jobPosting.getId())
-                            .isBookMarked(true)
-                            .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
-                            .title(jobPosting.getTitle())
-                            .summaries(
-                                    Summaries.fromEntity(
-                                            jobPosting
-                                    )
-                            )
-                            .tags(
-                                    Tags.fromEntity(
-                                            jobPosting
-                                    )
-                            )
-                            .hourlyRate(jobPosting.getHourlyRate())
-                            .recruitmentDeadLine(jobPosting.getRecruitmentDeadLine() == null ? "상시모집" : DateTimeUtil.convertLocalDateToString(jobPosting.getRecruitmentDeadLine()))
-                            .createdAt(DateTimeUtil.convertLocalDateTimeToString(jobPosting.getCreatedAt()))
-                            .build();
-                }
-            }
-
             return JobPostingOverviewDto.builder()
                     .id(jobPosting.getId())
-                    .isBookMarked(false)
+                    .isBookMarked(bookMarkCountMap.getOrDefault(jobPosting.getId(), 0) > 0)
                     .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
                     .title(jobPosting.getTitle())
                     .summaries(

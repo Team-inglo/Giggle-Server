@@ -1,12 +1,15 @@
 package com.inglo.giggle.posting.application.service;
 
+import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.core.utility.EnumParseUtil;
 import com.inglo.giggle.posting.application.dto.request.JobPostingSearchId;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingOverviewUseCase;
+import com.inglo.giggle.posting.domain.BookMark;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.*;
 import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
@@ -14,6 +17,7 @@ import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,21 +28,26 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseCase {
 
+    private final AddressService addressService;
+
     private final JobPostingRepository jobPostingRepository;
+    private final AccountRepository accountRepository;
+    private final BookMarkRepository bookMarkRepository;
 
     private static final String POPULAR_SORTING = "popular";
     private static final String NONE = "none";
-
     private static final String TRENDING = "TRENDING";
     private static final String RECENTLY = "RECENTLY";
     private static final String BOOKMARKED = "BOOKMARKED";
-    private final AccountRepository accountRepository;
-    private final BookMarkRepository bookMarkRepository;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -61,30 +70,21 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String visa
     ) {
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
-
         Pageable pageable = PageRequest.of(page - 1, size);
         LocalDate today = LocalDate.now();
 
         // region 필터 값들을 ',' 기준으로 리스트로 변환
-        List<List<String>> regionSets = parseRegionSets(region1Depth, region2Depth, region3Depth);
-        List<String> region1DepthList = regionSets.stream().map(list -> list.get(0)).toList();
-        List<String> region2DepthList = regionSets.stream().map(list -> list.get(1)).toList();
-        List<String> region3DepthList = regionSets.stream().map(list -> list.get(2)).toList();
+        List<List<String>> regionSets = addressService.parseRegionSets(region1Depth, region2Depth, region3Depth);
+        List<String> region1DepthList = addressService.getDepthList(regionSets, 0);
+        List<String> region2DepthList = addressService.getDepthList(regionSets, 1);
+        List<String> region3DepthList = addressService.getDepthList(regionSets, 2);
 
         // 필터 파라미터 변환
-        List<EJobCategory> industryList = parseEnums(industry, EJobCategory.class);
-        List<EWorkPeriod> workPeriodList = parseEnums(workPeriod, EWorkPeriod.class);
-        List<Integer> workDaysPerWeekList = parseIntegerToEnums(workDaysPerWeek);
-
-        // 요일 설정
-        List<EDayOfWeek> workingDayList;
-        if(workingDay.equals(EDayOfWeek.NEGOTIABLE.toString())){
-            workingDayList = null;
-        }else{
-            workingDayList = parseEnums(workingDay, EDayOfWeek.class);
-        }
+        List<EJobCategory> industryList = EnumParseUtil.parseEnums(industry, EJobCategory.class);
+        List<EWorkPeriod> workPeriodList = EnumParseUtil.parseEnums(workPeriod, EWorkPeriod.class);
+        List<Integer> workDaysPerWeekList = EnumParseUtil.parseIntegerToEnums(workDaysPerWeek);
+        List<EDayOfWeek> workingDayList = EnumParseUtil.parseEnums(workingDay, EDayOfWeek.class);
+        List<EWorkingHours> workingHoursList = EnumParseUtil.parseEnums(workingHours, EWorkingHours.class);
 
         // 시간대 설정
         LocalTime morningStart = LocalTime.of(6, 0);
@@ -98,16 +98,13 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
         LocalTime dawnStart = LocalTime.of(0, 0);
         LocalTime dawnEnd = LocalTime.of(6, 0);
 
-        // workingHoursList의 시간대에 따라 선택 여부 설정
-        List<EWorkingHours> workingHoursList = parseEnums(workingHours, EWorkingHours.class);
-
         boolean morningSelected = false;
-        boolean afternoonSelected= false;
-        boolean eveningSelected= false;
-        boolean fullDaySelected= false;
+        boolean afternoonSelected = false;
+        boolean eveningSelected = false;
+        boolean fullDaySelected = false;
         boolean dawnSelected = false;
 
-        if (workingHoursList != null){
+        if (workingHoursList != null) {
             morningSelected = workingHoursList.contains(EWorkingHours.MORNING);
             afternoonSelected = workingHoursList.contains(EWorkingHours.AFTERNOON);
             eveningSelected = workingHoursList.contains(EWorkingHours.EVENING);
@@ -115,10 +112,10 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             dawnSelected = workingHoursList.contains(EWorkingHours.DAWN);
         }
 
-        Page<JobPostingRepository.JobPostingProjection> jobPostingSearches;
+        Page<JobPostingRepository.JobPostingProjection> jobPostingProjections;
         // 인기순 또는 최신순에 따라 다른 메서드 호출
-        if (sorting !=null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
-            jobPostingSearches = jobPostingRepository.findPopularJobPostingsWithFilters(
+        if (sorting != null && sorting.equalsIgnoreCase(POPULAR_SORTING)) {
+            jobPostingProjections = jobPostingRepository.findPopularJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
                     region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
@@ -157,7 +154,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                     pageable
             );
         } else {
-            jobPostingSearches = jobPostingRepository.findRecentJobPostingsWithFilters(
+            jobPostingProjections = jobPostingRepository.findRecentJobPostingsWithFilters(
                     jobTitle,
                     !region1DepthList.isEmpty() ? region1DepthList.get(0) : null,
                     region1DepthList.size() > 1 ? region1DepthList.get(1) : null,
@@ -198,21 +195,29 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
         }
 
         // Step 2: JobPosting IDs 추출
-        List<Long> jobPostingIds = jobPostingSearches.stream()
+        List<Long> jobPostingIds = jobPostingProjections.stream()
                 .map(JobPostingRepository.JobPostingProjection::getJobPostingId)
                 .toList();
 
         // Step 3: 상세 데이터 가져오기
         List<JobPosting> jobPostings = jobPostingRepository.findJobPostingsWithDetailsByIds(jobPostingIds);
 
-        return ReadJobPostingOverviewResponseDto.builder()
-                .hasNext(jobPostingSearches.hasNext())
-                .jobPostingList(
-                        jobPostings.stream()
-                                .map(jobPosting -> ReadJobPostingOverviewResponseDto.JobPostingOverviewDto.fromEntities(jobPosting, account))
-                                .toList()
-                )
-                .build();
+        // Step 4: jobPostings을 jobPostingIds 순서로 정렬
+        Map<Long, JobPosting> jobPostingMap = jobPostings.stream()
+                .collect(Collectors.toMap(JobPosting::getId, Function.identity())); // ID를 키로 하는 Map 생성
+
+        List<JobPosting> sortedJobPostings = jobPostingIds.stream()
+                .map(jobPostingMap::get) // jobPostingIds 순서대로 Map에서 값 가져오기
+                .filter(Objects::nonNull) // Map에 없는 ID가 있을 경우 필터링
+                .toList();
+
+        Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds);
+
+        return ReadJobPostingOverviewResponseDto.of(
+                jobPostingProjections.hasNext(),
+                sortedJobPostings,
+                bookmarkCountMap
+        );
     }
 
     @Override
@@ -224,80 +229,42 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String type
     ) {
 
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
-
+        log.info("accountId: {}, page: {}, size: {}, type: {}", accountId, page, size, type);
         Pageable pageable = PageRequest.of(page - 1, size);
-        List<JobPosting> jobPostingsList = switch (type) {
-            case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin(LocalDate.now());
-            case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin(LocalDate.now());
-            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin(accountId, LocalDate.now());
+        Page<JobPostingRepository.JobPostingProjection> jobPostingProjections = switch (type) {
+            case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin(LocalDate.now(), pageable);
+            case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin(LocalDate.now(), pageable);
+            case BOOKMARKED -> jobPostingRepository.findBookmarkedJobPostingsWithFetchJoin(accountId, LocalDate.now(), pageable);
             default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
         };
-        // TODO 삭제할 로직
-        jobPostingsList.forEach(bookMarkRepository::findByJobPosting);
 
+        List<Long> jobPostingIds = jobPostingProjections.stream()
+                .map(JobPostingRepository.JobPostingProjection::getJobPostingId)
+                .toList();
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), jobPostingsList.size());
-        Page<JobPosting> jobPostingsPage = new PageImpl<>(jobPostingsList.subList(start, end), pageable, jobPostingsList.size());
+        List<JobPosting> jobPostings = jobPostingRepository.findJobPostingsWithDetailsByIds(jobPostingIds);
 
-        return ReadJobPostingOverviewResponseDto.fromEntities(
-                jobPostingsPage,
-                account
+        // Step 4: jobPostings을 jobPostingIds 순서로 정렬
+        Map<Long, JobPosting> jobPostingMap = jobPostings.stream()
+                .collect(Collectors.toMap(JobPosting::getId, Function.identity())); // ID를 키로 하는 Map 생성
+
+        List<JobPosting> sortedJobPostings = jobPostingIds.stream()
+                .map(jobPostingMap::get) // jobPostingIds 순서대로 Map에서 값 가져오기
+                .filter(Objects::nonNull) // Map에 없는 ID가 있을 경우 필터링
+                .toList();
+
+        Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds);
+
+        return ReadJobPostingOverviewResponseDto.of(
+                jobPostingProjections.hasNext(),
+                sortedJobPostings,
+                bookmarkCountMap
         );
     }
-
 
     /* -------------------------------------------- */
     /* Private Methods ---------------------------- */
     /* -------------------------------------------- */
-
-    private List<List<String>> parseRegionSets(String region1Depth, String region2Depth, String region3Depth) {
-        List<String> region1DepthList = parseSingleDepth(region1Depth);
-        List<String> region2DepthList = parseSingleDepth(region2Depth);
-        List<String> region3DepthList = parseSingleDepth(region3Depth);
-
-        List<List<String>> regionSets = new ArrayList<>();
-        int maxSize = Math.max(region1DepthList.size(), Math.max(region2DepthList.size(), region3DepthList.size()));
-
-        for (int i = 0; i < maxSize; i++) {
-            String region1 = i < region1DepthList.size() ? region1DepthList.get(i) : null;
-            String region2 = i < region2DepthList.size() ? region2DepthList.get(i) : null;
-            String region3 = i < region3DepthList.size() ? region3DepthList.get(i) : null;
-
-            if (!(region1 == null && region2 == null && region3 == null)) {
-                regionSets.add(Arrays.asList(region1, region2, region3));
-            }
-        }
-        return regionSets;
-    }
-
-    private List<String> parseSingleDepth(String region) {
-        if (region == null || region.isEmpty()) return new ArrayList<>(); // 빈 리스트 반환
-        return Arrays.stream(region.split(","))
-                .map(String::trim)
-                .map(value -> value.equalsIgnoreCase(NONE) ? null : value) // "none"을 null로 변환
-                .toList();
-    }
-
-
-    private List<Integer> parseIntegerToEnums(String input) {
-        if (input == null || input.isEmpty()) return null;
-        return Arrays.stream(input.split(","))
-                .map(String::trim)
-                .map(value -> EWorkDaysPerWeek.toInt(Enum.valueOf(EWorkDaysPerWeek.class, value)))
-                .toList();
-    }
-
-    private <E extends Enum<E>> List<E> parseEnums(String input, Class<E> enumClass) {
-        if (input == null || input.isEmpty()) return null;
-        return Arrays.stream(input.split(","))
-                .map(String::trim)
-                .map(value -> Enum.valueOf(enumClass, value))
-                .toList();
-    }
-
     private Map<Long, Integer> getBookmarkCountMap(List<Long> jobPostingIds) {
         List<Object[]> results = jobPostingRepository.countBookmarksByJobPostingIds(jobPostingIds);
         Map<Long, Integer> bookmarkCountMap = new HashMap<>();
