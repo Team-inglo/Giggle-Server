@@ -33,7 +33,7 @@ public record CreateOwnerJobPostingRequestDto(
 
         @NotNull(message = "시급을 입력해주세요.")
         @Max(value = 1000000, message = "시급은 1,000,000원 이하로 입력해주세요.")
-        @Min(value = 0, message = "시급은 0원 이상으로 입력해주세요.")
+        @Min(value = 10030, message = "시급은 10030원 이상으로 입력해주세요.")
         @JsonProperty("hourly_rate")
         Integer hourlyRate,
 
