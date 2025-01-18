@@ -63,12 +63,12 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
         Reject standardLaborContractReject = null;
 
         if (partTimeEmploymentPermit != null) {
-            partTimeEmploymentPermitReject = rejectRepository.findById(partTimeEmploymentPermit.getId())
+            partTimeEmploymentPermitReject = rejectRepository.findTopByIdOrderByCreatedAtDesc(partTimeEmploymentPermit.getId())
                     .orElse(null);
         }
 
         if (standardLaborContract != null) {
-            standardLaborContractReject = rejectRepository.findById(standardLaborContract.getId())
+            standardLaborContractReject = rejectRepository.findTopByIdOrderByCreatedAtDesc(standardLaborContract.getId())
                     .orElse(null);
         }
 

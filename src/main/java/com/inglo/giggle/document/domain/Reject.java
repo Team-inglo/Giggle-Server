@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,9 +28,12 @@ public class Reject {
     private String reason;
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id", nullable = false)
     private Document document;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
@@ -37,5 +42,6 @@ public class Reject {
     public Reject(Document document, String reason) {
         this.document = document;
         this.reason = reason;
+        this.createdAt = LocalDateTime.now();
     }
 }
