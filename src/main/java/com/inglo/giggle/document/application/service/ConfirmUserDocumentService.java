@@ -82,7 +82,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // Reject 정보 조회
-        List<Reject> rejects = rejectRepository.findAllbyId(documentId);
+        List<Reject> rejects = rejectRepository.findAllById(documentId);
 
         // Reject 이 있을 경우 Reject 정보 삭제
         if (!rejects.isEmpty()) {
