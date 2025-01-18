@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -49,8 +50,8 @@ public abstract class Document {
     /* -------------------------------------------- */
     /* One To One Mapping ------------------------- */
     /* -------------------------------------------- */
-    @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Reject reject;
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reject> reject;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */

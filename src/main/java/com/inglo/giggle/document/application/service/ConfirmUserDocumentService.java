@@ -9,12 +9,14 @@ import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.document.application.usecase.ConfirmUserDocumentUseCase;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
+import com.inglo.giggle.document.domain.Reject;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.service.DocumentService;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.mysql.RejectRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
@@ -28,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -45,6 +48,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
     private final StandardLaborContractService standardLaborContractService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
+    private final RejectRepository rejectRepository;
 
     private final S3Util s3Util;
 
@@ -76,6 +80,14 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
         // JobPosting 정보 조회
         JobPosting jobPosting = jobPostingRepository.findById(document.getUserOwnerJobPosting().getJobPosting().getId())
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // Reject 정보 조회
+        List<Reject> rejects = rejectRepository.findAllbyId(documentId);
+
+        // Reject 이 있을 경우 Reject 정보 삭제
+        if (!rejects.isEmpty()) {
+            rejectRepository.deleteAll(rejects);
+        }
 
         // Document의 DiscriminatorValue에 따라 생성할 파일을 결정
         String discriminatorValue = document.getClass().getAnnotation(DiscriminatorValue.class).value();
