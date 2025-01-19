@@ -132,6 +132,9 @@ public class Constants {
             "/v1/auth/users",
             "/v1/auth/owners",
 
+            // Term
+            "/v1/terms/**",
+
             // Guest
             "/v1/guests/**",
 
