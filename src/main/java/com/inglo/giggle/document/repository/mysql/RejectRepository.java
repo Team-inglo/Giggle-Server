@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface RejectRepository extends JpaRepository<Reject, Long>{
-    Optional<Reject> findTopByIdOrderByCreatedAtDesc(Long id);
+    Optional<Reject> findTopByDocumentIdOrderByCreatedAtDesc(Long id);
 
-    List<Reject> findAllById(Long id);
+    List<Reject> findAllByDocumentId(Long id);
 }
