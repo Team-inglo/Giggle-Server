@@ -23,7 +23,7 @@ public class ReadTermDetailService implements ReadTermDetailUseCase {
         ETermType eTermType = ETermType.fromString(termType);
 
         // 약관 상세정보 조회
-        Term term = termRepository.findFirstByTermTypeOrderByCreatedAtDesc(eTermType)
+        Term term = termRepository.findTopByTermTypeOrderByCreatedAtDesc(eTermType)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         return ReadTermDetailResponseDto.fromEntity(term);
