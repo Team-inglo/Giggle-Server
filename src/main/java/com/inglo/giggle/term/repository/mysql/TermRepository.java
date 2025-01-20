@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface TermRepository extends JpaRepository<Term, Long> {
 
-    Optional<Term> findFirstByTermTypeOrderByCreatedAtDesc(ETermType termType);
+    Optional<Term> findTopByTermTypeOrderByCreatedAtDesc(ETermType termType);
 
     @Query("""
     SELECT t 
