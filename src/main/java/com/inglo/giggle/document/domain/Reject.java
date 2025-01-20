@@ -18,7 +18,7 @@ public class Reject {
     /* Default Column ----------------------------- */
     /* -------------------------------------------- */
     @Id
-    @Column(name = "document_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /* -------------------------------------------- */
@@ -27,7 +27,6 @@ public class Reject {
     @Column(name = "reason", length = 100, nullable = false)
     private String reason;
 
-    @MapsId
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id", nullable = false)
     private Document document;
