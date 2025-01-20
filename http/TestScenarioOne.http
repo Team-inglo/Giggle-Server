@@ -1,0 +1,133 @@
+### 1.1 사용자 로그인 - 고용주
+// @no-log
+POST {{host_url}}/v1/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+serial_id={{auth.API_1_1_OWNER.serial_id}}&
+password={{auth.API_1_1_OWNER.password}}
+
+> {%
+    client.global.set("owner_access_token", response.body.data.access_token);
+%}
+
+### 4.10 (고용주) 공고 등록하기
+// @no-log
+POST {{host_url}}/v1/owners/job-postings
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{owner_access_token}}
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "title": "{{posting.API_4_10.title}}",
+  "job_category": "{{posting.API_4_10.job_category}}",
+  "work_day_times": [
+    {
+      "day_of_week": "{{posting.API_4_10.work_day_times[0].day_of_week}}",
+      "work_start_time": "{{posting.API_4_10.work_day_times[0].work_start_time}}",
+      "work_end_time": "{{posting.API_4_10.work_day_times[0].work_end_time}}"
+    },
+    {
+      "day_of_week": "{{posting.API_4_10.work_day_times[1].day_of_week}}",
+      "work_start_time": "{{posting.API_4_10.work_day_times[1].work_start_time}}",
+      "work_end_time": "{{posting.API_4_10.work_day_times[1].work_end_time}}"
+    }
+  ],
+  "work_period": "{{posting.API_4_10.work_period}}",
+  "hourly_rate": {{posting.API_4_10.hourly_rate}},
+  "employment_type": "{{posting.API_4_10.employment_type}}",
+  "address": {
+    "address_name": "{{posting.API_4_10.address.address_name}}",
+    "region_1depth_name": "{{posting.API_4_10.address.region_1depth_name}}",
+    "region_2depth_name": "{{posting.API_4_10.address.region_2depth_name}}",
+    "region_3depth_name": "{{posting.API_4_10.address.region_3depth_name}}",
+    "region_4depth_name": "{{posting.API_4_10.address.region_4depth_name}}",
+    "address_detail": "{{posting.API_4_10.address.address_detail}}",
+    "latitude": {{posting.API_4_10.address.latitude}},
+    "longitude": {{posting.API_4_10.address.longitude}}
+  },
+  "recruitment_dead_line": "{{posting.API_4_10.recruitment_dead_line}}",
+  "recruitment_number": {{posting.API_4_10.recruitment_number}},
+  "gender": "{{posting.API_4_10.gender}}",
+  "age_restriction": {{posting.API_4_10.age_restriction}},
+  "education_level": "{{posting.API_4_10.education_level}}",
+  "visa": "{{posting.API_4_10.visa}}",
+  "recruiter_name": "{{posting.API_4_10.recruiter_name}}",
+  "recruiter_email": "{{posting.API_4_10.recruiter_email}}",
+  "recruiter_phone_number": "{{posting.API_4_10.recruiter_phone_number}}",
+  "description": "{{posting.API_4_10.description}}",
+  "preferred_conditions": "{{posting.API_4_10.preferred_conditions}}"
+}
+
+> {%
+    client.global.set("job_posting_id", response.body.data.id);
+%}
+
+### 1.1 사용자 로그인 - 유학생
+// @no-log
+POST {{host_url}}/v1/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+serial_id={{auth.API_1_1_USER.serial_id}}&
+password={{auth.API_1_1_USER.password}}
+
+> {%
+    client.global.set("user_access_token", response.body.data.access_token);
+%}
+
+### 4.9 (유학생) 공고 지원하기
+// @no-log
+POST {{host_url}}/v1/users/job-postings/{{job_posting_id}}
+Content-Type: application/json
+Authorization: Bearer {{user_access_token}}
+
+> {%
+    client.global.set("user_owner_job_posting_id", response.body.data.id);
+%}
+
+### 6.10 (고용주) 이력서 수락/거절하기
+// @no-log
+PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{user_owner_job_posting_id}}/step-resume-under-review
+Content-Type: application/json
+Authorization: Bearer {{owner_access_token}}
+
+{
+  "is_accepted": true
+}
+
+### 6.11 (고용주) 인터뷰 완료하기
+// @no-log
+PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{user_owner_job_posting_id}}/step-waiting-for-interview
+Content-Type: application/json
+Authorization: Bearer {{owner_access_token}}
+
+### 8.6 (유학생) 시간제 취업허가서 생성하기
+// @no-log
+POST {{host_url}}/v1/users/user-owner-job-postings/{{user_owner_job_posting_id}}/documents/part-time-employment-permits
+Authorization: Bearer {{user_access_token}}
+Content-Type: application/json
+
+{
+  "first_name": "{{document.API_8_6.first_name}}",
+  "last_name": "{{document.API_8_6.last_name}}",
+  "major": "{{document.API_8_6.major}}",
+  "term_of_completion": {{document.API_8_6.term_of_completion}},
+  "phone_number": "{{document.API_8_6.phone_number}}",
+  "email": "{{document.API_8_6.email}}"
+}
+
+### 8.1 (유학생) 서류 조회하기
+// @no-log
+GET {{host_url}}/v1/users/user-owner-job-postings/{{user_owner_job_posting_id}}/documents/summaries
+Authorization: Bearer {{user_access_token}}
+
+> {%
+    client.global.set("part_time_employment_permits_id", response.body.data.part_time_employment_permits.id);
+%}
+
+### 8.15 (유학생) 서류 제출하기
+// @no-log
+PATCH {{host_url}}/v1/users/documents/{{part_time_employment_permits_id}}/status/submission
+Authorization: Bearer {{user_access_token}}

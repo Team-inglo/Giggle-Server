@@ -1,0 +1,9 @@
+### 2.9 회원 탈퇴
+// @no-log
+DELETE {{host_url}}/v1/auth
+Authorization: Bearer {{user_access_token}}
+
+### 2.9 회원 탈퇴
+// @no-log
+DELETE {{host_url}}/v1/auth
+Authorization: Bearer {{owner_access_token}}

@@ -1,5 +1,7 @@
 package com.inglo.giggle.security.domain.mysql;
 
+import com.inglo.giggle.term.domain.Term;
+import com.inglo.giggle.term.domain.TermAccount;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,6 +10,7 @@ import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -72,6 +75,12 @@ public abstract class Account {
 
     @Column(name = "device_token")
     private String deviceToken;
+
+    /* -------------------------------------------- */
+    /* One To Many Mapping ------------------------ */
+    /* -------------------------------------------- */
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TermAccount> termAccounts;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
