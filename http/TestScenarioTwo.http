@@ -1,0 +1,4 @@
+### 8.17 (유학생) 서류 컨펌하기
+// @no-log
+PATCH {{host_url}}/v1/users/documents/{{part_time_employment_permits_id}}/status/confirmation
+Authorization: Bearer {{user_access_token}}
