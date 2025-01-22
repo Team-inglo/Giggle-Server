@@ -127,13 +127,6 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         String integratedApplicationWordUrl = s3Util.uploadWordFile(
                 integratedApplicationWordStream, "INTEGRATED_APPLICATION", jobPosting.getId(), jobPosting.getTitle(), userOwnerJobPosting.getOwner().getOwnerName(), userOwnerJobPosting.getUser().getName()
         );
-        // 통합신청서 hwp 파일 생성
-        ByteArrayInputStream integratedApplicationHwpStream = integratedApplicationService.createIntegratedApplicationHwpFile(integratedApplication);
-
-        // hwpFile 업로드
-        String integratedApplicationHwpUrl = s3Util.uploadHwpFile(
-                integratedApplicationHwpStream, "INTEGRATED_APPLICATION", jobPosting.getId(), jobPosting.getTitle(), userOwnerJobPosting.getOwner().getOwnerName(), userOwnerJobPosting.getUser().getName()
-        );
 
         // Document의 wordUrl, hwpUrl 업데이트
         updatedIntegratedApplication

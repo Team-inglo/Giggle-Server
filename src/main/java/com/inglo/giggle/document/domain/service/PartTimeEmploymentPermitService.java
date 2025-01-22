@@ -172,11 +172,11 @@ public class PartTimeEmploymentPermitService {
             if (base64Svg != null && !base64Svg.isEmpty()) {
                 byte[] pngBytes = convertSvgToPng(base64Svg);
                 if (pngBytes != null) {
-                    // 1. "(인 또는 서명)" 텍스트 위치를 찾습니다.
-                    XWPFParagraph signatureParagraph = findPlaceholderParagraph(template, "(인 또는 서명)");
+                    // 1. 서명 텍스트 위치를 찾음
+                    XWPFParagraph signatureParagraph = findPlaceholderParagraph(template, Constants.SIGNATURE);
 
                     if (signatureParagraph != null) {
-                        // 2. 이미지를 Anchor로 삽입합니다.
+                        // 2. 이미지를 Anchor로 삽입
                         String blipId = addImageToDocument(template, pngBytes);
                         insertAnchorImage(signatureParagraph, blipId, Units.toEMU(100), Units.toEMU(15));
                     } else {
@@ -247,7 +247,7 @@ public class PartTimeEmploymentPermitService {
             }
 
             // 3. 기존 Run 제거 및 치환된 텍스트 삽입
-            if (!updatedText.equals(paragraphText.toString())) {
+            if (!updatedText.contentEquals(paragraphText)) {
                 for (int i = runs.size() - 1; i >= 0; i--) {
                     paragraph.removeRun(i);
                 }
