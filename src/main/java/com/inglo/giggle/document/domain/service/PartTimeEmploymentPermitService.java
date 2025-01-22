@@ -289,7 +289,7 @@ public class PartTimeEmploymentPermitService {
     private void insertAnchorImage(XWPFParagraph paragraph, String blipId, int widthEMU, int heightEMU) {
         try {
 
-            long offsetX = -Units.toEMU(10);
+            long offsetX = Units.toEMU(3);
             String anchorXml =
                     "<wp:anchor distT=\"0\" distB=\"0\" distL=\"0\" distR=\"0\" simplePos=\"0\" relativeHeight=\"0\" behindDoc=\"false\" " +
                             "locked=\"false\" layoutInCell=\"true\" allowOverlap=\"true\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\">" +
