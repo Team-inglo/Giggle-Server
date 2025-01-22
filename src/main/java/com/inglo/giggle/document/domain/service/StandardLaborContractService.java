@@ -13,16 +13,6 @@ import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.xml.bind.JAXBElement;
-import kr.dogfoot.hwplib.object.HWPFile;
-import kr.dogfoot.hwplib.object.bodytext.Section;
-import kr.dogfoot.hwplib.object.bodytext.control.Control;
-import kr.dogfoot.hwplib.object.bodytext.control.ControlTable;
-import kr.dogfoot.hwplib.object.bodytext.control.table.Cell;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.Paragraph;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.text.HWPCharNormal;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.text.ParaText;
-import kr.dogfoot.hwplib.reader.HWPReader;
-import kr.dogfoot.hwplib.writer.HWPWriter;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
@@ -44,7 +34,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -57,9 +46,6 @@ public class StandardLaborContractService {
 
     @Value("${template.standard-labor-contract.word.path}")
     private String wordTemplatePath;
-
-    @Value("${template.standard-labor-contract.hwp.path}")
-    private String hwpTemplatePath;
 
     public StandardLaborContract updateStatusByUserSubmission(StandardLaborContract document) {
         document.updateEmployeeStatus(EEmployeeStatus.SUBMITTED);
@@ -401,7 +387,7 @@ public class StandardLaborContractService {
 
                 // 수평 위치 설정
                 CTPosH employerPositionH = new CTPosH();
-                employerPositionH.setAlign(STAlignH.LEFT); // 수평 위치: 오른쪽 정렬
+                employerPositionH.setAlign(STAlignH.LEFT); // 수평 위치: 왼쪽 정렬
                 employerPositionH.setRelativeFrom(STRelFromH.MARGIN); // 기준: 페이지 여백
                 employerAnchor.setPositionH(employerPositionH);
 
@@ -504,158 +490,6 @@ public class StandardLaborContractService {
         }
     }
 
-    public ByteArrayInputStream createStandardLaborContractHwpFile(StandardLaborContract document) {
-        try {
-            HWPFile hwpFile = HWPReader.fromFile(hwpTemplatePath);
-
-            // 텍스트 필드 삽입
-            HashMap<String, String> variables = new HashMap<>();
-
-            variables.put("${" + Constants.EMPLOYER_NAME1 + "}", document.getEmployerName());
-            variables.put("${" + Constants.EMPLOYEE_NAME1 + "}", document.getEmployeeFullName());
-            variables.put("${" + Constants.START_YEAR + "}", String.valueOf(document.getStartDate().getYear()));
-            variables.put("${" + Constants.START_MONTH + "}", String.valueOf(document.getStartDate().getMonthValue()));
-            variables.put("${" + Constants.START_DAY + "}", String.valueOf(document.getStartDate().getDayOfMonth()));
-            variables.put("${" + Constants.ADDRESS + "}", document.getEmployerAddress().getFullAddress());
-            variables.put("${" + Constants.DESCRIPTION + "}", document.getDescription());
-
-            List<ContractWorkDayTime> workDayTime = document.getContractWorkDayTimes();
-            int dayCount = Math.min(workDayTime.size(), 6);  // 최대 6일만 처리
-
-            for (int i = 0; i < dayCount; i++) {
-                ContractWorkDayTime dayTime = workDayTime.get(i);
-                String dayKey = "${" + (i + 1) + Constants.DAY_PREFIX + "}";
-                String startHourKey = "${" + (i + 1) + Constants.START_HOUR_PREFIX + "}";
-                String startMinuteKey = "${" + (i + 1) + Constants.START_MINUTE_PREFIX + "}";
-                String endHourKey = "${" + (i + 1) + Constants.END_HOUR_PREFIX + "}";
-                String endMinuteKey = "${" + (i + 1) + Constants.END_MINUTE_PREFIX + "}";
-                String timeKey = "${" + (i + 1) + Constants.TIME_PREFIX + "}";
-                String startRestHourKey = "${" + (i + 1) + Constants.START_REST_PREFIX + "}";
-                String startRestMinuteKey = "${" + (i + 1) + Constants.START_REST_MINUTE_PREFIX + "}";
-                String endRestHourKey = "${" + (i + 1) + Constants.END_REST_PREFIX + "}";
-                String endRestMinuteKey = "${" + (i + 1) + Constants.END_REST_MINUTE_PREFIX + "}";
-
-                variables.put(dayKey, dayTime.getDayOfWeek().getKrName());
-                variables.put(startHourKey, String.valueOf(dayTime.getWorkStartTime().getHour()));
-                variables.put(startMinuteKey, String.valueOf(dayTime.getWorkStartTime().getMinute()));
-                variables.put(endHourKey, String.valueOf(dayTime.getWorkEndTime().getHour()));
-                variables.put(endMinuteKey, String.valueOf(dayTime.getWorkEndTime().getMinute()));
-                variables.put(startRestHourKey, String.valueOf(dayTime.getBreakStartTime().getHour()));
-                variables.put(startRestMinuteKey, String.valueOf(dayTime.getBreakStartTime().getMinute()));
-                variables.put(endRestHourKey, String.valueOf(dayTime.getBreakEndTime().getHour()));
-                variables.put(endRestMinuteKey, String.valueOf(dayTime.getBreakEndTime().getMinute()));
-
-                Duration duration = Duration.between(dayTime.getWorkStartTime(), dayTime.getWorkEndTime());
-                long hours = duration.toHours();
-                long minutes = duration.toMinutes() % 60;
-                variables.put(timeKey, hours + "시간 " + minutes + "분");
-            }
-
-            // 남은 일수 처리
-            for (int i = 0; i < 6 - dayCount; i++) {
-                String dayKey = "${" + (dayCount + i + 1) + Constants.DAY_PREFIX + "}";
-                String startHourKey = "${" + (dayCount + i + 1) + Constants.START_HOUR_PREFIX + "}";
-                String startMinuteKey = "${" + (dayCount + i + 1) + Constants.START_MINUTE_PREFIX + "}";
-                String endHourKey = "${" + (dayCount + i + 1) + Constants.END_HOUR_PREFIX + "}";
-                String endMinuteKey = "${" + (dayCount + i + 1) + Constants.END_MINUTE_PREFIX + "}";
-                String timeKey = "${" + (dayCount + i + 1) + Constants.TIME_PREFIX + "}";
-                String startRestHourKey = "${" + (dayCount + i + 1) + Constants.START_REST_PREFIX + "}";
-                String startRestMinuteKey = "${" + (dayCount + i + 1) + Constants.START_REST_MINUTE_PREFIX + "}";
-                String endRestHourKey = "${" + (dayCount + i + 1) + Constants.END_REST_PREFIX + "}";
-                String endRestMinuteKey = "${" + (dayCount + i + 1) + Constants.END_REST_MINUTE_PREFIX + "}";
-
-                variables.put(dayKey, Constants.BLANK);
-                variables.put(startHourKey, Constants.BLANK);
-                variables.put(startMinuteKey, Constants.BLANK);
-                variables.put(endHourKey, Constants.BLANK);
-                variables.put(endMinuteKey, Constants.BLANK);
-                variables.put(startRestHourKey, Constants.BLANK);
-                variables.put(startRestMinuteKey, Constants.BLANK);
-                variables.put(endRestHourKey, Constants.BLANK);
-                variables.put(endRestMinuteKey, Constants.BLANK);
-                variables.put(timeKey, Constants.BLANK);
-            }
-
-            variables.put("${" + Constants.REST_DAY + "}", document.getRestDays());
-            variables.put("${" + Constants.S_HOURLY_RATE + "}", String.valueOf(document.getHourlyRate()));
-
-            if (document.getBonus() != null) {
-                variables.put("${" + Constants.YES_BONUS + "}", Constants.V);
-                variables.put("${" + Constants.BONUS + "}", String.valueOf(document.getBonus()));
-                variables.put("${" + Constants.NO_BONUS + "}", Constants.BLANK);
-            } else {
-                variables.put("${" + Constants.YES_BONUS + "}", Constants.BLANK);
-                variables.put("${" + Constants.BONUS + "}", Constants.BLANK);
-                variables.put("${" + Constants.NO_BONUS + "}", Constants.V);
-            }
-
-            if (document.getAdditionalSalary() != null) {
-                variables.put("${" + Constants.YES_ADD + "}", Constants.V);
-                variables.put("${" + Constants.WAGE_RATE + "}", String.valueOf(document.getWageRate()));
-                variables.put("${" + Constants.NO_ADD + "}", Constants.BLANK);
-            } else {
-                variables.put("${" + Constants.YES_ADD + "}", Constants.BLANK);
-                variables.put("${" + Constants.WAGE_RATE + "}", Constants.BLANK);
-                variables.put("${" + Constants.NO_ADD + "}", Constants.V);
-            }
-
-            variables.put("${" + Constants.WAGE_RATE + "}", String.valueOf(document.getWageRate()));
-            variables.put("${" + Constants.PAYMENT_DAY + "}", String.valueOf(document.getPaymentDay()));
-
-            if (document.getPaymentMethod().equals(EPaymentMethod.DIRECT)) {
-                variables.put("${" + Constants.DIRECT_PAYMENT + "}", Constants.V);
-                variables.put("${" + Constants.BANK_PAYMENT + "}", Constants.BLANK);
-            } else {
-                variables.put("${" + Constants.DIRECT_PAYMENT + "}", Constants.BLANK);
-                variables.put("${" + Constants.BANK_PAYMENT + "}", Constants.V);
-            }
-
-            if (document.getInsurances().contains(EInsurance.EMPLOYMENT_INSURANCE)) {
-                variables.put("${" + Constants.EMPLOYMENT_INSURANCE + "}", Constants.CHECK);
-            } else {
-                variables.put("${" + Constants.EMPLOYMENT_INSURANCE + "}", Constants.NONECHECK);
-            }
-
-            if (document.getInsurances().contains(EInsurance.WORKERS_COMPENSATION_INSURANCE)) {
-                variables.put("${" + Constants.INDUSTRIAL_INSURANCE + "}", Constants.CHECK);
-            } else {
-                variables.put("${" + Constants.INDUSTRIAL_INSURANCE + "}", Constants.NONECHECK);
-            }
-
-            if (document.getInsurances().contains(EInsurance.NATIONAL_PENSION)) {
-                variables.put("${" + Constants.NATIONAL_PENSION + "}", Constants.CHECK);
-            } else {
-                variables.put("${" + Constants.NATIONAL_PENSION + "}", Constants.NONECHECK);
-            }
-
-            if (document.getInsurances().contains(EInsurance.HEALTH_INSURANCE)) {
-                variables.put("${" + Constants.HEALTH_INSURANCE + "}", Constants.CHECK);
-            } else {
-                variables.put("${" + Constants.HEALTH_INSURANCE + "}", Constants.NONECHECK);
-            }
-
-            variables.put("${" + Constants.COMPANY_NAME_1 + "}", document.getCompanyName());
-            variables.put("${" + Constants.EMPLOYER_PHONE + "}", document.getEmployerPhoneNumber());
-            variables.put("${" + Constants.ADDRESS_2 + "}", document.getEmployerAddress().getFullAddress());
-            variables.put("${" + Constants.EMPLOYER_NAME_2 + "}", document.getEmployerName());
-            variables.put("${" + Constants.ADDRESS_3 + "}", document.getEmployeeAddress().getFullAddress());
-            variables.put("${" + Constants.EMPLOYEE_PHONE + "}", document.getEmployeePhoneNumber());
-            variables.put("${" + Constants.EMPLOYEE_NAME_2 + "}", document.getEmployeeFullName());
-
-
-            modifyHwpContent(hwpFile, variables);
-
-            // HWP 파일을 ByteArrayOutputStream에 저장
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            HWPWriter.toStream(hwpFile, outputStream);
-
-            return new ByteArrayInputStream(outputStream.toByteArray());
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     private BufferedImage convertSvgToPng(File svgFile) {
         try {
             PNGTranscoder transcoder = new PNGTranscoder();
@@ -736,98 +570,6 @@ public class StandardLaborContractService {
             }
         } catch (Exception e) {
             throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    private void modifyHwpContent(HWPFile hwpFile, Map<String, String> fields) {
-        fields.forEach((placeholder, replacement) -> {
-            List<Section> sections = hwpFile.getBodyText().getSectionList();
-            sections.forEach(section -> {
-                for (Paragraph paragraph : section.getParagraphs()) {
-                    try {
-                        replaceTextInParagraph(paragraph, placeholder, replacement);
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
-                    if (paragraph.getControlList() != null) {  // Control 리스트가 존재하는지 확인
-                        for (Control control : paragraph.getControlList()) {
-                            if (control instanceof ControlTable table) {  // 표가 포함된 문단인지 확인
-                                table.getRowList().forEach(row -> {
-                                    row.getCellList().forEach(cell -> {
-                                        try {
-                                            readAndReplaceCellText(cell, placeholder, replacement);
-                                        } catch (UnsupportedEncodingException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    });
-                                });
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    }
-
-    // 일반 텍스트 문단의 텍스트를 치환하는 메서드
-    private void replaceTextInParagraph(Paragraph paragraph, String placeholder, String replacement) throws UnsupportedEncodingException {
-        ParaText text = paragraph.getText();
-        if (text != null) {
-            // 현재 텍스트를 검색하여 placeholder의 시작 인덱스를 찾음
-            String currentText = text.getNormalString(0);
-            int startIndex = currentText.indexOf(placeholder);
-
-            if (startIndex != -1) {
-                // placeholder의 각 문자를 교체
-                for (int i = 0; i < placeholder.length(); i++) {
-                    HWPCharNormal charNormal = (HWPCharNormal) text.getCharList().get(startIndex + i);
-                    if (i < replacement.length()) {
-                        charNormal.setCode((short) replacement.codePointAt(i));
-                    } else {
-                        // placeholder가 replacement보다 긴 경우 남은 문자는 공백으로 처리
-                        charNormal.setCode((short) '\u200B');  // zero-width space 사용
-                    }
-                }
-
-                // replacement가 placeholder보다 긴 경우, 추가 문자를 삽입
-                for (int i = placeholder.length(); i < replacement.length(); i++) {
-                    HWPCharNormal newChar = text.insertNewNormalChar(startIndex + i);
-                    newChar.setCode((short) replacement.codePointAt(i));
-                }
-            }
-        }
-    }
-
-
-
-    private void readAndReplaceCellText(Cell cell, String placeholder, String replacement) throws UnsupportedEncodingException {
-        for (Paragraph cellParagraph : cell.getParagraphList()) { // 셀 내부의 문단들을 순회
-            ParaText text = cellParagraph.getText();
-            if (text != null) {
-                // 현재 텍스트를 가져와 placeholder의 위치를 찾음
-                String currentText = text.getNormalString(0);
-                int startIndex = currentText.indexOf(placeholder);
-
-                if (startIndex != -1) {
-                    // placeholder의 각 문자를 replacement로 교체
-                    for (int i = 0; i < placeholder.length(); i++) {
-                        HWPCharNormal charNormal = (HWPCharNormal) text.getCharList().get(startIndex + i);
-                        if (i < replacement.length()) {
-                            charNormal.setCode((short) replacement.codePointAt(i));
-                        } else {
-                            // placeholder가 replacement보다 길다면 남은 부분은 공백으로 처리
-                            charNormal.setCode((short) '\u200B');  // zero-width space 사용
-                        }
-                    }
-
-                    // replacement가 placeholder보다 긴 경우, 추가 문자를 삽입
-                    for (int i = placeholder.length(); i < replacement.length(); i++) {
-                        HWPCharNormal newChar = text.insertNewNormalChar(startIndex + i);
-                        newChar.setCode((short) replacement.codePointAt(i));
-                    }
-                }
-            }
         }
     }
 }

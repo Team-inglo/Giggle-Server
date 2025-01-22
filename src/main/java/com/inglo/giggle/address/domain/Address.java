@@ -60,7 +60,11 @@ public class Address {
     }
 
     public String getFullAddress() {
-        return this.addressName + " " + this.addressDetail;
+
+        String addressName = this.addressName == null ? "" : this.addressName;
+        String addressDetail = this.addressDetail == null ? "" : this.addressDetail;
+
+        return addressName + " " + addressDetail;
     }
 
     public void updateAddressName(String addressName) {

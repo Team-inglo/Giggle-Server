@@ -1,4 +1,4 @@
-### 1.1 사용자 로그인 - 고용주
+### ~ 유학생 시간제 취업허가서 제출까지. 고용주로 로그인해서 시간제취업허가서 작성 후 제출 필요. "시간제취업허가서" 서명 확인용 시나리오
 // @no-log
 POST {{host_url}}/v1/auth/login
 Content-Type: application/x-www-form-urlencoded
@@ -131,3 +131,39 @@ Authorization: Bearer {{user_access_token}}
 // @no-log
 PATCH {{host_url}}/v1/users/documents/{{part_time_employment_permits_id}}/status/submission
 Authorization: Bearer {{user_access_token}}
+
+### 8.8 (유학생) 통합 신청서 생성하기
+// @no-log
+POST {{host_url}}/v1/users/user-owner-job-postings/{{user_owner_job_posting_id}}/documents/integrated-applications
+Authorization: Bearer {{user_access_token}}
+Content-Type: application/json
+
+{
+  "first_name" : "{{document.API_8_8.first_name}}",
+  "last_name" : "{{document.API_8_8.last_name}}",
+  "birth" : "{{document.API_8_8.birth}}",
+  "gender" : "{{document.API_8_8.gender}}",
+  "nationality" : "{{document.API_8_8.nationality}}",
+  "tele_phone_number" : "{{document.API_8_8.tele_phone_number}}",
+  "cell_phone_number" : "{{document.API_8_8.cell_phone_number}}",
+  "is_accredited" : {{document.API_8_8.is_accredited}},
+  "school_name" : "{{document.API_8_8.school_name}}",
+  "school_phone_number" : "{{document.API_8_8.school_phone_number}}",
+  "new_work_place_name" : "{{document.API_8_8.new_work_place_name}}",
+  "new_work_place_registration_number" : "{{document.API_8_8.new_work_place_registration_number}}",
+  "new_work_place_phone_number" : "{{document.API_8_8.new_work_place_phone_number}}",
+  "annual_income_amount" : {{document.API_8_8.annual_income_amount}},
+  "occupation" : "{{document.API_8_8.occupation}}",
+  "email" : "{{document.API_8_8.email}}",
+  "signature_base64" : "{{document.API_8_8.signature_base64}}",
+  "address" : {
+    "address_name" : "{{document.API_8_8.address.address_name}}",
+    "region_1depth_name" : "{{document.API_8_8.address.region_1depth_name}}",
+    "region_2depth_name" : "{{document.API_8_8.address.region_2depth_name}}",
+    "region_3depth_name" : "{{document.API_8_8.address.region_3depth_name}}",
+    "region_4depth_name" : "{{document.API_8_8.address.region_4depth_name}}",
+    "address_detail" : "{{document.API_8_8.address.address_detail}}",
+    "longitude" : {{document.API_8_8.address.longitude}},
+    "latitude" : {{document.API_8_8.address.latitude}}
+  }
+}

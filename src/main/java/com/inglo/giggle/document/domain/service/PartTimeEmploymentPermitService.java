@@ -9,40 +9,20 @@ import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
-import jakarta.xml.bind.JAXBElement;
-import kr.dogfoot.hwplib.object.HWPFile;
-import kr.dogfoot.hwplib.object.bodytext.Section;
-import kr.dogfoot.hwplib.object.bodytext.control.Control;
-import kr.dogfoot.hwplib.object.bodytext.control.ControlTable;
-import kr.dogfoot.hwplib.object.bodytext.control.table.Cell;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.Paragraph;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.text.HWPCharNormal;
-import kr.dogfoot.hwplib.object.bodytext.paragraph.text.ParaText;
-import kr.dogfoot.hwplib.reader.HWPReader;
-import kr.dogfoot.hwplib.writer.HWPWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
-import org.docx4j.dml.CTPoint2D;
-import org.docx4j.dml.wordprocessingDrawing.*;
-import org.docx4j.model.datastorage.migration.VariablePrepare;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.docx4j.wml.Drawing;
-import org.docx4j.wml.P;
-import org.docx4j.wml.R;
-import org.docx4j.wml.Text;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.util.Units;
+import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlToken;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDrawing;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -54,11 +34,9 @@ import java.util.Map;
 @Service
 @Slf4j
 public class PartTimeEmploymentPermitService {
+
     @Value("${template.part-time-employment-permit.word.path}")
     private String wordTemplatePath;
-
-    @Value("${template.part-time-employment-permit.hwp.path}")
-    private String hwpTemplatePath;
 
     public PartTimeEmploymentPermit updateStatusByUserSubmission(PartTimeEmploymentPermit document) {
         document.updateEmployeeStatus(EEmployeeStatus.SUBMITTED);
@@ -181,125 +159,34 @@ public class PartTimeEmploymentPermitService {
     }
 
     public ByteArrayInputStream createPartTimeEmploymentPermitDocxFile(PartTimeEmploymentPermit document) {
-        try {
-            WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));
-            MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+        try (FileInputStream fis = new FileInputStream(wordTemplatePath);
+             XWPFDocument template = new XWPFDocument(fis);
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-            VariablePrepare.prepare(wordMLPackage);
+            // 텍스트 치환
+            Map<String, String> variables = prepareVariables(document);
+            replacePlaceholders(template, variables);
 
-            HashMap<String, String> variables = new HashMap<>();
-
-            variables.put(Constants.KEMPLOYEE_FULL_NAME, document.getEmployeeFullName());
-            variables.put(Constants.KMAJOR, document.getMajor());
-            variables.put(Constants.KTERM_OF_COMPLETION, document.getTermOfCompletion().toString());
-            variables.put(Constants.KEMPLOYEE_PHONE_NUMBER, document.getEmployeePhoneNumber());
-            variables.put(Constants.KEMPLOYEE_EMAIL, document.getEmployeeEmail());
-            variables.put(Constants.KCOMPANY_NAME, document.getCompanyName());
-            variables.put(Constants.KCOMPANY_REGISTRATION_NUMBER, document.getCompanyRegistrationNumber());
-            variables.put(Constants.KJOB_TYPE, document.getJobType());
-            variables.put(Constants.KEMPLOYER_ADDRESS, document.getEmployerAddress().getAddressName() + " " + document.getEmployerAddress().getAddressDetail());
-            variables.put(Constants.KEMPLOYER_NAME, document.getEmployerName());
-            variables.put(Constants.KEMPLOYER_PHONE_NUMBER, document.getEmployerPhoneNumber());
-            variables.put(Constants.KWORK_PERIOD, document.getWorkPeriod().getKrName());
-            variables.put(Constants.KHOURLY_RATE, document.getHourlyRate().toString());
-            variables.put(Constants.KWORK_DAYS_WEEKDAYS, document.getWorkDaysWeekDays());
-            variables.put(Constants.KWORK_DAYS_WEEKENDS, document.getWorkDaysWeekends());
-
-            documentPart.variableReplace(variables);
-
-            // Base64로 인코딩된 서명 이미지를 SVG 파일로 변환
+            // 서명 이미지 삽입
             String base64Svg = document.getEmployerSignatureBase64();
-            byte[] svgBytes = Base64.getDecoder().decode(base64Svg);
-            Path tempSvgFile = Files.createTempFile("signature", ".svg");
-            Files.write(tempSvgFile, svgBytes, StandardOpenOption.WRITE);
+            if (base64Svg != null && !base64Svg.isEmpty()) {
+                byte[] pngBytes = convertSvgToPng(base64Svg);
+                if (pngBytes != null) {
+                    // 1. "(인 또는 서명)" 텍스트 위치를 찾습니다.
+                    XWPFParagraph signatureParagraph = findPlaceholderParagraph(template, "(인 또는 서명)");
 
-            // SVG 파일을 PNG로 변환
-            BufferedImage signatureImage = convertSvgToPng(tempSvgFile.toFile());
-
-            if (signatureImage != null) {
-                byte[] imageBytes = bufferedImageToByteArray(signatureImage);
-                assert imageBytes != null;
-                BinaryPartAbstractImage imagePart = BinaryPartAbstractImage.createImagePart(wordMLPackage, imageBytes);
-                // Inline 이미지 생성
-                Inline inlineImage = imagePart.createImageInline("Signature", "User Signature", 1, 2, 1000000L, 300000L, false);
-                Anchor anchor = new Anchor();
-
-                // Inline의 extent 속성 값을 Anchor에 설정
-                anchor.setExtent(inlineImage.getExtent());
-
-                // effectExtent가 Inline과 Anchor에 모두 정의되어 있으면 설정
-                if (inlineImage.getEffectExtent() != null) {
-                    anchor.setEffectExtent(inlineImage.getEffectExtent());
+                    if (signatureParagraph != null) {
+                        // 2. 이미지를 Anchor로 삽입합니다.
+                        String blipId = addImageToDocument(template, pngBytes);
+                        insertAnchorImage(signatureParagraph, blipId, Units.toEMU(100), Units.toEMU(15));
+                    } else {
+                        log.warn("Signature placeholder not found in the document.");
+                    }
                 }
-
-                // Inline의 docPr 속성 값을 Anchor에 설정
-                anchor.setDocPr(inlineImage.getDocPr());
-
-                // Inline의 cNvGraphicFramePr 속성 값을 Anchor에 설정
-                if (inlineImage.getCNvGraphicFramePr() != null) {
-                    anchor.setCNvGraphicFramePr(inlineImage.getCNvGraphicFramePr());
-                }
-
-                // Inline의 graphic 속성 값을 Anchor에 설정
-                anchor.setGraphic(inlineImage.getGraphic());
-
-                // Inline의 거리 설정 속성(distT, distB, distL, distR)을 Anchor에 설정
-                if (inlineImage.getDistT() != null) {
-                    anchor.setDistT(inlineImage.getDistT());
-                }
-                if (inlineImage.getDistB() != null) {
-                    anchor.setDistB(inlineImage.getDistB());
-                }
-                if (inlineImage.getDistL() != null) {
-                    anchor.setDistL(inlineImage.getDistL());
-                }
-                if (inlineImage.getDistR() != null) {
-                    anchor.setDistR(inlineImage.getDistR());
-                }
-
-                // Anchor의 고유 속성 값 설정
-                anchor.setRelativeHeight(0);       // 기본 높이
-                anchor.setBehindDoc(false);         // 문서 뒤 배치 여부
-                anchor.setLocked(false);            // 잠금 여부
-                anchor.setLayoutInCell(true);       // 셀 내 레이아웃 여부
-                anchor.setAllowOverlap(true);       // 겹침 허용 여부
-
-                // 랩 설정 제거
-                anchor.setWrapNone(null);
-                anchor.setWrapSquare(null);
-                anchor.setWrapTight(null);
-                anchor.setWrapThrough(null);
-                anchor.setWrapTopAndBottom(null);
-
-                // simplePos 속성 설정
-                CTPoint2D simplePos = new CTPoint2D();
-                simplePos.setX(0L);
-                simplePos.setY(0L);
-                anchor.setSimplePos(simplePos);
-                anchor.setSimplePosAttr(false); // Word 호환성을 위해 simplePos 속성 false로 설정
-
-                // 수평 위치 설정
-                CTPosH positionH = new CTPosH();
-                positionH.setAlign(STAlignH.RIGHT); // 수평 위치: 오른쪽 정렬
-                positionH.setRelativeFrom(STRelFromH.MARGIN); // 기준: 페이지 여백
-                anchor.setPositionH(positionH);
-
-                // 수직 위치 설정
-                CTPosV positionV = new CTPosV();
-                positionV.setAlign(STAlignV.TOP); // 수직 위치: 상단 정렬
-                positionV.setRelativeFrom(STRelFromV.MARGIN); // 기준: 페이지 여백
-                anchor.setPositionV(positionV);
-
-                anchor.setWrapNone(new CTWrapNone()); // 기본 랩 설정 (없음)
-
-                // '인 또는 서명' 위치에 이미지 삽입
-                insertImageAtPlaceholder(documentPart, anchor);
             }
-            // 파일을 ByteArrayOutputStream에 저장
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            wordMLPackage.save(outputStream);
 
-            // ByteArrayInputStream으로 변환하여 반환
+            // 결과 파일 저장
+            template.write(outputStream);
             return new ByteArrayInputStream(outputStream.toByteArray());
 
         } catch (Exception e) {
@@ -308,321 +195,173 @@ public class PartTimeEmploymentPermitService {
         }
     }
 
-    public ByteArrayInputStream createPartTimeEmploymentPermitHwpFile(PartTimeEmploymentPermit document) {
-        try {
-            HWPFile hwpFile = HWPReader.fromFile(hwpTemplatePath);
+    private Map<String, String> prepareVariables(PartTimeEmploymentPermit document) {
+        Map<String, String> variables = new HashMap<>();
+        variables.put(Constants.KEMPLOYEE_FULL_NAME, document.getEmployeeFullName());
+        variables.put(Constants.KMAJOR, document.getMajor());
+        variables.put(Constants.KTERM_OF_COMPLETION, document.getTermOfCompletion().toString());
+        variables.put(Constants.KEMPLOYEE_PHONE_NUMBER, document.getEmployeePhoneNumber());
+        variables.put(Constants.KEMPLOYEE_EMAIL, document.getEmployeeEmail());
+        variables.put(Constants.KCOMPANY_NAME, document.getCompanyName());
+        variables.put(Constants.KCOMPANY_REGISTRATION_NUMBER, document.getCompanyRegistrationNumber());
+        variables.put(Constants.KJOB_TYPE, document.getJobType());
+        variables.put(Constants.KEMPLOYER_ADDRESS, document.getEmployerAddress().getAddressName() + " " + document.getEmployerAddress().getAddressDetail());
+        variables.put(Constants.KEMPLOYER_NAME, document.getEmployerName());
+        variables.put(Constants.KEMPLOYER_PHONE_NUMBER, document.getEmployerPhoneNumber());
+        variables.put(Constants.KWORK_PERIOD, document.getWorkPeriod().getKrName());
+        variables.put(Constants.KHOURLY_RATE, document.getHourlyRate().toString());
+        variables.put(Constants.KWORK_DAYS_WEEKDAYS, document.getWorkDaysWeekDays());
+        variables.put(Constants.KWORK_DAYS_WEEKENDS, document.getWorkDaysWeekends());
+        return variables;
+    }
 
-            // 텍스트 필드 삽입
-            Map<String, String> variables = new HashMap<>();
-            variables.put("${" + Constants.KEMPLOYEE_FULL_NAME + "}", document.getEmployeeFullName());
-            variables.put("${" + Constants.KMAJOR + "}", document.getMajor());
-            variables.put("${" + Constants.KTERM_OF_COMPLETION + "}", document.getTermOfCompletion().toString());
-            variables.put("${" + Constants.KEMPLOYEE_PHONE_NUMBER + "}", document.getEmployeePhoneNumber());
-            variables.put("${" + Constants.KEMPLOYEE_EMAIL + "}", document.getEmployeeEmail());
-            variables.put("${" + Constants.KCOMPANY_NAME + "}", document.getCompanyName());
-            variables.put("${" + Constants.KCOMPANY_REGISTRATION_NUMBER + "}", document.getCompanyRegistrationNumber());
-            variables.put("${" + Constants.KJOB_TYPE + "}", document.getJobType());
-            variables.put("${" + Constants.KEMPLOYER_ADDRESS + "}", document.getEmployerAddress().getAddressName() + " " + document.getEmployerAddress().getAddressDetail());
-            variables.put("${" + Constants.KEMPLOYER_NAME + "}", document.getEmployerName());
-            variables.put("${" + Constants.KEMPLOYER_PHONE_NUMBER + "}", document.getEmployerPhoneNumber());
-            variables.put("${" + Constants.KWORK_PERIOD + "}", document.getWorkPeriod().getKrName());
-            variables.put("${" + Constants.KHOURLY_RATE + "}", document.getHourlyRate().toString());
-            variables.put("${" + Constants.KWORK_DAYS_WEEKDAYS + "}", document.getWorkDaysWeekDays());
-            variables.put("${" + Constants.KWORK_DAYS_WEEKENDS + "}", document.getWorkDaysWeekends());
-
-            modifyHwpContent(hwpFile, variables);
-
-//            TODO: 한글파일 사진 삽입 로직 추가
-//
-//            // Base64로 인코딩된 서명 이미지를 SVG에서 PNG로 변환
-//            String base64Svg = document.getEmployerSignatureBase64();
-//            byte[] svgBytes = Base64.getDecoder().decode(base64Svg);
-//            Path tempSvgFile = Files.createTempFile("signature", ".svg");
-//            Files.write(tempSvgFile, svgBytes, StandardOpenOption.WRITE);
-//
-//            BufferedImage signatureImage = convertSvgToPng(tempSvgFile.toFile());
-//            if (signatureImage != null) {
-//                byte[] imageBytes = bufferedImageToByteArray(signatureImage, "png");
-//                insertImageAtPlaceholderForHwp(hwpFile, imageBytes, "(인 또는 서명)");
-//            } else {
-//                throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
-//            }
-
-            // HWP 파일을 ByteArrayOutputStream에 저장
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            HWPWriter.toStream(hwpFile, outputStream);
-
-            return new ByteArrayInputStream(outputStream.toByteArray());
-
-        } catch (Exception e) {
-            return null;
+    private void replacePlaceholders(XWPFDocument document, Map<String, String> variables) {
+        for (XWPFParagraph paragraph : document.getParagraphs()) {
+            replaceTextInParagraph(paragraph, variables);
+        }
+        for (XWPFTable table : document.getTables()) {
+            for (XWPFTableRow row : table.getRows()) {
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                        replaceTextInParagraph(paragraph, variables);
+                    }
+                }
+            }
         }
     }
 
-    private BufferedImage convertSvgToPng(File svgFile) {
-        try {
-            PNGTranscoder transcoder = new PNGTranscoder();
-            TranscoderInput input = new TranscoderInput(svgFile.toURI().toString());
+    private void replaceTextInParagraph(XWPFParagraph paragraph, Map<String, String> variables) {
+        List<XWPFRun> runs = paragraph.getRuns();
+        if (runs != null && !runs.isEmpty()) {
+            StringBuilder paragraphText = new StringBuilder();
 
+            // 1. 모든 Run의 텍스트 병합
+            for (XWPFRun run : runs) {
+                paragraphText.append(run.text());
+            }
+
+            // 2. 병합된 텍스트에서 플레이스홀더 치환
+            String updatedText = paragraphText.toString();
+            for (Map.Entry<String, String> entry : variables.entrySet()) {
+                updatedText = updatedText.replace("${" + entry.getKey() + "}", entry.getValue());
+            }
+
+            // 3. 기존 Run 제거 및 치환된 텍스트 삽입
+            if (!updatedText.equals(paragraphText.toString())) {
+                for (int i = runs.size() - 1; i >= 0; i--) {
+                    paragraph.removeRun(i);
+                }
+
+                // 새로운 Run에 치환된 텍스트 추가
+                XWPFRun newRun = paragraph.createRun();
+                newRun.setText(updatedText);
+            }
+        }
+    }
+
+    private XWPFParagraph findPlaceholderParagraph(XWPFDocument document, String placeholder) {
+        for (XWPFParagraph paragraph : document.getParagraphs()) {
+            if (paragraph.getText().contains(placeholder)) {
+                return paragraph;
+            }
+        }
+        for (XWPFTable table : document.getTables()) {
+            for (XWPFTableRow row : table.getRows()) {
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    for (XWPFParagraph paragraph : cell.getParagraphs()) {
+                        if (paragraph.getText().contains(placeholder)) {
+                            return paragraph;
+                        }
+                    }
+                }
+            }
+        }
+        return null; // Placeholder를 찾을 수 없는 경우
+    }
+
+
+    private String addImageToDocument(XWPFDocument document, byte[] imageBytes) throws IOException, InvalidFormatException {
+        int pictureType = XWPFDocument.PICTURE_TYPE_PNG;
+        String blipId = document.addPictureData(imageBytes, pictureType);
+        return blipId;
+    }
+
+    private void insertAnchorImage(XWPFParagraph paragraph, String blipId, int widthEMU, int heightEMU) {
+        try {
+
+            long offsetX = -Units.toEMU(10);
+            String anchorXml =
+                    "<wp:anchor distT=\"0\" distB=\"0\" distL=\"0\" distR=\"0\" simplePos=\"0\" relativeHeight=\"0\" behindDoc=\"false\" " +
+                            "locked=\"false\" layoutInCell=\"true\" allowOverlap=\"true\" xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\">" +
+                            "   <wp:simplePos x=\"0\" y=\"0\"/>" +
+                            "   <wp:positionH relativeFrom=\"margin\">" +
+                            "       <wp:align>right</wp:align>" +
+                            "   </wp:positionH>" +
+                            "   <wp:positionV relativeFrom=\"paragraph\">" +
+                            "       <wp:align>top</wp:align>" +
+                            "   </wp:positionV>" +
+                            "   <wp:extent cx=\"" + widthEMU + "\" cy=\"" + heightEMU + "\"/>" +
+                            "   <wp:effectExtent l=\"0\" t=\"0\" r=\"0\" b=\"0\"/>" +
+                            "   <wp:wrapNone/>" +
+                            "   <wp:docPr id=\"1\" name=\"Picture 1\"/>" +
+                            "   <wp:cNvGraphicFramePr/>" +
+                            "   <a:graphic xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">" +
+                            "       <a:graphicData uri=\"http://schemas.openxmlformats.org/drawingml/2006/picture\">" +
+                            "           <pic:pic xmlns:pic=\"http://schemas.openxmlformats.org/drawingml/2006/picture\">" +
+                            "               <pic:nvPicPr>" +
+                            "                   <pic:cNvPr id=\"0\" name=\"Signature\"/>" +
+                            "                   <pic:cNvPicPr/>" +
+                            "               </pic:nvPicPr>" +
+                            "               <pic:blipFill>" +
+                            "                   <a:blip r:embed=\"" + blipId + "\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"/>" +
+                            "                   <a:stretch>" +
+                            "                       <a:fillRect/>" +
+                            "                   </a:stretch>" +
+                            "               </pic:blipFill>" +
+                            "               <pic:spPr>" +
+                            "                   <a:xfrm>" +
+                            "                       <a:off x=\"" + offsetX + "\" y=\"0\"/>" +
+                            "                       <a:ext cx=\"" + widthEMU + "\" cy=\"" + heightEMU + "\"/>" +
+                            "                   </a:xfrm>" +
+                            "                   <a:prstGeom prst=\"rect\">" +
+                            "                       <a:avLst/>" +
+                            "                   </a:prstGeom>" +
+                            "               </pic:spPr>" +
+                            "           </pic:pic>" +
+                            "       </a:graphicData>" +
+                            "   </a:graphic>" +
+                            "</wp:anchor>";
+
+            // Anchor XML을 CTDrawing에 추가
+            CTDrawing drawing = paragraph.createRun().getCTR().addNewDrawing();
+            XmlToken xmlToken = XmlToken.Factory.parse(anchorXml);
+            drawing.set(xmlToken);
+        } catch (XmlException e) {
+            throw new RuntimeException("Error creating anchor XML", e);
+        }
+    }
+
+
+
+    private byte[] convertSvgToPng(String base64Svg) {
+        try {
+            byte[] svgBytes = Base64.getDecoder().decode(base64Svg);
+            Path tempSvgFile = Files.createTempFile("signature", ".svg");
+            Files.write(tempSvgFile, svgBytes, StandardOpenOption.WRITE);
+
+            // SVG to PNG 변환
             ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
+            PNGTranscoder transcoder = new PNGTranscoder();
+            TranscoderInput input = new TranscoderInput(tempSvgFile.toUri().toString());
             TranscoderOutput output = new TranscoderOutput(pngOutputStream);
             transcoder.transcode(input, output);
 
-            return ImageIO.read(new ByteArrayInputStream(pngOutputStream.toByteArray()));
+            Files.delete(tempSvgFile); // 임시 파일 삭제
+            return pngOutputStream.toByteArray();
+
         } catch (Exception e) {
+            log.error("Error converting SVG to PNG: ", e);
             return null;
         }
     }
-
-    private byte[] bufferedImageToByteArray(BufferedImage image) {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            ImageIO.write(image, "png", baos);
-            return baos.toByteArray();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private void insertImageAtPlaceholder(MainDocumentPart documentPart, Anchor anchor) {
-        try {
-            boolean isPlaceholerText1Inserted = false;
-            String xpathExpression = "//w:p";
-            List<Object> paragraphNodes = documentPart.getJAXBNodesViaXPath(xpathExpression, true);
-
-            for (Object paragraphNode : paragraphNodes) {
-                if (paragraphNode instanceof P paragraph) {
-                    StringBuilder combinedText = new StringBuilder();
-
-                    for (Object content : paragraph.getContent()) {
-                        if (content instanceof R run) {
-                            for (Object runContent : run.getContent()) {
-                                if (runContent instanceof JAXBElement<?> element) {
-                                    if (element.getValue() instanceof Text textElement) {
-                                        combinedText.append(textElement.getValue());
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // 텍스트 일치 검사
-                    if (combinedText.toString().contains("(인 또는 서명)") && !isPlaceholerText1Inserted) {
-                        // 문단에 이미지 삽입 로직
-                        Drawing drawing = new Drawing();
-                        drawing.getAnchorOrInline().add(anchor);
-                        paragraph.getContent().add(drawing);
-                        isPlaceholerText1Inserted = true;
-                    }
-                }
-            }
-            if (!isPlaceholerText1Inserted) {
-                throw new Exception("Placeholder text not found in document");
-            }
-        } catch (Exception e) {
-            log.error("Error inserting image at placeholder: ", e);
-        }
-    }
-
-    private void modifyHwpContent(HWPFile hwpFile, Map<String, String> fields) {
-        fields.forEach((placeholder, replacement) -> {
-            List<Section> sections = hwpFile.getBodyText().getSectionList();
-            sections.forEach(section -> {
-                for (Paragraph paragraph : section.getParagraphs()) {
-                    try {
-                        replaceTextInParagraph(paragraph, placeholder, replacement);
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
-                    if (paragraph.getControlList() != null) {  // Control 리스트가 존재하는지 확인
-                        for (Control control : paragraph.getControlList()) {
-                            if (control instanceof ControlTable table) {  // 표가 포함된 문단인지 확인
-                                table.getRowList().forEach(row -> {
-                                    row.getCellList().forEach(cell -> {
-                                        try {
-                                            readAndReplaceCellText(cell, placeholder, replacement);
-                                        } catch (UnsupportedEncodingException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    });
-                                });
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    }
-
-    // 일반 텍스트 문단의 텍스트를 치환하는 메서드
-    private void replaceTextInParagraph(Paragraph paragraph, String placeholder, String replacement) throws UnsupportedEncodingException {
-        ParaText text = paragraph.getText();
-        if (text != null) {
-            // 현재 텍스트를 검색하여 placeholder의 시작 인덱스를 찾음
-            String currentText = text.getNormalString(0);
-            int startIndex = currentText.indexOf(placeholder);
-
-            if (startIndex != -1) {
-                // placeholder의 각 문자를 교체
-                for (int i = 0; i < placeholder.length(); i++) {
-                    HWPCharNormal charNormal = (HWPCharNormal) text.getCharList().get(startIndex + i);
-                    if (i < replacement.length()) {
-                        charNormal.setCode((short) replacement.codePointAt(i));
-                    } else {
-                        // placeholder가 replacement보다 긴 경우 남은 문자는 공백으로 처리
-                        charNormal.setCode((short) '\u200B');  // zero-width space 사용
-                    }
-                }
-
-                // replacement가 placeholder보다 긴 경우, 추가 문자를 삽입
-                for (int i = placeholder.length(); i < replacement.length(); i++) {
-                    HWPCharNormal newChar = text.insertNewNormalChar(startIndex + i);
-                    newChar.setCode((short) replacement.codePointAt(i));
-                }
-            }
-        }
-    }
-
-
-
-    private void readAndReplaceCellText(Cell cell, String placeholder, String replacement) throws UnsupportedEncodingException {
-        for (Paragraph cellParagraph : cell.getParagraphList()) { // 셀 내부의 문단들을 순회
-            ParaText text = cellParagraph.getText();
-            if (text != null) {
-                // 현재 텍스트를 가져와 placeholder의 위치를 찾음
-                String currentText = text.getNormalString(0);
-                int startIndex = currentText.indexOf(placeholder);
-
-                if (startIndex != -1) {
-                    // placeholder의 각 문자를 replacement로 교체
-                    for (int i = 0; i < placeholder.length(); i++) {
-                        HWPCharNormal charNormal = (HWPCharNormal) text.getCharList().get(startIndex + i);
-                        if (i < replacement.length()) {
-                            charNormal.setCode((short) replacement.codePointAt(i));
-                        } else {
-                            // placeholder가 replacement보다 길다면 남은 부분은 공백으로 처리
-                            charNormal.setCode((short) '\u200B');  // zero-width space 사용
-                        }
-                    }
-
-                    // replacement가 placeholder보다 긴 경우, 추가 문자를 삽입
-                    for (int i = placeholder.length(); i < replacement.length(); i++) {
-                        HWPCharNormal newChar = text.insertNewNormalChar(startIndex + i);
-                        newChar.setCode((short) replacement.codePointAt(i));
-                    }
-                }
-            }
-        }
-    }
-
-//    private void insertImageAtPlaceholderForHwp(HWPFile hwpFile, byte[] imageBytes, String placeholderText) {
-//        int streamIndex = hwpFile.getBinData().getEmbeddedBinaryDataList().size() + 1;
-//        String streamName = "Bin" + String.format("%04X", streamIndex) + ".png";
-//
-//        hwpFile.getBinData().addNewEmbeddedBinaryData(streamName, imageBytes, BinDataCompress.ByStorageDefault);
-//        int binDataID = addBinDataInDocInfo(hwpFile, streamIndex);
-//
-//        for (Section section : hwpFile.getBodyText().getSectionList()) {
-//            for (Paragraph paragraph : section.getParagraphs()) {
-//                if (paragraph.getControlList() != null) {
-//                    for (Control control : paragraph.getControlList()) {
-//                        if (control instanceof ControlTable) {
-//                            ControlTable table = (ControlTable) control;
-//                            table.getRowList().forEach(row -> row.getCellList().forEach(cell -> {
-//                                try {
-//                                    insertImageInCell(cell, placeholderText, binDataID);
-//                                } catch (Exception e) {
-//                                    log.error("Error inserting image in cell: ", e);
-//                                }
-//                            }));
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    // Cell에 이미지 삽입 함수
-//    private void insertImageInCell(Cell cell, String placeholderText, int binDataID) throws UnsupportedEncodingException {
-//        int instanceID = new Random().nextInt(); // 고유한 instanceID 생성
-//
-//        for (Paragraph cellParagraph : cell.getParagraphList()) {
-//            ParaText text = cellParagraph.getText();
-//            if (text != null && text.getNormalString(0).contains(placeholderText)) {
-//                ControlRectangle rectangle = (ControlRectangle) cellParagraph.addNewGsoControl(GsoControlType.Rectangle);
-//
-//                // CtrlHeaderGso 설정
-//                CtrlHeaderGso hdr = rectangle.getHeader();
-//                GsoHeaderProperty prop = hdr.getProperty();
-//                prop.setVertRelTo(VertRelTo.Para);
-//                prop.setVertRelativeArrange(RelativeArrange.TopOrLeft);
-//                prop.setHorzRelTo(HorzRelTo.Para);
-//                prop.setHorzRelativeArrange(RelativeArrange.TopOrLeft);
-//                hdr.setxOffset(3000);
-//                hdr.setyOffset(3000);
-//                hdr.setWidth(10000);
-//                hdr.setHeight(5000);
-//                hdr.setInstanceId(instanceID);
-//
-//                // ShapeComponentNormal 설정
-//                ShapeComponentNormal shapeComponent = (ShapeComponentNormal) rectangle.getShapeComponent();
-//
-//                // LineInfo 설정: 외곽선 스타일 설정 (없음)
-//                shapeComponent.createLineInfo();
-//                LineInfo lineInfo = shapeComponent.getLineInfo();
-//                lineInfo.getProperty().setLineType(LineType.None);  // 외곽선을 없앰
-//                lineInfo.setOutlineStyle(OutlineStyle.Normal);
-//
-//                // FillInfo 설정: 이미지 채우기 스타일
-//                shapeComponent.createFillInfo();
-//                FillInfo fillInfo = shapeComponent.getFillInfo();
-//                fillInfo.getType().setImageFill(true);
-//                fillInfo.createImageFill();
-//                ImageFill imgFill = fillInfo.getImageFill();
-//                imgFill.setImageFillType(ImageFillType.FitSize);
-//                imgFill.getPictureInfo().setBinItemID(binDataID);
-//
-//                // ShadowInfo 설정: 그림자 없음
-//                shapeComponent.createShadowInfo();
-//                shapeComponent.getShadowInfo().setType(ShadowType.None);
-//
-//                // ShapeComponentRectangle 설정
-//                ShapeComponentRectangle scr = rectangle.getShapeComponentRectangle();
-//                scr.setRoundRate((byte) 0);
-//                scr.setX1(0);
-//                scr.setY1(0);
-//                scr.setX2(fromMM(10000));
-//                scr.setY2(0);
-//                scr.setX3(fromMM(10000));
-//                scr.setY3(fromMM(5000));
-//                scr.setX4(0);
-//                scr.setY4(fromMM(5000));
-//
-//                log.info("Rectangle created with xOffset=3000, yOffset=3000, width=10000, height=5000 and image fill type set to FitSize with binDataID={}", binDataID);
-//                return;
-//            }
-//        }
-//    }
-//
-//    private int fromMM(int mm) {
-//        if (mm == 0) {
-//            return 1;
-//        }
-//        return (int) ((double) mm * 72000.0f / 254.0f + 0.5f);
-//    }
-//
-//    private int addBinDataInDocInfo(HWPFile hwpFile, int streamIndex) {
-//        BinData binData = new BinData();
-//        binData.getProperty().setType(BinDataType.Embedding);
-//        binData.getProperty().setCompress(BinDataCompress.ByStorageDefault);
-//        binData.getProperty().setState(BinDataState.NotAccess);
-//        binData.setBinDataID(streamIndex);
-//        binData.setExtensionForEmbedding("png");
-//
-//        hwpFile.getDocInfo().getBinDataList().add(binData);
-//        int binDataID = hwpFile.getDocInfo().getBinDataList().size();
-//        // 로그 추가: BinData 설정 상태 확인
-//        log.info("BinData 추가됨 - Type: Embedding, Compress: ByStorageDefault, State: NotAccess, StreamIndex: {}, Assigned BinDataID: {}, Extension: png",
-//                streamIndex, binDataID);
-//        return binDataID;
-//    }
 }
