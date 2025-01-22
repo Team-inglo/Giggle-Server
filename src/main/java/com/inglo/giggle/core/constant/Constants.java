@@ -33,6 +33,7 @@ public class Constants {
     public static String KHOURLY_RATE = "khr";
     public static String KWORK_DAYS_WEEKDAYS = "kwd";
     public static String KWORK_DAYS_WEEKENDS = "kwe";
+    public static String SIGNATURE = "(인 또는 서명)";
 
     // StandardLaborContract
     public static final String EMPLOYER_NAME1 = "employername";
@@ -109,7 +110,9 @@ public class Constants {
     public static String ANNUAL = "annual";
     public static String OCCUPATION = "occupation";
     public static String EMAIL = "email";
-    public static String SIGNATURE = "signature";
+    public static String NAME = "name";
+    public static String SIGNATURE1 = "${hand}";
+    public static String SIGNATURE2 = "${hand2}";
 
 
 

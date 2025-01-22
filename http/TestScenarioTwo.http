@@ -1,3 +1,53 @@
+### 1.1 사용자 로그인 - 유학생
+// @no-log
+POST {{host_url}}/v1/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+serial_id={{auth.API_1_1_USER.serial_id}}&
+password={{auth.API_1_1_USER.password}}
+
+> {%
+    client.global.set("user_access_token", response.body.data.access_token);
+%}
+
+### 8.7 (유학생) 근로 계약서 생성하기
+// @no-log
+POST {{host_url}}/v1/users/user-owner-job-postings/{{user_owner_job_posting_id}}/documents/standard-labor-contracts
+Authorization: Bearer {{user_access_token}}
+Content-Type: application/json
+
+{
+  "first_name" : "{{document.API_8_7.first_name}}",
+  "last_name" : "{{document.API_8_7.last_name}}",
+  "address" :
+  {
+    "address_name" : "{{document.API_8_7.address.address_name}}",
+    "region_1depth_name" : "{{document.API_8_7.address.region_1depth_name}}",
+    "region_2depth_name" : "{{document.API_8_7.address.region_2depth_name}}",
+    "region_3depth_name" : "{{document.API_8_7.address.region_3depth_name}}",
+    "region_4depth_name" : "{{document.API_8_7.address.region_4depth_name}}",
+    "address_detail" : "{{document.API_8_7.address.address_detail}}",
+    "longitude" : {{document.API_8_7.address.longitude}},
+    "latitude" : {{document.API_8_7.address.latitude}}
+  },
+  "phone_number" : "{{document.API_8_7.phone_number}}",
+  "signature_base64" : "{{document.API_8_7.signature_base64}}"
+}
+
+### 8.1 (유학생) 서류 조회하기
+// @no-log
+GET {{host_url}}/v1/users/user-owner-job-postings/{{user_owner_job_posting_id}}/documents/summaries
+Authorization: Bearer {{user_access_token}}
+
+> {%
+    client.global.set("standard_labor_contract_id", response.body.data.standard_labor_contract.id);
+%}
+
+### 8.15 (유학생) 서류 제출하기
+// @no-log
+PATCH {{host_url}}/v1/users/documents/{{standard_labor_contract_id}}/status/submission
+Authorization: Bearer {{user_access_token}}
+
 ### 유학생이 근로계약서 작성 및 제출 한 이후부터의 시나리오. 유학생 "근로계약서" 서명 확인용
 // @no-log
 POST {{host_url}}/v1/auth/login
@@ -94,3 +144,8 @@ Content-Type: application/json
 // @no-log
 PATCH {{host_url}}/v1/owners/documents/{{standard_labor_contract_id}}/status/submission
 Authorization: Bearer {{owner_access_token}}
+
+### 8.17 (유학생) 서류 컨펌하기
+// @no-log
+PATCH {{host_url}}/v1/users/documents/{{standard_labor_contract_id}}/status/confirmation
+Authorization: Bearer {{user_access_token}}
