@@ -220,12 +220,12 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("jobPostingIds") List<Long> jobPostingIds
     );
 
-    @Query("SELECT DISTINCT jp.id AS jobPostingId, COUNT(uojp.id) AS popularity " +
+    @Query("SELECT jp.id AS jobPostingId, COUNT(uojp.id) AS popularity " +
             "FROM JobPosting jp " +
             "LEFT JOIN jp.userOwnerJobPostings uojp " +
             "WHERE jp.recruitmentDeadLine IS NULL OR jp.recruitmentDeadLine >= :today " +
             "GROUP BY jp.id " +
-            "ORDER BY COUNT(uojp.id) DESC")
+            "ORDER BY popularity DESC")
     Page<JobPostingProjection> findTrendingJobPostingsWithFetchJoin(
             @Param("today") LocalDate today,
             Pageable pageable
