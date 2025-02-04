@@ -51,10 +51,6 @@ public abstract class Account {
     @Column(name = "password", length = 320, nullable = false)
     private String password;
 
-//    TODO: Notification 기능 추가 시, 추가
-//    @Column(name = "device_token", length = 320)
-//    private String deviceToken;
-
     /* -------------------------------------------- */
     /* Information Column ------------------------- */
     /* -------------------------------------------- */
@@ -73,7 +69,7 @@ public abstract class Account {
     @Column(name = "notification_allowed", nullable = false)
     private Boolean notificationAllowed;
 
-    @Column(name = "device_token")
+    @Column(name = "device_token", length = 320)
     private String deviceToken;
 
     /* -------------------------------------------- */
@@ -121,6 +117,10 @@ public abstract class Account {
 
     public void updateNotificationAllowed(Boolean notificationAllowed) {
         this.notificationAllowed = notificationAllowed;
+    }
+
+    public void updateDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 
     public abstract ESecurityRole getRole();
