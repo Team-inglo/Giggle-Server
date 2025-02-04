@@ -35,6 +35,19 @@ public class AuthController {
     private final ReissueAuthenticationCodeUseCase reissueAuthenticationCodeUseCase;
     private final ReissuePasswordUseCase reissuePasswordUseCase;
     private final DeleteAccountUseCase deleteAccountUseCase;
+    private final UpdateDeviceTokenUseCase updateDeviceTokenUseCase;
+
+    /**
+     * 1.4 디바이스 토큰 갱신
+     */
+    @PatchMapping("/device-token")
+    public ResponseDto<Void> updateDeviceToken(
+            @RequestBody @Valid UpdateDeviceTokenRequestDto requestDto,
+            @AccountID UUID accountId
+    ) {
+        updateDeviceTokenUseCase.execute(accountId, requestDto);
+        return ResponseDto.ok(null);
+    }
 
     /**
      * 2.3 JWT 재발급

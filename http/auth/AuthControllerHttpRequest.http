@@ -34,6 +34,16 @@ Authorization: Bearer {{access_token}}
 POST {{host_url}}/v1/auth/reissue/token
 Authorization: Bearer {{refresh_token}}
 
+### 1.4 디바이스 토큰 업데이트
+// @no-log
+PATCH {{host_url}}/v1/auth/device-token
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "device_token": "test"
+}
+
 ### 2.1 아이디 중복검사
 // @no-log
 @id = ""
