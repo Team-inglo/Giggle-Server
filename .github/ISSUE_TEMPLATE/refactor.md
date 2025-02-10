@@ -1,8 +1,8 @@
 ---
-name: "🔨 Refactor - 작업할 것"
+name: "♻️ Refactor - 작업할 것"
 about: "Code refactoring Template "
-title: "🔨 Refactor - "
-labels: 🔨 Refactor
+title: "♻️ Refactor - "
+labels: ♻️ Refactor
 assignees: ''
 
 ---

@@ -3,24 +3,23 @@
 closed #<issue_number>
 
 어떤 변경사항이 있었나요?
-- [ ] 🐞 BugFix Something isn't working
-- [ ] 💻 CrossBrowsing Browser compatibility
-- [ ] 🌏 Deploy Deploy
-- [ ] 🎨 Design Markup & styling
-- [ ] 📃 Docs Documentation writing and editing (README.md, etc.)
-- [ ] ✨ Feature Feature
-- [ ] 🔨 Refactor Code refactoring
-- [ ] ⚙️ Setting Development environment setup
-- [ ] ✅ Test Test related (storybook, jest, etc.)
+- [ ] ✨ Feature: New feature
+- [ ] 🔨 Fix: Feature change or bug fix
+- [ ] 💻 CrossBrowsing: Browser compatibility
+- [ ] 🌏 Deploy: Deploy
+- [ ] 🎨 Design: Markup & styling
+- [ ] 📃 Docs: Documentation writing and editing (README.md, etc.)
+- [ ] ♻️ Refactor: Code refactoring
+- [ ] ⚙️ Setting: Development environment setup
+- [ ] ✅ Test: Test related (storybook, jest, etc.)
 
 ## CheckPoint ✅
 [//]: # (PR 요구사항 확인)
 PR이 다음 요구 사항을 충족하는지 확인하세요.
 
 - [ ] PR 컨벤션에 맞게 작성했습니다. (필수)
-- [ ] Docker Container 환경으로 변경 사항에 대한 테스트를 했습니다.(버그 수정/기능에 대한 테스트). (필수)
-- [ ] Feature의 경우, API 문서 업데이트를 완료했습니다. (선택)
-- [ ] BugFix의 경우, 버그의 원인을 파악하였습니다. (선택)
+- [ ] 코드가 정상적으로 동작합니다. (필수)
+- [ ] 코드 리뷰어에게 리뷰를 요청했습니다. (필수)
 
 ## Work Description ✏️
 [//]: # (작업 내용 간단 소개)
