@@ -47,7 +47,7 @@ public class UserService {
         user.updateNationality(requestDto.nationality());
         user.updateVisa(EVisa.fromString(requestDto.visa()));
         user.updateBirth(requestDto.birth());
-        user.updateAddress(requestDto.address().toEntity());
+        user.updateAddress(requestDto.address() != null ? requestDto.address().toEntity() : null);
 
         return user;
     }

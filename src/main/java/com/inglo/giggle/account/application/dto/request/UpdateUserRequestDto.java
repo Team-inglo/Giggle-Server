@@ -19,7 +19,6 @@ public record UpdateUserRequestDto(
         @JsonProperty("last_name")
         String lastName,
 
-        @NotNull
         @JsonProperty("birth")
         LocalDate birth,
 
@@ -27,7 +26,6 @@ public record UpdateUserRequestDto(
         @JsonProperty("gender")
         String gender,
 
-        @NotNull
         @Size(min = 1, max = 56)
         @JsonProperty("nationality")
         String nationality,
@@ -45,7 +43,6 @@ public record UpdateUserRequestDto(
         @JsonProperty("is_profile_img_changed")
         Boolean isProfileImgChanged,
 
-        @NotNull
         @JsonProperty("address")
         AddressDto address
 
