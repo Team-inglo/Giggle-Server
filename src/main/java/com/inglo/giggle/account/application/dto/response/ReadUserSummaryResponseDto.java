@@ -69,7 +69,6 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
         @JsonProperty("last_name")
         private final String lastName;
 
-        @NotBlank(message = "birth는 null일 수 없습니다.")
         @JsonProperty("birth")
         private final String birth;
 
@@ -123,7 +122,7 @@ public class ReadUserSummaryResponseDto extends SelfValidating<ReadUserSummaryRe
                     .profileImgUrl(user.getProfileImgUrl())
                     .firstName(user.getFirstName())
                     .lastName(user.getLastName())
-                    .birth(DateTimeUtil.convertLocalDateToString(user.getBirth()))
+                    .birth(user.getBirth() != null ? DateTimeUtil.convertLocalDateToString(user.getBirth()) : null)
                     .schoolName(schoolName)
                     .grade(grade)
                     .gpa(gpa)
