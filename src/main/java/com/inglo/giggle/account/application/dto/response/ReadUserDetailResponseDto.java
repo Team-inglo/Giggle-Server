@@ -25,7 +25,6 @@ public class ReadUserDetailResponseDto extends SelfValidating<ReadUserDetailResp
     @JsonProperty("last_name")
     private final String lastName;
 
-    @NotBlank(message = "birth는 null일 수 없습니다.")
     @JsonProperty("birth")
     private final String birth;
 
@@ -33,7 +32,6 @@ public class ReadUserDetailResponseDto extends SelfValidating<ReadUserDetailResp
     @JsonProperty("gender")
     private final String gender;
 
-    @NotBlank(message = "nationality는 null일 수 없습니다.")
     @JsonProperty("nationality")
     private final String nationality;
 
@@ -148,12 +146,12 @@ public class ReadUserDetailResponseDto extends SelfValidating<ReadUserDetailResp
                 .profileImgUrl(user.getProfileImgUrl())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .birth(DateTimeUtil.convertLocalDateToString(user.getBirth()))
+                .birth(user.getBirth() != null ? DateTimeUtil.convertLocalDateToString(user.getBirth()) : null)
                 .gender(user.getGender().name())
                 .nationality(user.getNationality())
                 .visa(user.getVisa().name())
                 .phoneNumber(user.getPhoneNumber())
-                .address(AddressDto.fromEntity(user.getAddress()))
+                .address(user.getAddress() != null ? AddressDto.fromEntity(user.getAddress()) : null)
                 .build();
     }
 }
