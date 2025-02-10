@@ -66,39 +66,41 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
     @Transactional(readOnly = true)
     public ReadUserJobPostingValidationResponseDto execute(UUID accountId, Long jobPostingId) throws Exception {
 
-        // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        return ReadUserJobPostingValidationResponseDto.of(true);
 
-        // 계정 타입 유효성 검사
-        accountService.checkUserValidation(account);
-
-        // 공고 조회
-        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
-
-        // 이력서 정보 조회
-        Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
-
-        // 유저의 비자에 맵핑되는 educationLevel 조회
-        EEducationLevel educationLevel = educationService.getEducationLevelByVisa(resume.getUser().getVisa());
-
-        // 유저의 educationLevel에 맞는 학력 정보 조회
-        List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(resume.getUser().getId(), educationLevel);
-
-        Education education = educationService.getLatestEducation(educations);
-
-        // 유저 정보 검증 (거리, 학력, 언어 스킬 기반)
-        Boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
-        Boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(resume, jobPosting);
-
-        log.info("isApplicableFromEducation: {}", isApplicableFromEducation);
-        log.info("isApplicableFromSchoolDistance: {}", isApplicableFromSchoolDistance);
-
-        return ReadUserJobPostingValidationResponseDto.builder()
-                .isQualificationVerified(isApplicableFromEducation&&isApplicableFromSchoolDistance)
-                .build();
+//        // Account 조회
+//        Account account = accountRepository.findById(accountId)
+//                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+//
+//        // 계정 타입 유효성 검사
+//        accountService.checkUserValidation(account);
+//
+//        // 공고 조회
+//        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
+//                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+//
+//        // 이력서 정보 조회
+//        Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId)
+//                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+//
+//        // 유저의 비자에 맵핑되는 educationLevel 조회
+//        EEducationLevel educationLevel = educationService.getEducationLevelByVisa(resume.getUser().getVisa());
+//
+//        // 유저의 educationLevel에 맞는 학력 정보 조회
+//        List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(resume.getUser().getId(), educationLevel);
+//
+//        Education education = educationService.getLatestEducation(educations);
+//
+//        // 유저 정보 검증 (거리, 학력, 언어 스킬 기반)
+//        Boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
+//        Boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(resume, jobPosting);
+//
+//        log.info("isApplicableFromEducation: {}", isApplicableFromEducation);
+//        log.info("isApplicableFromSchoolDistance: {}", isApplicableFromSchoolDistance);
+//
+//        return ReadUserJobPostingValidationResponseDto.builder()
+//                .isQualificationVerified(isApplicableFromEducation&&isApplicableFromSchoolDistance)
+//                .build();
 
     }
 
