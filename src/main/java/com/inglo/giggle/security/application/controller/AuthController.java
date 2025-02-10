@@ -38,19 +38,7 @@ public class AuthController {
     private final UpdateDeviceTokenUseCase updateDeviceTokenUseCase;
 
     /**
-     * 1.4 디바이스 토큰 갱신
-     */
-    @PatchMapping("/device-token")
-    public ResponseDto<Void> updateDeviceToken(
-            @RequestBody @Valid UpdateDeviceTokenRequestDto requestDto,
-            @AccountID UUID accountId
-    ) {
-        updateDeviceTokenUseCase.execute(accountId, requestDto);
-        return ResponseDto.ok(null);
-    }
-
-    /**
-     * 2.3 JWT 재발급
+     * 1.3 JWT 재발급
      */
     @PostMapping("/reissue/token")
     public ResponseDto<DefaultJsonWebTokenDto> reissueDefaultJsonWebToken(
@@ -60,6 +48,18 @@ public class AuthController {
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_HEADER_ERROR));
 
         return ResponseDto.created(reissueJsonWebTokenUseCase.execute(refreshToken));
+    }
+
+    /**
+     * 1.4 디바이스 토큰 갱신
+     */
+    @PatchMapping("/device-token")
+    public ResponseDto<Void> updateDeviceToken(
+            @RequestBody @Valid UpdateDeviceTokenRequestDto requestDto,
+            @AccountID UUID accountId
+    ) {
+        updateDeviceTokenUseCase.execute(accountId, requestDto);
+        return ResponseDto.ok(null);
     }
 
     /**
@@ -83,7 +83,7 @@ public class AuthController {
     }
 
     /**
-     * 2.5 유학생 or 고용주 간단 정보 조회(판단)
+     * 2.3 유학생 or 고용주 간단 정보 조회(판단)
      */
     @GetMapping("/briefs")
     public ResponseDto<AccountBriefInfoResponseDto> readUserBriefInfo(

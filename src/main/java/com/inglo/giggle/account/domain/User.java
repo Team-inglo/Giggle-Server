@@ -47,7 +47,7 @@ public class User extends Account {
     @Column(name = "gender", nullable = false)
     private EGender gender;
 
-    @Column(name = "nationality", length = 56, nullable = false)
+    @Column(name = "nationality", length = 56)
     private String nationality;
 
     @Enumerated(EnumType.STRING)
