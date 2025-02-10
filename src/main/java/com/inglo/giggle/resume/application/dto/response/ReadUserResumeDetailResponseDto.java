@@ -111,8 +111,8 @@ public class ReadUserResumeDetailResponseDto extends SelfValidating<ReadUserResu
 
         public static PersonalInformationDto fromEntity(User user) {
             return PersonalInformationDto.builder()
-                    .mainAddress(user.getAddress().getAddressName())
-                    .detailedAddress(user.getAddress().getAddressDetail())
+                    .mainAddress(user.getAddress() != null ? user.getAddress().getAddressName() : null)
+                    .detailedAddress(user.getAddress() != null ? user.getAddress().getAddressDetail() : null)
                     .phoneNumber(user.getPhoneNumber())
                     .email(user.getEmail())
                     .build();
