@@ -72,14 +72,14 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
 
         // Address 생성
         Address address = addressService.createAddress(
-                requestDto.address().addressName(),
-                requestDto.address().region1DepthName(),
-                requestDto.address().region2DepthName(),
-                requestDto.address().region3DepthName(),
-                requestDto.address().region4DepthName(),
-                requestDto.address().addressDetail(),
-                requestDto.address().latitude(),
-                requestDto.address().longitude()
+                requestDto.address() != null ? requestDto.address().addressName() : null,
+                requestDto.address() != null ? requestDto.address().region1DepthName() : null,
+                requestDto.address() != null ? requestDto.address().region2DepthName() : null,
+                requestDto.address() != null ? requestDto.address().region3DepthName() : null,
+                requestDto.address() != null ? requestDto.address().region4DepthName() : null,
+                requestDto.address() != null ? requestDto.address().addressDetail() : null,
+                requestDto.address() != null ? requestDto.address().latitude() : null,
+                requestDto.address() != null ? requestDto.address().longitude() : null
         );
 
         // User 생성 및 저장

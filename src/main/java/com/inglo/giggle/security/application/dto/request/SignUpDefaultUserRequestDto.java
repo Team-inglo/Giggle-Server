@@ -49,11 +49,9 @@ public record SignUpDefaultUserRequestDto(
                 String gender,
 
                 @JsonProperty("birth")
-                @NotNull(message = "생년월일을 입력해주세요.")
                 LocalDate birth,
 
                 @JsonProperty("nationality")
-                @NotBlank(message = "국적을 입력해주세요")
                 String nationality,
 
                 @JsonProperty("visa")

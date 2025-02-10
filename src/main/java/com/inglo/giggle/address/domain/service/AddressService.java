@@ -22,6 +22,10 @@ public class AddressService {
             Double latitude,
             Double longitude
     ) {
+        if (addressName == null || addressName.isEmpty()) {
+            return null;
+        }
+
         return Address.builder()
                 .addressName(addressName)
                 .region1DepthName(region1DepthName)
