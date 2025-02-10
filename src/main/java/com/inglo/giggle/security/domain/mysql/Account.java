@@ -69,9 +69,6 @@ public abstract class Account {
     @Column(name = "notification_allowed", nullable = false)
     private Boolean notificationAllowed;
 
-    @Column(name = "device_token", length = 320)
-    private String deviceToken;
-
     /* -------------------------------------------- */
     /* One To Many Mapping ------------------------ */
     /* -------------------------------------------- */
@@ -89,8 +86,7 @@ public abstract class Account {
             String profileImgUrl,
             String phoneNumber,
             Boolean marketingAllowed,
-            Boolean notificationAllowed,
-            String deviceToken
+            Boolean notificationAllowed
     ) {
         this.provider = provider;
         this.serialId = serialId;
@@ -100,7 +96,6 @@ public abstract class Account {
         this.phoneNumber = phoneNumber;
         this.marketingAllowed = marketingAllowed;
         this.notificationAllowed = notificationAllowed;
-        this.deviceToken = deviceToken;
     }
 
     public void updatePassword(String password) {
@@ -117,10 +112,6 @@ public abstract class Account {
 
     public void updateNotificationAllowed(Boolean notificationAllowed) {
         this.notificationAllowed = notificationAllowed;
-    }
-
-    public void updateDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
     }
 
     public abstract ESecurityRole getRole();
