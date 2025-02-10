@@ -19,4 +19,10 @@ public class ReadUserJobPostingValidationResponseDto extends SelfValidating<Read
 
         this.validateSelf();
     }
+
+    public static ReadUserJobPostingValidationResponseDto of(Boolean isQualificationVerified) {
+        return ReadUserJobPostingValidationResponseDto.builder()
+                .isQualificationVerified(isQualificationVerified)
+                .build();
+    }
 }
