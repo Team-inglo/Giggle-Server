@@ -5,7 +5,9 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.application.dto.request.UpdateDeviceTokenRequestDto;
 import com.inglo.giggle.security.application.usecase.UpdateDeviceTokenUseCase;
 import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.service.AccountDeviceService;
 import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountDeviceRepository;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,8 +20,9 @@ import java.util.UUID;
 public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
 
     private final AccountRepository accountRepository;
+    private final AccountDeviceRepository accountDeviceRepository;
 
-    private final AccountService accountService;
+    private final AccountDeviceService accountDeviceService;
 
     @Override
     @Transactional
@@ -30,7 +33,22 @@ public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
 
         // Device Token 갱신
-        account = accountService.updateDeviceToken(account, requestDto.deviceToken());
+        // 만약 해당 Account에 해당 DeviceId가 이미 존재한다면 Device Token을 갱신하고,
+        // 존재하지 않는다면 새로운 AccountDevice를 생성한다.
+        accountDeviceRepository.findByAccountAndDeviceId(account, requestDto.deviceId())
+                .ifPresentOrElse(
+                        accountDevice -> accountDeviceService.updateDeviceToken(
+                                accountDevice,
+                                requestDto.deviceToken()
+                        ),
+                        () -> accountDeviceRepository.save(
+                                accountDeviceService.createAccountDevice(
+                                        account,
+                                        requestDto.deviceId(),
+                                        requestDto.deviceToken()
+                                )
+                        )
+                );
 
         accountRepository.save(account);
     }

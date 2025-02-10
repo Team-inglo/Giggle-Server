@@ -44,11 +44,6 @@ public class AccountService {
         return account;
     }
 
-    public Account updateDeviceToken(Account account, String deviceToken) {
-        account.updateDeviceToken(deviceToken);
-        return account;
-    }
-
     public void checkUserValidation(Account account) {
         if (!account.getRole().equals(ESecurityRole.USER))
             throw new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE);

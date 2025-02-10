@@ -8,5 +8,8 @@ import java.util.UUID;
 @UseCase
 public interface UpdateDeviceTokenUseCase {
 
-    void execute(UUID accountId, UpdateDeviceTokenRequestDto requestDto);
+    void execute(
+            UUID accountId,
+            UpdateDeviceTokenRequestDto requestDto
+    );
 }
