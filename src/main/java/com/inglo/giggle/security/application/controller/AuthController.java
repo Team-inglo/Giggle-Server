@@ -36,6 +36,7 @@ public class AuthController {
     private final ReissuePasswordUseCase reissuePasswordUseCase;
     private final DeleteAccountUseCase deleteAccountUseCase;
     private final UpdateDeviceTokenUseCase updateDeviceTokenUseCase;
+    private final ChangePasswordUseCase changePasswordUseCase;
 
     /**
      * 1.3 JWT 재발급
@@ -136,7 +137,7 @@ public class AuthController {
     }
 
     /**
-     * 2.8 인증 코드 재전송
+     * 2.8 인증 코드 발급(재발급)
      */
     @PatchMapping("/reissue/authentication-code")
     public ResponseDto<IssueAuthenticationCodeResponseDto> reissueAuthenticationCode(
@@ -157,7 +158,7 @@ public class AuthController {
     }
 
     /**
-     * 비밀번호 재전송(명세서에 없음 - 임시 비밀번호 재전송)
+     * 2.10 임시 비밀번호 발급 및 메일 전송
      */
     @PostMapping("/reissue/password")
     public ResponseDto<?> reissuePassword(
@@ -168,6 +169,18 @@ public class AuthController {
 
         reissuePasswordUseCase.execute(temporaryToken);
 
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 2.11 비밀번호 변경
+     */
+    @PatchMapping("/password")
+    public ResponseDto<?> changePassword(
+            @RequestBody @Valid ChangePasswordRequestDto requestDto,
+            @AccountID UUID accountId
+    ) {
+        changePasswordUseCase.execute(accountId, requestDto);
         return ResponseDto.ok(null);
     }
 }

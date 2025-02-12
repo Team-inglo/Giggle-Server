@@ -130,6 +130,7 @@ public class Constants {
             "/v1/auth/validations/**",
             "/v1/auth/reissue/token",
             "/v1/auth/reissue/authentication-code",
+            "/v1/auth/reissue/password",
             "/v1/auth/sign-up",
             "/v1/auth/login",
             "/v1/auth/users",

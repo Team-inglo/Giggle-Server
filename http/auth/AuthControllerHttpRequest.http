@@ -157,7 +157,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "823452"
+@authentication_code_user = "736239"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
@@ -211,3 +211,19 @@ Content-Type: application/json
 // @no-log
 DELETE {{host_url}}/v1/auth
 Authorization: Bearer {{access_token}}
+
+### 2.10 임시 비밀번호 발급 및 메일 전송
+// @no-log
+POST {{host_url}}/v1/auth/reissue/password
+Authorization: Bearer {{temporary_token}}
+
+### 2.11 비밀번호 변경
+// @no-log
+PATCH {{host_url}}/v1/auth/password
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "current_password": "{{auth.API_2_11.current_password}}",
+  "new_password": "{{auth.API_2_11.new_password}}"
+}

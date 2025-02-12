@@ -4,14 +4,14 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.PasswordUtil;
 import com.inglo.giggle.security.application.usecase.ReissuePasswordUseCase;
+import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.redis.TemporaryToken;
 import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.domain.type.ESecurityProvider;
+import com.inglo.giggle.security.event.ChangePasswordBySystemEvent;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
 import lombok.RequiredArgsConstructor;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.redis.TemporaryToken;
-import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.event.ChangePasswordBySystemEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,5 +49,8 @@ public class ReissuePasswordService implements ReissuePasswordUseCase {
 
         // 메일 전송(비동기)
         applicationEventPublisher.publishEvent(ChangePasswordBySystemEvent.of(email, temporaryPassword));
+
+        // 임시 토큰 삭제
+        temporaryTokenRepository.delete(temporaryToken);
     }
 }
