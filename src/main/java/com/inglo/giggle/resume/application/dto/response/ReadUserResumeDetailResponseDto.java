@@ -126,7 +126,7 @@ public class ReadUserResumeDetailResponseDto extends SelfValidating<ReadUserResu
             return PersonalInformationDto.builder()
                     .gender(user.getGender())
                     .nationality(user.getNationality() != null ? user.getNationality() : null)
-                    .birth(user.getBirth() != null ? DateTimeUtil.convertLocalDateToString(user.getBirth()) : null)
+                    .birth(user.getBirth() != null ? DateTimeUtil.convertLocalDateToDARTString(user.getBirth()) : null)
                     .mainAddress(user.getAddress() != null ? user.getAddress().getAddressName() : null)
                     .detailedAddress(user.getAddress() != null ? user.getAddress().getAddressDetail() : null)
                     .phoneNumber(user.getPhoneNumber())
