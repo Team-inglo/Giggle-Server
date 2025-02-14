@@ -3,6 +3,7 @@ package com.inglo.giggle.resume.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.resume.domain.*;
@@ -89,6 +90,15 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
     @Getter
     public static class PersonalInformationDto {
 
+        @JsonProperty("gender")
+        private final EGender gender;
+
+        @JsonProperty("nationality")
+        private final String nationality;
+
+        @JsonProperty("birth")
+        private final String birth;
+
         @JsonProperty("main_address")
         private final String mainAddress;
 
@@ -102,7 +112,10 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
         private final String email;
 
         @Builder
-        public PersonalInformationDto(String mainAddress, String detailedAddress, String phoneNumber, String email) {
+        public PersonalInformationDto(EGender gender, String nationality, String birth, String mainAddress, String detailedAddress, String phoneNumber, String email) {
+            this.gender = gender;
+            this.nationality = nationality;
+            this.birth = birth;
             this.mainAddress = mainAddress;
             this.detailedAddress = detailedAddress;
             this.phoneNumber = phoneNumber;
@@ -111,6 +124,9 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
 
         public static PersonalInformationDto fromEntity(User user) {
             return PersonalInformationDto.builder()
+                    .gender(user.getGender())
+                    .nationality(user.getNationality() != null ? user.getNationality() : null)
+                    .birth(user.getBirth() != null ? DateTimeUtil.convertLocalDateToString(user.getBirth()) : null)
                     .mainAddress(user.getAddress() != null ? user.getAddress().getAddressName() : null)
                     .detailedAddress(user.getAddress() != null ? user.getAddress().getAddressDetail() : null)
                     .phoneNumber(user.getPhoneNumber())
