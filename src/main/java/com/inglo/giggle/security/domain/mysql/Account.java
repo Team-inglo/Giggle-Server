@@ -45,7 +45,7 @@ public abstract class Account {
     @Column(name = "provider", nullable = false, updatable = false)
     private ESecurityProvider provider;
 
-    @Column(name = "serial_id", length = 20, nullable = false, updatable = false)
+    @Column(name = "serial_id", length = 320, nullable = false, updatable = false)
     private String serialId;
 
     @Column(name = "password", length = 320, nullable = false)
