@@ -220,6 +220,14 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("jobPostingIds") List<Long> jobPostingIds
     );
 
+    @Query("SELECT jp FROM JobPosting jp " +
+            "JOIN FETCH jp.owner o " +
+            "JOIN FETCH jp.companyImages ci " +
+            "WHERE jp.id IN :jobPostingIds")
+    List<JobPosting> findJobPostingsWithCompanyImagesByIds(
+            @Param("jobPostingIds") List<Long> jobPostingIds
+    );
+
     @Query("SELECT jp.id AS jobPostingId, COUNT(uojp.id) AS popularity " +
             "FROM JobPosting jp " +
             "LEFT JOIN jp.userOwnerJobPostings uojp " +

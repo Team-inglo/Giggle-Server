@@ -6,20 +6,16 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.core.utility.EnumParseUtil;
-import com.inglo.giggle.posting.application.dto.request.JobPostingSearchId;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingOverviewUseCase;
-import com.inglo.giggle.posting.domain.BookMark;
 import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.domain.type.*;
-import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
+import com.inglo.giggle.posting.domain.type.EEmploymentType;
+import com.inglo.giggle.posting.domain.type.EJobCategory;
+import com.inglo.giggle.posting.domain.type.EWorkPeriod;
+import com.inglo.giggle.posting.domain.type.EWorkingHours;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,7 +27,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseCase {
@@ -39,8 +34,6 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
     private final AddressService addressService;
 
     private final JobPostingRepository jobPostingRepository;
-    private final AccountRepository accountRepository;
-    private final BookMarkRepository bookMarkRepository;
 
     private static final String POPULAR_SORTING = "popular";
     private static final String NONE = "none";
@@ -201,6 +194,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
 
         // Step 3: 상세 데이터 가져오기
         List<JobPosting> jobPostings = jobPostingRepository.findJobPostingsWithDetailsByIds(jobPostingIds);
+        jobPostingRepository.findJobPostingsWithCompanyImagesByIds(jobPostingIds);
 
         // Step 4: jobPostings을 jobPostingIds 순서로 정렬
         Map<Long, JobPosting> jobPostingMap = jobPostings.stream()
@@ -229,7 +223,6 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String type
     ) {
 
-        log.info("accountId: {}, page: {}, size: {}, type: {}", accountId, page, size, type);
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<JobPostingRepository.JobPostingProjection> jobPostingProjections = switch (type) {
             case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin(LocalDate.now(), pageable);

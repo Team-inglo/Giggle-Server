@@ -3,8 +3,7 @@
 GET {{host_url}}/v1/guests/job-postings/overviews?
     page={{posting.API_4_1.page}}&
     sorting={{posting.API_4_1.sorting}}&
-    size={{posting.API_4_1.size}}&
-    type = {{posting.API_4_1.type}}
+    size={{posting.API_4_1.size}}
 Content-Type: application/json
 #    type = {{posting.API_4_1.type}}
 

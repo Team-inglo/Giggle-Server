@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -70,6 +68,9 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
         @JsonProperty("icon_img_url")
         private final String iconImgUrl;
 
+        @JsonProperty("representative_img_url")
+        private final String representativeImgUrl;
+
         @NotNull(message = "title은 null일 수 없습니다.")
         @JsonProperty("title")
         private final String title;
@@ -98,6 +99,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
                 Long id,
                 Boolean isBookMarked,
                 String iconImgUrl,
+                String representativeImgUrl,
                 String title,
                 Summaries summaries,
                 Tags tags,
@@ -108,6 +110,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
             this.id = id;
             this.isBookMarked = isBookMarked;
             this.iconImgUrl = iconImgUrl;
+            this.representativeImgUrl = representativeImgUrl;
             this.title = title;
             this.summaries = summaries;
             this.tags = tags;
@@ -126,6 +129,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
                     .id(jobPosting.getId())
                     .isBookMarked(bookMarkCountMap.getOrDefault(jobPosting.getId(), 0) > 0)
                     .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
+                    .representativeImgUrl(!jobPosting.getCompanyImages().isEmpty() ? jobPosting.getCompanyImages().get(0).getImgUrl(): null)
                     .title(jobPosting.getTitle())
                     .summaries(
                             Summaries.fromEntity(
@@ -180,6 +184,10 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
     @Getter
     public static class Tags extends SelfValidating<Tags> {
 
+        @NotNull(message = "employment_type는 null일 수 없습니다.")
+        @JsonProperty("employment_type")
+        private final EEmploymentType employmentType;
+
         @NotNull(message = "is_recruiting는 null일 수 없습니다.")
         @JsonProperty("is_recruiting")
         private final Boolean isRecruiting;
@@ -193,7 +201,8 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
         private final String jobCategory;
 
         @Builder
-        public Tags(Boolean isRecruiting, String visa, String jobCategory) {
+        public Tags(EEmploymentType employmentType, Boolean isRecruiting, String visa, String jobCategory) {
+            this.employmentType = employmentType;
             this.isRecruiting = isRecruiting;
             this.visa = visa;
             this.jobCategory = jobCategory;
@@ -203,6 +212,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
 
         public static Tags fromEntity(JobPosting jobPosting) {
             return Tags.builder()
+                    .employmentType(jobPosting.getEmploymentType())
                     .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
                     .visa(jobPosting.getVisa().toString())
                     .jobCategory(jobPosting.getJobCategory().toString())
