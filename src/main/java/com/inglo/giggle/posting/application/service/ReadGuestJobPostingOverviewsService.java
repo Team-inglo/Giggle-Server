@@ -192,6 +192,7 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
 
         // Step 3: 상세 데이터 가져오기
         List<JobPosting> jobPostings = jobPostingRepository.findJobPostingsWithDetailsByIds(jobPostingIds);
+        jobPostingRepository.findJobPostingsWithCompanyImagesByIds(jobPostingIds);
 
         // Step 4: jobPostings을 jobPostingIds 순서로 정렬
         Map<Long, JobPosting> jobPostingMap = jobPostings.stream()
