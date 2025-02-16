@@ -37,7 +37,7 @@ public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
 
-        UUID uuidDeviceId = UUID.nameUUIDFromBytes(requestDto.deviceId().getBytes());
+        UUID uuidDeviceId = UUID.nameUUIDFromBytes(requestDto.deviceToken().getBytes());
 
         // Device Token 갱신
         // 만약 해당 Account에 해당 DeviceId가 이미 존재한다면 Device Token을 갱신하고,
