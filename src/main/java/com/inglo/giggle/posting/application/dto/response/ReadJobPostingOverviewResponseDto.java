@@ -71,6 +71,10 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
         @JsonProperty("representative_img_url")
         private final String representativeImgUrl;
 
+        @JsonProperty("company_name")
+        @NotNull(message = "company_name은 null일 수 없습니다.")
+        private final String companyName;
+
         @NotNull(message = "title은 null일 수 없습니다.")
         @JsonProperty("title")
         private final String title;
@@ -101,6 +105,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
                 String iconImgUrl,
                 String representativeImgUrl,
                 String title,
+                String companyName,
                 Summaries summaries,
                 Tags tags,
                 Integer hourlyRate,
@@ -112,6 +117,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
             this.iconImgUrl = iconImgUrl;
             this.representativeImgUrl = representativeImgUrl;
             this.title = title;
+            this.companyName = companyName;
             this.summaries = summaries;
             this.tags = tags;
             this.hourlyRate = hourlyRate;
@@ -131,6 +137,7 @@ public class ReadJobPostingOverviewResponseDto extends SelfValidating<ReadJobPos
                     .iconImgUrl(jobPosting.getOwner().getProfileImgUrl())
                     .representativeImgUrl(!jobPosting.getCompanyImages().isEmpty() ? jobPosting.getCompanyImages().get(0).getImgUrl(): null)
                     .title(jobPosting.getTitle())
+                    .companyName(jobPosting.getOwner().getCompanyName())
                     .summaries(
                             Summaries.fromEntity(
                                     jobPosting

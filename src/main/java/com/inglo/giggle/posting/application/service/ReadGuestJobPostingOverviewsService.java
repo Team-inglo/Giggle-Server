@@ -211,18 +211,21 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReadGuestJobPostingOverviewsResponseDto execute(
             Integer page,
             Integer size,
             String type
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<JobPostingRepository.JobPostingProjection> jobPostingProjections = switch (type) {
+        Page<JobPostingRepository.JobPostingProjection> jobPostingProjections;
+        jobPostingProjections = switch (type) {
             case TRENDING -> jobPostingRepository.findTrendingJobPostingsWithFetchJoin(LocalDate.now(), pageable);
             case RECENTLY -> jobPostingRepository.findRecentlyJobPostingsWithFetchJoin(LocalDate.now(), pageable);
             default -> throw new CommonException(ErrorCode.NOT_FOUND_TYPE);
         };
 
+        // Step 2: JobPosting IDs 추출
         List<Long> jobPostingIds = jobPostingProjections.stream()
                 .map(JobPostingRepository.JobPostingProjection::getJobPostingId)
                 .toList();
