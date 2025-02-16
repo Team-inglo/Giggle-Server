@@ -1,6 +1,5 @@
 package com.inglo.giggle.core.utility;
 
-
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import net.minidev.json.JSONObject;
@@ -94,4 +93,23 @@ public class RestClientUtil {
         }
     }
 
+    public JSONObject sendFormUrlEncodedPostMethod(String url, HttpHeaders headers, MultiValueMap<String, String> body) {
+        try {
+            return new JSONObject(Objects.requireNonNull(restClient.post()
+                    .uri(url)
+                    .headers(httpHeaders -> httpHeaders.addAll(headers))
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(body)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                        throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+                    })
+                    .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                        throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
+                    })
+                    .toEntity(JSONObject.class).getBody()));
+        } catch (Exception e) {
+            throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

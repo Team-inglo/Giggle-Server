@@ -14,19 +14,22 @@ import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationEventService;
 import com.inglo.giggle.notification.domain.service.NotificationService;
+import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountDeviceRepository;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,17 +37,18 @@ import java.util.UUID;
 public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPartTimeEmploymentPermitUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final DocumentRepository documentRepository;
+    private final NotificationRepository notificationRepository;
+    private final AccountDeviceRepository accountDeviceRepository;
+
+    private final AccountService accountService;
     private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
     private final AddressService addressService;
     private final NotificationService notificationService;
-    private final NotificationRepository notificationRepository;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final NotificationEventService notificationEventService;
 
     @Override
     @Transactional
@@ -108,17 +112,29 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
         );
         notificationRepository.save(notification);
 
+        handlePushAlarm(account, document, notification);
+    }
+
+    /* -------------------------------------------- */
+    /* Private Method ----------------------------- */
+    /* -------------------------------------------- */
+    private void handlePushAlarm(Account account, Document document, Notification notification) {
+
+        // User의 Device Token 목록 조회
+        UUID userId = document.getUserOwnerJobPosting().getUser().getId();
+        List<String> deviceTokens = accountDeviceRepository.findByAccountId(userId).stream()
+                .map(AccountDevice::getDeviceToken)
+                .toList();
+
         // NotificationEvent 생성 및 발행
-        if(account.getNotificationAllowed()) {
+        if(account.getNotificationAllowed() && !deviceTokens.isEmpty()) {
             applicationEventPublisher.publishEvent(
-                    notificationEventService.createNotificationEvent(
+                    NotificationEventDto.of(
                             document.getUserOwnerJobPosting().getJobPosting().getTitle(),
                             notification.getMessage(),
-                            document.getUserOwnerJobPosting().getUser().getDeviceToken()
+                            deviceTokens
                     )
             );
         }
     }
-
-
 }

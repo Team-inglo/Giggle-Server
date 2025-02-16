@@ -5,21 +5,24 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationEventService;
 import com.inglo.giggle.notification.domain.service.NotificationService;
+import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
 import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountDeviceRepository;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,6 +30,7 @@ import java.util.UUID;
 public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService implements UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase {
 
     private final AccountRepository accountRepository;
+    private final AccountDeviceRepository accountDeviceRepository;
     private final AccountService accountService;
 
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
@@ -34,7 +38,6 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
     private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final NotificationEventService notificationEventService;
 
     @Override
     @Transactional
@@ -70,12 +73,23 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
         notificationRepository.save(notification);
 
         // Notification 발송
+        handlePushAlarm(userOwnerJobPosting, notification);
+    }
+
+    /* -------------------------------------------- */
+    /* Private Methods ---------------------------- */
+    /* -------------------------------------------- */
+    private void handlePushAlarm(UserOwnerJobPosting userOwnerJobPosting, Notification notification) {
         if(userOwnerJobPosting.getOwner().getNotificationAllowed()){
+            List<String> deviceTokens = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getOwner().getId()).stream()
+                    .map(AccountDevice::getDeviceToken)
+                    .toList();
+
             applicationEventPublisher.publishEvent(
-                    notificationEventService.createNotificationEvent(
+                    NotificationEventDto.of(
                             userOwnerJobPosting.getJobPosting().getTitle(),
                             notification.getMessage(),
-                            userOwnerJobPosting.getOwner().getDeviceToken()
+                            deviceTokens
                     )
             );
         }
