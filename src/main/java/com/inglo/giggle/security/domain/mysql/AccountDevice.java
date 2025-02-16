@@ -1,6 +1,7 @@
 package com.inglo.giggle.security.domain.mysql;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,14 +19,19 @@ public class AccountDevice {
     /* Default Column ----------------------------- */
     /* -------------------------------------------- */
     @Id
-    @Column(name = "device_id")
-    private String deviceId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     /* -------------------------------------------- */
     /* Information Column ------------------------- */
     /* -------------------------------------------- */
+    @NotNull
     @Column(name = "device_token", length = 320)
     private String deviceToken;
+
+    @NotNull
+    @Column(name = "device_id")
+    private UUID deviceId;
 
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
@@ -39,7 +45,7 @@ public class AccountDevice {
     /* -------------------------------------------- */
     @Builder
     public AccountDevice(
-            String deviceId,
+            UUID deviceId,
             String deviceToken,
             Account account
     ) {
@@ -50,5 +56,9 @@ public class AccountDevice {
 
     public void updateDeviceToken(String deviceToken) {
         this.deviceToken = deviceToken;
+    }
+
+    public void updateDeviceId(UUID deviceId) {
+        this.deviceId = deviceId;
     }
 }

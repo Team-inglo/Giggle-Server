@@ -19,7 +19,7 @@ public class OwnerService {
     {
         return Owner.builder()
                 .provider(securityProvider)
-                .serialId(temporaryAccount.getId())
+                .serialId(temporaryAccount.getEmail())
                 .password(password)
                 .email(temporaryAccount.getEmail())
                 .profileImgUrl(iconImgUrl)

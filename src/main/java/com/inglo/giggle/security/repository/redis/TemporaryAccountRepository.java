@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface TemporaryAccountRepository extends CrudRepository<TemporaryAccount, String> {
-    Optional<TemporaryAccount> findById(String compositeKey);
-    void deleteById(String compositeKey);
 }

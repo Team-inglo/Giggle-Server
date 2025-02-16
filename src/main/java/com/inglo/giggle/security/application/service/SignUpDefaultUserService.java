@@ -64,7 +64,7 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
 
         // Redis에서 임시 사용자 정보 가져오기
-        TemporaryAccount tempUserInfo = temporaryAccountRepository.findById(temporaryToken.getCompositeKey())
+        TemporaryAccount tempUserInfo = temporaryAccountRepository.findById(temporaryToken.getEmail())
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT));
 
         // AccountType 검증
@@ -97,10 +97,10 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
         languageSkillRepository.save(savedLanguageSkill);
 
         // temporary Token 삭제
-        temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());
+        temporaryTokenRepository.deleteById(temporaryToken.getEmail());
 
         // temporary User Info 삭제
-        temporaryAccountRepository.deleteById(tempUserInfo.getCompositeKey());
+        temporaryAccountRepository.deleteById(tempUserInfo.getEmail());
 
         // 약관 타입 파싱
         List<ETermType> termTypes = requestDto.termTypes().stream()

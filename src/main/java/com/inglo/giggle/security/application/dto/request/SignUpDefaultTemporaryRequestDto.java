@@ -6,12 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record SignUpDefaultTemporaryRequestDto(
-        @JsonProperty("email")
-        @NotBlank(message = "이메일을 입력해주세요.")
-        @Pattern(
-                regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
-                message = "아이디 형식이 올바르지 않습니다.")
-        String id,
 
         @JsonProperty("password")
         @NotBlank(message = "비밀번호를 입력해주세요.")

@@ -22,7 +22,7 @@ public class UserService {
     {
         return User.builder()
                 .provider(securityProvider)
-                .serialId(temporaryAccount.getId())
+                .serialId(temporaryAccount.getEmail())
                 .password(password)
                 .email(temporaryAccount.getEmail())
                 .profileImgUrl(profileImgUrl)

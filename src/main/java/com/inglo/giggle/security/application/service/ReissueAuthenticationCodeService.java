@@ -42,7 +42,12 @@ public class ReissueAuthenticationCodeService implements ReissueAuthenticationCo
         String code = PasswordUtil.generateAuthCode(6);
 
         // 새로운 인증코드 저장
-        authenticationCodeRepository.save(authenticationCodeService.createAuthenticationCode(requestDto.email(), bCryptPasswordEncoder.encode(code)));
+        authenticationCodeRepository.save(
+                authenticationCodeService.createAuthenticationCode(
+                        requestDto.email(),
+                        bCryptPasswordEncoder.encode(code)
+                )
+        );
 
         // 인증코드 발급 이력 업데이트
         if (history == null) {

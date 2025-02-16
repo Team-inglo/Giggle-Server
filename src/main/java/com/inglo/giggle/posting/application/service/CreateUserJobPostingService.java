@@ -100,19 +100,17 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
     /* -------------------------------------------- */
     private void handlePushAlarm(Account account, UserOwnerJobPosting userOwnerJobPosting, Notification notification) {
 
-        // Owner의 Device Token 목록 조회
+        // Owner의 AccountDevice 목록 조회
         UUID ownerId = userOwnerJobPosting.getOwner().getId();
-        List<String> deviceTokens = accountDeviceRepository.findByAccountId(ownerId).stream()
-                .map(AccountDevice::getDeviceToken)
-                .toList();
+        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(ownerId);
 
         // NotificationEvent 생성 및 발행
-        if(account.getNotificationAllowed() && !deviceTokens.isEmpty()) {
+        if(account.getNotificationAllowed() && !accountDevices.isEmpty()) {
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
                             userOwnerJobPosting.getJobPosting().getTitle(),
                             notification.getMessage(),
-                            deviceTokens
+                            accountDevices
                     )
             );
         }

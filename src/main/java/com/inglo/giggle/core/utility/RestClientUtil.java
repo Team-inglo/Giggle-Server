@@ -2,6 +2,7 @@ package com.inglo.giggle.core.utility;
 
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -11,10 +12,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
+@Slf4j
 @Component
 public class RestClientUtil {
 
@@ -93,23 +96,27 @@ public class RestClientUtil {
         }
     }
 
-    public JSONObject sendFormUrlEncodedPostMethod(String url, HttpHeaders headers, MultiValueMap<String, String> body) {
+    public void sendFormUrlEncodedPostMethod(String url, HttpHeaders headers, MultiValueMap<String, String> body) {
         try {
-            return new JSONObject(Objects.requireNonNull(restClient.post()
+            restClient.post()
                     .uri(url)
                     .headers(httpHeaders -> httpHeaders.addAll(headers))
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .body(body)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                        log.error("4xx Error sending POST request => {}", response.getStatusCode());
                         throw new CommonException(ErrorCode.INVALID_ARGUMENT);
                     })
                     .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                        log.error("5xx Error sending POST request => {}", response.getStatusCode());
                         throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
                     })
-                    .toEntity(JSONObject.class).getBody()));
+                    .body(String.class);
         } catch (Exception e) {
+            log.error("Unexpected error during POST request", e);
             throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

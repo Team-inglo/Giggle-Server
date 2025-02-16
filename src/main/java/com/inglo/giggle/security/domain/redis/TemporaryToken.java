@@ -13,20 +13,14 @@ import org.springframework.data.redis.core.index.Indexed;
 @RedisHash(value = "temporary_token", timeToLive = 60 * 30) // 30분
 public class TemporaryToken {
     @Id
-    private String compositeKey;
+    private String email;
 
     @Indexed
     private String value;
 
     @Builder
-    public TemporaryToken(String id, String email, String value) {
-        this.compositeKey = id + ":" + email;
+    public TemporaryToken(String email, String value) {
+        this.email = email;
         this.value = value;
-    }
-    public String getId() {
-        return compositeKey.split(":")[0];
-    }
-    public String getEmail() {
-        return compositeKey.split(":")[1];
     }
 }

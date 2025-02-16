@@ -80,16 +80,14 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
     /* Private Methods ---------------------------- */
     /* -------------------------------------------- */
     private void handlePushAlarm(UserOwnerJobPosting userOwnerJobPosting, Notification notification) {
-        if(userOwnerJobPosting.getOwner().getNotificationAllowed()){
-            List<String> deviceTokens = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getOwner().getId()).stream()
-                    .map(AccountDevice::getDeviceToken)
-                    .toList();
+        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getOwner().getId());
 
+        if(userOwnerJobPosting.getOwner().getNotificationAllowed() && !accountDevices.isEmpty()){
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
                             userOwnerJobPosting.getJobPosting().getTitle(),
                             notification.getMessage(),
-                            deviceTokens
+                            accountDevices
                     )
             );
         }

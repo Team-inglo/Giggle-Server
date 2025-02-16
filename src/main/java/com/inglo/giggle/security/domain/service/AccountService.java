@@ -14,7 +14,6 @@ public class AccountService {
 
     public TemporaryAccount createTemporaryAccount(SignUpDefaultTemporaryRequestDto requestDto) {
         return TemporaryAccount.builder()
-                .id(requestDto.id())
                 .email(requestDto.email())
                 .password(requestDto.password())
                 .accountType(ESecurityRole.fromString(requestDto.accountType()))

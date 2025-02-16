@@ -136,17 +136,15 @@ public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocu
 
         // Owner의 Device Token 목록 조회
         UUID ownerId = document.getUserOwnerJobPosting().getOwner().getId();
-        List<String> deviceTokens = accountDeviceRepository.findByAccountId(ownerId).stream()
-                .map(AccountDevice::getDeviceToken)
-                .toList();
+        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(ownerId);
 
         // NotificationEvent 생성 및 발행
-        if(account.getNotificationAllowed() && !deviceTokens.isEmpty()) {
+        if(account.getNotificationAllowed() && !accountDevices.isEmpty()) {
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
                             document.getUserOwnerJobPosting().getJobPosting().getTitle(),
                             notification.getMessage(),
-                            deviceTokens
+                            accountDevices
                     )
             );
         }

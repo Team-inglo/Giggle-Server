@@ -75,11 +75,11 @@ public class JsonParseUtil {
     /**
      * Object를 JSON 문자열로 변환
      */
-    public static String convertFromObjectToJson(Object responseDto) {
+    public static String convertFromObjectToJson(Object message) {
         try {
-            return objectMapper.writeValueAsString(responseDto);
+            return objectMapper.writeValueAsString(message);
         } catch (JsonProcessingException e) {
-            log.error("[JsonParseUtil] JSON 변환 오류: responseDto = {}", responseDto, e);
+            log.error("[JsonParseUtil] JSON 변환 오류: responseDto = {}", message, e);
             throw new RuntimeException("[JsonParseUtil] JSON 변환 오류", e);
         }
     }

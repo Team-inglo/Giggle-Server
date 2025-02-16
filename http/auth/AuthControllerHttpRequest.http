@@ -41,7 +41,8 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "device_token": "test"
+  "device_token": "d0hHBt0hkUKajCSrMlEPYB:APA91bFirQG_GXzBRDuo51TekqU0AYOvugWgIAESIqk5tI5A4yh7U9GBXhR8U3bDpQlSwgr5dyu89OfIzGa6XNHTeDuIc_OFVDgHQTr1suXYe4wZEOlqqc8",
+  "device_id" : "1234"
 }
 
 ### 2.1 아이디 중복검사
@@ -59,18 +60,19 @@ GET {{host_url}}/v1/auth/validations/email?email={{email}}
 GET {{host_url}}/v1/auth/briefs
 Authorization: Bearer {{access_token}}
 
+
 ### 2.4 기본 임시 회원가입 - 유학생
 // @no-log
-@email_user = "jangelliot0404@dgu.ac.kr"
+@email_user = "jake991110@naver.com"
 POST {{host_url}}/v1/auth/sign-up
 Content-Type: application/json
 
 {
-    "id": "{{auth.API_2_4_USER.id}}",
-    "password" : "{{auth.API_2_4_USER.password}}",
-    "email" : {{email_user}},
-    "account_type" : "USER"
+  "password" : "{{auth.API_2_4_USER.password}}",
+  "email" : "kangseung1110@gmail.com",
+  "account_type" : "USER"
 }
+
 
 ### 2.4 기본 임시 회원가입 - 고용주
 // @no-log
@@ -157,13 +159,13 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "736239"
+@authentication_code_user = "992560"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
 {
   "id" : "{{auth.API_2_7_USER.id}}",
-  "email" : {{email_user}},
+  "email" : "kangseung1110@gmail.com",
   "authentication_code" : {{authentication_code_user}}
 }
 

@@ -152,17 +152,15 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
 
         // Device Token 목록 조회
         UUID userId = document.getUserOwnerJobPosting().getUser().getId();
-        List<String> deviceTokens = accountDeviceRepository.findByAccountId(userId).stream()
-                .map(AccountDevice::getDeviceToken)
-                .toList();
+        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(userId);
 
         // NotificationEvent 생성 및 발행
-        if(account.getNotificationAllowed() && !deviceTokens.isEmpty()) {
+        if(account.getNotificationAllowed() && !accountDevices.isEmpty()) {
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
                             document.getUserOwnerJobPosting().getJobPosting().getTitle(),
                             notification.getMessage(),
-                            deviceTokens
+                            accountDevices
                     )
             );
         }

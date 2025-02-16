@@ -14,7 +14,7 @@ public interface AccountDeviceRepository extends JpaRepository<AccountDevice, St
 
     Optional<AccountDevice> findByAccountAndDeviceId(
             Account account,
-            String deviceId
+            UUID deviceId
     );
 
     List<AccountDevice> findByAccount(Account account);

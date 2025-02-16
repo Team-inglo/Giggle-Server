@@ -90,30 +90,30 @@ public class UpdateUserUserOwnerJobPostingStepApplicationInProgressService imple
     /* Private Method ----------------------------- */
     /* -------------------------------------------- */
     private void handlePushAlarm(UserOwnerJobPosting userOwnerJobPosting, Notification userNotification, Notification ownerNotification) {
-        if(userOwnerJobPosting.getUser().getNotificationAllowed()){
-            List<String> deviceTokens = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getUser().getId()).stream()
-                    .map(AccountDevice::getDeviceToken)
-                    .toList();
+
+        // User의 Device Token 목록 조회
+        List<AccountDevice> userAccountDevices = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getUser().getId());
+
+        if(userOwnerJobPosting.getUser().getNotificationAllowed() && !userAccountDevices.isEmpty()) {
 
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
                             userOwnerJobPosting.getJobPosting().getTitle(),
                             userNotification.getMessage(),
-                            deviceTokens
+                            userAccountDevices
                     )
             );
         }
 
-        if(userOwnerJobPosting.getOwner().getNotificationAllowed()){
-            List<String> deviceTokens = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getOwner().getId()).stream()
-                    .map(AccountDevice::getDeviceToken)
-                    .toList();
+        // Owner의 AccountDevice 목록 조회
+        List<AccountDevice> ownerAccountDevices = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getOwner().getId());
 
+        if(userOwnerJobPosting.getOwner().getNotificationAllowed() && !ownerAccountDevices.isEmpty()) {
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
                             userOwnerJobPosting.getJobPosting().getTitle(),
                             ownerNotification.getMessage(),
-                            deviceTokens
+                            ownerAccountDevices
                     )
             );
         }
