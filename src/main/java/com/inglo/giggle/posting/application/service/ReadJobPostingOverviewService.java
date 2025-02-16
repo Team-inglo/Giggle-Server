@@ -236,6 +236,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                 .toList();
 
         List<JobPosting> jobPostings = jobPostingRepository.findJobPostingsWithDetailsByIds(jobPostingIds);
+        jobPostingRepository.findJobPostingsWithCompanyImagesByIds(jobPostingIds);
 
         // Step 4: jobPostings을 jobPostingIds 순서로 정렬
         Map<Long, JobPosting> jobPostingMap = jobPostings.stream()
