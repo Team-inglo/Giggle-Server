@@ -45,7 +45,7 @@ jobs:
           # 조건 만족 시 Discord 알림 전송
           if [[ "$TITLE_MATCH" == "true" ]]; then
             echo '{' > $JSON_FILE
-            echo '  "content": "📢 **새로운 작업 요청이 할당되었습니다 @장동겸 **",' >> $JSON_FILE
+            echo '  "content": "📢 ** 백엔드팀에게 새로운 작업 요청 @jangdongkyeom @seungjooni **",' >> $JSON_FILE
             echo '  "embeds": [' >> $JSON_FILE
             echo '    {' >> $JSON_FILE
             echo '      "title": "🔗 [GitHub 이슈 링크]('$ISSUE_URL')",' >> $JSON_FILE
