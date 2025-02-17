@@ -40,9 +40,9 @@ public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
         UUID uuidDeviceId = UUID.nameUUIDFromBytes(requestDto.deviceToken().getBytes());
 
         // Device Token 갱신
-        // 만약 해당 Account에 해당 DeviceId가 이미 존재한다면 Device Token을 갱신하고,
+        // 만약 해당 Account에 해당 DeviceToken이 이미 존재한다면 Device Token을 갱신하고,
         // 존재하지 않는다면 새로운 AccountDevice를 생성한다.
-        accountDeviceRepository.findByAccountAndDeviceId(account, uuidDeviceId)
+        accountDeviceRepository.findByAccountAndDeviceToken(account, requestDto.deviceToken())
                 .ifPresentOrElse(
                         accountDevice -> {
 
@@ -59,7 +59,7 @@ public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
                                     uuidDeviceId
                             );
 
-                            // Device Token 갱신 이벤트 발행
+                            // Device Token 등록 이벤트 발행
                             applicationEventPublisher.publishEvent(
                                     UpdateDeviceTokenEventDto.of(
                                             accountDevice
