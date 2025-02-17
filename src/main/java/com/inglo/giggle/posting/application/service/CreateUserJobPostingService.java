@@ -6,8 +6,8 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationEventService;
 import com.inglo.giggle.notification.domain.service.NotificationService;
+import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
 import com.inglo.giggle.posting.application.dto.response.CreateUserJobPostingResponseDto;
 import com.inglo.giggle.posting.application.usecase.CreateUserJobPostingUseCase;
@@ -17,13 +17,16 @@ import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountDeviceRepository;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,13 +37,13 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
     private final AccountService accountService;
 
     private final JobPostingRepository jobPostingRepository;
+    private final AccountDeviceRepository accountDeviceRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
 
     private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final NotificationService notificationService;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final NotificationEventService notificationEventService;
     private final NotificationRepository notificationRepository;
 
     @Override
@@ -84,19 +87,32 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
         notificationRepository.save(notification);
 
         // NotificationEvent 발행
-        if(account.getNotificationAllowed()){
-            applicationEventPublisher.publishEvent(
-                    notificationEventService.createNotificationEvent(
-                            userOwnerJobPosting.getJobPosting().getTitle(),
-                            notification.getMessage(),
-                            userOwnerJobPosting.getOwner().getDeviceToken()
-                    )
-            );
-        }
+        handlePushAlarm(account, savedUserOwnerJobPosting, notification);
 
         // DTO 반환
         return CreateUserJobPostingResponseDto.of(
                 savedUserOwnerJobPosting.getId()
         );
+    }
+
+    /* -------------------------------------------- */
+    /* Private Method ----------------------------- */
+    /* -------------------------------------------- */
+    private void handlePushAlarm(Account account, UserOwnerJobPosting userOwnerJobPosting, Notification notification) {
+
+        // Owner의 AccountDevice 목록 조회
+        UUID ownerId = userOwnerJobPosting.getOwner().getId();
+        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(ownerId);
+
+        // NotificationEvent 생성 및 발행
+        if(account.getNotificationAllowed() && !accountDevices.isEmpty()) {
+            applicationEventPublisher.publishEvent(
+                    NotificationEventDto.of(
+                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            accountDevices
+                    )
+            );
+        }
     }
 }

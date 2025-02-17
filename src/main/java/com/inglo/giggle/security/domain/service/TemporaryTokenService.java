@@ -5,9 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TemporaryTokenService {
-    public TemporaryToken createTemporaryToken(String id, String email, String value) {
+    public TemporaryToken createTemporaryToken(String email, String value) {
         return TemporaryToken.builder()
-                .id(id)
                 .email(email)
                 .value(value)
                 .build();

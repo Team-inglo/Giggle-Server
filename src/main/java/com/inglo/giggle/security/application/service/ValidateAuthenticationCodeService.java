@@ -57,7 +57,7 @@ public class ValidateAuthenticationCodeService implements ValidateAuthentication
         TemporaryJsonWebTokenDto temporaryTokenDto = jsonWebTokenUtil.generateTemporaryJsonWebToken(requestDto.email());
 
         // 임시 토큰 저장
-        temporaryTokenRepository.save(temporaryTokenService.createTemporaryToken(requestDto.id(), requestDto.email(), temporaryTokenDto.getTemporaryToken()));
+        temporaryTokenRepository.save(temporaryTokenService.createTemporaryToken(requestDto.email(), temporaryTokenDto.getTemporaryToken()));
 
         return temporaryTokenDto;
     }

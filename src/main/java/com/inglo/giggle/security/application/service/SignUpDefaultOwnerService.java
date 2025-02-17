@@ -57,7 +57,7 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
 
         // Redis에서 임시 사용자 정보 가져오기
-        TemporaryAccount tempUserInfo = temporaryAccountRepository.findById(temporaryToken.getCompositeKey())
+        TemporaryAccount tempUserInfo = temporaryAccountRepository.findById(temporaryToken.getEmail())
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT));
 
         // AccountType 검증
@@ -66,7 +66,7 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         // 아이콘 이미지 저장
         String iconUrl = s3Util.getOwnerDefaultImgUrl();
         if (file != null) {
-            iconUrl = s3Util.uploadImageFile(file, tempUserInfo.getId(), EImageType.OWNER_PROFILE_IMG);
+            iconUrl = s3Util.uploadImageFile(file, tempUserInfo.getEmail(), EImageType.OWNER_PROFILE_IMG);
         }
 
         // Address 생성
@@ -91,10 +91,10 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         account = accountRepository.save(account);
 
         // temporary Token 삭제
-        temporaryTokenRepository.deleteById(temporaryToken.getCompositeKey());
+        temporaryTokenRepository.deleteById(temporaryToken.getEmail());
 
         // temporary User Info 삭제
-        temporaryAccountRepository.deleteById(tempUserInfo.getCompositeKey());
+        temporaryAccountRepository.deleteById(tempUserInfo.getEmail());
 
         // 약관 타입 파싱
         List<ETermType> termTypes = requestDto.termTypes().stream()

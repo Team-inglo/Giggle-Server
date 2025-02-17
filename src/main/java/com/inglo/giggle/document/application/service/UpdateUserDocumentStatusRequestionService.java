@@ -17,18 +17,22 @@ import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitReposi
 import com.inglo.giggle.document.repository.mysql.RejectRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationEventService;
 import com.inglo.giggle.notification.domain.service.NotificationService;
+import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountDeviceRepository;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,18 +40,21 @@ import java.util.UUID;
 public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocumentStatusRequestionUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final DocumentRepository documentRepository;
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
+    private final AccountDeviceRepository accountDeviceRepository;
+    private final StandardLaborContractRepository standardLaborContractRepository;
     private final RejectRepository rejectRepository;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
-    private final StandardLaborContractRepository standardLaborContractRepository;
+    private final NotificationRepository notificationRepository;
+
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
+    private final AccountService accountService;
     private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
     private final StandardLaborContractService standardLaborContractService;
     private final RejectService rejectService;
     private final NotificationService notificationService;
-    private final NotificationEventService notificationEventService;
-    private final NotificationRepository notificationRepository;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
@@ -118,13 +125,28 @@ public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocu
         notificationRepository.save(notification);
 
         // NotificationEvent 발행
-        if(account.getNotificationAllowed()) {
-            notificationEventService.createNotificationEvent(
-                    document.getUserOwnerJobPosting().getJobPosting().getTitle(),
-                    notification.getMessage(),
-                    document.getUserOwnerJobPosting().getOwner().getDeviceToken()
+
+        handlePushAlarm(account, document, notification);
+    }
+
+    /* -------------------------------------------- */
+    /* Private Method ----------------------------- */
+    /* -------------------------------------------- */
+    private void handlePushAlarm(Account account, Document document, Notification notification) {
+
+        // Owner의 Device Token 목록 조회
+        UUID ownerId = document.getUserOwnerJobPosting().getOwner().getId();
+        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(ownerId);
+
+        // NotificationEvent 생성 및 발행
+        if(account.getNotificationAllowed() && !accountDevices.isEmpty()) {
+            applicationEventPublisher.publishEvent(
+                    NotificationEventDto.of(
+                            document.getUserOwnerJobPosting().getJobPosting().getTitle(),
+                            notification.getMessage(),
+                            accountDevices
+                    )
             );
         }
     }
-
 }

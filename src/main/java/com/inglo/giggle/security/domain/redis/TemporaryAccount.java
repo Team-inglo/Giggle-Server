@@ -13,24 +13,16 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash(value = "temporary_account", timeToLive = 60 * 30) // 30분
 public class TemporaryAccount {
     @Id
-    private String compositeKey;
+    private String email;
 
     private String password;
 
     private ESecurityRole accountType;
 
     @Builder
-    public TemporaryAccount(String id, String email, String password, ESecurityRole accountType) {
-        this.compositeKey = id + ":" + email;
+    public TemporaryAccount(String email, String password, ESecurityRole accountType) {
+        this.email = email;
         this.password = password;
         this.accountType = accountType;
-    }
-
-    public String getId() {
-        return compositeKey.split(":")[0];
-    }
-
-    public String getEmail() {
-        return compositeKey.split(":")[1];
     }
 }

@@ -33,14 +33,13 @@ public class ReissuePasswordService implements ReissuePasswordUseCase {
     @Override
     @Transactional
     public void execute(String temporaryTokenValue) {
-        // temporary Token 검증. Redis에 있는 토큰인지 확인 -> id, email 추출
+        // temporary Token 검증. Redis에 있는 토큰인지 확인 -> email 추출
         TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(temporaryTokenValue)
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
-        String id = temporaryToken.getId();
         String email = temporaryToken.getEmail();
 
         // 계정 조회
-        Account account = accountRepository.findBySerialIdAndProvider(id, ESecurityProvider.DEFAULT)
+        Account account = accountRepository.findBySerialIdAndProvider(email, ESecurityProvider.DEFAULT)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
 
         // 임시 비밀번호 생성 및 저장

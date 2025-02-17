@@ -1,4 +1,4 @@
-package com.inglo.giggle.core.listener;
+package com.inglo.giggle.core.event.listener;
 
 import com.inglo.giggle.core.utility.MailUtil;
 import com.inglo.giggle.security.event.ChangePasswordBySystemEvent;

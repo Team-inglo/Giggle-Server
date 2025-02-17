@@ -34,13 +34,10 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
     private final AuthenticationCodeHistoryService authenticationCodeHistoryService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     @Transactional
     public IssueAuthenticationCodeResponseDto execute(SignUpDefaultTemporaryRequestDto requestDto) {
-        // 중복된 아이디인지 확인
-        if (isDuplicatedId(requestDto.id())) {
-            throw new CommonException(ErrorCode.ALREADY_EXIST_ID);
-        }
         // 중복된 이메일인지 확인
         if (isDuplicatedEmail(requestDto.email())) {
             throw new CommonException(ErrorCode.ALREADY_EXIST_EMAIL);
@@ -60,7 +57,12 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
         String code = PasswordUtil.generateAuthCode(6);
 
         // 새로운 인증코드 저장
-        authenticationCodeRepository.save(authenticationCodeService.createAuthenticationCode(requestDto.email(), bCryptPasswordEncoder.encode(code)));
+        authenticationCodeRepository.save(
+                authenticationCodeService.createAuthenticationCode(
+                        requestDto.email(),
+                        bCryptPasswordEncoder.encode(code)
+                )
+        );
 
         // 인증코드 발급 이력 업데이트
         if (history == null) {
@@ -73,15 +75,6 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
         applicationEventPublisher.publishEvent(CompleteEmailValidationEvent.of(requestDto.email(), code));
 
         return IssueAuthenticationCodeResponseDto.fromEntity(history);
-    }
-
-    /**
-     * 중복된 아이디인지 확인
-     * @param serialId 아이디
-     * @return 중복된 아이디인지 여부
-     */
-    private Boolean isDuplicatedId(String serialId) {
-        return accountRepository.findBySerialId(serialId).isPresent();
     }
 
     /**

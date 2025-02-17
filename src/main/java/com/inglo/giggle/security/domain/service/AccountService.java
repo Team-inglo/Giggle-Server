@@ -14,7 +14,6 @@ public class AccountService {
 
     public TemporaryAccount createTemporaryAccount(SignUpDefaultTemporaryRequestDto requestDto) {
         return TemporaryAccount.builder()
-                .id(requestDto.id())
                 .email(requestDto.email())
                 .password(requestDto.password())
                 .accountType(ESecurityRole.fromString(requestDto.accountType()))
@@ -41,11 +40,6 @@ public class AccountService {
 
     public Account updateNotificationAllowed(Account account, Boolean notificationAllowed) {
         account.updateNotificationAllowed(notificationAllowed);
-        return account;
-    }
-
-    public Account updateDeviceToken(Account account, String deviceToken) {
-        account.updateDeviceToken(deviceToken);
         return account;
     }
 

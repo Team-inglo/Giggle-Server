@@ -20,12 +20,14 @@ import com.inglo.giggle.document.repository.mysql.ContractWorkDayTimeRepository;
 import com.inglo.giggle.document.repository.mysql.DocumentRepository;
 import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationEventService;
 import com.inglo.giggle.notification.domain.service.NotificationService;
+import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
+import com.inglo.giggle.security.repository.mysql.AccountDeviceRepository;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -43,16 +45,18 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final DocumentRepository documentRepository;
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
+    private final AccountDeviceRepository accountDeviceRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final ContractWorkDayTimeRepository contractWorkDayTimeRepository;
+    private final NotificationRepository notificationRepository;
+
+    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final StandardLaborContractService standardLaborContractService;
     private final AddressService addressService;
     private final ContractWorkDayTimeService contractWorkDayTimeService;
     private final NotificationService notificationService;
+
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final NotificationEventService notificationEventService;
-    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -138,15 +142,27 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
         notificationRepository.save(notification);
 
         // Notification 발송
-        if(account.getNotificationAllowed()){
+        handlePushAlarm(account, document, notification);
+    }
+
+    /* -------------------------------------------- */
+    /* Private Method ----------------------------- */
+    /* -------------------------------------------- */
+    private void handlePushAlarm(Account account, Document document, Notification notification) {
+
+        // Device Token 목록 조회
+        UUID userId = document.getUserOwnerJobPosting().getUser().getId();
+        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(userId);
+
+        // NotificationEvent 생성 및 발행
+        if(account.getNotificationAllowed() && !accountDevices.isEmpty()) {
             applicationEventPublisher.publishEvent(
-                    notificationEventService.createNotificationEvent(
+                    NotificationEventDto.of(
                             document.getUserOwnerJobPosting().getJobPosting().getTitle(),
                             notification.getMessage(),
-                            document.getUserOwnerJobPosting().getUser().getDeviceToken()
+                            accountDevices
                     )
             );
         }
     }
-
 }

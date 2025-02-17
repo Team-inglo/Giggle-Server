@@ -66,6 +66,7 @@ public class AuthController {
     /**
      * 2.1 아이디 중복 검사
      */
+    @Deprecated
     @GetMapping("/validations/id")
     public ResponseDto<ValidationResponseDto> validateId(
             @RequestParam(name = "id") String id
