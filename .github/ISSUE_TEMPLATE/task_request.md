@@ -1,3 +1,12 @@
+---
+name: "✅ Task Request - 작업 요청"
+about: "Task Requeste "
+title: "✅ Task Request - "
+labels: ✅ Task Request
+assignees: ''
+
+---
+
 🔄 작업 유형 : ✨ Feature / 🎨 Design / 🐞 Bug Fix / ⚙ Refactoring / 📑 Documentation  
 🚀 우선순위 : 🔥 M (반드시 해야하는) / ⚡ S (해야하는) / ✅ C (하면 좋은) / ❌ W (할 가치가 없는) 
 
