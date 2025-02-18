@@ -1,4 +1,4 @@
-FROM openjdk:17-slim
+FROM krmp-d2hub-idock.9rum.cc/goorm/openjdk:17-jdk-slim
 
 WORKDIR /app
 

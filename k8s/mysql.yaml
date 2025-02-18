@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:8.4.4
+          image: krmp-d2hub-idock.9rum.cc/goorm/mysql:8.0.39
           imagePullPolicy: Always
           ports:
             - containerPort: 3306
