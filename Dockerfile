@@ -1,5 +1,8 @@
 # Stage 1: 빌드 단계
 FROM gradle:8.12-alpine AS build
+
+ENV GRADLE_OPTS="-Dhttp.proxyHost=krmp-proxy.9rum.cc -Dhttp.proxyPort=3128 -Dhttps.proxyHost=krmp-proxy.9rum.cc -Dhttps.proxyPort=3128"
+
 WORKDIR /app
 # 모든 소스 코드를 컨테이너로 복사합니다.
 COPY . .
