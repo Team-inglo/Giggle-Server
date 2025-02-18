@@ -2,7 +2,7 @@ name: Web Application Develop Server CI/CD
 
 on:
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "main" ]
     types:
       - opened
       - synchronize
