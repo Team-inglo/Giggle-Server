@@ -5,3 +5,4 @@ resources:
   - osrm.yaml
   - api-server.yaml
   - ingress.yaml
+  - secret.yaml
