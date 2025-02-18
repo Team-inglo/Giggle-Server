@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: redis
-          image: redis:7.4.2
+          image: krmp-d2hub-idock.9rum.cc/goorm/redis:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 6379
