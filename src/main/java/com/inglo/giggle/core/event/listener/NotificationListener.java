@@ -32,7 +32,7 @@ public class NotificationListener {
     @Value("${kakao.secret-key}")
     private String kakaoSecretKey;
 
-    @Value("${push.notification.token-send-url")
+    @Value("${push.notification.token-send-url}")
     private String pushNotificationTokenSendUrl;
 
     @Value("${push.notification.token-register-url}")
