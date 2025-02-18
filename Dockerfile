@@ -1,5 +1,5 @@
 # Stage 1: 빌드 단계
-FROM gradle:8.12-slim AS build
+FROM gradle:8.12-jdk17 AS build
 
 ENV GRADLE_OPTS="-Dhttp.proxyHost=krmp-proxy.9rum.cc -Dhttp.proxyPort=3128 -Dhttps.proxyHost=krmp-proxy.9rum.cc -Dhttps.proxyPort=3128"
 
