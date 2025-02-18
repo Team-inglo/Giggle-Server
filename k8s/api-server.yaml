@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-server
+  namespace: jdk0304-namespace
 spec:
   replicas: 2
   selector:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: api-server
-          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_5903fc54aa80
+          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_1bece455b14c
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -206,6 +207,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: api-server
+  namespace: jdk0304-namespace
 spec:
     selector:
         app: api-server

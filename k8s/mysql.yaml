@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
+  namespace: jdk0304-namespace
 spec:
   replicas: 1
   selector:
@@ -66,6 +67,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql
+  namespace: jdk0304-namespace
 spec:
   selector:
     app: mysql
