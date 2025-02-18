@@ -1,0 +1,218 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-server
+  template:
+    metadata:
+      labels:
+        app: api-server
+    spec:
+      containers:
+        - name: api-server
+          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_8bf9d50ff401
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mysql-host
+            - name: MYSQL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mysql-port
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mysql-username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mysql-password
+            - name: MYSQL_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mysql-database-name
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: redis-host
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: redis-port
+            - name: MAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mail-port
+            - name: MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mail-username
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mail-password
+            - name: MAX_FILE_SIZE
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: max-file-size
+            - name: MAX_REQUEST_SIZE
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: max-request-size
+            - name: SERVER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: server-url
+            - name: CLIENT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: client-url
+            - name: COOKIE_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: cookie-domain
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: jwt-secret-key
+            - name: TEMPORARY_TOKEN_EXPIRE_PERIOD
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: temporary-token-expire-period
+            - name: ACCESS_TOKEN_EXPIRE_PERIOD
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: access-token-expire-period
+            - name: REFRESH_TOKEN_EXPIRE_PERIOD
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: refresh-token-expire-period
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: aws-access-key
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: aws-secret-key
+            - name: AWS_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: aws-region
+            - name: AWS_S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: aws-s3-bucket
+            - name: AWS_S3_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: aws-s3-url
+            - name: AWS_S3_USER_DEFAULT_IMG_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: aws-s3-user-default-img-url
+            - name: AWS_S3_OWNER_DEFAULT_IMG_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: aws-s3-owner-default-img-url
+            - name: PART_TIME_EMPLOYMENT_PERMIT_TEMPLATE_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: part-time-employment-permit-template-path
+            - name: STANDARD_LABOR_CONTRACT_TEMPLATE_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: standard-labor-contract-template-path
+            - name: INTEGRATED_APPLICATION_TEMPLATE_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: integrated-application-template-path
+            - name: OSRM_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: osrm-url
+            - name: OSRM_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: osrm-path
+            - name: KAKAO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: kakao-secret-key
+            - name: PUSH_TOKEN_REGISTER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: push-token-register-url
+            - name: PUSH_TOKEN_SEND_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: push-token-send-url
+            - name: PUSH_TOKEN_GET_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: push-token-get-url
+            - name: PUSH_TOKEN_DELETE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: push-token-delete-url
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-server
+spec:
+    selector:
+        app: api-server
+    ports:
+        - protocol: TCP
+          port: 8080
+          targetPort: 8080
+    type: ClusterIP
+
+

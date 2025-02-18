@@ -1,0 +1,109 @@
+spring:
+  # DataSource Setting
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE_NAME}?useSSL=false&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    hikari:
+      pool-name: jpa-hikari-pool
+      maximum-pool-size: 5
+      jdbc-url: ${spring.datasource.url}
+      username: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+      driver-class-name: ${spring.datasource.driver-class-name}
+      data-source-properties:
+        rewriteBatchedStatements: true
+
+  # JPA Setting
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        default_batch_fetch_size: 100
+        jdbc.batch_size: 20
+        order_inserts: true
+        order_updates: true
+        format_sql: true
+    open-in-view: false
+
+  # Redis Setting
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+  # Email Setting(gmail.com)
+  mail:
+    host: smtp.gmail.com
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 10000
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
+
+web-engine:
+  server-url: ${SERVER_URL}
+  client-url: ${CLIENT_URL}
+  cookie-domain: ${COOKIE_DOMAIN}
+
+json-web-token:
+  secret-key: ${JWT_SECRET_KEY}
+  temporary-token-expire-period: ${TEMPORARY_TOKEN_EXPIRE_PERIOD}
+  access-token-expire-period: ${ACCESS_TOKEN_EXPIRE_PERIOD}
+  refresh-token-expire-period: ${REFRESH_TOKEN_EXPIRE_PERIOD}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ${AWS_REGION}
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+      url: ${AWS_S3_URL}
+      user-default-img-url: ${AWS_S3_USER_DEFAULT_IMG_URL}
+      owner-default-img-url: ${AWS_S3_OWNER_DEFAULT_IMG_URL}
+template:
+  part-time-employment-permit:
+    word:
+      path: ${PART_TIME_EMPLOYMENT_PERMIT_TEMPLATE_PATH}
+  standard-labor-contract:
+    word:
+      path: ${STANDARD_LABOR_CONTRACT_TEMPLATE_PATH}
+  integrated-application:
+    word:
+      path: ${INTEGRATED_APPLICATION_TEMPLATE_PATH}
+
+osrm:
+  url: ${OSRM_URL}
+  path: ${OSRM_PATH}
+
+kakao:
+  secret-key: ${KAKAO_SECRET_KEY}
+
+push:
+  notification:
+    token-register-url: ${PUSH_TOKEN_REGISTER_URL}
+    token-send-url: ${PUSH_TOKEN_SEND_URL}
+    token-get-url: ${PUSH_TOKEN_GET_URL}
+    token-delete-url: ${PUSH_TOKEN_DELETE_URL}
+
+logging:
+  level:
+    org.docx4j: WARN

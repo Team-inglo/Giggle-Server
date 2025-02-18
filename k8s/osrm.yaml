@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osrm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: osrm-server
+  template:
+    metadata:
+      labels:
+        app: osrm-server
+    spec:
+      volumes:
+        - name: osrm-data
+          emptyDir: { }
+
+      initContainers:
+        - name: osrm-extract
+          image: osrm/osrm-backend:v5.25.0
+          command: [ "osrm-extract", "-p", "/opt/car.lua", "/data/berlin-latest.osm.pbf" ]
+          volumeMounts:
+            - name: osrm-data
+              mountPath: /data
+
+        - name: osrm-partition
+          image: osrm/osrm-backend:v5.25.0
+          command: [ "osrm-partition", "/data/berlin-latest.osrm" ]
+          volumeMounts:
+            - name: osrm-data
+              mountPath: /data
+
+        - name: osrm-customize
+          image: osrm/osrm-backend:v5.25.0
+          command: [ "osrm-customize", "/data/berlin-latest.osrm" ]
+          volumeMounts:
+            - name: osrm-data
+              mountPath: /data
+
+      containers:
+        - name: osrm-server
+          image: osrm/osrm-backend:v5.25.0
+          command: [ "osrm-routed", "--algorithm", "mld", "/data/berlin-latest.osrm" ]
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: osrm-data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: osrm-server
+spec:
+    selector:
+        app: osrm-server
+    ports:
+        - port: 5000
+          targetPort: 5000

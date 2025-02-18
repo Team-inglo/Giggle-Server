@@ -4,6 +4,7 @@
 ### ignore application.yml ###
 src/main/resources/application-dev.yml
 src/main/resources/application-local.yml
+src/main/resources/application-prod.yml
 src/main/resources/firebase/firebase_service_key.json
 .gradle/*
 build/*
