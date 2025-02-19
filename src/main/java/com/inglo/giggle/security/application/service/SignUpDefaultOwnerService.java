@@ -6,7 +6,9 @@ import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
+import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.core.utility.S3Util;
+import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultOwnerUseCase;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.redis.TemporaryToken;
@@ -49,9 +51,12 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final S3Util s3Util;
+    private final JsonWebTokenUtil jsonWebTokenUtil;
+
     @Override
     @Transactional
-    public void execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
+    public DefaultJsonWebTokenDto execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
+
         // temporary Token 검증. Redis에 있는 토큰인지 확인
         TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(requestDto.temporaryToken())
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
@@ -113,5 +118,6 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         // 약관 동의 저장
         termAccountRepository.saveAll(termAccounts);
 
+        return jsonWebTokenUtil.generateDefaultJsonWebTokens(account.getId(), account.getRole());
     }
 }
