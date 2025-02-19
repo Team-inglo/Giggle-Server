@@ -24,8 +24,6 @@ import java.util.UUID;
 public class S3Util {
     private final AmazonS3Client amazonS3Client;
 
-    private final String IMAGE_CONTENT_PREFIX = "image/";
-
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
