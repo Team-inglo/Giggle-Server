@@ -63,13 +63,13 @@ Authorization: Bearer {{access_token}}
 
 ### 2.4 기본 임시 회원가입 - 유학생
 // @no-log
-@email_user = "jake991110@naver.com"
+@email_user = "jangelliot0404@dgu.ac.kr"
 POST {{host_url}}/v1/auth/sign-up
 Content-Type: application/json
 
 {
   "password" : "{{auth.API_2_4_USER.password}}",
-  "email" : "kangseung1110@gmail.com",
+  "email" : {{email_user}},
   "account_type" : "USER"
 }
 
@@ -159,13 +159,13 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "992560"
+@authentication_code_user = "073484"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
 {
   "id" : "{{auth.API_2_7_USER.id}}",
-  "email" : "kangseung1110@gmail.com",
+  "email" : {{email_user}},
   "authentication_code" : {{authentication_code_user}}
 }
 
@@ -228,4 +228,14 @@ Content-Type: application/json
 {
   "current_password": "{{auth.API_2_11.current_password}}",
   "new_password": "{{auth.API_2_11.new_password}}"
+}
+
+### 2.12 현재 비밀번호 확인
+// @no-log
+POST {{host_url}}/v1/auth/validations/password
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "password": "{{auth.API_2_12.password}}"
 }
