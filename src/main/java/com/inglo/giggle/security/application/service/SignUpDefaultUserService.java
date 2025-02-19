@@ -6,6 +6,7 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
+import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
@@ -13,6 +14,7 @@ import com.inglo.giggle.resume.domain.service.LanguageSkillService;
 import com.inglo.giggle.resume.domain.service.ResumeService;
 import com.inglo.giggle.resume.repository.mysql.LanguageSkillRepository;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultUserRequestDto;
+import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultUserUseCase;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import com.inglo.giggle.security.domain.redis.TemporaryToken;
@@ -52,13 +54,14 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final S3Util s3Util;
+    private final JsonWebTokenUtil jsonWebTokenUtil;
     private final ResumeService resumeService;
     private final LanguageSkillService languageSkillService;
     private final LanguageSkillRepository languageSkillRepository;
 
     @Override
     @Transactional
-    public void execute(SignUpDefaultUserRequestDto requestDto) {
+    public DefaultJsonWebTokenDto execute(SignUpDefaultUserRequestDto requestDto) {
         // temporary Token 검증. Redis에 있는 토큰인지 확인
         TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(requestDto.temporaryToken())
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
@@ -119,5 +122,7 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
         // 약관 동의 저장
         termAccountRepository.saveAll(termAccounts);
 
+        // JWT 발급
+        return jsonWebTokenUtil.generateDefaultJsonWebTokens(savedUser.getId(), savedUser.getRole());
     }
 }

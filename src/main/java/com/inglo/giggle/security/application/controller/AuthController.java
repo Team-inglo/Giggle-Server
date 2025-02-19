@@ -112,8 +112,9 @@ public class AuthController {
     public ResponseDto<?> signUpDefaultUser(
             @RequestBody @Valid SignUpDefaultUserRequestDto requestDto
     ) {
-        signUpDefaultUserUseCase.execute(requestDto);
-        return ResponseDto.created(null);
+        return ResponseDto.created(
+                signUpDefaultUserUseCase.execute(requestDto)
+        );
     }
 
     /**
@@ -124,8 +125,9 @@ public class AuthController {
             @RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart("body") @Valid SignUpDefaultOwnerRequestDto requestDto
     ) {
-        signUpDefaultOwnerUseCase.execute(requestDto, image);
-        return ResponseDto.created(null);
+        return ResponseDto.created(
+                signUpDefaultOwnerUseCase.execute(requestDto, image)
+        );
     }
 
     /**

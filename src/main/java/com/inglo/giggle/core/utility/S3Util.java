@@ -9,6 +9,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,12 +18,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class S3Util {
     private final AmazonS3Client amazonS3Client;
-
-    private final String IMAGE_CONTENT_PREFIX = "image/";
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -57,6 +57,7 @@ public class S3Util {
 
             return bucketUrl + key;
         } catch (SdkClientException | IOException e) {
+            log.error("S3 upload error: {}", e.getMessage());
             throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
         }
     }
