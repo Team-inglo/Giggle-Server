@@ -105,6 +105,7 @@ public class AuthController {
         return ResponseDto.created(signUpDefaultTemporaryUseCase.execute(requestDto));
     }
 
+
     /**
      * 2.5 기본 회원가입(유학생)
      */
