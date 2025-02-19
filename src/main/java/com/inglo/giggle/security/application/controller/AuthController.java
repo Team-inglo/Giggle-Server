@@ -37,6 +37,7 @@ public class AuthController {
     private final DeleteAccountUseCase deleteAccountUseCase;
     private final UpdateDeviceTokenUseCase updateDeviceTokenUseCase;
     private final ChangePasswordUseCase changePasswordUseCase;
+    private final ValidatePasswordUseCase validatePasswordUseCase;
 
     /**
      * 1.3 JWT 재발급
@@ -183,5 +184,16 @@ public class AuthController {
     ) {
         changePasswordUseCase.execute(accountId, requestDto);
         return ResponseDto.ok(null);
+    }
+
+    /**
+     * 2.12 현재 비밀번호 확인
+     */
+    @PostMapping("/validations/password")
+    public ResponseDto<?> validatePassword(
+            @RequestBody @Valid ValidatePasswordRequestDto requestDto,
+            @AccountID UUID accountId
+    ) {
+        return ResponseDto.ok(validatePasswordUseCase.execute(accountId, requestDto));
     }
 }
