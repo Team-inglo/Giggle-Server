@@ -1,7 +1,4 @@
 namespace: default
 resources:
-  - mysql.yaml
-  - redis.yaml
   - osrm.yaml
   - api-server.yaml
-  - ingress.yaml

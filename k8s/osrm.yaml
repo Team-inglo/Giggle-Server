@@ -17,23 +17,30 @@ spec:
           emptyDir: { }
 
       initContainers:
+        - name: osrm-download
+          image: curlimages/curl:latest
+          command: [ "sh", "-c", "curl -x http://krmp-proxy.9rum.cc:3128 -O http://download.geofabrik.de/asia/south-korea-latest.osm.pbf && mv south-korea-latest.osm.pbf /data/south-korea-latest.osm.pbf" ]
+          volumeMounts:
+            - name: osrm-data
+              mountPath: /data
+
         - name: osrm-extract
           image: krmp-d2hub-idock.9rum.cc/goorm/osrm-backend:v5.25.0
-          command: [ "osrm-extract", "-p", "/opt/car.lua", "/data/berlin-latest.osm.pbf" ]
+          command: [ "osrm-extract", "-p", "/opt/car.lua", "/data/south-korea-latest.osm.pbf" ]
           volumeMounts:
             - name: osrm-data
               mountPath: /data
 
         - name: osrm-partition
           image: osrm/osrm-backend:v5.25.0
-          command: [ "osrm-partition", "/data/berlin-latest.osrm" ]
+          command: [ "osrm-partition", "/data/south-korea-latest.osrm" ]
           volumeMounts:
             - name: osrm-data
               mountPath: /data
 
         - name: osrm-customize
           image: osrm/osrm-backend:v5.25.0
-          command: [ "osrm-customize", "/data/berlin-latest.osrm" ]
+          command: [ "osrm-customize", "/data/south-korea-latest.osrm" ]
           volumeMounts:
             - name: osrm-data
               mountPath: /data
@@ -41,7 +48,7 @@ spec:
       containers:
         - name: osrm-server
           image: osrm/osrm-backend:v5.25.0
-          command: [ "osrm-routed", "--algorithm", "mld", "/data/berlin-latest.osrm" ]
+          command: [ "osrm-routed", "--algorithm", "mld", "/data/south-korea-latest.osrm" ]
           ports:
             - containerPort: 5000
           volumeMounts:
@@ -62,8 +69,8 @@ kind: Service
 metadata:
   name: osrm-server
 spec:
-    selector:
-        app: osrm-server
-    ports:
-        - port: 5000
-          targetPort: 5000
+  selector:
+    app: osrm-server
+  ports:
+    - port: 5000
+      targetPort: 5000
