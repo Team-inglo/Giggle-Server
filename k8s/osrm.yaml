@@ -19,7 +19,10 @@ spec:
       initContainers:
         - name: osrm-download
           image: curlimages/curl:latest
-          command: [ "sh", "-c", "curl -x http://krmp-proxy.9rum.cc:3128 -O http://download.geofabrik.de/asia/south-korea-latest.osm.pbf && mv south-korea-latest.osm.pbf /data/south-korea-latest.osm.pbf" ]
+          command:
+            - "sh"
+            - "-c"
+            - "mkdir -p /data && curl -x http://krmp-proxy.9rum.cc:3128 -o /data/south-korea-latest.osm.pbf http://download.geofabrik.de/asia/south-korea-latest.osm.pbf"
           volumeMounts:
             - name: osrm-data
               mountPath: /data
