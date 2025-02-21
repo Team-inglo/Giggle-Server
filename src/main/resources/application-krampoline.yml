@@ -40,7 +40,7 @@ spring:
 
   # Email Setting(gmail.com)
   mail:
-    host: localhost
+    host: ${MAIL_HOST}
     port: ${MAIL_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}

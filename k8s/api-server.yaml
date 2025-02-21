@@ -58,6 +58,11 @@ spec:
                 secretKeyRef:
                   name: application-yml-secret
                   key: redis-port
+            - name: MAIL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: mail-host
             - name: MAIL_PORT
               valueFrom:
                 secretKeyRef:
