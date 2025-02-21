@@ -1,15 +1,21 @@
 package com.inglo.giggle.core.utility;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class MailUtil {
+
+    @Value("${spring.mail.username}")
+    private String username;
+
+    @Value("${spring.mail.password}")
+    private String password;
+
     private static final String AUTHENTICATION_CODE_TEMPLATE = """
             <div style="width: 540px; border-top: 4px solid #02b875; border-bottom: 4px solid #02b875; margin: 100px auto; padding: 30px 0; box-sizing: border-box;">
             	<h1 style="margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;">
@@ -48,38 +54,32 @@ public class MailUtil {
 
     private final JavaMailSender javaMailSender;
 
-    public void sendAuthenticationCode(
+    public String getSendAuthenticationCodeRequestBody(
             String receiverAddress,
             String authenticationCode
-    ) throws MessagingException {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        mimeMessage.setSubject("Giggle 인증코드 안내");
+    ) {
 
-        // 위 HTML을 이용하여 이메일을 작성하고 전송하는 코드
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom("Giggle");
-        mimeMessageHelper.setTo(receiverAddress);
-        // UTF-8로 인코딩
-        mimeMessageHelper.setText(AUTHENTICATION_CODE_TEMPLATE.replace("${AuthenticationCode}", authenticationCode), true);
+        JSONObject payload = new JSONObject();
+        payload.put("subject", "Giggle 인증코드 안내");
+        payload.put("text", AUTHENTICATION_CODE_TEMPLATE.replace("${AuthenticationCode}", authenticationCode));
+        payload.put("email", receiverAddress);
+        payload.put("username", username);
+        payload.put("password", password);
 
-        javaMailSender.send(mimeMessage);
+        return payload.toJSONString();
     }
 
-    public void sendTemporaryPassword(
+    public String getSendTemporaryPasswordRequestBody(
             String receiverAddress,
             String temporaryPassword
-    ) throws MessagingException {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        mimeMessage.setSubject("Giggle 임시 비밀번호 안내");
+    ) {
+        JSONObject payload = new JSONObject();
+        payload.put("subject", "Giggle 임시 비밀번호 안내");
+        payload.put("text", FORGET_PASSWORD_TEMPLATE.replace("${TemporaryPassword}", temporaryPassword));
+        payload.put("email", receiverAddress);
+        payload.put("username", username);
+        payload.put("password", password);
 
-        // 위 HTML을 이용하여 이메일을 작성하고 전송하는 코드
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom("Giggle");
-        mimeMessageHelper.setTo(receiverAddress);
-
-        // UTF-8로 인코딩
-        mimeMessageHelper.setText(FORGET_PASSWORD_TEMPLATE.replace("${TemporaryPassword}", temporaryPassword), true);
-
-        javaMailSender.send(mimeMessage);
+        return payload.toJSONString();
     }
 }
