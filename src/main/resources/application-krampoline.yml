@@ -51,6 +51,9 @@ spring:
           timeout: 10000
           starttls:
             enable: true
+          socks:
+            host: krmp-proxy.9rum.cc
+            port: 3128
   servlet:
     multipart:
       max-file-size: ${MAX_FILE_SIZE}
