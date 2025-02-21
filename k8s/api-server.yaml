@@ -18,6 +18,10 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          volumeMounts:
+            - name: template-volume
+              mountPath: /app/template
+              readOnly: true
           env:
             - name: MYSQL_HOST
               valueFrom:
@@ -199,7 +203,10 @@ spec:
                 secretKeyRef:
                   name: application-yml-secret
                   key: push-token-delete-url
-
+      volumes:
+        - name: template-volume
+          configMap:
+            name: template-config
 ---
 
 apiVersion: v1
