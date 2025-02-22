@@ -19,7 +19,7 @@ public class MailUtil {
     private static final String AUTHENTICATION_CODE_TEMPLATE = """
             <div style="width: 540px; border-top: 4px solid #02b875; border-bottom: 4px solid #02b875; margin: 100px auto; padding: 30px 0; box-sizing: border-box;">
             	<h1 style="margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;">
-            		개발용 - <span style="color: #02b875;">인증코드</span> 안내입니다.
+            		<span style="color: #02b875;">인증코드</span> 안내입니다.
             	</h1>
             	<p style="font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;">
             		안녕하세요, 외국인 유학생을 위한 서비스 Giggle 입니다.<br />
@@ -37,7 +37,7 @@ public class MailUtil {
     private static final String FORGET_PASSWORD_TEMPLATE = """
             <div style="width: 540px; border-top: 4px solid #02b875; border-bottom: 4px solid #02b875; margin: 100px auto; padding: 30px 0; box-sizing: border-box;">
             	<h1 style="margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;">
-            		개발용 - <span style="color: #02b875;">임시 비밀번호</span> 안내입니다.
+            		<span style="color: #02b875;">임시 비밀번호</span> 안내입니다.
             	</h1>
             	<p style="font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;">
             		안녕하세요, 외국인 유학생을 위한 서비스 Giggle 입니다.<br />
