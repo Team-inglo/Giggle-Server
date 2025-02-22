@@ -1,4 +1,4 @@
-name: Web Application Server CI
+name: API Server
 
 on:
   pull_request:
