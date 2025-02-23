@@ -8,6 +8,28 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      # OPTIONS 메소드에 대한 CORS 설정
+      if ($request_method = 'OPTIONS') {
+          add_header 'Access-Control-Allow-Origin' $cors_origin always;
+          add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS' always;
+          add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization' always;
+          add_header 'Access-Control-Allow-Credentials' 'true' always;
+          add_header 'Access-Control-Max-Age' 1728000;
+          add_header 'Content-Type' 'text/plain charset=UTF-8';
+          add_header 'Content-Length' 0;
+          return 204;
+      }
+      # 요청 제한 설정
+      limit_req zone=mylimit burst=20 nodelay;
+      limit_req_status 429;
+      limit_req_log_level error;
+      # CORS 기본 헤더 추가
+      add_header 'Access-Control-Allow-Origin' $cors_origin always;
+      add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, PATCH, DELETE, OPTIONS' always;
+      add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization' always;
+      add_header 'Access-Control-Allow-Credentials' 'true' always;
+      client_max_body_size 100M;
   labels:
     app.kubernetes.io/managed-by: kargocd
 spec:
@@ -16,8 +38,8 @@ spec:
         paths:
           - path: /api/(.*)
             backend:
-                service:
-                    name: api-server
-                    port:
-                        number: 8080
+              service:
+                name: api-server
+                port:
+                  number: 8080
             pathType: ImplementationSpecific
