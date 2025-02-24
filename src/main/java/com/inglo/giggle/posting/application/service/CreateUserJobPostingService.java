@@ -26,6 +26,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,6 +63,11 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
 
         JobPosting jobPosting = jobPostingRepository.findWithOwnerById(jobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // 지원 기간이 지난 공고인지 확인
+        if(jobPosting.getRecruitmentDeadLine().isBefore(LocalDate.now())) {
+            throw new CommonException(ErrorCode.EXPIRED_JOB_POSTING);
+        }
 
         // 유저가 이미 지원한 공고인지 확인
         if(userOwnerJobPostingRepository.existsByUserAndJobPosting(user, jobPosting)){
