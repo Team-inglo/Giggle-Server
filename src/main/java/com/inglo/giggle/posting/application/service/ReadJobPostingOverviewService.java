@@ -15,7 +15,6 @@ import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import com.inglo.giggle.posting.domain.type.EWorkingHours;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.function.Function;
@@ -31,7 +29,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseCase {
 
     private final AddressService addressService;
@@ -65,7 +62,6 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String employmentType,
             String visa
     ) {
-        log.info("현재 서버 시각: {}", LocalDateTime.now());
         // Account 조회
         Pageable pageable = PageRequest.of(page - 1, size);
         LocalDate today = LocalDate.now();
