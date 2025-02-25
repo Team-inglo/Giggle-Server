@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.function.Function;
@@ -64,7 +65,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String employmentType,
             String visa
     ) {
-        log.info("현재 서버 시각: {}", LocalDate.now());
+        log.info("현재 서버 시각: {}", LocalDateTime.now());
         // Account 조회
         Pageable pageable = PageRequest.of(page - 1, size);
         LocalDate today = LocalDate.now();
