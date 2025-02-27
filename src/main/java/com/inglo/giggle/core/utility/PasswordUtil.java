@@ -26,7 +26,7 @@ public class PasswordUtil {
                     password.append((int) (Math.random() * 10));
                     break;
                 case 3:
-                    password.append("!@#$%^&*".charAt((int) (Math.random() * 8)));
+                    password.append("~!@#$%^&*?".charAt((int) (Math.random() * 8)));
                     break;
             }
         }
