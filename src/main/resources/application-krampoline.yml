@@ -19,7 +19,7 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     show-sql: false
     properties:
       hibernate:
@@ -110,3 +110,7 @@ push:
 logging:
   level:
     org.docx4j: WARN
+
+admin:
+  id: ${GIGGLE_ADMIN_ID}
+  password: ${GIGGLE_ADMIN_PASSWORD}

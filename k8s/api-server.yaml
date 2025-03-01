@@ -208,6 +208,16 @@ spec:
                 secretKeyRef:
                   name: application-yml-secret
                   key: push-token-delete-url
+            - name: GIGGLE_ADMIN_ID
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: giggle-admin-id
+            - name: GIGGLE_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: giggle-admin-password
       volumes:
         - name: template-volume
           configMap:
