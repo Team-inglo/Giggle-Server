@@ -33,6 +33,6 @@ public class WebMVCConfig implements WebMvcConfigurer {
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(httpAccountIDInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns(Constants.NO_NEED_AUTH_URLS);
+                .excludePathPatterns(Constants.REGEX_NO_NEED_AUTH_URLS);
     }
 }

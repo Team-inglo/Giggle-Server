@@ -115,59 +115,111 @@ public class Constants {
     public static String SIGNATURE1 = "${hand}";
     public static String SIGNATURE2 = "${hand2}";
 
-
-
     public static String BLANK = "";
     public static String V = "V";
 
 
-
-    
     /**
      * 인증이 필요 없는 URL
      */
-    public static List<String> NO_NEED_AUTH_URLS = List.of(
+    public static List<String> REGEX_NO_NEED_AUTH_URLS = List.of(
             // Authentication/Authorization
-            "/v1/auth/validations/authentication-code",
-            "/v1/auth/validations/email",
-            "/v1/auth/validations/id",
-            "/v1/auth/reissue/token",
-            "/v1/auth/reissue/authentication-code",
-            "/v1/auth/reissue/password",
-            "/v1/auth/sign-up",
-            "/v1/auth/login",
-            "/v1/auth/users",
-            "/v1/auth/owners",
+            "^/v1/auth/validations/authentication-code$",
+            "^/v1/auth/validations/email\\?email=([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$",
+            "^/v1/auth/reissue/token$",
+            "^/v1/auth/reissue/authentication-code$",
+            "^/v1/auth/reissue/password$",
+            "^/v1/auth/sign-up$",
+            "^/v1/auth/login$",
+            "^/v1/auth/users$",
+            "^/v1/auth/owners$",
 
             // Term
-            "/v1/terms/**",
+            "^/v1/terms/(personal-service-terms|enterprise-service-terms|location-based-terms|privacy-policy)/details$",
 
             // Guest
-            "/v1/guests/**",
+            "^/v1/guests(/.*)?$",
 
             // Swagger
-            "/api-docs.html",
-            "/api-docs/**",
-            "/swagger-ui/**",
-            "/v3/**",
+            "^/api-docs.html(/.*)?$",
+            "^/api-docs(/.*)?$",
+            "^/swagger-ui(/.*)?$",
+            "^/v3(/.*)?$",
 
-            "/test-osrm"
+            // Banner
+            "^/v1/guests/banners/overviews$",
+            "^/v1/guests/banners/\\d+/details$",
+
+            // OSRM
+            "^/test-osrm(/.*)?$"
     );
 
     /**
-     * Swagger 에서 사용하는 URL
+     * USER URL
      */
-    public static List<String> SWAGGER_URLS = List.of(
-            "/api-docs.html",
-            "/api-docs",
-            "/swagger-ui",
-            "/v3"
+    public static List<String> REGEX_USER_URLS = List.of(
+            "^/v1/users(/.*)?$"
+
     );
 
     /**
-     * 사용자 URL
+     * OWNER URL
      */
-    public static List<String> USER_URLS = List.of(
-            "/v1/**"
+    public static List<String> REGEX_OWNER_URLS = List.of(
+            "^/v1/owners(/.*)?$"
+    );
+
+    /**
+     * ADMIN URL
+     */
+    public static List<String> REGEX_ADMIN_URLS = List.of(
+
+            // Banner
+            "^/v1/banners$",
+            "^/v1/banners/\\d+$"
+    );
+
+    /**
+     * USER, OWNER URL
+     */
+    public static List<String> REGEX_USER_OWNER_URLS = List.of(
+
+            // Auth
+            "^/v1/auth/device-token$",
+            "^/v1/auth/briefs$",
+            "^/v1/auth$",
+            "^/v1/auth/password$",
+            "^/v1/auth/validations/password$",
+
+            // Account
+            "^/v1/notification-allowed",
+
+            // Posting
+            "^/v1/job-postings/overviews(\\?(page=[^&]*|size=[^&]*|search=[^&]*|sorting=[^&]*|region_1depth=[^&]*|region_2depth=[^&]*|region_3depth=[^&]*|industry=[^&]*|work_period=[^&]*|work_days_per_week=[^&]*|working_day=[^&]*|working_hours=[^&]*|recruitment_period=[^&]*|employment_type=[^&]*|visa=[^&]*|type=[^&]*)(?:&\\1)*)?$",
+            "^/v1/job-postings/\\d+/details$",
+            "^/v1/job-postings/\\d+/summaries$",
+
+            // Document
+            "^/v1/documents/\\d+/part-time-employment-permit/details$",
+            "^/v1/documents/\\d+/standard-labor-contract/details$",
+            "^/v1/documents/\\d+/integrated-application/details$",
+
+            // Notification
+            "^/v1/notifications/overviews(\\?(page=[^&]*|size=[^&]*)(?:&\\1)*)?$",
+            "^/v1/notifications/\\d+/is-read$",
+            "^/v1/term-accounts"
+    );
+
+    /**
+     * USER, OWNER, ADMIN URL
+     */
+    public static List<String> REGEX_USER_OWNER_ADMIN_URLS = List.of(
+
+            // Auth
+            "^/v1/auth/logout$",
+
+            // Banner
+            "^/v1/banners/overviews$",
+            "^/v1/banners/\\d+/details$"
     );
 }

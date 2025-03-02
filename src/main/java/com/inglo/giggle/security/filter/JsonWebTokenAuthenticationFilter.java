@@ -73,9 +73,8 @@ public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
 
-        // 인증이 필요 없는 URL 목록에 포함되는지 확인
-        return Constants.NO_NEED_AUTH_URLS.stream()
-                .anyMatch(excludePattern -> requestURI.matches(excludePattern.replace("**", ".*")));
+        return Constants.REGEX_NO_NEED_AUTH_URLS.stream()
+                .anyMatch(requestURI::matches);
     }
 }
 
