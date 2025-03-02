@@ -52,4 +52,9 @@ public class AccountService {
         if (!account.getRole().equals(ESecurityRole.OWNER))
             throw new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE);
     }
+
+    public void checkAdminValidation(Account account) {
+        if (!account.getRole().equals(ESecurityRole.ADMIN))
+            throw new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE);
+    }
 }

@@ -24,6 +24,19 @@ password={{auth.API_1_1_OWNER.password}}
     client.global.set("refresh_token", response.body.data.refresh_token);
 %}
 
+### 1.1 사용자 로그인 - 관리자
+// @no-log
+POST {{host_url}}/v1/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+serial_id={{auth.API_1_1_ADMIN.serial_id}}&
+password={{auth.API_1_1_ADMIN.password}}
+
+> {%
+    client.global.set("access_token", response.body.data.access_token);
+    client.global.set("refresh_token", response.body.data.refresh_token);
+%}
+
 ### 1.2 사용자 로그아웃
 // @no-log
 POST {{host_url}}/v1/auth/logout
@@ -63,7 +76,7 @@ Authorization: Bearer {{access_token}}
 
 ### 2.4 기본 임시 회원가입 - 유학생
 // @no-log
-@email_user = "jake991110@naver.com"
+@email_user = "jangelliot0404@dgu.ac.kr"
 POST {{host_url}}/v1/auth/sign-up
 Content-Type: application/json
 
@@ -128,7 +141,7 @@ Content-Type: multipart/form-data; boundary=boundary
 Content-Disposition: form-data; name="image"; filename="image.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image.png
+< /Users/kyeom/Desktop/team13.png
 
 --boundary
 Content-Disposition: form-data; name="body"
@@ -159,7 +172,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "127587"
+@authentication_code_user = "094155"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
@@ -175,7 +188,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 고용주
 // @no-log
-@authentication_code_owner = "260687"
+@authentication_code_owner = "751331"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 

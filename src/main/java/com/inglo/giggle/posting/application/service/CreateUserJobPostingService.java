@@ -65,7 +65,7 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // 지원 기간이 지난 공고인지 확인
-        if(jobPosting.getRecruitmentDeadLine().isBefore(LocalDate.now())) {
+        if((jobPosting.getRecruitmentDeadLine() != null) && jobPosting.getRecruitmentDeadLine().isBefore(LocalDate.now())) {
             throw new CommonException(ErrorCode.EXPIRED_JOB_POSTING);
         }
 

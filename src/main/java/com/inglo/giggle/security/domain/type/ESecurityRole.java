@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum ESecurityRole {
 
     USER("유학생", "USER", "ROLE_USER"),
-    OWNER("점주", "OWNER", "ROLE_OWNER")
+    OWNER("점주", "OWNER", "ROLE_OWNER"),
+    ADMIN("관리자", "ADMIN", "ROLE_ADMIN")
 
     ;
 
@@ -20,6 +21,7 @@ public enum ESecurityRole {
         return switch (value.toUpperCase()) {
             case "USER" -> USER;
             case "OWNER" -> OWNER;
+            case "ADMIN" -> ADMIN;
             default -> throw new IllegalArgumentException("Security Role이 잘못되었습니다.");
         };
     }

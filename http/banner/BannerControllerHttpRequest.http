@@ -1,0 +1,45 @@
+### 12.1 (게스트) 배너 요약 조회하기
+// @no-log
+GET {{host_url}}/v1/guests/banners/overviews
+Authorization: Bearer {{access_token}}
+
+### 12.2 (게스트) 배너 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/guests/banners/1/details
+
+### 12.3 (유학생/고용주/관리자) 배너 요약 조회하기
+// @no-log
+GET {{host_url}}/v1/banners/overviews
+Authorization: Bearer {{access_token}}
+
+### 12.4 (유학생/고용주/관리자) 배너 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/banners/1/details
+Authorization: Bearer {{access_token}}'
+
+### 12.5 배너 등록하기
+// @no-log
+POST {{host_url}}/v1/banners
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{access_token}}
+
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "content" : "배너 내용",
+  "role" : "USER"
+}
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image.png"
+Content-Type: image/png
+
+< /Users/kyeom/Desktop/team13.png
+
+### 12.6 배너 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/banners/1
+Authorization: Bearer {{access_token}}

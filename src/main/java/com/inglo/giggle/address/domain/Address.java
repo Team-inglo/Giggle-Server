@@ -17,16 +17,16 @@ public class Address {
     @Column(name = "address_name", length = 50)
     private String addressName;
 
-    @Column(name = "region_1depth_name", length = 10)
+    @Column(name = "region_1depth_name", length = 50)
     private String region1DepthName;
 
-    @Column(name = "region_2depth_name", length = 10)
+    @Column(name = "region_2depth_name", length = 50)
     private String region2DepthName;
 
-    @Column(name = "region_3depth_name", length = 10)
+    @Column(name = "region_3depth_name", length = 50)
     private String region3DepthName;
 
-    @Column(name = "region_4depth_name", length = 10)
+    @Column(name = "region_4depth_name", length = 50)
     private String region4DepthName;
 
     @Column(name = "address_detail", length = 100)

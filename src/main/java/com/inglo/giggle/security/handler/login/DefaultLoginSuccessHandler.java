@@ -2,12 +2,12 @@ package com.inglo.giggle.security.handler.login;
 
 import com.inglo.giggle.core.utility.HttpServletUtil;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
+import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.application.usecase.LoginByDefaultUseCase;
+import com.inglo.giggle.security.info.CustomUserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
-import com.inglo.giggle.security.info.CustomUserPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
