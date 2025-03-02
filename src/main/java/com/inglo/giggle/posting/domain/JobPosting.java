@@ -67,9 +67,11 @@ public class JobPosting {
     @Column(name = "education_level", nullable = false)
     private EEducationLevel educationLevel;
 
+    @ElementCollection(targetClass = EVisa.class, fetch = FetchType.LAZY)
+    @CollectionTable(name = "job_posting_visas", joinColumns = @JoinColumn(name = "job_posting_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "visa")
-    private EVisa visa;
+    private Set<EVisa> visa = new HashSet<>();
 
     @Column(name = "recruiter_name", length = 10, nullable = false)
     private String recruiterName;
@@ -131,7 +133,7 @@ public class JobPosting {
     @Builder
     public JobPosting(String title, EJobCategory jobCategory, Integer hourlyRate, LocalDate recruitmentDeadLine,
                       EWorkPeriod workPeriod, Integer recruitmentNumber, EGender gender, Integer ageRestriction,
-                      EEducationLevel educationLevel, EVisa visa, String recruiterName, String recruiterEmail,
+                      EEducationLevel educationLevel, Set<EVisa> visa, String recruiterName, String recruiterEmail,
                       String recruiterPhoneNumber, String description, String preferredConditions,
                       EEmploymentType employmentType, Owner owner, Address address) {
         this.title = title;
@@ -165,7 +167,7 @@ public class JobPosting {
             EGender gender,
             Integer ageRestriction,
             EEducationLevel educationLevel,
-            EVisa visa,
+            Set<EVisa> visa,
             String recruiterName,
             String recruiterEmail,
             String recruiterPhoneNumber,

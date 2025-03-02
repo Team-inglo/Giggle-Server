@@ -11,6 +11,7 @@ import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
+import java.util.Set;
 
 public record CreateOwnerJobPostingRequestDto(
 
@@ -68,7 +69,7 @@ public record CreateOwnerJobPostingRequestDto(
 
         @NotNull(message = "비자를 입력해주세요.")
         @JsonProperty("visa")
-        EVisa visa,
+        Set<EVisa> visa,
 
         @NotNull(message = "담당자명을 입력해주세요.")
         @Size(max = 10, message = "담당자명은 10자 이하로 입력해주세요.")

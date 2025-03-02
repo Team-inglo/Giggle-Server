@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class JobPostingService {
@@ -29,7 +30,7 @@ public class JobPostingService {
             EGender gender,
             Integer ageRestriction,
             EEducationLevel educationLevel,
-            EVisa visa,
+            Set<EVisa> visa,
             String recruiterName,
             String recruiterEmail,
             String recruiterPhoneNumber,
@@ -72,7 +73,7 @@ public class JobPostingService {
             EGender gender,
             Integer ageRestriction,
             EEducationLevel educationLevel,
-            EVisa visa,
+            Set<EVisa> visa,
             String recruiterName,
             String recruiterEmail,
             String recruiterPhoneNumber,
