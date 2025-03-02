@@ -49,7 +49,7 @@ public class S3Util {
                 case USER_PROFILE_IMG -> "users/" + "account_" + serialId + "/" + "profile_img/" + fileName;
                 case OWNER_PROFILE_IMG -> "owners/" + "account_" + serialId + "/" + "icon_img/" + fileName;
                 case COMPANY_IMG -> "companies/" + "account_" + serialId + "/" + "company_img/" + fileName;
-                case Banner_IMG -> "banners/" + "banner_" + serialId + "/" + "banner_img/" + fileName;
+                case BANNER_IMG -> "banners/" + "banner_" + serialId + "/" + "banner_img/" + fileName;
             };
 
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata);

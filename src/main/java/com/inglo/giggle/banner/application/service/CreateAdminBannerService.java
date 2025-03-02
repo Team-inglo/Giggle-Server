@@ -40,7 +40,7 @@ public class CreateAdminBannerService implements CreateAdminBannerUseCase {
         // 계정 타입 유효성 검사
         accountService.checkAdminValidation(account);
 
-        String imgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.Banner_IMG);
+        String imgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.BANNER_IMG);
 
         Banner banner = Banner.builder()
                 .imgUrl(imgUrl)
