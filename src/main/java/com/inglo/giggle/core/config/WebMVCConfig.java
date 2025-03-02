@@ -1,5 +1,6 @@
 package com.inglo.giggle.core.config;
 
+import com.inglo.giggle.core.resolver.HttpRoleArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.interceptor.pre.HttpAccountIDInterceptor;
@@ -19,11 +20,13 @@ public class WebMVCConfig implements WebMvcConfigurer {
 
     private final HttpAccountIDInterceptor httpAccountIDInterceptor;
     private final HttpAccountIDArgumentResolver httpAccountIDArgumentResolver;
+    private final HttpRoleArgumentResolver httpRoleArgumentResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
         resolvers.add(httpAccountIDArgumentResolver);
+        resolvers.add(httpRoleArgumentResolver);
     }
 
     @Override

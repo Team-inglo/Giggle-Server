@@ -1,7 +1,7 @@
 package com.inglo.giggle.banner.application.service;
 
 import com.inglo.giggle.banner.application.dto.response.ReadBannerOverviewResponseDto;
-import com.inglo.giggle.banner.application.usecase.ReadBannerOverviewUseCase;
+import com.inglo.giggle.banner.application.usecase.ReadGuestBannerOverviewUseCase;
 import com.inglo.giggle.banner.domain.Banner;
 import com.inglo.giggle.banner.repository.mysql.BannerRepository;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
@@ -13,20 +13,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ReadBannerOverviewService implements ReadBannerOverviewUseCase {
+public class ReadGuestBannerOverviewService implements ReadGuestBannerOverviewUseCase {
 
     private final BannerRepository bannerRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public ReadBannerOverviewResponseDto execute(ESecurityRole role) {
+    public ReadBannerOverviewResponseDto execute() {
 
-        if (role == ESecurityRole.ADMIN) {
-            List<Banner> banners = bannerRepository.findAll();
-            return ReadBannerOverviewResponseDto.fromEntities(banners);
-        }
-
-        List<Banner> banners = bannerRepository.findByRole(role);
+        List<Banner> banners = bannerRepository.findByRole(ESecurityRole.USER);
 
         return ReadBannerOverviewResponseDto.fromEntities(banners);
     }
