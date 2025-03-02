@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.application.controller.query;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
+import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingDetailResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingSummariesResponseDto;
@@ -11,6 +12,7 @@ import com.inglo.giggle.posting.application.usecase.ReadJobPostingSummariesUseCa
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -42,7 +44,7 @@ public class PostingQueryV1Controller {
             @RequestParam(value = "working_hours", required = false) String workingHours,
             @RequestParam(value = "recruitment_period", required = false) String recruitmentPeriod,
             @RequestParam(value = "employment_type", required = false) String employmentType,
-            @RequestParam(value = "visa", required = false) String visa,
+            @RequestParam(value = "visa", required = false) Set<EVisa> visa,
             @RequestParam(value = "type", required = false) String type
     ) {
         if(type == null) {

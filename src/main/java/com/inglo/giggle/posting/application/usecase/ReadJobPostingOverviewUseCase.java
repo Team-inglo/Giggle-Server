@@ -1,8 +1,10 @@
 package com.inglo.giggle.posting.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
+import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingOverviewResponseDto;
 
+import java.util.Set;
 import java.util.UUID;
 
 @UseCase
@@ -45,7 +47,7 @@ public interface ReadJobPostingOverviewUseCase {
             String workingHours,
             String recruitmentPeriod,
             String employmentType,
-            String visa
+            Set<EVisa> visa
     );
 
     /**

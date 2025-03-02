@@ -60,7 +60,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
             String workingHours,
             String recruitmentPeriod, // OPENED, CLOSED
             String employmentType,
-            String visa
+            Set<EVisa> visa
     ) {
         // Account 조회
         Pageable pageable = PageRequest.of(page - 1, size);
@@ -143,7 +143,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                     today,
                     recruitmentPeriod,
                     employmentType == null ? null : EEmploymentType.fromString(employmentType),
-                    visa == null ? null : EVisa.fromString(visa),
+                    visa == null || visa.isEmpty() ? null : visa,
                     pageable
             );
         } else {
@@ -182,7 +182,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                     today,
                     recruitmentPeriod,
                     employmentType == null ? null : EEmploymentType.fromString(employmentType),
-                    visa == null ? null : EVisa.fromString(visa),
+                    visa == null || visa.isEmpty() ? null : visa,
                     pageable
             );
         }

@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Getter
 public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPostingDetailResponseDto> {
@@ -222,13 +223,13 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
         private final Boolean isRecruiting;
 
         @JsonProperty("visa")
-        private final EVisa visa;
+        private final Set<EVisa> visa;
 
         @JsonProperty("job_category")
         private final EJobCategory jobCategory;
 
         @Builder
-        public Tags(Boolean isRecruiting, EVisa visa, EJobCategory jobCategory) {
+        public Tags(Boolean isRecruiting, Set<EVisa> visa, EJobCategory jobCategory) {
             this.isRecruiting = isRecruiting;
             this.visa = visa;
             this.jobCategory = jobCategory;
@@ -291,7 +292,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
         private final Integer numberOfRecruits;
 
         @JsonProperty("visa")
-        private final EVisa visa;
+        private final Set<EVisa> visa;
 
         @JsonProperty("gender")
         private final String gender;
@@ -301,7 +302,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
 
         @Builder
         public RecruitmentConditions(String recruitmentDeadline, String education, Integer numberOfRecruits,
-                                     EVisa visa, String gender, String preferredConditions) {
+                                     Set<EVisa> visa, String gender, String preferredConditions) {
             this.recruitmentDeadline = recruitmentDeadline;
             this.education = education;
             this.numberOfRecruits = numberOfRecruits;

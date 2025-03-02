@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -29,8 +30,11 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     List<JobPosting> findAllByOwner(Owner owner);
 
-    @EntityGraph(attributePaths = {"owner"})
-    Optional<JobPosting> findWithOwnerById(Long jobPostingId);
+    @Query("SELECT jp FROM JobPosting jp " +
+            "JOIN FETCH jp.owner o " +
+            "JOIN FETCH jp.visa " +
+            "WHERE jp.id = :jobPostingId")
+    Optional<JobPosting> findWithOwnerById(@Param("jobPostingId") Long jobPostingId);
 
     Page<JobPosting> findWithPageByOwner(Owner owner, Pageable pageRequest);
 
@@ -79,7 +83,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "OR (:recruitmentPeriod = 'OPENING' AND jp.recruitmentDeadLine >= :today) " +
             "OR (:recruitmentPeriod = 'CLOSED' AND jp.recruitmentDeadLine < :today)) " +
             "AND (:employmentType IS NULL OR jp.employmentType = :employmentType) " +
-            "AND (:visa IS NULL OR jp.visa = :visa) " +
+            "AND (:visa IS NULL OR EXISTS (SELECT v FROM jp.visa v WHERE v IN :visa)) " +
             "ORDER BY (SELECT COUNT(b.id) FROM BookMark b WHERE b.jobPosting = jp) DESC")
     Page<JobPostingProjection> findPopularJobPostingsWithFilters(
             @Param("jobTitle") String jobTitle,
@@ -116,7 +120,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("today") LocalDate today,
             @Param("recruitmentPeriod") String recruitmentPeriod,
             @Param("employmentType") EEmploymentType employmentType,
-            @Param("visa") EVisa visa,
+            @Param("visa") Set<EVisa> visa,
             Pageable pageable
     );
 
@@ -170,7 +174,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "OR (:recruitmentPeriod = 'OPENING' AND jp.recruitmentDeadLine >= :today) " +
             "OR (:recruitmentPeriod = 'CLOSED' AND jp.recruitmentDeadLine < :today)) " +
             "AND (:employmentType IS NULL OR jp.employmentType = :employmentType) " +
-            "AND (:visa IS NULL OR jp.visa = :visa) " +
+            "AND (:visa IS NULL OR EXISTS (SELECT v FROM jp.visa v WHERE v IN :visa)) " +
             "ORDER BY jp.createdAt DESC"
     )
     Page<JobPostingProjection> findRecentJobPostingsWithFilters(
@@ -208,7 +212,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("today") LocalDate today,
             @Param("recruitmentPeriod") String recruitmentPeriod,
             @Param("employmentType") EEmploymentType employmentType,
-            @Param("visa") EVisa visa,
+            @Param("visa") Set<EVisa> visa,
             @Param("pageable") Pageable pageable
     );
 
