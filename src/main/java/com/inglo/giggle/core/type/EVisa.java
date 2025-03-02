@@ -18,7 +18,9 @@ public enum EVisa {
     D_4_7("외국어연수", "D_4_7", "Foreign Language Trainee"),
     F_2("거주", "F_2", "Residence"),
     D_2("일반 유학과정", "D_2", "-"),
-    D_4("연수과정", "D_4", "-")
+    D_4("연수과정", "D_4", "-"),
+    D_10("구직", "D_10", "전문직 취업 준비"),
+    C_4("단기 취업", "C_4", "90일 이하 단기 근로")
 
     ;
 
@@ -40,6 +42,8 @@ public enum EVisa {
             case "D_2" -> D_2;
             case "D_4" -> D_4;
             case "F_2" -> F_2;
+            case "D_10" -> D_10;
+            case "C_4" -> C_4;
             default -> throw new IllegalArgumentException("비자가 잘못되었습니다.");
         };
     }

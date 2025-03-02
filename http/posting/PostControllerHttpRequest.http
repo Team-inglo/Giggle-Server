@@ -23,7 +23,7 @@ Content-Type: application/json
 
 ### 4.2 (게스트) 공고 상세 조회하기
 // @no-log
-GET {{host_url}}/v1/guests/job-postings/{{posting.API_4_2.job_posting_id}}/details
+GET {{host_url}}/v1/guests/job-postings/2/details
 Content-Type: application/json
 
 
@@ -53,7 +53,7 @@ Authorization: Bearer {{access_token}}
 
 ### 4.4 (유학생/고용주) 공고 상세 조회하기
 // @no-log
-GET {{host_url}}/v1/job-postings/{{posting.API_4_4.job_posting_id}}/details
+GET {{host_url}}/v1/job-postings/2/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
@@ -79,7 +79,7 @@ Authorization: Bearer {{access_token}}
 
 ### 4.7 (유학생/고용주) 공고 요약 정보 조회하기
 // @no-log
-GET {{host_url}}/v1/job-postings/{{posting.API_4_7.job_posting_id}}/summaries
+GET {{host_url}}/v1/job-postings/2/summaries
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
@@ -141,7 +141,7 @@ Content-Type: application/json
   "gender": "{{posting.API_4_10.gender}}",
   "age_restriction": {{posting.API_4_10.age_restriction}},
   "education_level": "{{posting.API_4_10.education_level}}",
-  "visa": "{{posting.API_4_10.visa}}",
+  "visa": ["D_2","D_4"],
   "recruiter_name": "{{posting.API_4_10.recruiter_name}}",
   "recruiter_email": "{{posting.API_4_10.recruiter_email}}",
   "recruiter_phone_number": "{{posting.API_4_10.recruiter_phone_number}}",
@@ -153,27 +153,30 @@ Content-Type: application/json
 Content-Disposition: form-data; name="image"; filename="image1.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/updated-image.png
+< /Users/kyeom/Desktop/team13.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image2.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/updated-image.png
+< /Users/kyeom/Desktop/team13.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image3.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/updated-image.png
+< /Users/kyeom/Desktop/team13.png
 
 --boundary
 
 
 
+
+
+
 ### 4.11 (고용주) 공고 수정하기
 // @no-log
-PUT {{host_url}}/v1/owners/job-postings/{{posting.API_4_11.job_posting_id}}
+PUT {{host_url}}/v1/owners/job-postings/1
 Content-Type: multipart/form-data; boundary=boundary
 Authorization: Bearer {{access_token}}
 
@@ -214,7 +217,7 @@ Content-Type: application/json
   "gender": "{{posting.API_4_11.gender}}",
   "age_restriction": {{posting.API_4_11.age_restriction}},
   "education_level": "{{posting.API_4_11.education_level}}",
-  "visa": "{{posting.API_4_11.visa}}",
+  "visa": ["D_2","D_4"],
   "recruiter_name": "{{posting.API_4_11.recruiter_name}}",
   "recruiter_email": "{{posting.API_4_11.recruiter_email}}",
   "recruiter_phone_number": "{{posting.API_4_11.recruiter_phone_number}}",
@@ -229,19 +232,19 @@ Content-Type: application/json
 Content-Disposition: form-data; name="image"; filename="image1.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image1.png
+< /Users/kyeom/Desktop/team13.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image2.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image2.png
+< /Users/kyeom/Desktop/team13.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image3.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image3.png
+< /Users/kyeom/Desktop/team13.png
 
 --boundary
 

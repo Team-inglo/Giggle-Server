@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 public class ReadUserBookMarkOverviewResponseDto extends SelfValidating<ReadUserBookMarkOverviewResponseDto> {
@@ -158,14 +159,14 @@ public class ReadUserBookMarkOverviewResponseDto extends SelfValidating<ReadUser
 
             @NotNull(message = "visa는 null이 될 수 없습니다.")
             @JsonProperty("visa")
-            private final EVisa visa;
+            private final Set<EVisa> visa;
 
             @NotNull(message = "job_category는 null이 될 수 없습니다.")
             @JsonProperty("job_category")
             private final EJobCategory jobCategory;
 
             @Builder
-            public Tags(Boolean isRecruiting, EVisa visa, EJobCategory jobCategory) {
+            public Tags(Boolean isRecruiting, Set<EVisa> visa, EJobCategory jobCategory) {
                 this.isRecruiting = isRecruiting;
                 this.visa = visa;
                 this.jobCategory = jobCategory;

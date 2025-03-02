@@ -53,7 +53,7 @@ Content-Type: application/json
   "gender": "{{posting.API_4_10.gender}}",
   "age_restriction": {{posting.API_4_10.age_restriction}},
   "education_level": "{{posting.API_4_10.education_level}}",
-  "visa": "{{posting.API_4_10.visa}}",
+  "visa": "D_2, D_4",
   "recruiter_name": "{{posting.API_4_10.recruiter_name}}",
   "recruiter_email": "{{posting.API_4_10.recruiter_email}}",
   "recruiter_phone_number": "{{posting.API_4_10.recruiter_phone_number}}",

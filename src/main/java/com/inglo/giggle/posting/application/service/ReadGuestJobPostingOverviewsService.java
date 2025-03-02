@@ -26,6 +26,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,9 +60,8 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             String workingHours,
             String recruitmentPeriod,
             String employmentType,
-            String visa
+            Set<EVisa> visa
     ) {
-
         Pageable pageable = PageRequest.of(page - 1, size);
         LocalDate today = LocalDate.now();
 
@@ -142,7 +142,7 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
                     today,
                     recruitmentPeriod,
                     employmentType == null ? null : EEmploymentType.fromString(employmentType),
-                    visa == null ? null : EVisa.fromString(visa),
+                    visa == null || visa.isEmpty() ? null : visa,
                     pageable
             );
         } else {
@@ -181,7 +181,7 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
                     today,
                     recruitmentPeriod,
                     employmentType == null ? null : EEmploymentType.fromString(employmentType),
-                    visa == null ? null : EVisa.fromString(visa),
+                    visa == null || visa.isEmpty() ? null : visa,
                     pageable
             );
         }

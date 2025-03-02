@@ -1,6 +1,7 @@
 package com.inglo.giggle.posting.application.controller.query;
 
 import com.inglo.giggle.core.dto.ResponseDto;
+import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.application.dto.request.ReadGuestJobPostingOverviewsRequestDto;
 import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingDetailResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingOverviewsResponseDto;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -40,7 +43,7 @@ public class PostingGuestsQueryV1Controller {
             @RequestParam(value = "working_hours", required = false) String workingHours,
             @RequestParam(value = "recruitment_period", required = false) String recruitmentPeriod,
             @RequestParam(value = "employment_type", required = false) String employmentType,
-            @RequestParam(value = "visa", required = false) String visa,
+            @RequestParam(value = "visa", required = false) Set<EVisa> visa,
             @RequestParam(value = "type", required = false) String type
     ) {
 
