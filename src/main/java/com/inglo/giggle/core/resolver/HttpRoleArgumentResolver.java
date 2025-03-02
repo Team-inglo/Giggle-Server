@@ -4,6 +4,7 @@ import com.inglo.giggle.core.annotation.security.Role;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.info.CustomUserPrincipal;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,19 +29,11 @@ public class HttpRoleArgumentResolver implements HandlerMethodArgumentResolver {
             ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
-    ) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getAuthorities().isEmpty()) {
-            throw new CommonException(ErrorCode.ACCESS_DENIED);
-        }
-        String authority = authentication.getAuthorities().iterator().next().getAuthority();
-
-        if(authority.startsWith("ROLE_")) {
-            authority = authority.substring(5);
-        }
+    ) {
         try {
-            return ESecurityRole.fromString(authority);
-        } catch (IllegalArgumentException ex) {
+            CustomUserPrincipal principal = (CustomUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return principal.getRole();
+        } catch (Exception ex) {
             throw new CommonException(ErrorCode.ACCESS_DENIED);
         }
     }
