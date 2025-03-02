@@ -30,7 +30,7 @@ public class ReadBannerOverviewService implements ReadBannerOverviewUseCase {
                 ESecurityRole.USER : ESecurityRole.fromString(jsonWebTokenUtil.validateToken(accessToken).get(Constants.ACCOUNT_ROLE_CLAIM_NAME, String.class));
 
         if (role == ESecurityRole.ADMIN) {
-            List<Banner> banners = bannerRepository.find();
+            List<Banner> banners = bannerRepository.findAll();
             return ReadBannerOverviewResponseDto.fromEntities(banners);
         }
 
