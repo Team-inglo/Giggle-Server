@@ -128,6 +128,15 @@ public class ResponseDto<T> extends SelfValidating<ResponseDto<T>> {
                 .build();
     }
 
+    public static ResponseDto<Object> fail(final IllegalArgumentException e) {
+        return ResponseDto.<Object>builder()
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .success(false)
+                .data(null)
+                .error(ExceptionDto.of(ErrorCode.INVALID_ARGUMENT))
+                .build();
+    }
+
     public static ResponseDto<Object> fail(final HttpSecurityException e) {
         return ResponseDto.<Object>builder()
                 .httpStatus(e.getErrorCode().getHttpStatus())
