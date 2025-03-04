@@ -219,6 +219,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     @Query("SELECT jp FROM JobPosting jp " +
             "JOIN FETCH jp.owner o " +
             "JOIN FETCH jp.workDayTimes wdt " +
+            "JOIN FETCH jp.visa v " +
             "WHERE jp.id IN :jobPostingIds")
     List<JobPosting> findJobPostingsWithDetailsByIds(
             @Param("jobPostingIds") List<Long> jobPostingIds
