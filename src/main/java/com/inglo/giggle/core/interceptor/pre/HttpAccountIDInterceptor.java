@@ -19,8 +19,9 @@ public class HttpAccountIDInterceptor implements HandlerInterceptor {
             Object handler
     ) throws Exception {
 
+        // 만약 인증이 되어있지 않은 경우(anonymousUser), 다음으로 진행
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
+        if (authentication.getPrincipal().equals("anonymousUser")) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
         }
 
