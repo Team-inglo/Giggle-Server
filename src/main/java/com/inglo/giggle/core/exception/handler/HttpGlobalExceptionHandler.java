@@ -92,6 +92,13 @@ public class HttpGlobalExceptionHandler {
         return ResponseDto.fail(e);
     }
 
+    // 타입이 잘못되었을 때 발생하는 예외
+    @ExceptionHandler(value = {IllegalArgumentException.class})
+    public ResponseDto<?> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error("ExceptionHandler catch IllegalArgumentException : {}", e.getMessage());
+        return ResponseDto.fail(e);
+    }
+
     // 개발자가 직접 정의한 예외
     @ExceptionHandler(value = {HttpSecurityException.class})
     public ResponseDto<?> handleApiException(HttpSecurityException e) {

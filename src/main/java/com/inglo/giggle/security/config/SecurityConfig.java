@@ -13,7 +13,6 @@ import com.inglo.giggle.security.handler.login.DefaultLoginSuccessHandler;
 import com.inglo.giggle.security.handler.logout.DefaultLogoutProcessHandler;
 import com.inglo.giggle.security.handler.logout.DefaultLogoutSuccessHandler;
 import com.inglo.giggle.security.application.usecase.AuthenticateJsonWebTokenUseCase;
-import com.inglo.giggle.security.matcher.CustomRegexRequestMatcher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,16 +59,16 @@ public class SecurityConfig {
                         .requestMatchers(
                                 Constants.REGEX_NO_NEED_AUTH_URLS
                                         .stream()
-                                        .map(CustomRegexRequestMatcher::new)
-                                        .toArray(CustomRegexRequestMatcher[]::new)
+                                        .map(pattern -> new RegexRequestMatcher(pattern, null))
+                                        .toArray(RegexRequestMatcher[]::new)
                         ).permitAll()
 
                         // USER 권한이 필요한 URL
                         .requestMatchers(
                                 Constants.REGEX_USER_URLS
                                         .stream()
-                                        .map(CustomRegexRequestMatcher::new)
-                                        .toArray(CustomRegexRequestMatcher[]::new)
+                                        .map(pattern -> new RegexRequestMatcher(pattern, null))
+                                        .toArray(RegexRequestMatcher[]::new)
                         ).hasAnyRole(ESecurityRole.USER.toString())
 
                         // OWNER 권한이 필요한 URL
@@ -84,24 +83,24 @@ public class SecurityConfig {
                         .requestMatchers(
                                 Constants.REGEX_ADMIN_URLS
                                         .stream()
-                                        .map(CustomRegexRequestMatcher::new)
-                                        .toArray(CustomRegexRequestMatcher[]::new)
+                                        .map(pattern -> new RegexRequestMatcher(pattern, null))
+                                        .toArray(RegexRequestMatcher[]::new)
                         ).hasAnyRole(ESecurityRole.ADMIN.toString())
 
                         // USER, OWNER 권한이 필요한 URL
                         .requestMatchers(
                                 Constants.REGEX_USER_OWNER_URLS
                                         .stream()
-                                        .map(CustomRegexRequestMatcher::new)
-                                        .toArray(CustomRegexRequestMatcher[]::new)
+                                        .map(pattern -> new RegexRequestMatcher(pattern, null))
+                                        .toArray(RegexRequestMatcher[]::new)
                         ).hasAnyRole(ESecurityRole.USER.toString(), ESecurityRole.OWNER.toString())
 
                         // USER, OWNER, ADMIN 권한이 필요한 URL
                         .requestMatchers(
                                 Constants.REGEX_USER_OWNER_ADMIN_URLS
                                         .stream()
-                                        .map(CustomRegexRequestMatcher::new)
-                                        .toArray(CustomRegexRequestMatcher[]::new)
+                                        .map(pattern -> new RegexRequestMatcher(pattern, null))
+                                        .toArray(RegexRequestMatcher[]::new)
                         ).hasAnyRole(ESecurityRole.USER.toString(), ESecurityRole.OWNER.toString(), ESecurityRole.ADMIN.toString())
 
                         // 모든 요청은 인증 필요
