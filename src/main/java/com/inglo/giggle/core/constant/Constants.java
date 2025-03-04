@@ -125,7 +125,7 @@ public class Constants {
     public static List<String> REGEX_NO_NEED_AUTH_URLS = List.of(
             // Authentication/Authorization
             "^/v1/auth/validations/authentication-code$",
-            "^/v1/auth/validations/email\\?email=([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$",
+            "^/v1/auth/validations/email.*$",
             "^/v1/auth/reissue/token$",
             "^/v1/auth/reissue/authentication-code$",
             "^/v1/auth/reissue/password$",
@@ -195,7 +195,7 @@ public class Constants {
             "^/v1/notification-allowed",
 
             // Posting
-            "^/v1/job-postings/overviews(\\?(page=[^&]*|size=[^&]*|search=[^&]*|sorting=[^&]*|region_1depth=[^&]*|region_2depth=[^&]*|region_3depth=[^&]*|industry=[^&]*|work_period=[^&]*|work_days_per_week=[^&]*|working_day=[^&]*|working_hours=[^&]*|recruitment_period=[^&]*|employment_type=[^&]*|visa=[^&]*|type=[^&]*)(?:&\\1)*)?$",
+            "^/v1/job-postings/overviews.*$",
             "^/v1/job-postings/\\d+/details$",
             "^/v1/job-postings/\\d+/summaries$",
 
@@ -205,9 +205,9 @@ public class Constants {
             "^/v1/documents/\\d+/integrated-application/details$",
 
             // Notification
-            "^/v1/notifications/overviews(\\?(page=[^&]*|size=[^&]*)(?:&\\1)*)?$",
+            "^/v1/notifications/overviews.*$",
             "^/v1/notifications/\\d+/is-read$",
-            "^/v1/term-accounts"
+            "^/v1/term-accounts$"
     );
 
     /**
