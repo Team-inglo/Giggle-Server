@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api-server
-          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_1bece455b14c
+          image: krmp-d2hub-idock.9rum.cc/dev-test/repo_5903fc54aa80
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
