@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Getter
@@ -187,14 +189,14 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
 
         @NotNull(message = "visa는 null일 수 없습니다.")
         @JsonProperty("visa")
-        private final String visa;
+        private final Set<EVisa> visa;
 
         @NotNull(message = "job_category는 null일 수 없습니다.")
         @JsonProperty("job_category")
         private final String jobCategory;
 
         @Builder
-        public Tags(EEmploymentType employmentType, Boolean isRecruiting, String visa, String jobCategory) {
+        public Tags(EEmploymentType employmentType, Boolean isRecruiting, Set<EVisa> visa, String jobCategory) {
             this.employmentType = employmentType;
             this.isRecruiting = isRecruiting;
             this.visa = visa;
@@ -207,7 +209,7 @@ public class ReadGuestJobPostingOverviewsResponseDto extends SelfValidating<Read
             return Tags.builder()
                     .employmentType(jobPosting.getEmploymentType())
                     .isRecruiting(jobPosting.getRecruitmentDeadLine() == null || jobPosting.getRecruitmentDeadLine().isAfter(LocalDate.now()))
-                    .visa(jobPosting.getVisa().toString())
+                    .visa(jobPosting.getVisa())
                     .jobCategory(jobPosting.getJobCategory().toString())
                     .build();
         }
