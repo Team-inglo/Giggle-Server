@@ -36,7 +36,5 @@ public class ReadJobPostingSummariesService implements ReadJobPostingSummariesUs
         return ReadJobPostingSummariesResponseDto.fromEntity(
                 jobPosting
         );
-
     }
-
 }
