@@ -22,7 +22,6 @@ public class ReadOwnerUserOwnerJobPostingDetailResponseDto extends SelfValidatin
     @JsonProperty("name")
     private final String name;
 
-    @NotBlank(message = "nationality는 null일 수 없습니다.")
     @JsonProperty("nationality")
     private final String nationality;
 
@@ -85,7 +84,7 @@ public class ReadOwnerUserOwnerJobPostingDetailResponseDto extends SelfValidatin
         return ReadOwnerUserOwnerJobPostingDetailResponseDto.builder()
                 .profileImgUrl(userOwnerJobPosting.getUser().getProfileImgUrl())
                 .name(userOwnerJobPosting.getUser().getName())
-                .nationality(userOwnerJobPosting.getUser().getNationality())
+                .nationality(userOwnerJobPosting.getUser().getNationality() != null ? userOwnerJobPosting.getUser().getNationality() : null)
                 .gender(userOwnerJobPosting.getUser().getGender().toString())
                 .visa(userOwnerJobPosting.getUser().getVisa().toString())
                 .schoolName(schoolName)

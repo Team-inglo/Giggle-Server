@@ -55,7 +55,6 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto ext
         @JsonProperty("name")
         private final String name;
 
-        @NotNull
         @JsonProperty("nationality")
         private final String nationality;
 
