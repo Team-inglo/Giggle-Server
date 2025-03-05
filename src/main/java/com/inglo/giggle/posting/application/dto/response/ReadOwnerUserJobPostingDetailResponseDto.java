@@ -83,7 +83,7 @@ public class ReadOwnerUserJobPostingDetailResponseDto extends SelfValidating<Rea
         return ReadOwnerUserJobPostingDetailResponseDto.builder()
                 .profileImgUrl(userOwnerJobPosting.getUser().getProfileImgUrl())
                 .name(userOwnerJobPosting.getUser().getName())
-                .nationality(userOwnerJobPosting.getUser().getNationality())
+                .nationality(userOwnerJobPosting.getUser().getNationality() != null ? userOwnerJobPosting.getUser().getNationality() : null)
                 .gender(userOwnerJobPosting.getUser().getGender().toString())
                 .visa(userOwnerJobPosting.getUser().getVisa().toString())
                 .schoolName(school == null ? DASH : school.getSchoolName())

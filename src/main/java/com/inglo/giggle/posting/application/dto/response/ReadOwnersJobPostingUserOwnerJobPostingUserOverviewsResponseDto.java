@@ -55,7 +55,6 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto ext
         @JsonProperty("name")
         private final String name;
 
-        @NotNull
         @JsonProperty("nationality")
         private final String nationality;
 
@@ -107,7 +106,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto ext
                     .id(userOwnerJobPosting.getId())
                     .profileImgUrl(user.getProfileImgUrl())
                     .name(user.getName())
-                    .nationality(user.getNationality())
+                    .nationality(user.getNationality() != null ? user.getNationality() : null)
                     .gender(user.getGender().toString())
                     .visa(user.getVisa().toString())
                     .schoolName(schoolName)
