@@ -62,6 +62,10 @@ public class ReadUserUserOwnerJobPostingListResponseDto extends SelfValidating<R
         @JsonProperty("icon_img_url")
         private final String iconImgUrl;
 
+        @NotNull(message = "company_name은 null일 수 없습니다.")
+        @JsonProperty("company_name")
+        private final String companyName;
+
         @NotNull(message = "title은 null일 수 없습니다.")
         @JsonProperty("title")
         private final String title;
@@ -87,6 +91,7 @@ public class ReadUserUserOwnerJobPostingListResponseDto extends SelfValidating<R
                 Long jobPostingId,
                 Long userOwnerJobPostingId,
                 String iconImgUrl,
+                String companyName,
                 String title,
                 String addressName,
                 String step,
@@ -96,6 +101,7 @@ public class ReadUserUserOwnerJobPostingListResponseDto extends SelfValidating<R
             this.jobPostingId = jobPostingId;
             this.userOwnerJobPostingId = userOwnerJobPostingId;
             this.iconImgUrl = iconImgUrl;
+            this.companyName = companyName;
             this.title = title;
             this.addressName = addressName;
             this.step = step;
@@ -115,6 +121,7 @@ public class ReadUserUserOwnerJobPostingListResponseDto extends SelfValidating<R
                     .userOwnerJobPostingId(userOwnerJobPosting.getId())
                     .jobPostingId(userOwnerJobPosting.getJobPosting().getId())
                     .iconImgUrl(userOwnerJobPosting.getOwner().getProfileImgUrl())
+                    .companyName(userOwnerJobPosting.getOwner().getCompanyName())
                     .title(userOwnerJobPosting.getJobPosting().getTitle())
                     .addressName(userOwnerJobPosting.getJobPosting().getAddress().getAddressName())
                     .step(userOwnerJobPosting.getStep().name())
