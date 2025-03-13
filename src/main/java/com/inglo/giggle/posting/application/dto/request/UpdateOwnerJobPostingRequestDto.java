@@ -8,6 +8,7 @@ import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public record UpdateOwnerJobPostingRequestDto(
 
         @NotNull(message = "근무 시간 정보는 필수 입력 값입니다.")
         @JsonProperty("work_day_times")
+        @Valid
         List<WorkDayTimeDto> workDayTimes,
 
         @NotNull(message = "근무 기간은 필수 입력 값입니다.")
@@ -43,6 +45,7 @@ public record UpdateOwnerJobPostingRequestDto(
 
         @NotNull(message = "주소 정보는 필수 입력 값입니다.")
         @JsonProperty("address")
+        @Valid
         AddressDto address,
 
         @JsonProperty("recruitment_dead_line")

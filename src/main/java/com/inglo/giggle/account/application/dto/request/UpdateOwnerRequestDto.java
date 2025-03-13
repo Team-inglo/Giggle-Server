@@ -2,6 +2,7 @@ package com.inglo.giggle.account.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.dto.request.AddressRequestDto;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -9,10 +10,12 @@ public record UpdateOwnerRequestDto(
 
         @NotNull
         @JsonProperty("owner_info")
+        @Valid
         OwnerInfo ownerInfo,
 
         @NotNull
         @JsonProperty("address")
+        @Valid
         AddressRequestDto address,
 
         @NotNull

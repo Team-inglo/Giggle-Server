@@ -2,6 +2,7 @@ package com.inglo.giggle.document.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.dto.request.AddressRequestDto;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -19,6 +20,7 @@ public record CreateUserStandardLaborContractRequestDto(
 
         @NotNull(message = "주소를 입력해주세요.")
         @JsonProperty("address")
+        @Valid
         AddressRequestDto address,
 
         @NotNull(message = "전화번호를 입력해주세요.")
