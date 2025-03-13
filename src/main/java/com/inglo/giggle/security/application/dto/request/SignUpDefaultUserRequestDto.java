@@ -2,6 +2,7 @@ package com.inglo.giggle.security.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.dto.request.AddressRequestDto;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,9 +15,11 @@ public record SignUpDefaultUserRequestDto(
         String temporaryToken,
 
         @JsonProperty("user_info")
+        @Valid
         SignUpDefaultUserUserInfo signUpDefaultUserUserInfo,
 
         @JsonProperty("address")
+        @Valid
         AddressRequestDto address,
 
         @JsonProperty("marketing_allowed")

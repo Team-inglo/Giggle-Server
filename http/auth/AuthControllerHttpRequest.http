@@ -65,7 +65,7 @@ GET {{host_url}}/v1/auth/validations/id?id={{id}}
 
 ### 2.2 이메일 중복검사
 // @no-log
-@email = ""
+@email = "jangelliot0404@dgu.ac.kr"
 GET {{host_url}}/v1/auth/validations/email?email={{email}}
 
 ### 2.3 유학생/고용주 판단

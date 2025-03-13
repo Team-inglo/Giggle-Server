@@ -8,6 +8,7 @@ import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public record CreateOwnerJobPostingRequestDto(
 
         @NotNull(message = "근무시간을 선택해주세요.")
         @JsonProperty("work_day_times")
+        @Valid
         List<WorkDayTimeDto> workDayTimes,
 
         @NotNull(message = "근무기간을 선택해주세요.")
@@ -44,6 +46,7 @@ public record CreateOwnerJobPostingRequestDto(
 
         @NotNull(message = "근무지 주소를 입력해주세요.")
         @JsonProperty("address")
+        @Valid
         AddressDto address,
 
         @JsonProperty("recruitment_dead_line")
