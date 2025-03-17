@@ -255,5 +255,10 @@ public class JobPosting {
     private boolean isWeekend(EDayOfWeek dayOfWeek) {
         return dayOfWeek == EDayOfWeek.SATURDAY || dayOfWeek == EDayOfWeek.SUNDAY;
     }
+
+    public void updatePostWorkDayTimes(List<PostingWorkDayTime> workDayTimes) {
+        this.workDayTimes.clear();
+        this.workDayTimes.addAll(workDayTimes);
+    }
 }
 
