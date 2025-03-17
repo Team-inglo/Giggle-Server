@@ -12,6 +12,7 @@ import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.posting.application.dto.request.UpdateOwnerJobPostingRequestDto;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerJobPostingUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
+import com.inglo.giggle.posting.domain.PostingWorkDayTime;
 import com.inglo.giggle.posting.domain.service.CompanyImageService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
 import com.inglo.giggle.posting.domain.service.PostWorkDayTimeService;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,16 +108,21 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
         );
 
         if (requestDto.workDayTimes() != null) {
-            postingWorkDayTimeRepository.deleteAll(jobPosting.getWorkDayTimes());
+            List<PostingWorkDayTime> workDayTimes = new ArrayList<>();
 
-            jobPosting.getWorkDayTimes().clear();
+            requestDto.workDayTimes().forEach(workDayTime -> {
+                PostingWorkDayTime postingWorkDayTime = postWorkDayTimeService.createPostingWorkDayTime(
+                        workDayTime.dayOfWeek(),
+                        (workDayTime.workStartTime() == null || workDayTime.workStartTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()),
+                        (workDayTime.workEndTime() == null || workDayTime.workEndTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workEndTime()),
+                        jobPosting
+                );
 
-            requestDto.workDayTimes().forEach(workDayTime -> postWorkDayTimeService.createPostingWorkDayTime(
-                    workDayTime.dayOfWeek(),
-                    (workDayTime.workStartTime() == null || workDayTime.workStartTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()),
-                    (workDayTime.workEndTime() == null || workDayTime.workEndTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workEndTime()),
-                    jobPosting
-            ));
+                workDayTimes.add(postingWorkDayTime);
+            });
+            jobPosting.updatePostWorkDayTimes(workDayTimes);
+
+            postingWorkDayTimeRepository.saveAll(workDayTimes);
         }
 
         if (requestDto.deletedImgIds() != null && !requestDto.deletedImgIds().isEmpty()) {
