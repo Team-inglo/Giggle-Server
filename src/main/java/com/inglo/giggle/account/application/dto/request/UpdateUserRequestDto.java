@@ -2,6 +2,7 @@ package com.inglo.giggle.account.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.domain.Address;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -44,6 +45,7 @@ public record UpdateUserRequestDto(
         Boolean isProfileImgChanged,
 
         @JsonProperty("address")
+        @Valid
         AddressDto address
 
 ) {

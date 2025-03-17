@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.notification.domain.Notification;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class ReadNotificationOverviewResponseDto extends SelfValidating<ReadNoti
     private final Boolean hasNext;
 
     @JsonProperty("notification_list")
+    @Valid
     private final List<NotificationDto> notificationList;
 
     @Builder

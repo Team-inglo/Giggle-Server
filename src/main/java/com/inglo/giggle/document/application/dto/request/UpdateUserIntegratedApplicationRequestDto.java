@@ -2,6 +2,7 @@ package com.inglo.giggle.document.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.dto.request.AddressRequestDto;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -94,6 +95,7 @@ public record UpdateUserIntegratedApplicationRequestDto(
 
         @NotNull(message = "주소를 입력해주세요.")
         @JsonProperty("address")
+        @Valid
         AddressRequestDto address
 ) {
 }
