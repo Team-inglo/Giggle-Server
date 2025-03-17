@@ -300,15 +300,19 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
         @JsonProperty("preferred_conditions")
         private final String preferredConditions;
 
+        @JsonProperty("age_restriction")
+        private final Integer ageRestriction;
+
         @Builder
         public RecruitmentConditions(String recruitmentDeadline, String education, Integer numberOfRecruits,
-                                     Set<EVisa> visa, String gender, String preferredConditions) {
+                                     Set<EVisa> visa, String gender, String preferredConditions, Integer ageRestriction) {
             this.recruitmentDeadline = recruitmentDeadline;
             this.education = education;
             this.numberOfRecruits = numberOfRecruits;
             this.visa = visa;
             this.gender = gender;
             this.preferredConditions = preferredConditions;
+            this.ageRestriction = ageRestriction;
             this.validateSelf();
         }
 
@@ -320,6 +324,7 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                     .visa(jobPosting.getVisa())
                     .gender(jobPosting.getGender().toString())
                     .preferredConditions(jobPosting.getPreferredConditions())
+                    .ageRestriction(jobPosting.getAgeRestriction())
                     .build();
         }
     }
