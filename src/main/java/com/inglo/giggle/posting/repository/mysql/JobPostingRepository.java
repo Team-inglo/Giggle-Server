@@ -3,8 +3,6 @@ package com.inglo.giggle.posting.repository.mysql;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
-import com.inglo.giggle.posting.application.dto.request.JobPostingSearchId;
-import com.inglo.giggle.posting.application.dto.request.JobPostingSearchIdRequestDto;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
@@ -13,7 +11,6 @@ import com.inglo.giggle.posting.domain.type.EWorkingHours;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -27,7 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
+public interface JobPostingRepository extends JpaRepository<JobPosting, Long>, JobPostingQueryRepository {
 
     List<JobPosting> findAllByOwner(Owner owner);
 

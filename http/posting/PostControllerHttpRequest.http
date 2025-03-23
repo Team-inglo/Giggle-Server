@@ -274,6 +274,22 @@ GET {{host_url}}/v1/admins/job-postings/summaries?
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
+
+### 4.15 (관리자) 공고 목록 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/job-postings/overviews?
+    page={{posting.API_4_15.page}}
+    &size={{posting.API_4_15.size}}
+    &start_date={{posting.API_4_15.start_date}}
+    &end_date={{posting.API_4_15.end_date}}
+    &filter_type={{posting.API_4_15.filter_type}}
+    &filter={{posting.API_4_15.filter}}
+#    &sort_type={{posting.API_4_15.sort_type}}
+#    &sort={{posting.API_4_15.sort}}
+#    &search={{posting.API_4_15.search}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
 //======================================================= API 5 =======================================================
 
 
