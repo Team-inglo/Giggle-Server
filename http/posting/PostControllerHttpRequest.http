@@ -440,3 +440,12 @@ GET {{host_url}}/v1/admins/user-owner-job-postings/summaries?
     end_date={{posting.API_6_16.end_date}}
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.17 (어드민) 매칭 성공 수 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/application-success/summaries?
+    start_date={{posting.API_6_17.start_date}}&
+    end_date={{posting.API_6_17.end_date}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

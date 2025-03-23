@@ -78,4 +78,13 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
     );
 
     int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
+    @Query("SELECT COUNT(u) FROM UserOwnerJobPosting u " +
+            "WHERE u.step = :step " +
+            "AND u.createdAt BETWEEN :start AND :end")
+    int countUserOwnerJobPostingByStepAndCreatedAtBetween(
+            @Param("step") EApplicationStep step,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
 }

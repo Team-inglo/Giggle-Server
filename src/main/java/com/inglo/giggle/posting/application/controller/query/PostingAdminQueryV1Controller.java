@@ -4,9 +4,11 @@ import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsOverviewsResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsSummariesResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsSummariesResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsOverviewsUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsSummariesUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsSummariesUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,7 @@ public class PostingAdminQueryV1Controller {
     private final ReadAdminJobPostingsSummariesUseCase readAdminJobPostingsSummariesUseCase;
     private final ReadAdminJobPostingsOverviewsUseCase readAdminJobPostingsOverviewsUseCase;
     private final ReadAdminUserOwnerJobPostingsSummariesUseCase readAdminUserOwnerJobPostingsSummariesUseCase;
+    private final ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase readAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase;
 
     /**
      * 4.14 (어드민) 공고 등록 수 조회하기
@@ -75,7 +78,7 @@ public class PostingAdminQueryV1Controller {
     }
 
     /* -------------------------------------------- */
-    /* API 5 -------------------------------------- */
+    /* API 6 -------------------------------------- */
     /* -------------------------------------------- */
 
     /**
@@ -88,6 +91,22 @@ public class PostingAdminQueryV1Controller {
     ) {
         return ResponseDto.ok(
                 readAdminUserOwnerJobPostingsSummariesUseCase.execute(
+                        stringStartDate,
+                        stringEndDate
+                )
+        );
+    }
+
+    /**
+     * 6.17 (어드민) 매칭 성공 수 조회하기
+     */
+    @GetMapping("/user-owner-job-postings/application-success/summaries")
+    public ResponseDto<ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesResponseDto> readAdminUserOwnerJobPostingsApplicationSuccess(
+            @RequestParam("start_date") String stringStartDate,
+            @RequestParam("end_date") String stringEndDate
+    ) {
+        return ResponseDto.ok(
+                readAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase.execute(
                         stringStartDate,
                         stringEndDate
                 )
