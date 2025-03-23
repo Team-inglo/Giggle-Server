@@ -268,7 +268,7 @@ Authorization: Bearer {{access_token}}
 
 ### 4.14 (관리자) 공고 등록 수 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/job-postings/overviews?
+GET {{host_url}}/v1/admins/job-postings/summaries?
     start_date = {{posting.API_4_14.start_date}}&
     end_date = {{posting.API_4_14.end_date}}
 Content-Type: application/json

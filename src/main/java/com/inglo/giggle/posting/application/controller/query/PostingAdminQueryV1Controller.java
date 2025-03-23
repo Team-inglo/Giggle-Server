@@ -22,7 +22,7 @@ public class PostingAdminQueryV1Controller {
     /**
      * 4.14 (어드민) 공고 등록 수 조회하기
      */
-    @GetMapping("/overviews")
+    @GetMapping("/summaries")
     public ResponseDto<ReadAdminJobPostingsOverviewsResponseDto> readAdminJobPostingsOverviews(
             @RequestParam("start_date") String stringStartDate,
             @RequestParam("end_date") String stringEndDate,
