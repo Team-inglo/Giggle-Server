@@ -77,7 +77,7 @@ public class ReadOwnerUserOwnerJobPostingDetailResponseDto extends SelfValidatin
         String schoolName = (school != null) ? school.getSchoolName() : DASH;
 
         int durationOfDays = (int) java.time.Duration.between(
-                userOwnerJobPosting.getUpdatedAt().atStartOfDay(),
+                userOwnerJobPosting.getUpdatedAt(),
                 LocalDate.now().atStartOfDay()
         ).toDays();
 

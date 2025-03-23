@@ -1,14 +1,16 @@
 package com.inglo.giggle.security.domain.mysql;
 
-import com.inglo.giggle.term.domain.Term;
+import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.security.domain.type.ESecurityProvider;
+import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.inglo.giggle.term.domain.TermAccount;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,19 +18,13 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-        name = "accounts",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "uk_accounts_serial_id",
-                        columnNames = {"serial_id"}
-                )
-        }
-)
+@Table(name = "accounts")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "dtype")
 @DynamicUpdate
-public abstract class Account {
+@SQLDelete(sql = "UPDATE accounts SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public abstract class Account extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */

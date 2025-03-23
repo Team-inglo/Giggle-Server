@@ -113,7 +113,7 @@ public class ReadUserUserOwnerJobPostingListResponseDto extends SelfValidating<R
 
         public static UserAppliedJobDto fromEntity(UserOwnerJobPosting userOwnerJobPosting) {
             int durationOfDays = (int) java.time.Duration.between(
-                    userOwnerJobPosting.getUpdatedAt().atStartOfDay(),
+                    userOwnerJobPosting.getUpdatedAt(),
                     LocalDate.now().atStartOfDay()
             ).toDays();
 

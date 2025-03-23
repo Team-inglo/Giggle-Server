@@ -11,8 +11,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,7 @@ import java.util.List;
 )
 @DiscriminatorValue("OWNER")
 @DynamicUpdate
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class Owner extends Account {
 
     /* -------------------------------------------- */
@@ -38,12 +40,6 @@ public class Owner extends Account {
 
     @Column(name = "company_registration_number", length = 12, nullable = false)
     private String companyRegistrationNumber;
-
-    /* -------------------------------------------- */
-    /* Timestamp Column --------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     /* -------------------------------------------- */
     /* Embedded Column ---------------------------- */
@@ -88,7 +84,6 @@ public class Owner extends Account {
         this.companyName = companyName;
         this.ownerName = ownerName;
         this.companyRegistrationNumber = companyRegistrationNumber;
-        this.createdAt = LocalDateTime.now();
         this.address = address;
     }
 

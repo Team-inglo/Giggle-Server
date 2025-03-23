@@ -10,6 +10,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -22,6 +24,7 @@ import java.time.LocalDate;
         name = "document_id",
         foreignKey = @ForeignKey(name = "fk_integrated_application_document")
 )
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class IntegratedApplication extends Document {
 
     /* -------------------------------------------- */

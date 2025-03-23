@@ -1,18 +1,24 @@
 package com.inglo.giggle.term.domain;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.security.domain.mysql.Account;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Table(name = "term_accounts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TermAccount {
+@SQLDelete(sql = "UPDATE term_accounts SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class TermAccount extends BaseEntity {
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
     /* -------------------------------------------- */

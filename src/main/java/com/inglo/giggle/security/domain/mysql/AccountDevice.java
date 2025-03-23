@@ -1,11 +1,13 @@
 package com.inglo.giggle.security.domain.mysql;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import java.util.UUID;
 
@@ -13,7 +15,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "account_devices")
-public class AccountDevice {
+@SQLDelete(sql = "UPDATE account_devices SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+public class AccountDevice extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
