@@ -112,3 +112,13 @@ Content-Type: application/json
 {
     "language" : "{{account.API_3_8.language}}"
 }
+
+### 3.9 (어드민) 가입 회원 통계 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/accounts/sign-up/summaries?start_date=2024-12-31&end_date=2025-03-23
+Authorization: Bearer {{access_token}}
+
+### 3.10 (어드민) 탈퇴 회원 통계 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/accounts/withdrawal/summaries?start_date=2024-12-31&end_date=2025-03-23
+Authorization: Bearer {{access_token}}
