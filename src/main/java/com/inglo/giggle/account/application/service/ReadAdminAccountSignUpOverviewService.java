@@ -72,7 +72,7 @@ public class ReadAdminAccountSignUpOverviewService implements ReadAdminAccountSi
     }
 
     private double calculatePercentage(int current, int prior) {
-        if (prior == 0) return 0.0;
+        if (prior == 0) return 100.00;
         double raw = ((double) (current - prior) / prior) * 100;
         return Math.round(raw * 100.0) / 100.0;
     }
