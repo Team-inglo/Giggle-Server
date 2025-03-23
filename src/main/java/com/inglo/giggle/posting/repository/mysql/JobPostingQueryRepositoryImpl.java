@@ -38,7 +38,7 @@ public class JobPostingQueryRepositoryImpl implements JobPostingQueryRepository 
         BooleanBuilder builder = new BooleanBuilder();
 
         // 기간 필터
-        builder.and(jobPosting.createdAt.between(startDate, endDate));
+        filterByDate(startDate, endDate, builder, jobPosting);
 
         // 검색어 (title, addressDetail)
         if (search != null && !search.isBlank()) {
@@ -84,6 +84,19 @@ public class JobPostingQueryRepositoryImpl implements JobPostingQueryRepository 
         long total = totalResult != null ? totalResult : 0L;
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+    /* -------------------------------------------- */
+    /* Private Method ----------------------------- */
+    /* -------------------------------------------- */
+    private void filterByDate(LocalDateTime startDate, LocalDateTime endDate, BooleanBuilder builder, QJobPosting jobPosting) {
+        if (startDate != null && endDate != null) {
+            builder.and(jobPosting.createdAt.between(startDate, endDate));
+        } else if (startDate != null) {
+            builder.and(jobPosting.createdAt.goe(startDate));
+        } else if (endDate != null) {
+            builder.and(jobPosting.createdAt.loe(endDate));
+        }
     }
 
     private List<OrderSpecifier<?>> getOrderSpecifiers(Pageable pageable) {
