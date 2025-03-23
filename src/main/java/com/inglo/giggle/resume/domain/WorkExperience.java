@@ -1,10 +1,13 @@
 package com.inglo.giggle.resume.domain;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 
@@ -12,7 +15,9 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "work_experiences")
-public class WorkExperience {
+@SQLDelete(sql = "UPDATE resumes SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class WorkExperience extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */

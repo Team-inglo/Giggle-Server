@@ -1,5 +1,6 @@
 package com.inglo.giggle.notification.domain;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.persistence.*;
@@ -7,14 +8,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "notifications")
-public class Notification {
+@SQLDelete(sql = "UPDATE notifications SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class Notification extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
@@ -43,12 +46,6 @@ public class Notification {
     @JoinColumn(name = "user_owner_job_postings_id", nullable = false)
     private UserOwnerJobPosting userOwnerJobPosting;
 
-    /* -------------------------------------------- */
-    /* Timestamp Column --------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
     @Builder
     public Notification(
             String message,
@@ -59,7 +56,6 @@ public class Notification {
         this.isRead = false;
         this.userOwnerJobPosting = userOwnerJobPosting;
         this.notificationType = notificationType;
-        this.createdAt = LocalDateTime.now();
     }
 
     public void updateIsRead() {

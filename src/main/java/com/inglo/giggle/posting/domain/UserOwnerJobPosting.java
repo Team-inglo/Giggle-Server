@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
+import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
@@ -10,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +22,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_owner_job_postings")
-public class UserOwnerJobPosting {
+@SQLDelete(sql = "UPDATE user_owner_job_postings SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class UserOwnerJobPosting extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
@@ -43,15 +48,6 @@ public class UserOwnerJobPosting {
 
     @Column(name = "feedback", length = 200)
     private String feedback;
-
-    /* -------------------------------------------- */
-    /* Timestamp Column --------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDate createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDate updatedAt;
 
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
@@ -88,8 +84,6 @@ public class UserOwnerJobPosting {
         this.owner = owner;
         this.step = EApplicationStep.RESUME_UNDER_REVIEW;
         this.lastStepUpdated = LocalDate.now();
-        this.createdAt = LocalDate.now();
-        this.updatedAt = LocalDate.now();
     }
 
     public void updateStep(EApplicationStep step) {

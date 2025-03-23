@@ -1,18 +1,21 @@
 package com.inglo.giggle.document.domain;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "rejects")
-public class Reject {
+@SQLDelete(sql = "UPDATE rejects SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class Reject extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
@@ -31,9 +34,6 @@ public class Reject {
     @JoinColumn(name = "document_id", nullable = false)
     private Document document;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
@@ -41,6 +41,5 @@ public class Reject {
     public Reject(Document document, String reason) {
         this.document = document;
         this.reason = reason;
-        this.createdAt = LocalDateTime.now();
     }
 }

@@ -10,6 +10,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -20,6 +22,7 @@ import lombok.NoArgsConstructor;
         name = "document_id",
         foreignKey = @ForeignKey(name = "fk_part_time_employment_permit_document")
 )
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class PartTimeEmploymentPermit extends Document {
 
     /* -------------------------------------------- */

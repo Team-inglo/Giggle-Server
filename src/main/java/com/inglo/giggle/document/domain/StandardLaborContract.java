@@ -12,6 +12,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -25,6 +27,7 @@ import java.util.*;
         name = "document_id",
         foreignKey = @ForeignKey(name = "fk_standard_labor_contract_document")
 )
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class StandardLaborContract extends Document {
 
     /* -------------------------------------------- */

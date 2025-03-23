@@ -2,6 +2,7 @@ package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;
@@ -14,17 +15,20 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "job_postings")
-public class JobPosting {
+@SQLDelete(sql = "UPDATE job_postings SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class JobPosting extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
@@ -94,12 +98,6 @@ public class JobPosting {
     private EEmploymentType employmentType;
 
     /* -------------------------------------------- */
-    /* Timestamp Column --------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    /* -------------------------------------------- */
     /* Embedded Column ---------------------------- */
     /* -------------------------------------------- */
     @Embedded
@@ -152,7 +150,6 @@ public class JobPosting {
         this.description = description;
         this.preferredConditions = preferredConditions;
         this.employmentType = employmentType;
-        this.createdAt = LocalDateTime.now();
         this.owner = owner;
         this.address = address;
     }

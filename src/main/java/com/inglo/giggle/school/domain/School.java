@@ -1,17 +1,22 @@
 package com.inglo.giggle.school.domain;
 
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "schools")
-public class School {
+@SQLDelete(sql = "UPDATE schools SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class School extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */

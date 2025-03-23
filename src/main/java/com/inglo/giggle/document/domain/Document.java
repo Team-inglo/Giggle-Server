@@ -1,12 +1,14 @@
 package com.inglo.giggle.document.domain;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -15,7 +17,9 @@ import java.util.List;
 @Table(name = "documents")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "dtype")
-public abstract class Document {
+@SQLDelete(sql = "UPDATE documents SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public abstract class Document extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
@@ -35,12 +39,6 @@ public abstract class Document {
     private String wordUrl;
 
     /* -------------------------------------------- */
-    /* Timestamp Column --------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDate createdAt;
-
-    /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,7 +55,6 @@ public abstract class Document {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     protected Document(UserOwnerJobPosting userOwnerJobPosting) {
-        this.createdAt = LocalDate.now();
         this.userOwnerJobPosting = userOwnerJobPosting;
     }
 
