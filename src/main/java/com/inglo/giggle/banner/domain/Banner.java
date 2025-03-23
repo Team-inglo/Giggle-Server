@@ -28,6 +28,10 @@ public class Banner extends BaseEntity {
     /* -------------------------------------------- */
     /* Information Column ------------------------- */
     /* -------------------------------------------- */
+
+    @Column(name = "title", length = 50, nullable = false)
+    private String title;
+
     @Column(name = "img_url", length = 320, nullable = false)
     private String imgUrl;
 
@@ -43,7 +47,8 @@ public class Banner extends BaseEntity {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public Banner(String imgUrl, String content, ESecurityRole role) {
+    public Banner(String title, String imgUrl, String content, ESecurityRole role) {
+        this.title = title;
         this.imgUrl = imgUrl;
         this.content = content;
         this.role = role;

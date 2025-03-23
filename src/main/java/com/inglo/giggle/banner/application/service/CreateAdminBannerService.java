@@ -37,12 +37,10 @@ public class CreateAdminBannerService implements CreateAdminBannerUseCase {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        // 계정 타입 유효성 검사
-        accountService.checkAdminValidation(account);
-
         String imgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.BANNER_IMG);
 
         Banner banner = Banner.builder()
+                .title(requestDto.title())
                 .imgUrl(imgUrl)
                 .content(requestDto.content())
                 .role(requestDto.role())
