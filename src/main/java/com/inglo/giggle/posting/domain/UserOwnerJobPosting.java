@@ -49,6 +49,9 @@ public class UserOwnerJobPosting extends BaseEntity {
     @Column(name = "feedback", length = 200)
     private String feedback;
 
+    @Column(name = "memo")
+    private String memo;
+
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
@@ -97,5 +100,9 @@ public class UserOwnerJobPosting extends BaseEntity {
 
     public void updateResult(Boolean result) {
         this.result = result;
+    }
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
     }
 }

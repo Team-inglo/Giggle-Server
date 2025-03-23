@@ -167,6 +167,4 @@ public class PostingUsersQueryV1Controller {
                 userOwnerJobPostingsId
         ));
     }
-
-
 }

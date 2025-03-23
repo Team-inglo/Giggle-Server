@@ -2,14 +2,8 @@ package com.inglo.giggle.posting.application.controller.query;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsOverviewsResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsSummariesResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesResponseDto;
-import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsSummariesResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsOverviewsUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsSummariesUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase;
-import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsSummariesUseCase;
+import com.inglo.giggle.posting.application.dto.response.*;
+import com.inglo.giggle.posting.application.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +21,7 @@ public class PostingAdminQueryV1Controller {
     private final ReadAdminJobPostingsOverviewsUseCase readAdminJobPostingsOverviewsUseCase;
     private final ReadAdminUserOwnerJobPostingsSummariesUseCase readAdminUserOwnerJobPostingsSummariesUseCase;
     private final ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase readAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase;
+    private final ReadAdminUserOwnerJobPostingsOverviewsUseCase readAdminUserOwnerJobPostingsOverviewsUseCase;
 
     /**
      * 4.14 (어드민) 공고 등록 수 조회하기
@@ -109,6 +104,36 @@ public class PostingAdminQueryV1Controller {
                 readAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase.execute(
                         stringStartDate,
                         stringEndDate
+                )
+        );
+    }
+
+    /**
+     * 6.18 (어드민) 지원 목록 조회하기
+     */
+    @GetMapping("/user-owner-job-postings/overviews")
+    public ResponseDto<ReadAdminUserOwnerJobPostingsOverviewsResponseDto> readAdminUserOwnerJobPostingsOverviews(
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "size") Integer size,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "start_date") String startDate,
+            @RequestParam(value = "end_date") String endDate,
+            @RequestParam(value = "filter_type", required = false) String filterType,
+            @RequestParam(value = "filter", required = false) String filter,
+            @RequestParam(value = "sort_type", required = false) String sortType,
+            @RequestParam(value = "sort", required = false) String sort
+    ) {
+        return ResponseDto.ok(
+                readAdminUserOwnerJobPostingsOverviewsUseCase.execute(
+                        page,
+                        size,
+                        search,
+                        startDate,
+                        endDate,
+                        filterType,
+                        filter,
+                        sortType,
+                        sort
                 )
         );
     }
