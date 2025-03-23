@@ -431,3 +431,12 @@ Authorization: Bearer {{access_token}}
   "is_approval": {{posting.API_6_15.is_approval}},
   "feedback": "{{posting.API_6_15.feedback}}"
 }
+
+
+### 6.16 (어드민) 공고 신청 수 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/summaries?
+    start_date={{posting.API_6_16.start_date}}&
+    end_date={{posting.API_6_16.end_date}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

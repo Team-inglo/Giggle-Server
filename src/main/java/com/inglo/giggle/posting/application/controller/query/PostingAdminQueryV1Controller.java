@@ -4,8 +4,10 @@ import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsOverviewsResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsSummariesResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsSummariesResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsOverviewsUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsSummariesUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsSummariesUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,16 +18,17 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/admins/job-postings")
+@RequestMapping("/v1/admins")
 public class PostingAdminQueryV1Controller {
 
     private final ReadAdminJobPostingsSummariesUseCase readAdminJobPostingsSummariesUseCase;
     private final ReadAdminJobPostingsOverviewsUseCase readAdminJobPostingsOverviewsUseCase;
+    private final ReadAdminUserOwnerJobPostingsSummariesUseCase readAdminUserOwnerJobPostingsSummariesUseCase;
 
     /**
      * 4.14 (어드민) 공고 등록 수 조회하기
      */
-    @GetMapping("/summaries")
+    @GetMapping("/job-postings/summaries")
     public ResponseDto<ReadAdminJobPostingsSummariesResponseDto> readAdminJobPostingsSummaries(
             @RequestParam("start_date") String stringStartDate,
             @RequestParam("end_date") String stringEndDate,
@@ -43,7 +46,7 @@ public class PostingAdminQueryV1Controller {
     /**
      * 4.15 (어드민) 공고 목록 조회하기
      */
-    @GetMapping("/overviews")
+    @GetMapping("/job-postings/overviews")
     public ResponseDto<ReadAdminJobPostingsOverviewsResponseDto> readAdminJobPostingsOverviews(
             @RequestParam(value = "page") Integer page,
             @RequestParam(value = "size") Integer size,
@@ -67,6 +70,26 @@ public class PostingAdminQueryV1Controller {
                         filter,
                         sortType,
                         sort
+                )
+        );
+    }
+
+    /* -------------------------------------------- */
+    /* API 5 -------------------------------------- */
+    /* -------------------------------------------- */
+
+    /**
+     * 6.16 (어드민) 공고 신청 수 조회하기
+     */
+    @GetMapping("/user-owner-job-postings/summaries")
+    public ResponseDto<ReadAdminUserOwnerJobPostingsSummariesResponseDto> readAdminUserOwnerJobPostings(
+            @RequestParam("start_date") String stringStartDate,
+            @RequestParam("end_date") String stringEndDate
+    ) {
+        return ResponseDto.ok(
+                readAdminUserOwnerJobPostingsSummariesUseCase.execute(
+                        stringStartDate,
+                        stringEndDate
                 )
         );
     }
