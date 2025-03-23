@@ -9,6 +9,10 @@ import java.time.LocalDate;
 @UseCase
 public interface ReadAdminAccountOverviewUseCase {
 
+    /**
+     * 3.11 (어드민) 회원 목록 조회하기 UseCase
+     */
+
     ReadAdminAccountOverviewResponseDto execute(
             Integer page,
             Integer size,
