@@ -26,6 +26,6 @@ public interface AccountRepository extends JpaRepository<Account, UUID>, Account
     @Query("SELECT a FROM Account a WHERE a.createdAt <= :endDate")
     List<Account> findAllBeforeEndDate(@Param("endDate") LocalDateTime endDate);
 
-    @Query(value = "SELECT * FROM accounts JOIN users, owners WHERE created_at <= :endDate", nativeQuery = true)
+    @Query(value = "SELECT * FROM accounts a LEFT JOIN users u ON a.id = u.account_id LEFT JOIN owners o ON a.id = o.account_id WHERE created_at <= :endDate", nativeQuery = true)
     List<Account> findAllBeforeEndDateWithDeleted(@Param("endDate") LocalDateTime endDate);
 }
