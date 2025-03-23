@@ -153,19 +153,19 @@ Content-Type: application/json
 Content-Disposition: form-data; name="image"; filename="image1.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/team13.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image2.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/team13.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image3.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/team13.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 
@@ -265,6 +265,14 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
+
+### 4.14 (관리자) 공고 등록 수 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/job-postings/overviews?
+    start_date = {{posting.API_4_14.start_date}}&
+    end_date = {{posting.API_4_14.end_date}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
 
 //======================================================= API 5 =======================================================
 
