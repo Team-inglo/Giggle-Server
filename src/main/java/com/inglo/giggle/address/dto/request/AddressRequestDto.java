@@ -26,7 +26,6 @@ public record AddressRequestDto(
         String region3DepthName,
 
         @JsonProperty("region_4depth_name")
-        @NotBlank(message = "리/가/동을 입력해주세요.")
         String region4DepthName,
 
         @JsonProperty("address_detail")
