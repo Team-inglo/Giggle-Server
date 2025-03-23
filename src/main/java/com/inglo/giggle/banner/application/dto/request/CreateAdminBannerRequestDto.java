@@ -6,6 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateAdminBannerRequestDto(
+
+        @JsonProperty("title")
+        @NotBlank(message = "배너 제목은 필수입니다.")
+        String title,
+
         @JsonProperty("content")
         @NotBlank(message = "배너 내용은 필수입니다.")
         String content,

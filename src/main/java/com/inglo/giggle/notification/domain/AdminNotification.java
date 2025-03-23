@@ -1,4 +1,4 @@
-package com.inglo.giggle.banner.domain;
+package com.inglo.giggle.notification.domain;
 
 import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
@@ -13,10 +13,10 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "banners")
-@SQLDelete(sql = "UPDATE banners SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@Table(name = "admin_notifications")
+@SQLDelete(sql = "UPDATE admin_notifications SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
-public class Banner extends BaseEntity {
+public class AdminNotification extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
@@ -28,30 +28,33 @@ public class Banner extends BaseEntity {
     /* -------------------------------------------- */
     /* Information Column ------------------------- */
     /* -------------------------------------------- */
-
     @Column(name = "title", length = 50, nullable = false)
     private String title;
 
-    @Column(name = "img_url", length = 320, nullable = false)
-    private String imgUrl;
+    @Column(name = "message", length = 200, nullable = false)
+    private String message;
 
-    @Lob
-    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
-    private String content;
-
-    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     private ESecurityRole role;
 
-    /* -------------------------------------------- */
-    /* Methods ------------------------------------ */
-    /* -------------------------------------------- */
-    @Builder
-    public Banner(String title, String imgUrl, String content, ESecurityRole role) {
-        this.title = title;
-        this.imgUrl = imgUrl;
-        this.content = content;
-        this.role = role;
-    }
+    @Column(name = "is_advertisement", nullable = false)
+    private Boolean isAdvertisement;
 
+    /* -------------------------------------------- */
+    /* Method ------------------------------------ */
+    /* -------------------------------------------- */
+
+    @Builder
+    public AdminNotification(
+            String title,
+            String message,
+            ESecurityRole role,
+            Boolean isAdvertisement
+    ) {
+        this.title = title;
+        this.message = message;
+        this.role = role;
+        this.isAdvertisement = isAdvertisement;
+    }
 }

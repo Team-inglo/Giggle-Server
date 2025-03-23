@@ -30,7 +30,7 @@ public class ReadBannerDetailService implements ReadBannerDetailUseCase {
         }
 
         // Banner 권한 확인
-        if (!banner.getRole().equals(role)) {
+        if (banner.getRole() != ESecurityRole.GUEST && !banner.getRole().equals(role)) {
             throw new CommonException(ErrorCode.ACCESS_DENIED);
         }
 

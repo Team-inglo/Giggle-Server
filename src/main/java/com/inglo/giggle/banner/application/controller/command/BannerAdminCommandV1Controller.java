@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/banners")
+@RequestMapping("/v1/admins/banners")
 public class BannerAdminCommandV1Controller {
 
     private final CreateAdminBannerUseCase createAdminBannerUseCase;
