@@ -27,6 +27,14 @@ public class HeaderUtil {
         return httpHeaders;
     }
 
+    public static HttpHeaders createJsonHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        return headers;
+    }
+
+
+
 //    public static Optional<String> refineHeader(StompHeaderAccessor request, String header, String prefix) {
 //        String unpreparedToken = request.getFirstNativeHeader(header);
 //
