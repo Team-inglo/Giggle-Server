@@ -76,7 +76,7 @@ public class ReadOwnerUserJobPostingDetailResponseDto extends SelfValidating<Rea
             ) {
 
         int durationOfDays = (int) java.time.Duration.between(
-                userOwnerJobPosting.getUpdatedAt().atStartOfDay(),
+                userOwnerJobPosting.getUpdatedAt(),
                 LocalDate.now().atStartOfDay()
         ).toDays();
 

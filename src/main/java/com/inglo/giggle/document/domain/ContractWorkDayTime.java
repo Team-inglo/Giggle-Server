@@ -1,11 +1,14 @@
 package com.inglo.giggle.document.domain;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalTime;
 
@@ -13,7 +16,9 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "contract_work_day_times")
-public class ContractWorkDayTime {
+@SQLDelete(sql = "UPDATE contract_work_day_times SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class ContractWorkDayTime extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */

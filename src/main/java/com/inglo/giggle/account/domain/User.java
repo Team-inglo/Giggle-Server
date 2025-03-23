@@ -16,9 +16,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import java.util.List;
 )
 @DiscriminatorValue("USER")
 @DynamicUpdate
+@OnDelete(action = OnDeleteAction.CASCADE)
 public class User extends Account {
 
     /* -------------------------------------------- */
@@ -60,12 +62,6 @@ public class User extends Account {
     @Enumerated(EnumType.STRING)
     @Column(name = "visa")
     private EVisa visa;
-
-    /* -------------------------------------------- */
-    /* Timestamp Column --------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     /* -------------------------------------------- */
     /* Embedded Column ---------------------------- */
@@ -121,7 +117,6 @@ public class User extends Account {
         this.language = language;
         this.birth = birth;
         this.visa = visa;
-        this.createdAt = LocalDateTime.now();
         this.address = address;
     }
 

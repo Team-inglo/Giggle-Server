@@ -1,5 +1,6 @@
 package com.inglo.giggle.resume.domain;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.school.domain.School;
 import jakarta.persistence.*;
@@ -7,6 +8,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 
@@ -14,7 +17,9 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "educations")
-public class Education {
+@SQLDelete(sql = "UPDATE educations SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class Education extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */

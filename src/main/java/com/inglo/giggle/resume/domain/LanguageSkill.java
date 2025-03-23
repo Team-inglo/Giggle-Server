@@ -1,10 +1,13 @@
 package com.inglo.giggle.resume.domain;
 
+import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +17,9 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "language_skills")
-public class LanguageSkill {
+@SQLDelete(sql = "UPDATE language_skills SET deleted_at = CURRENT_TIMESTAMP WHERE resume_id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class LanguageSkill extends BaseEntity {
 
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
