@@ -449,3 +449,18 @@ GET {{host_url}}/v1/admins/user-owner-job-postings/application-success/summaries
     end_date={{posting.API_6_17.end_date}}
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.18 (어드민) 지원 목록 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/overviews?
+    page={{posting.API_6_18.page}}
+    &size={{posting.API_6_18.size}}
+    &start_date={{posting.API_6_18.start_date}}
+    &end_date={{posting.API_6_18.end_date}}
+    &sort_type={{posting.API_6_18.sort_type}}
+    &sort={{posting.API_6_18.sort}}
+    &filter={{posting.API_6_18.filter}}
+    &filter_type={{posting.API_6_18.filter_type}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

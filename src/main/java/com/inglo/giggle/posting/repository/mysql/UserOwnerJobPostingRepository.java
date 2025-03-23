@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJobPosting, Long>{
+public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJobPosting, Long>, UserOwnerJobPostingQueryRepository {
 
     @EntityGraph(attributePaths = {"jobPosting"})
     Page<UserOwnerJobPosting> findAllPagedWithJobPostingByUser(User user, Pageable pageable);

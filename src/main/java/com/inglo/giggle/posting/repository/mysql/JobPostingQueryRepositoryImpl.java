@@ -41,26 +41,10 @@ public class JobPostingQueryRepositoryImpl implements JobPostingQueryRepository 
         filterByDate(startDate, endDate, builder, jobPosting);
 
         // 검색어 (title, addressDetail)
-        if (search != null && !search.isBlank()) {
-            builder.and(
-                    jobPosting.title.containsIgnoreCase(search)
-                            .or(jobPosting.address.addressDetail.containsIgnoreCase(search))
-                            .or(jobPosting.address.region1DepthName.containsIgnoreCase(search))
-                            .or(jobPosting.address.region2DepthName.containsIgnoreCase(search))
-                            .or(jobPosting.address.region3DepthName.containsIgnoreCase(search))
-            );
-        }
+        filterByKeyword(search, builder, jobPosting);
 
         // ENUM 필터 처리
-        if (filterType != null && filter != null) {
-            switch (filterType) {
-                case "job_category" -> builder.and(jobPosting.jobCategory.stringValue().eq(filter));
-                case "employment_type" -> builder.and(jobPosting.employmentType.stringValue().eq(filter));
-                case "gender" -> builder.and(jobPosting.gender.stringValue().eq(filter));
-                case "education_level" -> builder.and(jobPosting.educationLevel.stringValue().eq(filter));
-                case "visa" -> builder.and(jobPosting.visa.any().stringValue().eq(filter));
-            }
-        }
+        fileterByColumn(filterType, filter, builder, jobPosting);
 
         // 정렬
         List<OrderSpecifier<?>> orders = getOrderSpecifiers(pageable);
@@ -89,6 +73,18 @@ public class JobPostingQueryRepositoryImpl implements JobPostingQueryRepository 
     /* -------------------------------------------- */
     /* Private Method ----------------------------- */
     /* -------------------------------------------- */
+    private void filterByKeyword(String search, BooleanBuilder builder, QJobPosting jobPosting) {
+        if (search != null && !search.isBlank()) {
+            builder.and(
+                    jobPosting.title.containsIgnoreCase(search)
+                            .or(jobPosting.address.addressDetail.containsIgnoreCase(search))
+                            .or(jobPosting.address.region1DepthName.containsIgnoreCase(search))
+                            .or(jobPosting.address.region2DepthName.containsIgnoreCase(search))
+                            .or(jobPosting.address.region3DepthName.containsIgnoreCase(search))
+            );
+        }
+    }
+
     private void filterByDate(LocalDateTime startDate, LocalDateTime endDate, BooleanBuilder builder, QJobPosting jobPosting) {
         if (startDate != null && endDate != null) {
             builder.and(jobPosting.createdAt.between(startDate, endDate));
@@ -96,6 +92,19 @@ public class JobPostingQueryRepositoryImpl implements JobPostingQueryRepository 
             builder.and(jobPosting.createdAt.goe(startDate));
         } else if (endDate != null) {
             builder.and(jobPosting.createdAt.loe(endDate));
+        }
+    }
+
+
+    private void fileterByColumn(String filterType, String filter, BooleanBuilder builder, QJobPosting jobPosting) {
+        if (filterType != null && filter != null) {
+            switch (filterType) {
+                case "job_category" -> builder.and(jobPosting.jobCategory.stringValue().eq(filter));
+                case "employment_type" -> builder.and(jobPosting.employmentType.stringValue().eq(filter));
+                case "gender" -> builder.and(jobPosting.gender.stringValue().eq(filter));
+                case "education_level" -> builder.and(jobPosting.educationLevel.stringValue().eq(filter));
+                case "visa" -> builder.and(jobPosting.visa.any().stringValue().eq(filter));
+            }
         }
     }
 

@@ -49,7 +49,7 @@ public class UserOwnerJobPosting extends BaseEntity {
     @Column(name = "feedback", length = 200)
     private String feedback;
 
-    @Column(name = "memo")
+    @Column(name = "memo", length = 200)
     private String memo;
 
     /* -------------------------------------------- */
