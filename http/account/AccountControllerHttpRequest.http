@@ -122,3 +122,8 @@ Authorization: Bearer {{access_token}}
 // @no-log
 GET {{host_url}}/v1/admins/accounts/withdrawal/summaries?start_date=2024-12-31&end_date=2025-03-23
 Authorization: Bearer {{access_token}}
+
+### 3.11 (어드민) 회원 목록 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/accounts/overviews?page=1&size=10
+Authorization: Bearer {{access_token}}

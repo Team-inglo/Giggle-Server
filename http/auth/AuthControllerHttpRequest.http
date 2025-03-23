@@ -172,7 +172,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "067123"
+@authentication_code_user = "219710"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
