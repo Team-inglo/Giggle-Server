@@ -1,8 +1,8 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.core.utility.DateTimeUtil;
-import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsOverviewsResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsOverviewsUseCase;
+import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsSummariesResponseDto;
+import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsSummariesUseCase;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +14,12 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReadAdminJobPostingsOverviewsService implements ReadAdminJobPostingsOverviewsUseCase {
+public class ReadAdminJobPostingsSummariesService implements ReadAdminJobPostingsSummariesUseCase {
 
     private final JobPostingRepository jobPostingRepository;
 
     @Override
-    public ReadAdminJobPostingsOverviewsResponseDto execute(UUID accountId, String stringStartDate, String stringEndDate) {
+    public ReadAdminJobPostingsSummariesResponseDto execute(UUID accountId, String stringStartDate, String stringEndDate) {
 
         // stringStartDate, stringEndDate를 LocalDate로 변환
         LocalDate startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
@@ -34,7 +34,7 @@ public class ReadAdminJobPostingsOverviewsService implements ReadAdminJobPosting
         double comparisonRate = getComparisonRate(priorCount, currentCount);
 
         // 응답 DTO 생성
-        return ReadAdminJobPostingsOverviewsResponseDto.of(
+        return ReadAdminJobPostingsSummariesResponseDto.of(
                 currentCount,
                 priorCount,
                 comparisonRate

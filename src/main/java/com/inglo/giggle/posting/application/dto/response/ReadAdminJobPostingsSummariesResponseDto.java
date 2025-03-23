@@ -8,14 +8,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ReadAdminJobPostingsOverviewsResponseDto extends SelfValidating<ReadAdminJobPostingsOverviewsResponseDto> {
+public class ReadAdminJobPostingsSummariesResponseDto extends SelfValidating<ReadAdminJobPostingsSummariesResponseDto> {
 
     @NotNull
     @JsonProperty("job_posting_count_info")
     private final CountInfoDto jobPostingCountInfo;
 
     @Builder
-    public ReadAdminJobPostingsOverviewsResponseDto(
+    public ReadAdminJobPostingsSummariesResponseDto(
             CountInfoDto jobPostingCountInfo
     ) {
         this.jobPostingCountInfo = jobPostingCountInfo;
@@ -23,12 +23,12 @@ public class ReadAdminJobPostingsOverviewsResponseDto extends SelfValidating<Rea
         this.validateSelf();
     }
 
-    public static ReadAdminJobPostingsOverviewsResponseDto of(
+    public static ReadAdminJobPostingsSummariesResponseDto of(
             Integer count,
             Integer priorPeriodCount,
             Double priorPeriodComparison
     ) {
-        return ReadAdminJobPostingsOverviewsResponseDto.builder()
+        return ReadAdminJobPostingsSummariesResponseDto.builder()
                 .jobPostingCountInfo(
                         CountInfoDto.of(
                                 count,
