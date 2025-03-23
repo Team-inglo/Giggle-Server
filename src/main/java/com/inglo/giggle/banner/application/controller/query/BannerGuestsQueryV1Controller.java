@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/guests/banners")
-public class BannerGuestQueryV1Controller {
+public class BannerGuestsQueryV1Controller {
     private final ReadGuestBannerOverviewUseCase readGuestBannerOverviewUseCase;
     private final ReadGuestBannerDetailUseCase readGuestBannerDetailUseCase;
 
