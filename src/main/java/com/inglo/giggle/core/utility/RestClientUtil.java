@@ -12,7 +12,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -119,4 +118,22 @@ public class RestClientUtil {
         }
     }
 
+    public void sendNonReturnPostMethod(String url, HttpHeaders headers, Object body) {
+        try {
+            restClient.post()
+                    .uri(url)
+                    .headers(httpHeaders -> httpHeaders.addAll(headers))
+                    .body(body)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                        throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+                    })
+                    .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                        throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
+                    })
+                    .toBodilessEntity();
+        } catch (Exception e) {
+            log.error("Error occurred while sending POST request: {}", e.getMessage());
+        }
+    }
 }

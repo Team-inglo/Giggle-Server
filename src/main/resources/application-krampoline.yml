@@ -114,3 +114,6 @@ logging:
 admin:
   id: ${GIGGLE_ADMIN_ID}
   password: ${GIGGLE_ADMIN_PASSWORD}
+
+discord:
+  webhook-url: ${DISCORD_WEBHOOK_URL}

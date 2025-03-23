@@ -218,6 +218,11 @@ spec:
                 secretKeyRef:
                   name: application-yml-secret
                   key: giggle-admin-password
+            - name: DISCORD_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: discord-webhook-url
       volumes:
         - name: template-volume
           configMap:
