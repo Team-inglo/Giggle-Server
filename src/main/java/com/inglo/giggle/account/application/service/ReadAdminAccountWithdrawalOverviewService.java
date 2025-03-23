@@ -8,13 +8,11 @@ import com.inglo.giggle.core.dto.CountInfoDto;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccountWithdrawalOverviewUseCase {
@@ -30,12 +28,6 @@ public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccou
         LocalDate priorEndDate = endDate.minusDays(duration);
 
         List<Account> accumulatedAccounts = accountRepository.findAllBeforeEndDateWithDeleted(endDate.plusDays(1).atStartOfDay());
-
-        for (Account account : accumulatedAccounts) {
-            log.info("account: {}", account);
-            log.info("account.getName(): {}", account.getName());
-            log.info("account.getDeletedAt(): {}", account.getDeletedAt());
-        }
 
         List<User> deletedAccumulatedUsers = accumulatedAccounts.stream()
                 .filter(account -> account instanceof User && account.getDeletedAt() != null)
