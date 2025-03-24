@@ -67,4 +67,15 @@ public class School extends BaseEntity {
         this.isMetropolitan = isMetropolitan;
     }
 
+    public void updateSelf(String schoolName, String schoolPhoneNumber, String instituteName,
+                String coordinatorName, String coordinatorPhoneNumber, Address address, Boolean isMetropolitan) {
+        this.schoolName = schoolName;
+        this.schoolPhoneNumber = schoolPhoneNumber;
+        this.instituteName = instituteName;
+        this.coordinatorName = coordinatorName;
+        this.coordinatorPhoneNumber = coordinatorPhoneNumber;
+        this.address = address;
+        this.isMetropolitan = isMetropolitan;
+    }
+
 }
