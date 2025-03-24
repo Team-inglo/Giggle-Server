@@ -1,6 +1,7 @@
 package com.inglo.giggle.school.repository.mysql;
 
 import com.inglo.giggle.school.domain.School;
+import com.inglo.giggle.school.repository.mysql.querydsl.SchoolRepositoryQuery;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface SchoolRepository extends JpaRepository<School, Long>{
+public interface SchoolRepository extends JpaRepository<School, Long>, SchoolRepositoryQuery {
 
     @Query("SELECT s FROM School s " +
             "JOIN Education e ON s.id = e.school.id " +
