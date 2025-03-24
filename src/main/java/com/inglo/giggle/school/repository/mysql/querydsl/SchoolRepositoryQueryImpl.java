@@ -30,7 +30,7 @@ public class SchoolRepositoryQueryImpl implements SchoolRepositoryQuery {
 
         // 검색 조건
         if (search != null && !search.isBlank()) {
-            // 이름 + 이메일 + 주소 + 전화번호
+            // 학교명, 기관명, 담당자명, 주소명
             baseQuery.where(
                     school.schoolName.containsIgnoreCase(search)
                             .or(school.instituteName.containsIgnoreCase(search))
