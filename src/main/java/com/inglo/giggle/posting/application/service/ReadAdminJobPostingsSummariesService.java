@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReadAdminJobPostingsSummariesService implements ReadAdminJobPostingsSummariesUseCase {
@@ -51,7 +50,6 @@ public class ReadAdminJobPostingsSummariesService implements ReadAdminJobPosting
                 comparisonRate
         );
     }
-
 
     /* -------------------------------------------- */
     /* Private Methods ---------------------------- */
