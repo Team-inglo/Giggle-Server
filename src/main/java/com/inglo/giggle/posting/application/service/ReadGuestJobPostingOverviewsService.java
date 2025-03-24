@@ -100,7 +100,7 @@ public class ReadGuestJobPostingOverviewsService implements ReadGuestJobPostingO
             morningSelected = workingHoursList.contains(EWorkingHours.MORNING);
             afternoonSelected = workingHoursList.contains(EWorkingHours.AFTERNOON);
             eveningSelected = workingHoursList.contains(EWorkingHours.EVENING);
-            fullDaySelected = workingHoursList.contains(EWorkingHours.FULLDAY);
+            fullDaySelected = workingHoursList.contains(EWorkingHours.FULL_DAY);
             dawnSelected = workingHoursList.contains(EWorkingHours.DAWN);
         }
 
