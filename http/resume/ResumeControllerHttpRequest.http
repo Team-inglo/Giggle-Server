@@ -163,3 +163,8 @@ Authorization: Bearer {{access_token}}
 // @no-log
 GET {{host_url}}/v1/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details
 Authorization: Bearer {{access_token}}
+
+### 7.20 (어드민) 이력서 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/resumes/eb4f7157-397f-4315-91b5-fea7a5c27c80
+Authorization: Bearer {{access_token}}
