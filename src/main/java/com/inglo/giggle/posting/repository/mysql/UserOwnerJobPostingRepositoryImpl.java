@@ -6,6 +6,7 @@ import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +70,36 @@ public class UserOwnerJobPostingRepositoryImpl implements UserOwnerJobPostingQue
         long total = totalResult != null ? totalResult : 0L;
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public List<GraphStats> countGraphStatsByMonth(LocalDateTime startDate, LocalDateTime endDate) {
+        QUserOwnerJobPosting q = QUserOwnerJobPosting.userOwnerJobPosting;
+
+        return queryFactory
+                .select(com.querydsl.core.types.Projections.constructor(
+                        GraphStats.class,
+                        q.createdAt.year(),
+                        q.createdAt.month(),
+                        q.id.count(),
+                        Expressions.numberTemplate(Long.class,
+                                "SUM(CASE WHEN {0} != {1} THEN 1 ELSE 0 END)",
+                                q.step, EApplicationStep.RESUME_REJECTED
+                        ),
+                        Expressions.numberTemplate(Long.class,
+                                "SUM(CASE WHEN {0} = {1} THEN 1 ELSE 0 END)",
+                                q.step, EApplicationStep.RESUME_REJECTED
+                        ),
+                        Expressions.numberTemplate(Long.class,
+                                "SUM(CASE WHEN {0} = {1} THEN 1 ELSE 0 END)",
+                                q.step, EApplicationStep.APPLICATION_SUCCESS
+                        )
+                ))
+                .from(q)
+                .where(q.createdAt.between(startDate, endDate.minusNanos(1)))
+                .groupBy(q.createdAt.year(), q.createdAt.month())
+                .orderBy(q.createdAt.year().asc(), q.createdAt.month().asc())
+                .fetch();
     }
 
     /* -------------------------------------------- */

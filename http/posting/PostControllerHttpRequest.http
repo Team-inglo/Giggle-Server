@@ -464,3 +464,12 @@ GET {{host_url}}/v1/admins/user-owner-job-postings/overviews?
     &filter_type={{posting.API_6_18.filter_type}}
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.19 (어드민) 신규 신청 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/digests?
+    start_date={{posting.API_6_19.start_date}}
+    &end_date={{posting.API_6_19.end_date}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
