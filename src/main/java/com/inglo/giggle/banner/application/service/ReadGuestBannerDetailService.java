@@ -25,7 +25,7 @@ public class ReadGuestBannerDetailService implements ReadGuestBannerDetailUseCas
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
         // Banner 권한 확인
-        if (!banner.getRole().equals(ESecurityRole.USER)) {
+        if (!banner.getRole().equals(ESecurityRole.USER) && !banner.getRole().equals(ESecurityRole.GUEST)) {
             throw new CommonException(ErrorCode.ACCESS_DENIED);
         }
 

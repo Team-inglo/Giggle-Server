@@ -1,7 +1,6 @@
 ### 12.1 (게스트) 배너 요약 조회하기
 // @no-log
 GET {{host_url}}/v1/guests/banners/overviews
-Authorization: Bearer {{access_token}}
 
 ### 12.2 (게스트) 배너 상세 조회하기
 // @no-log
