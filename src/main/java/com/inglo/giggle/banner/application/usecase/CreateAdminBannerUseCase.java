@@ -8,5 +8,9 @@ import java.util.UUID;
 
 @UseCase
 public interface CreateAdminBannerUseCase {
+
+    /**
+     * 12.7 (어드민) 배너 생성하기 UseCase
+     */
     void execute(UUID accountId, MultipartFile image, CreateAdminBannerRequestDto requestDto);
 }

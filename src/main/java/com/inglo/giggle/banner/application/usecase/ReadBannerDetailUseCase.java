@@ -6,5 +6,9 @@ import com.inglo.giggle.security.domain.type.ESecurityRole;
 
 @UseCase
 public interface ReadBannerDetailUseCase {
+
+    /**
+     * 12.4 (유학생/고용주) 배너 상세 조회하기 UseCase
+     */
     ReadBannerDetailResponseDto execute(ESecurityRole role, Long bannerId);
 }

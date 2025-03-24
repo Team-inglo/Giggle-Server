@@ -21,7 +21,7 @@ public class BannerQueryV1Controller {
     private final ReadBannerDetailUseCase readBannerDetailUseCase;
 
     /**
-     * 12.3 (유학생/고용주/관리자) 배너 요약 조회하기
+     * 12.3 (유학생/고용주) 배너 요약 조회하기
      */
     @GetMapping("/overviews")
     public ResponseDto<ReadBannerOverviewResponseDto> readBannerOverview(
@@ -31,7 +31,7 @@ public class BannerQueryV1Controller {
     }
 
     /**
-     * 12.4 (유학생/고용주/관리자) 배너 상세 조회하기
+     * 12.4 (유학생/고용주) 배너 상세 조회하기
      */
     @GetMapping("/{id}/details")
     public ResponseDto<ReadBannerDetailResponseDto> readBannerDetail(

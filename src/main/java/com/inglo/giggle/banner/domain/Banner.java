@@ -54,4 +54,17 @@ public class Banner extends BaseEntity {
         this.role = role;
     }
 
+    public void updateWithImgUrl(String title, String imgUrl, String content, ESecurityRole role) {
+        this.title = title;
+        this.imgUrl = imgUrl;
+        this.content = content;
+        this.role = role;
+    }
+
+    public void updateWithoutImgUrl(String title, String content, ESecurityRole role) {
+        this.title = title;
+        this.content = content;
+        this.role = role;
+    }
+
 }

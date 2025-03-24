@@ -11,25 +11,25 @@ import com.inglo.giggle.security.domain.mysql.QAccount;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
+@RequiredArgsConstructor
 public class AccountRepositoryQueryImpl implements AccountRepositoryQuery {
 
     private final JPAQueryFactory queryFactory;
-
-    public AccountRepositoryQueryImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     @Override
     public Page<Account> findAccountByFilter(
@@ -47,7 +47,7 @@ public class AccountRepositoryQueryImpl implements AccountRepositoryQuery {
         QOwner owner = QOwner.owner;
         QAdmin admin = QAdmin.admin;
 
-        var baseQuery = queryFactory
+        JPAQuery<Account> baseQuery = queryFactory
                 .selectFrom(account)
                 .leftJoin(user).on(user.id.eq(account.id))
                 .leftJoin(owner).on(owner.id.eq(account.id))
@@ -69,7 +69,13 @@ public class AccountRepositoryQueryImpl implements AccountRepositoryQuery {
         }
 
         // 날짜 조건
-        if (startDate != null && endDate != null) {
+        if (startDate != null || endDate != null) {
+            if (startDate == null) {
+                startDate = LocalDate.of(1970, 1, 1);
+            }
+            if (endDate == null) {
+                endDate = LocalDate.now();
+            }
             LocalDateTime startDateTime = startDate.atStartOfDay();
             LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
             baseQuery.where(account.createdAt.between(startDateTime, endDateTime));
@@ -132,9 +138,6 @@ public class AccountRepositoryQueryImpl implements AccountRepositoryQuery {
             }
         }
 
-        /* ---------------------------
-         * 5) 전체 카운트 쿼리
-         * -------------------------- */
         long total = Optional.ofNullable(
                 baseQuery.clone()
                         .select(account.id.count())
