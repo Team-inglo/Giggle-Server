@@ -480,3 +480,14 @@ Authorization: Bearer {{access_token}}
 GET {{host_url}}/v1/admins/user-owner-job-postings/briefs
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.21 (어드민) 공고 메모 수정하기
+// @no-log
+PATCH {{host_url}}/v1/admins/user-owner-job-postings/{{posting.API_6_21.user_owner_job_posting_id}}/memo
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "memo": "{{posting.API_6_21.memo}}"
+}
