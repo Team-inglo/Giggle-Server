@@ -22,6 +22,9 @@ public class SchoolAdminsCommandV1Controller {
     private final CreateAdminSchoolUseCase createAdminSchoolUseCase;
     private final UpdateAdminSchoolUseCase updateAdminSchoolUseCase;
 
+    /**
+     * 9.5 (어드민) 학교 생성하기
+     */
     @PostMapping("")
     public ResponseDto<Void> createAdminSchool(
             @RequestBody @Valid CreateAdminSchoolRequestDto requestDto
@@ -30,6 +33,9 @@ public class SchoolAdminsCommandV1Controller {
         return ResponseDto.created(null);
     }
 
+    /**
+     * 9.6 (어드민) 학교 수정하기
+     */
     @PutMapping("/{schoolId}")
     public ResponseDto<Void> updateAdminSchool(
             @PathVariable Long schoolId,
