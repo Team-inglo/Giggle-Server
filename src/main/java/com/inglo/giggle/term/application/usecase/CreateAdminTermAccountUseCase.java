@@ -6,5 +6,8 @@ import com.inglo.giggle.term.application.dto.request.CreateAdminTermAccountReque
 @UseCase
 public interface CreateAdminTermAccountUseCase {
 
-    public void execute(CreateAdminTermAccountRequestDto requestDto);
+    /**
+     * (관리자) 약관 생성하기 UseCase
+     */
+    void execute(CreateAdminTermAccountRequestDto requestDto);
 }
