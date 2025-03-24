@@ -7,3 +7,8 @@ Authorization: Bearer {{access_token}}
 // @no-log
 GET {{host_url}}/v1/users/resumes/schools/details
 Authorization: Bearer {{access_token}}
+
+### 9.3 (어드민) 학교 목록 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/schools/overviews?page=1&size=10
+Authorization: Bearer {{access_token}}
