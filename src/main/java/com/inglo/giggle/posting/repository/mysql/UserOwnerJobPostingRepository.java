@@ -90,4 +90,6 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
 
     @Query("SELECT uojp FROM UserOwnerJobPosting uojp WHERE uojp.createdAt BETWEEN :start AND :end")
     List<UserOwnerJobPosting> findAllByCreatedAtBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    int countByStep(EApplicationStep step);
 }

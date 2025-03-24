@@ -473,3 +473,10 @@ GET {{host_url}}/v1/admins/user-owner-job-postings/digests?
     &end_date={{posting.API_6_19.end_date}}
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
+
+
+### 6.20 (어드민) 누적 신청 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/briefs
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

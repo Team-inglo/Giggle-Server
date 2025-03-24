@@ -23,6 +23,7 @@ public class PostingAdminQueryV1Controller {
     private final ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase readAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase;
     private final ReadAdminUserOwnerJobPostingsOverviewsUseCase readAdminUserOwnerJobPostingsOverviewsUseCase;
     private final ReadAdminUserOwnerJobPostingsDigestsUseCase readAdminUserOwnerJobPostingsDigestsUseCase;
+    private final ReadAdminUserOwnerJobPostingsBriefsUseCase readAdminUserOwnerJobPostingsBriefsUseCase;
 
     /**
      * 4.14 (어드민) 공고 등록 수 조회하기
@@ -152,6 +153,17 @@ public class PostingAdminQueryV1Controller {
                         stringStartDate,
                         stringEndDate
                 )
+        );
+    }
+
+    /**
+     * 6.20 (어드민) 누적 신청 조회하기
+     */
+    @GetMapping("/user-owner-job-postings/briefs")
+    public ResponseDto<ReadAdminUserOwnerJobPostingsBriefsResponseDto> readAdminUserOwnerJobPostingsBriefs(
+    ) {
+        return ResponseDto.ok(
+                readAdminUserOwnerJobPostingsBriefsUseCase.execute()
         );
     }
 }
