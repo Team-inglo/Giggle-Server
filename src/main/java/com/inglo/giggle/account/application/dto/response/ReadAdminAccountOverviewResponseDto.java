@@ -21,20 +21,20 @@ import java.util.UUID;
 public class ReadAdminAccountOverviewResponseDto extends SelfValidating<ReadAdminAccountOverviewResponseDto> {
 
     @JsonProperty("accounts")
-    private final List<AccountDto> accounts;
+    private final List<AccountOverviewDto> accounts;
 
     @JsonProperty("page_info")
     @NotNull(message = "페이지 정보를 입력해주세요.")
     private final PageInfoDto pageInfo;
 
     @Builder
-    public ReadAdminAccountOverviewResponseDto(List<AccountDto> accounts, PageInfoDto pageInfo) {
+    public ReadAdminAccountOverviewResponseDto(List<AccountOverviewDto> accounts, PageInfoDto pageInfo) {
         this.accounts = accounts;
         this.pageInfo = pageInfo;
         this.validateSelf();
     }
 
-    public static class AccountDto extends SelfValidating<AccountDto> {
+    public static class AccountOverviewDto extends SelfValidating<AccountOverviewDto> {
         @JsonProperty("id")
         @NotNull(message = "아이디는 필수입니다.")
         private final UUID id;
@@ -75,7 +75,7 @@ public class ReadAdminAccountOverviewResponseDto extends SelfValidating<ReadAdmi
         private final String signUpDate;
 
         @Builder
-        public AccountDto(UUID id, String email, ESecurityRole userType, String name, String birth, EGender gender, String nationality, String address, EVisa visa, String phoneNumber, ELanguage language, String signUpDate) {
+        public AccountOverviewDto(UUID id, String email, ESecurityRole userType, String name, String birth, EGender gender, String nationality, String address, EVisa visa, String phoneNumber, ELanguage language, String signUpDate) {
             this.id = id;
             this.email = email;
             this.userType = userType;
@@ -91,18 +91,18 @@ public class ReadAdminAccountOverviewResponseDto extends SelfValidating<ReadAdmi
             this.validateSelf();
         }
 
-        public static AccountDto fromEntity(
+        public static AccountOverviewDto fromEntity(
                 Account account
         ) {
-            return AccountDto.builder()
+            return AccountOverviewDto.builder()
                     .id(account.getId())
                     .email(account.getEmail())
                     .userType(account.getRole())
                     .name(account.getName())
-                    .birth(account instanceof User ? ((User) account).getBirth().toString() : null)
+                    .birth(account instanceof User && ((User) account).getBirth() != null ? ((User) account).getBirth().toString() : null)
                     .gender(account instanceof User ? ((User) account).getGender() : null)
                     .nationality(account instanceof User ? ((User) account).getNationality() : null)
-                    .address(account instanceof User ? ((User) account).getAddress().getFullAddress() : null)
+                    .address(account instanceof User && ((User) account).getAddress() != null ? ((User) account).getAddress().getFullAddress() : null)
                     .visa(account instanceof User ? ((User) account).getVisa() : null)
                     .phoneNumber(account.getPhoneNumber())
                     .language(account instanceof User ? ((User) account).getLanguage() : null)
@@ -112,7 +112,7 @@ public class ReadAdminAccountOverviewResponseDto extends SelfValidating<ReadAdmi
     }
     public static ReadAdminAccountOverviewResponseDto of(List<Account> accounts, PageInfoDto pageInfo) {
         return ReadAdminAccountOverviewResponseDto.builder()
-                .accounts(accounts.stream().map(AccountDto::fromEntity).toList())
+                .accounts(accounts.stream().map(AccountOverviewDto::fromEntity).toList())
                 .pageInfo(pageInfo)
                 .build();
     }

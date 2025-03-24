@@ -5,7 +5,7 @@ import com.inglo.giggle.security.domain.type.ESecurityRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateAdminBannerRequestDto(
+public record UpdateAdminBannerRequestDto (
 
         @JsonProperty("title")
         @NotBlank(message = "배너 제목은 필수입니다.")

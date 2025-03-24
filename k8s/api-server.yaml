@@ -4,6 +4,11 @@ metadata:
   name: api-server
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       app: api-server
@@ -15,6 +20,22 @@ spec:
       containers:
         - name: api-server
           image: krmp-d2hub-idock.9rum.cc/dev-test/repo_1bece455b14c:latest
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 5
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

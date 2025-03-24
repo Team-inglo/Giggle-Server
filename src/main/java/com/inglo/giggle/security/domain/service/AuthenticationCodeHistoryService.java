@@ -42,6 +42,6 @@ public class AuthenticationCodeHistoryService {
         if (history == null) {
             return false;
         }
-        return history.getLastSentAt().isAfter(LocalDateTime.now().minusMinutes(1));
+        return history.getLastSentAt().isAfter(LocalDateTime.now().minusSeconds(10));
     }
 }
