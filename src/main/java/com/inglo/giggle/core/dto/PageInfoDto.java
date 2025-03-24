@@ -1,28 +1,31 @@
 package com.inglo.giggle.core.dto;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PageInfoDto {
+public class PageInfoDto extends SelfValidating<PageInfoDto> {
 
     @NotNull
+    @JsonProperty("current_page")
     private final Integer currentPage;
 
     @NotNull
+    @JsonProperty("current_items")
     private final Integer currentItems;
 
     @NotNull
+    @JsonProperty("page_size")
     private final Integer pageSize;
 
     @NotNull
+    @JsonProperty("total_pages")
     private final Integer totalPages;
 
     @NotNull
+    @JsonProperty("total_items")
     private final Integer totalItems;
 
     @Builder
@@ -38,6 +41,7 @@ public class PageInfoDto {
         this.pageSize = pageSize;
         this.totalPages = totalPages;
         this.totalItems = totalItems;
+        this.validateSelf();
     }
 
     public static PageInfoDto of(
