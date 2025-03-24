@@ -151,7 +151,10 @@ public class Constants {
             "^/v1/guests/banners/\\d+/details$",
 
             // OSRM
-            "^/test-osrm(/.*)?$"
+            "^/test-osrm(/.*)?$",
+
+            // Health Check
+            "^/actuator/health$"
     );
 
     /**
