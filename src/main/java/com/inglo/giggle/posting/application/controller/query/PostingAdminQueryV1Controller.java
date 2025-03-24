@@ -30,8 +30,8 @@ public class PostingAdminQueryV1Controller {
      */
     @GetMapping("/job-postings/summaries")
     public ResponseDto<ReadAdminJobPostingsSummariesResponseDto> readAdminJobPostingsSummaries(
-            @RequestParam("start_date") String stringStartDate,
-            @RequestParam("end_date") String stringEndDate,
+            @RequestParam(value = "start_date", required = false) String stringStartDate,
+            @RequestParam(value = "end_date", required = false) String stringEndDate,
             @AccountID UUID accountId
     ) {
         return ResponseDto.ok(
@@ -83,8 +83,8 @@ public class PostingAdminQueryV1Controller {
      */
     @GetMapping("/user-owner-job-postings/summaries")
     public ResponseDto<ReadAdminUserOwnerJobPostingsSummariesResponseDto> readAdminUserOwnerJobPostings(
-            @RequestParam("start_date") String stringStartDate,
-            @RequestParam("end_date") String stringEndDate
+            @RequestParam(value = "start_date", required = false) String stringStartDate,
+            @RequestParam(value = "end_date", required = false) String stringEndDate
     ) {
         return ResponseDto.ok(
                 readAdminUserOwnerJobPostingsSummariesUseCase.execute(
@@ -99,8 +99,8 @@ public class PostingAdminQueryV1Controller {
      */
     @GetMapping("/user-owner-job-postings/application-success/summaries")
     public ResponseDto<ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesResponseDto> readAdminUserOwnerJobPostingsApplicationSuccess(
-            @RequestParam("start_date") String stringStartDate,
-            @RequestParam("end_date") String stringEndDate
+            @RequestParam(value = "start_date", required = false) String stringStartDate,
+            @RequestParam(value = "end_date", required = false) String stringEndDate
     ) {
         return ResponseDto.ok(
                 readAdminUserOwnerJobPostingsApplicationSuccessSummariesUseCase.execute(
@@ -145,8 +145,8 @@ public class PostingAdminQueryV1Controller {
      */
     @GetMapping("/user-owner-job-postings/digests")
     public ResponseDto<ReadAdminUserOwnerJobPostingsDigestsResponseDto> readAdminUserOwnerJobPostingsDigests(
-            @RequestParam("start_date") String stringStartDate,
-            @RequestParam("end_date") String stringEndDate
+            @RequestParam(value = "start_date", required = false) String stringStartDate,
+            @RequestParam(value = "end_date", required = false) String stringEndDate
     ) {
         return ResponseDto.ok(
                 readAdminUserOwnerJobPostingsDigestsUseCase.execute(

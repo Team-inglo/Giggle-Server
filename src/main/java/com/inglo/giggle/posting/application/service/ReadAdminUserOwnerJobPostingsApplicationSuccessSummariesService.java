@@ -20,8 +20,22 @@ public class ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesService imp
     public ReadAdminUserOwnerJobPostingsApplicationSuccessSummariesResponseDto execute(String stringStartDate, String stringEndDate) {
 
         // stringStartDate, stringEndDate를 LocalDate로 변환
-        LocalDate startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
-        LocalDate endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+        LocalDate startDate;
+        LocalDate endDate;
+
+        if (stringStartDate != null && stringEndDate != null) {
+            startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
+            endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+        } else if (stringStartDate != null) {
+            startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
+            endDate = LocalDate.now();
+        } else if (stringEndDate != null) {
+            endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+            startDate = LocalDate.of(2025, 3, 24);
+        } else {
+            startDate = LocalDate.of(2025, 3, 24);
+            endDate = LocalDate.now();
+        }
 
         // 기간 내 공고 등록 수 조회
         int currentCount = getJobPostingsCountsByDaysBetween(startDate, endDate.plusDays(1));

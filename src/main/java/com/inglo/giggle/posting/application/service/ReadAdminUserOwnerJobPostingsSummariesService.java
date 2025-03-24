@@ -21,14 +21,27 @@ public class ReadAdminUserOwnerJobPostingsSummariesService implements ReadAdminU
             String stringEndDate
     ) {
 
-        // stringStartDate, stringEndDate를 LocalDate로 변환
-        LocalDate localDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
-        LocalDate endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+        LocalDate startDate;
+        LocalDate endDate;
+
+        if (stringStartDate != null && stringEndDate != null) {
+            startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
+            endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+        } else if (stringStartDate != null) {
+            startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
+            endDate = LocalDate.now();
+        } else if (stringEndDate != null) {
+            endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+            startDate = LocalDate.of(2025, 3, 24);
+        } else {
+            startDate = LocalDate.of(2025, 3, 24);
+            endDate = LocalDate.now();
+        }
 
         // 기간 내 지원 수 조회
-        int currentCount = getJobPostingsCountsByDaysBetween(localDate, endDate.plusDays(1));
-        long days = getDays(localDate, endDate);
-        int priorCount = getJobPostingsCountsByDaysBetween(localDate.minusDays(days), localDate);
+        int currentCount = getJobPostingsCountsByDaysBetween(startDate, endDate.plusDays(1));
+        long days = getDays(startDate, endDate);
+        int priorCount = getJobPostingsCountsByDaysBetween(startDate.minusDays(days), startDate);
 
         // 전기간 대비 등록 수 비율 계산
         double comparisonRate = getComparisonRate(priorCount, currentCount);

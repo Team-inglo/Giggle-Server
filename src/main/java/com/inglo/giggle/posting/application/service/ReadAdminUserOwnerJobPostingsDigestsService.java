@@ -24,26 +24,42 @@ public class ReadAdminUserOwnerJobPostingsDigestsService implements ReadAdminUse
     @Transactional(readOnly = true)
     public ReadAdminUserOwnerJobPostingsDigestsResponseDto execute(String stringStartDate, String stringEndDate) {
 
-        // 날짜 파싱
-        LocalDate start = DateTimeUtil.convertStringToLocalDate(stringStartDate);
-        LocalDate end = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+        LocalDateTime startDate;
+        LocalDateTime endDate;
 
-        LocalDateTime startDate = start.atStartOfDay();
-        LocalDateTime endDate = end.plusDays(1).atStartOfDay(); // inclusive
+        // 시작일과 종료일 모두 있는 경우
+        if (stringStartDate != null && stringEndDate != null) {
+            LocalDate start = DateTimeUtil.convertStringToLocalDate(stringStartDate);
+            LocalDate end = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+            startDate = start.atStartOfDay();
+            endDate = end.plusDays(1).atStartOfDay();
 
-        // 기간 계산
-        long periodDays = ChronoUnit.DAYS.between(start, end);
+            // 시작일만 있는 경우
+        } else if (stringStartDate != null) {
+            LocalDate start = DateTimeUtil.convertStringToLocalDate(stringStartDate);
+            startDate = start.atStartOfDay();
+            endDate = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS); // 현재까지
 
-        // 현재 기간 통계 (월별)
-        List<UserOwnerJobPostingQueryRepository.GraphStats> currentStats = userOwnerJobPostingRepository.countGraphStatsByMonth(startDate, endDate);
+            // 종료일만 있는 경우
+        } else if (stringEndDate != null) {
+            LocalDate end = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+            startDate = LocalDate.of(2025, 3, 24).atStartOfDay();
+            endDate = end.plusDays(1).atStartOfDay();
 
-        // 이전 기간 총 지원 수
-        int priorTotalCount = userOwnerJobPostingRepository.countByCreatedAtBetween(startDate.minusDays(periodDays + 1), startDate);
+            // 둘 다 없는 경우 (전체 기간)
+        } else {
+            startDate = LocalDate.of(2025, 3, 24).atStartOfDay(); // 과거부터
+            endDate = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS); // 현재까지
+        }
 
-        return ReadAdminUserOwnerJobPostingsDigestsResponseDto.of(
-                currentStats,
-                priorTotalCount
-        );
+        long periodDays = ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate()) - 1;
+
+        List<UserOwnerJobPostingQueryRepository.GraphStats> currentStats =
+                userOwnerJobPostingRepository.countGraphStatsByMonth(startDate, endDate);
+
+        int priorTotalCount =
+                userOwnerJobPostingRepository.countByCreatedAtBetween(startDate.minusDays(periodDays + 1), startDate);
+
+        return ReadAdminUserOwnerJobPostingsDigestsResponseDto.of(currentStats, priorTotalCount);
     }
-
 }

@@ -22,24 +22,36 @@ public class ReadAdminJobPostingsSummariesService implements ReadAdminJobPosting
     public ReadAdminJobPostingsSummariesResponseDto execute(UUID accountId, String stringStartDate, String stringEndDate) {
 
         // stringStartDate, stringEndDate를 LocalDate로 변환
-        LocalDate startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
-        LocalDate endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+        LocalDate startDate;
+        LocalDate endDate;
 
-        // 기간 내 공고 등록 수 조회
+        if (stringStartDate != null && stringEndDate != null) {
+            startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
+            endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+        } else if (stringStartDate != null) {
+            startDate = DateTimeUtil.convertStringToLocalDate(stringStartDate);
+            endDate = LocalDate.now();
+        } else if (stringEndDate != null) {
+            endDate = DateTimeUtil.convertStringToLocalDate(stringEndDate);
+            startDate = LocalDate.of(2025, 3, 24);
+        } else {
+            startDate = LocalDate.of(2025, 3, 24);
+            endDate = LocalDate.now();
+        }
+
         int currentCount = getJobPostingsCountsByDaysBetween(startDate, endDate.plusDays(1));
         long days = getDays(startDate, endDate);
         int priorCount = getJobPostingsCountsByDaysBetween(startDate.minusDays(days), startDate);
 
-        // 전기간 대비 등록 수 비율 계산
         double comparisonRate = getComparisonRate(priorCount, currentCount);
 
-        // 응답 DTO 생성
         return ReadAdminJobPostingsSummariesResponseDto.of(
                 currentCount,
                 priorCount,
                 comparisonRate
         );
     }
+
 
     /* -------------------------------------------- */
     /* Private Methods ---------------------------- */
