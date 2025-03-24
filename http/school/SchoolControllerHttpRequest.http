@@ -17,3 +17,27 @@ Authorization: Bearer {{access_token}}
 // @no-log
 GET {{host_url}}/v1/admins/schools/1/details
 Authorization: Bearer {{access_token}}
+
+### 9.5 (어드민) 학교 생성하기
+// @no-log
+POST {{host_url}}/v1/admins/schools
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "school_name": "학교 이름",
+  "school_phone_number": "010-1234-5678",
+  "is_metropolitan": true,
+  "institute_name": "학교 소속 기관",
+  "coordinator_name": "담당자 이름",
+  "coordinator_phone_number": "010-1234-5678",
+  "address": {
+    "address_name": "서울특별시 강남구 역삼동",
+    "address_detail": "123-456",
+    "latitude": 37.123456,
+    "longitude": 127.123456,
+    "region_1depth_name": "서울특별시",
+    "region_2depth_name": "강남구",
+    "region_3depth_name": "역삼동"
+  }
+}
