@@ -117,3 +117,9 @@ admin:
 
 discord:
   webhook-url: ${DISCORD_WEBHOOK_URL}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

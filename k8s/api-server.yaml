@@ -15,6 +15,12 @@ spec:
       containers:
         - name: api-server
           image: krmp-d2hub-idock.9rum.cc/dev-test/repo_1bece455b14c:latest
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 5
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
