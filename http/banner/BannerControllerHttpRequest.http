@@ -62,9 +62,9 @@ Content-Disposition: form-data; name="body"
 Content-Type: application/json
 
 {
-  "title" : "오너 배너",
-  "content" : "오너 배너 내용",
-  "role" : "OWNER"
+  "title" : "오너 배너를 수정하여 유저배너로",
+  "content" : "오너 배너 수정 후 유저배너로 만듦. 그 내용",
+  "role" : "USER"
 }
 
 ### 12.9 배너 삭제하기
