@@ -52,7 +52,7 @@ Content-Type: image/png
 
 ### 12.8 (어드민) 배너 수정하기
 // @no-log
-PUT {{host_url}}/v1/admins/banners
+PUT {{host_url}}/v1/admins/banners/2
 Content-Type: multipart/form-data; boundary=boundary
 Authorization: Bearer {{access_token}}
 
@@ -62,9 +62,9 @@ Content-Disposition: form-data; name="body"
 Content-Type: application/json
 
 {
-  "title" : "배너 제목",
-  "content" : "배너 내용",
-  "role" : "USER"
+  "title" : "오너 배너",
+  "content" : "오너 배너 내용",
+  "role" : "OWNER"
 }
 
 ### 12.9 배너 삭제하기
