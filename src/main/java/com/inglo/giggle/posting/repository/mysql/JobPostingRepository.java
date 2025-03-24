@@ -3,8 +3,6 @@ package com.inglo.giggle.posting.repository.mysql;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
-import com.inglo.giggle.posting.application.dto.request.JobPostingSearchId;
-import com.inglo.giggle.posting.application.dto.request.JobPostingSearchIdRequestDto;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
@@ -13,12 +11,12 @@ import com.inglo.giggle.posting.domain.type.EWorkingHours;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
+public interface JobPostingRepository extends JpaRepository<JobPosting, Long>, JobPostingQueryRepository {
 
     List<JobPosting> findAllByOwner(Owner owner);
 
@@ -262,9 +260,10 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             Pageable pageable
     );
 
-
     @Query("SELECT b.jobPosting.id, COUNT(b) FROM BookMark b WHERE b.jobPosting.id IN :jobPostingIds GROUP BY b.jobPosting.id")
     List<Object[]> countBookmarksByJobPostingIds(@Param("jobPostingIds") List<Long> jobPostingIds);
+
+    int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
     public interface JobPostingProjection {
         Long getJobPostingId();

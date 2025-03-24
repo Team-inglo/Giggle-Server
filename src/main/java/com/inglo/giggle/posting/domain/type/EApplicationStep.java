@@ -37,4 +37,20 @@ public enum EApplicationStep {
             default -> throw new IllegalArgumentException("지원 단계가 잘못되었습니다.");
         };
     }
+
+    public static boolean isExisted(String value) {
+        return switch (value.toUpperCase()) {
+            case "RESUME_UNDER_REVIEW" -> true;
+            case "WAITING_FOR_INTERVIEW" -> true;
+            case "FILLING_OUT_DOCUMENTS" -> true;
+            case "DOCUMENT_UNDER_REVIEW" -> true;
+            case "APPLICATION_IN_PROGRESS" -> true;
+            case "APPLICATION_SUCCESS" -> true;
+            case "APPLICATION_REJECTED" -> true;
+            case "RESUME_REJECTED" -> true;
+            case "PENDING" -> true;
+            case "REGISTERING_RESULTS" -> true;
+            default -> false;
+        };
+    }
 }

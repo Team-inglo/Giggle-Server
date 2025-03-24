@@ -106,7 +106,7 @@ Content-Type: application/json
 ### 3.8 (유학생) 앱 내 언어 수정
 // @no-log
 PATCH {{host_url}}/v1/users/languages
-Authorization: Bearer\ {{access_token}}
+Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {

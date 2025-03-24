@@ -13,11 +13,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJobPosting, Long>{
+public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJobPosting, Long>, UserOwnerJobPostingQueryRepository {
 
     @EntityGraph(attributePaths = {"jobPosting"})
     Page<UserOwnerJobPosting> findAllPagedWithJobPostingByUser(User user, Pageable pageable);
@@ -76,5 +77,19 @@ public interface UserOwnerJobPostingRepository extends JpaRepository<UserOwnerJo
             Pageable pageable
     );
 
+    int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
+    @Query("SELECT COUNT(u) FROM UserOwnerJobPosting u " +
+            "WHERE u.step = :step " +
+            "AND u.createdAt BETWEEN :start AND :end")
+    int countUserOwnerJobPostingByStepAndCreatedAtBetween(
+            @Param("step") EApplicationStep step,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
+
+    @Query("SELECT uojp FROM UserOwnerJobPosting uojp WHERE uojp.createdAt BETWEEN :start AND :end")
+    List<UserOwnerJobPosting> findAllByCreatedAtBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    int countByStep(EApplicationStep step);
 }

@@ -153,19 +153,19 @@ Content-Type: application/json
 Content-Disposition: form-data; name="image"; filename="image1.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/team13.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image2.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/team13.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="image"; filename="image3.png"
 Content-Type: image/png
 
-< /Users/kyeom/Desktop/team13.png
+< /Users/jjuuuunnii/Desktop/image.png
 
 --boundary
 
@@ -265,6 +265,30 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
+
+### 4.14 (관리자) 공고 등록 수 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/job-postings/summaries?
+    start_date = {{posting.API_4_14.start_date}}&
+    end_date = {{posting.API_4_14.end_date}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 4.15 (관리자) 공고 목록 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/job-postings/overviews?
+    page={{posting.API_4_15.page}}
+    &size={{posting.API_4_15.size}}
+    &start_date={{posting.API_4_15.start_date}}
+    &end_date={{posting.API_4_15.end_date}}
+    &filter_type={{posting.API_4_15.filter_type}}
+    &filter={{posting.API_4_15.filter}}
+#    &sort_type={{posting.API_4_15.sort_type}}
+#    &sort={{posting.API_4_15.sort}}
+#    &search={{posting.API_4_15.search}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
 
 //======================================================= API 5 =======================================================
 
@@ -406,4 +430,64 @@ Authorization: Bearer {{access_token}}
 {
   "is_approval": {{posting.API_6_15.is_approval}},
   "feedback": "{{posting.API_6_15.feedback}}"
+}
+
+
+### 6.16 (어드민) 공고 신청 수 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/summaries?
+    start_date={{posting.API_6_16.start_date}}&
+    end_date={{posting.API_6_16.end_date}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 6.17 (어드민) 매칭 성공 수 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/application-success/summaries?
+    start_date={{posting.API_6_17.start_date}}&
+    end_date={{posting.API_6_17.end_date}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 6.18 (어드민) 지원 목록 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/overviews?
+    page={{posting.API_6_18.page}}
+    &size={{posting.API_6_18.size}}
+    &start_date={{posting.API_6_18.start_date}}
+    &end_date={{posting.API_6_18.end_date}}
+    &sort_type={{posting.API_6_18.sort_type}}
+    &sort={{posting.API_6_18.sort}}
+    &filter={{posting.API_6_18.filter}}
+    &filter_type={{posting.API_6_18.filter_type}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 6.19 (어드민) 신규 신청 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/digests?
+    start_date={{posting.API_6_19.start_date}}
+    &end_date={{posting.API_6_19.end_date}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 6.20 (어드민) 누적 신청 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/user-owner-job-postings/briefs
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 6.21 (어드민) 공고 메모 수정하기
+// @no-log
+PATCH {{host_url}}/v1/admins/user-owner-job-postings/{{posting.API_6_21.user_owner_job_posting_id}}/memo
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "memo": "{{posting.API_6_21.memo}}"
 }
