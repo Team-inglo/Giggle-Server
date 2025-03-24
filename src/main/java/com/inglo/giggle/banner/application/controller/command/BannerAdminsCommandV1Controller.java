@@ -23,7 +23,7 @@ public class BannerAdminsCommandV1Controller {
 
 
     /**
-     * 12.5 (관리자) 배너 생성하기
+     * 12.7 (어드민) 배너 생성하기
      */
     @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseDto<Void> createBanner(
@@ -36,7 +36,7 @@ public class BannerAdminsCommandV1Controller {
     }
 
     /**
-     * 12.6 (관리자) 배너 삭제하기
+     * 12.9 (어드민) 배너 삭제하기
      */
     @DeleteMapping("/{bannerId}")
     public ResponseDto<Void> deleteBanner(

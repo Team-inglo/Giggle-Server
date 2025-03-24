@@ -7,19 +7,29 @@ Authorization: Bearer {{access_token}}
 // @no-log
 GET {{host_url}}/v1/guests/banners/1/details
 
-### 12.3 (유학생/고용주/관리자) 배너 요약 조회하기
+### 12.3 (유학생/고용주) 배너 요약 조회하기
 // @no-log
 GET {{host_url}}/v1/banners/overviews
 Authorization: Bearer {{access_token}}
 
-### 12.4 (유학생/고용주/관리자) 배너 상세 조회하기
+### 12.4 (유학생/고용주) 배너 상세 조회하기
 // @no-log
 GET {{host_url}}/v1/banners/1/details
-Authorization: Bearer {{access_token}}'
+Authorization: Bearer {{access_token}}
 
-### 12.5 배너 등록하기
+### 12.5 (어드민) 배너 목록 조회하기
 // @no-log
-POST {{host_url}}/v1/banners
+GET {{host_url}}/v1/admins/banners/overviews?page=1&size=10
+Authorization: Bearer {{access_token}}
+
+### 12.6 (어드민) 배너 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/admins/banners/1/details
+Authorization: Bearer {{access_token}}
+
+### 12.7 (어드민) 배너 생성하기
+// @no-log
+POST {{host_url}}/v1/admins/banners
 Content-Type: multipart/form-data; boundary=boundary
 Authorization: Bearer {{access_token}}
 
@@ -29,6 +39,7 @@ Content-Disposition: form-data; name="body"
 Content-Type: application/json
 
 {
+  "title" : "배너 제목",
   "content" : "배너 내용",
   "role" : "USER"
 }
@@ -39,7 +50,24 @@ Content-Type: image/png
 
 < /Users/kyeom/Desktop/team13.png
 
-### 12.6 배너 삭제하기
+### 12.8 (어드민) 배너 수정하기
 // @no-log
-DELETE {{host_url}}/v1/banners/1
+PUT {{host_url}}/v1/admins/banners
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{access_token}}
+
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "title" : "배너 제목",
+  "content" : "배너 내용",
+  "role" : "USER"
+}
+
+### 12.9 배너 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/admins/banners/1
 Authorization: Bearer {{access_token}}
