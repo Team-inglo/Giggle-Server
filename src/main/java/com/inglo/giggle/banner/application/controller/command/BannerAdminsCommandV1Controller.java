@@ -1,8 +1,10 @@
 package com.inglo.giggle.banner.application.controller.command;
 
 import com.inglo.giggle.banner.application.dto.request.CreateAdminBannerRequestDto;
+import com.inglo.giggle.banner.application.dto.request.UpdateAdminBannerRequestDto;
 import com.inglo.giggle.banner.application.usecase.CreateAdminBannerUseCase;
 import com.inglo.giggle.banner.application.usecase.DeleteAdminBannerUseCase;
+import com.inglo.giggle.banner.application.usecase.UpdateAdminBannerUseCase;
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import jakarta.validation.Valid;
@@ -20,6 +22,7 @@ public class BannerAdminsCommandV1Controller {
 
     private final CreateAdminBannerUseCase createAdminBannerUseCase;
     private final DeleteAdminBannerUseCase deleteAdminBannerUseCase;
+    private final UpdateAdminBannerUseCase updateAdminBannerUseCase;
 
 
     /**
@@ -33,6 +36,20 @@ public class BannerAdminsCommandV1Controller {
     ) {
         createAdminBannerUseCase.execute(accountId, image, requestDto);
         return ResponseDto.created(null);
+    }
+
+    /**
+     * 12.8 (어드민) 배너 수정하기
+     */
+    @PutMapping("/{bannerId}")
+    public ResponseDto<Void> updateBanner(
+            @AccountID UUID accountId,
+            @PathVariable Long bannerId,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart(value = "body") @Valid UpdateAdminBannerRequestDto requestDto
+    ) {
+        updateAdminBannerUseCase.execute(bannerId, accountId, image, requestDto);
+        return ResponseDto.ok(null);
     }
 
     /**

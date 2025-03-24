@@ -1,7 +1,7 @@
 package com.inglo.giggle.banner.application.service;
 
-import com.inglo.giggle.banner.application.dto.request.CreateAdminBannerRequestDto;
-import com.inglo.giggle.banner.application.usecase.CreateAdminBannerUseCase;
+import com.inglo.giggle.banner.application.dto.request.UpdateAdminBannerRequestDto;
+import com.inglo.giggle.banner.application.usecase.UpdateAdminBannerUseCase;
 import com.inglo.giggle.banner.domain.Banner;
 import com.inglo.giggle.banner.repository.mysql.BannerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
@@ -19,30 +19,31 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CreateAdminBannerService implements CreateAdminBannerUseCase {
+public class UpdateAdminBannerService implements UpdateAdminBannerUseCase {
 
-    private final AccountRepository accountRepository;
     private final BannerRepository bannerRepository;
+    private final AccountRepository accountRepository;
 
     private final S3Util s3Util;
 
     @Override
     @Transactional
-    public void execute(UUID accountId, MultipartFile image, CreateAdminBannerRequestDto requestDto) {
+    public void execute(Long bannerId, UUID accountId, MultipartFile image, UpdateAdminBannerRequestDto requestDto) {
 
         // Account 조회
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        String imgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.BANNER_IMG);
+        // Banner 조회
+        Banner banner = bannerRepository.findById(bannerId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
-        Banner banner = Banner.builder()
-                .title(requestDto.title())
-                .imgUrl(imgUrl)
-                .content(requestDto.content())
-                .role(requestDto.role())
-                .build();
-
+        if (image != null) {
+            String imgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.BANNER_IMG);
+            banner.updateWithImgUrl(requestDto.title(), imgUrl, requestDto.content(), requestDto.role());
+        } else {
+            banner.updateWithoutImgUrl(requestDto.title(), requestDto.content(), requestDto.role());
+        }
         bannerRepository.save(banner);
     }
 }

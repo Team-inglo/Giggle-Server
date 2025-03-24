@@ -8,6 +8,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class ReadAdminBannerDetailService implements ReadAdminBannerDetailUseCas
     private final BannerRepository bannerRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ReadAdminBannerDetailResponseDto execute(Long bannerId) {
 
         Banner banner = bannerRepository.findById(bannerId)
