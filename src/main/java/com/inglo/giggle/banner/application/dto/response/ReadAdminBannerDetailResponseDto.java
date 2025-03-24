@@ -3,16 +3,21 @@ package com.inglo.giggle.banner.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.banner.domain.Banner;
 import com.inglo.giggle.core.dto.SelfValidating;
+import com.inglo.giggle.security.domain.type.ESecurityRole;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
-public class ReadBannerDetailResponseDto extends SelfValidating<ReadBannerDetailResponseDto> {
+public class ReadAdminBannerDetailResponseDto extends SelfValidating<ReadAdminBannerDetailResponseDto> {
 
     @JsonProperty("id")
     private final Long id;
+
+    @JsonProperty("title")
+    private final String title;
+
+    @JsonProperty("role")
+    private final ESecurityRole role;
 
     @JsonProperty("img_url")
     private final String imgUrl;
@@ -21,16 +26,20 @@ public class ReadBannerDetailResponseDto extends SelfValidating<ReadBannerDetail
     private final String content;
 
     @Builder
-    public ReadBannerDetailResponseDto(Long id, String imgUrl, String content) {
+    public ReadAdminBannerDetailResponseDto(Long id, String title, ESecurityRole role, String imgUrl, String content) {
         this.id = id;
+        this.title = title;
+        this.role = role;
         this.imgUrl = imgUrl;
         this.content = content;
         this.validateSelf();
     }
 
-    public static ReadBannerDetailResponseDto fromEntity(Banner banner) {
-        return ReadBannerDetailResponseDto.builder()
+    public static ReadAdminBannerDetailResponseDto fromEntity(Banner banner) {
+        return ReadAdminBannerDetailResponseDto.builder()
                 .id(banner.getId())
+                .title(banner.getTitle())
+                .role(banner.getRole())
                 .imgUrl(banner.getImgUrl())
                 .content(banner.getContent())
                 .build();

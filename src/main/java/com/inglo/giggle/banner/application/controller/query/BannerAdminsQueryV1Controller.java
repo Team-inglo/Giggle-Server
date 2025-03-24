@@ -1,14 +1,13 @@
 package com.inglo.giggle.banner.application.controller.query;
 
+import com.inglo.giggle.banner.application.dto.response.ReadAdminBannerDetailResponseDto;
 import com.inglo.giggle.banner.application.dto.response.ReadAdminBannerOverviewResponseDto;
+import com.inglo.giggle.banner.application.usecase.ReadAdminBannerDetailUseCase;
 import com.inglo.giggle.banner.application.usecase.ReadAdminBannerOverviewUseCase;
 import com.inglo.giggle.core.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -18,6 +17,7 @@ import java.time.LocalDate;
 public class BannerAdminsQueryV1Controller {
 
     private final ReadAdminBannerOverviewUseCase readAdminBannerOverviewUseCase;
+    private final ReadAdminBannerDetailUseCase readAdminBannerDetailUseCase;
 
     /**
      * 12.5 (어드민) 배너 목록 조회하기
@@ -45,5 +45,15 @@ public class BannerAdminsQueryV1Controller {
                 sortType,
                 sort
         ));
+    }
+
+    /**
+     * 12.6 (어드민) 배너 상세 조회하기
+     */
+    @GetMapping("/{id}/details")
+    public ResponseDto<ReadAdminBannerDetailResponseDto> readAdminBannerDetail(
+            @PathVariable Long id
+    ) {
+        return ResponseDto.ok(readAdminBannerDetailUseCase.execute(id));
     }
 }
