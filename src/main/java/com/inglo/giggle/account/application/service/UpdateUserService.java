@@ -5,8 +5,6 @@ import com.inglo.giggle.account.application.usecase.UpdateUserUseCase;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.domain.service.UserService;
 import com.inglo.giggle.account.repository.UserRepository;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.domain.mysql.Account;

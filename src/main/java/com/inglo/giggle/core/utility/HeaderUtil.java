@@ -1,9 +1,9 @@
 package com.inglo.giggle.core.utility;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
-import org.springframework.http.HttpHeaders;
 
 import java.util.Map;
 import java.util.Optional;

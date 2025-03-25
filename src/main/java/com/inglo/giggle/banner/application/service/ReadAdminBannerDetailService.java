@@ -4,8 +4,6 @@ import com.inglo.giggle.banner.application.dto.response.ReadAdminBannerDetailRes
 import com.inglo.giggle.banner.application.usecase.ReadAdminBannerDetailUseCase;
 import com.inglo.giggle.banner.domain.Banner;
 import com.inglo.giggle.banner.repository.BannerRepository;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,10 +1,9 @@
 package com.inglo.giggle.core.config;
 
-import com.inglo.giggle.core.resolver.HttpRoleArgumentResolver;
-import lombok.RequiredArgsConstructor;
-import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.interceptor.pre.HttpAccountIDInterceptor;
 import com.inglo.giggle.core.resolver.HttpAccountIDArgumentResolver;
+import com.inglo.giggle.core.resolver.HttpRoleArgumentResolver;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

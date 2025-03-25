@@ -4,8 +4,6 @@ import com.inglo.giggle.banner.application.dto.request.UpdateAdminBannerRequestD
 import com.inglo.giggle.banner.application.usecase.UpdateAdminBannerUseCase;
 import com.inglo.giggle.banner.domain.Banner;
 import com.inglo.giggle.banner.repository.BannerRepository;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.domain.mysql.Account;

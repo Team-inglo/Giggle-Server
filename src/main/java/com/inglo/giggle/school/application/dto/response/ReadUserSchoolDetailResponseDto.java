@@ -1,11 +1,13 @@
 package com.inglo.giggle.school.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.address.dto.request.AddressRequestDto;
+import com.inglo.giggle.address.dto.response.AddressResponseDto;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.resume.domain.Education;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class ReadUserSchoolDetailResponseDto extends SelfValidating<ReadUserSchoolDetailResponseDto> {
     @JsonProperty("school_name")
     private final String schoolName;
@@ -20,10 +22,10 @@ public class ReadUserSchoolDetailResponseDto extends SelfValidating<ReadUserScho
     private final String coordinatorPhoneNumber;
 
     @JsonProperty("address")
-    AddressRequestDto address;
+    AddressResponseDto address;
 
     @Builder
-    public ReadUserSchoolDetailResponseDto(String schoolName, String instituteName, String coordinatorName, String coordinatorPhoneNumber, AddressRequestDto address) {
+    public ReadUserSchoolDetailResponseDto(String schoolName, String instituteName, String coordinatorName, String coordinatorPhoneNumber, AddressResponseDto address) {
         this.schoolName = schoolName;
         this.instituteName = instituteName;
         this.coordinatorName = coordinatorName;
@@ -48,7 +50,7 @@ public class ReadUserSchoolDetailResponseDto extends SelfValidating<ReadUserScho
                 .instituteName(education.getSchool().getInstituteName())
                 .coordinatorName(education.getSchool().getCoordinatorName())
                 .coordinatorPhoneNumber(education.getSchool().getCoordinatorPhoneNumber())
-                .address(AddressRequestDto.fromEntity(education.getSchool().getAddress()))
+                .address(AddressResponseDto.fromEntity(education.getSchool().getAddress()))
                 .build();
     }
 }

@@ -6,8 +6,6 @@ import com.inglo.giggle.core.dto.SelfValidating;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 public class ReadBannerDetailResponseDto extends SelfValidating<ReadBannerDetailResponseDto> {
 

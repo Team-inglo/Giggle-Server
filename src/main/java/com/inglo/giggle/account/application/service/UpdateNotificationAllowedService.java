@@ -2,8 +2,6 @@ package com.inglo.giggle.account.application.service;
 
 import com.inglo.giggle.account.application.dto.request.UpdateNotificationAllowedRequestDto;
 import com.inglo.giggle.account.application.usecase.UpdateNotificationAllowedUseCase;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;

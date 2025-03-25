@@ -1,10 +1,10 @@
 package com.inglo.giggle.security.info;
 
 import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.type.ESecurityRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

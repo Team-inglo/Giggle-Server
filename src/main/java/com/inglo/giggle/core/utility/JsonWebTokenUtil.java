@@ -7,7 +7,14 @@ import com.inglo.giggle.core.exception.type.HttpSecurityException;
 import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.application.dto.response.TemporaryJsonWebTokenDto;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
@@ -93,5 +100,4 @@ public class JsonWebTokenUtil implements InitializingBean {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
-    //TODO: refresh, access 검증 로직 필요. 현재는 refresh token도 통과시킴
 }

@@ -1,7 +1,5 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.usecase.UpdateAdminUserOwnerJobPostingMemoUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;

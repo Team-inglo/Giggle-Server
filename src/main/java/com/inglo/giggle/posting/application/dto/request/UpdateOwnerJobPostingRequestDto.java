@@ -1,6 +1,7 @@
 package com.inglo.giggle.posting.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.inglo.giggle.address.dto.request.AddressRequestDto;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;
@@ -9,7 +10,11 @@ import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 import java.util.Set;
@@ -46,7 +51,7 @@ public record UpdateOwnerJobPostingRequestDto(
         @NotNull(message = "주소 정보는 필수 입력 값입니다.")
         @JsonProperty("address")
         @Valid
-        AddressDto address,
+        AddressRequestDto address,
 
         @JsonProperty("recruitment_dead_line")
         String recruitmentDeadLine,  // null if 상시모집
@@ -111,41 +116,6 @@ public record UpdateOwnerJobPostingRequestDto(
 
             @JsonProperty("work_end_time")
             String workEndTime // should be null if day_of_week is NEGOTIABLE
-    ) {
-    }
-
-    public record AddressDto(
-            @NotNull(message = "주소명은 필수 입력 값입니다.")
-            @JsonProperty("address_name")
-            String addressName,
-
-            @NotNull(message = "1차 지역명은 필수 입력 값입니다.")
-            @JsonProperty("region_1depth_name")
-            String region1DepthName,
-
-            @NotNull(message = "2차 지역명은 필수 입력 값입니다.")
-            @JsonProperty("region_2depth_name")
-            String region2DepthName,
-
-            @NotNull(message = "3차 지역명은 필수 입력 값입니다.")
-            @JsonProperty("region_3depth_name")
-            String region3DepthName,
-
-            @JsonProperty("region_4depth_name")
-            String region4DepthName,
-
-            @NotNull(message = "상세 주소는 필수 입력 값입니다.")
-            @Size(max = 100, message = "상세 주소는 최대 100자까지 입력 가능합니다.")
-            @JsonProperty("address_detail")
-            String addressDetail,
-
-            @NotNull(message = "경도는 필수 입력 값입니다.")
-            @JsonProperty("longitude")
-            Double longitude,
-
-            @NotNull(message = "위도는 필수 입력 값입니다.")
-            @JsonProperty("latitude")
-            Double latitude
     ) {
     }
 }

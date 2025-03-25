@@ -1,8 +1,6 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.dto.response.UpdateUserJobPostingBookMarkResponseDto;
 import com.inglo.giggle.posting.application.usecase.UpdateUserJobPostingBookMarkUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;

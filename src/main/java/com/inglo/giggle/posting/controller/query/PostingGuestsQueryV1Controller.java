@@ -2,16 +2,17 @@ package com.inglo.giggle.posting.controller.query;
 
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.core.type.EVisa;
-import com.inglo.giggle.posting.application.dto.request.ReadGuestJobPostingOverviewsRequestDto;
 import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingDetailResponseDto;
 import com.inglo.giggle.posting.application.dto.response.ReadGuestJobPostingOverviewsResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadGuestJobPostingDetailUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadGuestJobPostingOverviewsUseCase;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 

@@ -5,8 +5,6 @@ import com.inglo.giggle.account.application.usecase.UpdateUserLanguageUseCase;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.domain.service.UserService;
 import com.inglo.giggle.account.repository.UserRepository;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -6,7 +6,6 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.inglo.giggle.security.info.CustomUserPrincipal;
 import org.springframework.core.MethodParameter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

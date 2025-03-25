@@ -1,7 +1,7 @@
 package com.inglo.giggle.document.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.address.dto.request.AddressRequestDto;
+import com.inglo.giggle.address.dto.response.AddressResponseDto;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.document.domain.IntegratedApplication;
@@ -63,7 +63,7 @@ public class ReadIntegratedApplicationDetailResponseDto extends SelfValidating<R
     private final String signatureBase64;
 
     @JsonProperty("address")
-    private final AddressRequestDto address;
+    private final AddressResponseDto address;
 
     @Builder
     public ReadIntegratedApplicationDetailResponseDto(
@@ -84,7 +84,7 @@ public class ReadIntegratedApplicationDetailResponseDto extends SelfValidating<R
             String occupation,
             String email,
             String signatureBase64,
-            AddressRequestDto address
+            AddressResponseDto address
     ) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -127,7 +127,7 @@ public class ReadIntegratedApplicationDetailResponseDto extends SelfValidating<R
                 .occupation(application.getOccupation())
                 .email(application.getEmail())
                 .signatureBase64(application.getEmployeeSignatureBase64())
-                .address(AddressRequestDto.fromEntity(application.getEmployeeAddress()))
+                .address(AddressResponseDto.fromEntity(application.getEmployeeAddress()))
                 .build();
     }
 }

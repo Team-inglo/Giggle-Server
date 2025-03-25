@@ -1,7 +1,9 @@
 package com.inglo.giggle.posting.application.dto.request;
 
-import com.fasterxml.jackson.annotation.*;
-import jakarta.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public record ReadGuestJobPostingOverviewsRequestDto(
 
