@@ -7,11 +7,11 @@ import com.inglo.giggle.posting.application.dto.response.UpdateUserJobPostingBoo
 import com.inglo.giggle.posting.application.usecase.UpdateUserJobPostingBookMarkUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.BookMarkService;
-import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.BookMarkRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +35,7 @@ public class UpdateUserJobPostingBookMarkService implements UpdateUserJobPosting
     public UpdateUserJobPostingBookMarkResponseDto execute(UUID accountId, Long jobPostingId) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
         accountService.checkUserValidation(account);
@@ -50,8 +49,7 @@ public class UpdateUserJobPostingBookMarkService implements UpdateUserJobPosting
                 .orElseGet(() -> {
                     User user = (User) account;
 
-                    JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                            .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                    JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
 
                     bookMarkRepository.save(
                             bookMarkService.createBookMark(

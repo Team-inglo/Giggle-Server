@@ -6,7 +6,7 @@ import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.CountInfoDto;
 import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

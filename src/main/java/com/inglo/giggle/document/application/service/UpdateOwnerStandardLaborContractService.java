@@ -2,8 +2,6 @@ package com.inglo.giggle.document.application.service;
 
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
@@ -16,19 +14,19 @@ import com.inglo.giggle.document.domain.service.ContractWorkDayTimeService;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
-import com.inglo.giggle.document.repository.mysql.ContractWorkDayTimeRepository;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.document.repository.ContractWorkDayTimeRepository;
+import com.inglo.giggle.document.repository.DocumentRepository;
+import com.inglo.giggle.document.repository.StandardLaborContractRepository;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.domain.service.NotificationService;
 import com.inglo.giggle.core.event.dto.NotificationEventDto;
-import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
+import com.inglo.giggle.notification.repository.NotificationRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountDeviceRepository;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountDeviceRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -63,22 +61,19 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
     public void execute(UUID accountId, Long documentId, UpdateOwnerStandardLaborContractRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkOwnerValidation(account);
 
         // Document 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
 
         // UserOwnerJobPosting 오너 유효성 체크
         userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
 
         // StandardLaborContract 조회
-        StandardLaborContract standardLaborContract = standardLaborContractRepository.findById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        StandardLaborContract standardLaborContract = standardLaborContractRepository.findByIdOrElseThrow(documentId);
 
         // StandardLaborContract 수정 유효성 체크
         standardLaborContractService.checkUpdateOrSubmitOwnerStandardLaborContractValidation(standardLaborContract);

@@ -12,10 +12,10 @@ import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultTemporaryRequestDto;
 import com.inglo.giggle.security.application.dto.response.IssueAuthenticationCodeResponseDto;
 import com.inglo.giggle.security.event.CompleteEmailValidationEvent;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
-import com.inglo.giggle.security.repository.redis.AuthenticationCodeHistoryRepository;
-import com.inglo.giggle.security.repository.redis.AuthenticationCodeRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.repository.AuthenticationCodeHistoryRepository;
+import com.inglo.giggle.security.repository.AuthenticationCodeRepository;
+import com.inglo.giggle.security.repository.TemporaryAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,8 +44,7 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
         }
 
         // 인증코드 발급 이력 조회
-        AuthenticationCodeHistory history = authenticationCodeHistoryRepository.findById(requestDto.email())
-                .orElse(null);
+        AuthenticationCodeHistory history = authenticationCodeHistoryRepository.findByIdOrElseNull(requestDto.email());
 
         // 인증코드 발급 제한, 발급 속도 제한 유효성 검사
         authenticationCodeHistoryService.validateAuthenticationCodeHistory(history);
@@ -66,9 +65,9 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
 
         // 인증코드 발급 이력 업데이트
         if (history == null) {
-            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryService.createAuthenticationCodeHistory(requestDto.email()));
+            history = authenticationCodeHistoryRepository.saveAndReturn(authenticationCodeHistoryService.createAuthenticationCodeHistory(requestDto.email()));
         } else {
-            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryService.incrementAuthenticationCodeCount(history));
+            history = authenticationCodeHistoryRepository.saveAndReturn(authenticationCodeHistoryService.incrementAuthenticationCodeCount(history));
         }
 
         // 메일 전송(비동기)
@@ -83,6 +82,6 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
      * @return 중복된 이메일인지 여부
      */
     private Boolean isDuplicatedEmail(String email) {
-        return accountRepository.findByEmailAndProvider(email, ESecurityProvider.DEFAULT).isPresent();
+        return accountRepository.findByEmailAndProviderOrElseNull(email, ESecurityProvider.DEFAULT) != null;
     }
 }

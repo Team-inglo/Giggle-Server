@@ -1,15 +1,13 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.dto.response.ReadUserBookMarkCountResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadUserBookMarkCountUseCase;
 import com.inglo.giggle.posting.domain.BookMark;
-import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
+import com.inglo.giggle.posting.repository.BookMarkRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +29,7 @@ public class ReadUserBookMarkCountService implements ReadUserBookMarkCountUseCas
     public ReadUserBookMarkCountResponseDto execute(UUID accountId) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
         accountService.checkUserValidation(account);

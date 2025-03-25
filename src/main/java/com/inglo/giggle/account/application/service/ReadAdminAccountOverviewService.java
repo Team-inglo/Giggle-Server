@@ -4,7 +4,7 @@ import com.inglo.giggle.account.application.dto.response.ReadAdminAccountOvervie
 import com.inglo.giggle.account.application.usecase.ReadAdminAccountOverviewUseCase;
 import com.inglo.giggle.core.dto.PageInfoDto;
 import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

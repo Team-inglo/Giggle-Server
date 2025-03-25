@@ -1,7 +1,7 @@
 package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.security.domain.service.RefreshTokenService;
-import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
+import com.inglo.giggle.security.repository.RefreshTokenRepository;
 import com.inglo.giggle.security.application.usecase.LoginByDefaultUseCase;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;

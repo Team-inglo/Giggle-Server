@@ -3,7 +3,7 @@ package com.inglo.giggle.banner.application.service;
 import com.inglo.giggle.banner.application.dto.response.ReadBannerDetailResponseDto;
 import com.inglo.giggle.banner.application.usecase.ReadGuestBannerDetailUseCase;
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.banner.repository.mysql.BannerRepository;
+import com.inglo.giggle.banner.repository.BannerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
@@ -21,8 +21,7 @@ public class ReadGuestBannerDetailService implements ReadGuestBannerDetailUseCas
     public ReadBannerDetailResponseDto execute(Long bannerId) {
 
         // Banner 조회
-        Banner banner = bannerRepository.findById(bannerId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Banner banner = bannerRepository.findByIdOrElseThrow(bannerId);
 
         // Banner 권한 확인
         if (!banner.getRole().equals(ESecurityRole.USER) && !banner.getRole().equals(ESecurityRole.GUEST)) {

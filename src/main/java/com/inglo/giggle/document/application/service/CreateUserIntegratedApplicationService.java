@@ -11,17 +11,17 @@ import com.inglo.giggle.document.application.usecase.CreateUserIntegratedApplica
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.service.DocumentService;
 import com.inglo.giggle.document.domain.service.IntegratedApplicationService;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
+import com.inglo.giggle.document.repository.DocumentRepository;
+import com.inglo.giggle.document.repository.IntegratedApplicationRepository;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,8 +50,7 @@ public class CreateUserIntegratedApplicationService implements CreateUserIntegra
     public void execute(UUID accountId, Long userOwnerJobPostingId, CreateUserIntegratedApplicationRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);
@@ -79,8 +78,7 @@ public class CreateUserIntegratedApplicationService implements CreateUserIntegra
         );
 
         // School 조회
-        School school = schoolRepository.findBySchoolName(requestDto.schoolName())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        School school = schoolRepository.findBySchoolNameOrElseThrow(requestDto.schoolName());
 
         // IntegratedApplication 생성
         IntegratedApplication integratedApplication = integratedApplicationService.createIntegratedApplication(

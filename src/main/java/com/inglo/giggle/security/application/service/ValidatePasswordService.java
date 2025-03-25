@@ -6,7 +6,7 @@ import com.inglo.giggle.security.application.dto.request.ValidatePasswordRequest
 import com.inglo.giggle.security.application.dto.response.ValidatePasswordResponseDto;
 import com.inglo.giggle.security.application.usecase.ValidatePasswordUseCase;
 import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,7 @@ public class ValidatePasswordService implements ValidatePasswordUseCase {
     public ValidatePasswordResponseDto execute(UUID accountId, ValidatePasswordRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId).
-                orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         return ValidatePasswordResponseDto.of(
                 bCryptPasswordEncoder.matches(

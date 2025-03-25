@@ -3,7 +3,6 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.dto.RouteResponseDto;
 import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.utility.OSRMUtil;
 import com.inglo.giggle.core.utility.RestClientUtil;
@@ -13,19 +12,19 @@ import com.inglo.giggle.posting.domain.JobPostAggregate;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.JobPostAggregateService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.domain.service.EducationService;
 import com.inglo.giggle.resume.domain.service.ResumeAggregateService;
-import com.inglo.giggle.resume.repository.mysql.EducationRepository;
-import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
+import com.inglo.giggle.resume.repository.EducationRepository;
+import com.inglo.giggle.resume.repository.ResumeRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -64,8 +63,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
     public ReadUserJobPostingBriefResponseDto execute(UUID accountId) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
         accountService.checkUserValidation(account);
@@ -75,7 +73,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
                 .filter(jobPosting -> {
 
                     // Resume 조회 및 null 체크
-                    Optional<Resume> optionalResume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId);
+                    Optional<Resume> optionalResume = resumeRepository.findWithEducationsAndLanguageSkillByAccountIdOptional(accountId);
                     if (optionalResume.isEmpty()) {
                         return false;
                     }
@@ -127,7 +125,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
 
 
     private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDesc(resume.getUser().getId());
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDescOptional(resume.getUser().getId());
         if (school.isEmpty()) {
             return false;
         }

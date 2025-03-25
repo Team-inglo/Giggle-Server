@@ -2,7 +2,8 @@ package com.inglo.giggle.school.application.service;
 
 import com.inglo.giggle.school.application.dto.response.ReadAdminSchoolDetailResponseDto;
 import com.inglo.giggle.school.application.usecase.ReadAdminSchoolDetailUseCase;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.domain.School;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +17,9 @@ public class ReadAdminSchoolDetailService implements ReadAdminSchoolDetailUseCas
     @Override
     @Transactional(readOnly = true)
     public ReadAdminSchoolDetailResponseDto execute(Long id) {
-        return schoolRepository.findById(id)
-                .map(ReadAdminSchoolDetailResponseDto::of)
-                .orElse(null);
+
+        School school = schoolRepository.findByIdOrElseThrow(id);
+
+        return ReadAdminSchoolDetailResponseDto.of(school);
     }
 }

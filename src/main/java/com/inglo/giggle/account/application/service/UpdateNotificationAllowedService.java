@@ -6,7 +6,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +25,7 @@ public class UpdateNotificationAllowedService implements UpdateNotificationAllow
     public void execute(UUID accountId, UpdateNotificationAllowedRequestDto requestDto) {
 
         // 계정 정보 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 알림 허용 여부 업데이트
         account = accountService.updateNotificationAllowed(account, requestDto.isNotificationAllowed());

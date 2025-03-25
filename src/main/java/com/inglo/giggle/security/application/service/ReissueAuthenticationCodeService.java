@@ -8,8 +8,8 @@ import com.inglo.giggle.security.domain.redis.AuthenticationCodeHistory;
 import com.inglo.giggle.security.domain.service.AuthenticationCodeHistoryService;
 import com.inglo.giggle.security.domain.service.AuthenticationCodeService;
 import com.inglo.giggle.security.event.CompleteEmailValidationEvent;
-import com.inglo.giggle.security.repository.redis.AuthenticationCodeHistoryRepository;
-import com.inglo.giggle.security.repository.redis.AuthenticationCodeRepository;
+import com.inglo.giggle.security.repository.AuthenticationCodeHistoryRepository;
+import com.inglo.giggle.security.repository.AuthenticationCodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,8 +32,7 @@ public class ReissueAuthenticationCodeService implements ReissueAuthenticationCo
     public IssueAuthenticationCodeResponseDto execute(IssueAuthenticationCodeRequestDto requestDto) {
 
         // 인증코드 발급 이력 조회
-        AuthenticationCodeHistory history = authenticationCodeHistoryRepository.findById(requestDto.email())
-                .orElse(null);
+        AuthenticationCodeHistory history = authenticationCodeHistoryRepository.findByIdOrElseNull(requestDto.email());
 
         // 인증코드 발급 제한, 발급 속도 제한 유효성 검사
         authenticationCodeHistoryService.validateAuthenticationCodeHistory(history);
@@ -51,9 +50,9 @@ public class ReissueAuthenticationCodeService implements ReissueAuthenticationCo
 
         // 인증코드 발급 이력 업데이트
         if (history == null) {
-            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryService.createAuthenticationCodeHistory(requestDto.email()));
+            history = authenticationCodeHistoryRepository.saveAndReturn(authenticationCodeHistoryService.createAuthenticationCodeHistory(requestDto.email()));
         } else {
-            history = authenticationCodeHistoryRepository.save(authenticationCodeHistoryService.incrementAuthenticationCodeCount(history));
+            history = authenticationCodeHistoryRepository.saveAndReturn(authenticationCodeHistoryService.incrementAuthenticationCodeCount(history));
         }
 
         // 메일 전송(비동기)

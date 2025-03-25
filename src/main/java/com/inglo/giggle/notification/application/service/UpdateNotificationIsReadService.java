@@ -5,7 +5,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.notification.application.usecase.UpdateNotificationIsReadUseCase;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.domain.service.NotificationService;
-import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
+import com.inglo.giggle.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +23,7 @@ public class UpdateNotificationIsReadService implements UpdateNotificationIsRead
     @Transactional
     public void execute(UUID accountId, Long notificationId) {
 
-        Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Notification notification = notificationRepository.findByIdOrElseThrow(notificationId);
 
         notificationService.updateNotificationIsRead(notification);
 

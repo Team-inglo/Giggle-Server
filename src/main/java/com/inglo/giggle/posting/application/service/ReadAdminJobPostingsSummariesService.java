@@ -3,9 +3,8 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsSummariesResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsSummariesUseCase;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

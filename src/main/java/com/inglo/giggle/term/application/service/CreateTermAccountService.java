@@ -1,17 +1,15 @@
 package com.inglo.giggle.term.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import com.inglo.giggle.term.application.dto.request.CreateTermAccountRequestDto;
 import com.inglo.giggle.term.application.usecase.CreateTermAccountUseCase;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.TermAccount;
 import com.inglo.giggle.term.domain.service.TermAccountService;
 import com.inglo.giggle.term.domain.type.ETermType;
-import com.inglo.giggle.term.repository.mysql.TermAccountRepository;
-import com.inglo.giggle.term.repository.mysql.TermRepository;
+import com.inglo.giggle.term.repository.TermAccountRepository;
+import com.inglo.giggle.term.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +30,7 @@ public class CreateTermAccountService implements CreateTermAccountUseCase {
     public void execute(UUID accountId, CreateTermAccountRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 약관 타입 파싱
         List<ETermType> termTypes = requestDto.termTypes().stream()

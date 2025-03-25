@@ -1,10 +1,9 @@
 package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.security.application.usecase.LogoutUseCase;
-import com.inglo.giggle.security.repository.redis.RefreshTokenRepository;
+import com.inglo.giggle.security.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.security.info.CustomUserPrincipal;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

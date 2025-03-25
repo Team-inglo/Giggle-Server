@@ -12,17 +12,17 @@ import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.service.DocumentService;
 import com.inglo.giggle.document.domain.service.IntegratedApplicationService;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
+import com.inglo.giggle.document.repository.DocumentRepository;
+import com.inglo.giggle.document.repository.IntegratedApplicationRepository;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,15 +51,13 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
     public void execute(UUID accountId, Long documentId, UpdateUserIntegratedApplicationRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);
 
         // Document 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
 
         // UserOwnerJobPosting 조회
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithOwnerAndUserJobPostingById(document.getUserOwnerJobPosting().getId())
@@ -72,8 +70,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
 
         // IntegratedApplication 조회
-        IntegratedApplication integratedApplication = integratedApplicationRepository.findById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        IntegratedApplication integratedApplication = integratedApplicationRepository.findByIdOrElseThrow(documentId);
 
         // IntegratedApplication 수정 유효성 체크
         integratedApplicationService.checkUpdateOrSubmitUserIntegratedApplicationValidation(integratedApplication);
@@ -91,8 +88,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         );
 
         // School 조회
-        School school = schoolRepository.findBySchoolName(requestDto.schoolName())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        School school = schoolRepository.findBySchoolNameOrElseThrow(requestDto.schoolName());
 
         // IntegratedApplication 수정
         IntegratedApplication updatedIntegratedApplication = integratedApplicationService.updateUserIntegratedApplication(

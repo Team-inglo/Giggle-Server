@@ -7,11 +7,11 @@ import com.inglo.giggle.posting.application.usecase.ReadJobPostingDetailUseCase;
 import com.inglo.giggle.posting.domain.CompanyImage;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.PostingWorkDayTime;
-import com.inglo.giggle.posting.repository.mysql.CompanyImageRepository;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
-import com.inglo.giggle.posting.repository.mysql.PostingWorkDayTimeRepository;
+import com.inglo.giggle.posting.repository.CompanyImageRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
+import com.inglo.giggle.posting.repository.PostingWorkDayTimeRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +33,8 @@ public class ReadJobPostingDetailService implements ReadJobPostingDetailUseCase 
     @Transactional(readOnly = true)
     public ReadJobPostingDetailResponseDto execute(UUID accountId, Long jobPostingId) {
 
-        // 계정조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        // Account 조회
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 공고조회
         JobPosting jobPosting = jobPostingRepository.findWithOwnerById(jobPostingId)

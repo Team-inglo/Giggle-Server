@@ -3,8 +3,7 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsDigestsResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsDigestsUseCase;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingQueryRepository;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +53,7 @@ public class ReadAdminUserOwnerJobPostingsDigestsService implements ReadAdminUse
 
         long periodDays = ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate()) - 1;
 
-        List<UserOwnerJobPostingQueryRepository.GraphStats> currentStats =
+        List<UserOwnerJobPostingRepository.GraphStats> currentStats =
                 userOwnerJobPostingRepository.countGraphStatsByMonth(startDate, endDate);
 
         int priorTotalCount =

@@ -1,7 +1,7 @@
 package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import com.inglo.giggle.security.application.usecase.AuthenticateUserNameUseCase;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.security.domain.mysql.Account;
@@ -19,8 +19,8 @@ public class AuthenticateUserNameService implements AuthenticateUserNameUseCase 
 
     @Override
     public UserDetails loadUserByUsername(String serialId) throws UsernameNotFoundException {
-        Account account = accountRepository.findBySerialIdAndProvider(serialId, ESecurityProvider.DEFAULT)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with serialId: " + serialId));
+
+        Account account = accountRepository.findBySerialIdAndProviderOrElseThrowUserNameNotFoundException(serialId, ESecurityProvider.DEFAULT);
 
         return accountService.createCustomUserPrincipalByAccount(account);
     }

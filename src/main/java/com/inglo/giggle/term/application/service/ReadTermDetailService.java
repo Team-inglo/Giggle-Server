@@ -6,7 +6,7 @@ import com.inglo.giggle.term.application.dto.response.ReadTermDetailResponseDto;
 import com.inglo.giggle.term.application.usecase.ReadTermDetailUseCase;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.type.ETermType;
-import com.inglo.giggle.term.repository.mysql.TermRepository;
+import com.inglo.giggle.term.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +23,7 @@ public class ReadTermDetailService implements ReadTermDetailUseCase {
         ETermType eTermType = ETermType.fromString(termType);
 
         // 약관 상세정보 조회
-        Term term = termRepository.findTopByTermTypeOrderByCreatedAtDesc(eTermType)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Term term = termRepository.findTopByTermTypeOrderByCreatedAtDescOrElseThrow(eTermType);
 
         return ReadTermDetailResponseDto.fromEntity(term);
     }

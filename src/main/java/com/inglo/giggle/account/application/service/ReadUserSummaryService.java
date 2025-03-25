@@ -3,7 +3,7 @@ package com.inglo.giggle.account.application.service;
 import com.inglo.giggle.account.application.dto.response.ReadUserSummaryResponseDto;
 import com.inglo.giggle.account.application.usecase.ReadUserSummaryUseCase;
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.mysql.UserRepository;
+import com.inglo.giggle.account.repository.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
@@ -12,8 +12,8 @@ import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.domain.service.EducationService;
 import com.inglo.giggle.resume.domain.service.ResumeAggregateService;
-import com.inglo.giggle.resume.repository.mysql.EducationRepository;
-import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
+import com.inglo.giggle.resume.repository.EducationRepository;
+import com.inglo.giggle.resume.repository.ResumeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,11 +37,9 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
     public ReadUserSummaryResponseDto execute(UUID accountId) {
 
         // 유저 정보 조회
-        User user = userRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        User user = userRepository.findByIdOrElseThrow(accountId);
         // 이력서 정보 조회
-        Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountIdOrElseThrow(accountId);
 
         // 유저의 비자에 맵핑되는 educationLevel 조회
         EEducationLevel educationLevel = educationService.getEducationLevelByVisa(user.getVisa());

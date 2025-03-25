@@ -4,7 +4,7 @@ import com.inglo.giggle.core.dto.PageInfoDto;
 import com.inglo.giggle.school.application.dto.response.ReadAdminSchoolOverviewResponseDto;
 import com.inglo.giggle.school.application.usecase.ReadAdminSchoolOverviewUseCase;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

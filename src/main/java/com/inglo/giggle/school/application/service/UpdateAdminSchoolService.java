@@ -6,7 +6,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.school.application.dto.request.UpdateAdminSchoolRequestDto;
 import com.inglo.giggle.school.application.usecase.UpdateAdminSchoolUseCase;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +21,7 @@ public class UpdateAdminSchoolService implements UpdateAdminSchoolUseCase {
     @Transactional
     public void execute(Long schoolId, UpdateAdminSchoolRequestDto requestDto) {
 
-        School school = schoolRepository.findById(schoolId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        School school = schoolRepository.findByIdOrElseThrow(schoolId);
 
         Address address = Address.builder()
                 .addressName(requestDto.address().addressName())

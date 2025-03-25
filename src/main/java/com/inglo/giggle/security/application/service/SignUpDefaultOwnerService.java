@@ -3,8 +3,6 @@ package com.inglo.giggle.security.application.service;
 import com.inglo.giggle.account.domain.service.OwnerService;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.core.utility.S3Util;
@@ -16,15 +14,15 @@ import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultOwnerRequestDto;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.repository.TemporaryTokenRepository;
+import com.inglo.giggle.security.repository.TemporaryAccountRepository;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.TermAccount;
 import com.inglo.giggle.term.domain.service.TermAccountService;
 import com.inglo.giggle.term.domain.type.ETermType;
-import com.inglo.giggle.term.repository.mysql.TermAccountRepository;
-import com.inglo.giggle.term.repository.mysql.TermRepository;
+import com.inglo.giggle.term.repository.TermAccountRepository;
+import com.inglo.giggle.term.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,12 +56,10 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
     public DefaultJsonWebTokenDto execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
 
         // temporary Token 검증. Redis에 있는 토큰인지 확인
-        TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(requestDto.temporaryToken())
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
+        TemporaryToken temporaryToken = temporaryTokenRepository.findByValueOrElseThrow(requestDto.temporaryToken());
 
         // Redis에서 임시 사용자 정보 가져오기
-        TemporaryAccount tempUserInfo = temporaryAccountRepository.findById(temporaryToken.getEmail())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT));
+        TemporaryAccount tempUserInfo = temporaryAccountRepository.findByIdOrElseThrow(temporaryToken.getEmail());
 
         // AccountType 검증
         temporaryAccountService.validateAccountTypeOwner(tempUserInfo);
@@ -93,7 +89,7 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
                 bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
                 iconUrl, requestDto, address
         );
-        account = accountRepository.save(account);
+        account = accountRepository.saveAndReturn(account);
 
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getEmail());

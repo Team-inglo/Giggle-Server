@@ -3,8 +3,6 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.core.utility.S3Util;
@@ -15,10 +13,10 @@ import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.CompanyImageService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
 import com.inglo.giggle.posting.domain.service.PostWorkDayTimeService;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,8 +46,7 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
     public CreateOwnerJobPostingResponseDto execute(UUID accountId, List<MultipartFile> image, CreateOwnerJobPostingRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
         accountService.checkOwnerValidation(account);
@@ -114,7 +111,7 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
         }
 
 
-        JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
+        JobPosting savedJobPosting = jobPostingRepository.saveAndReturn(jobPosting);
 
         return CreateOwnerJobPostingResponseDto.builder()
                 .id(savedJobPosting.getId())

@@ -9,8 +9,8 @@ import com.inglo.giggle.security.domain.redis.TemporaryToken;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.event.ChangePasswordBySystemEvent;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.repository.TemporaryTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,13 +34,11 @@ public class ReissuePasswordService implements ReissuePasswordUseCase {
     @Transactional
     public void execute(String temporaryTokenValue) {
         // temporary Token 검증. Redis에 있는 토큰인지 확인 -> email 추출
-        TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(temporaryTokenValue)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
+        TemporaryToken temporaryToken = temporaryTokenRepository.findByValueOrElseThrow(temporaryTokenValue);
         String email = temporaryToken.getEmail();
 
         // 계정 조회
-        Account account = accountRepository.findBySerialIdAndProvider(email, ESecurityProvider.DEFAULT)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+        Account account = accountRepository.findBySerialIdAndProviderOrElseThrow(email, ESecurityProvider.DEFAULT);
 
         // 임시 비밀번호 생성 및 저장
         String temporaryPassword = PasswordUtil.generatePassword(8);

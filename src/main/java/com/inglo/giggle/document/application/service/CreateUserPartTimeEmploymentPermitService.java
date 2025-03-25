@@ -6,13 +6,13 @@ import com.inglo.giggle.document.application.dto.request.CreateUserPartTimeEmplo
 import com.inglo.giggle.document.application.usecase.CreateUserPartTimeEmploymentPermitUseCase;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
-import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +35,7 @@ public class CreateUserPartTimeEmploymentPermitService implements CreateUserPart
     public void execute(UUID accountId, Long userOwnerJobPostingId, CreateUserPartTimeEmploymentPermitRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);

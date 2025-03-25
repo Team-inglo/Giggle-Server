@@ -4,20 +4,20 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDto;
 import com.inglo.giggle.resume.application.usecase.ReadOwnerResumeDetailUseCase;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.WorkExperience;
-import com.inglo.giggle.resume.repository.mysql.EducationRepository;
-import com.inglo.giggle.resume.repository.mysql.LanguageSkillRepository;
-import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
-import com.inglo.giggle.resume.repository.mysql.WorkExperienceRepository;
+import com.inglo.giggle.resume.repository.EducationRepository;
+import com.inglo.giggle.resume.repository.LanguageSkillRepository;
+import com.inglo.giggle.resume.repository.ResumeRepository;
+import com.inglo.giggle.resume.repository.WorkExperienceRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +43,7 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
     public ReadOwnerResumeDetailResponseDto execute(UUID accountId, Long userOwnerJobPostingId) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkOwnerValidation(account);
@@ -57,15 +56,13 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
         userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 
         // Resume 조회
-        Resume resume = resumeRepository.findWithEducationsByAccountId(userOwnerJobPosting.getUser().getId())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Resume resume = resumeRepository.findWithEducationsByAccountIdOrElseThrow(userOwnerJobPosting.getUser().getId());
 
         // education 조회
         List<Education> educations = educationRepository.findAllByResume(resume);
 
         // LanguageSkill 조회
-        LanguageSkill languageSkill = languageSkillRepository.findByResume(resume)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        LanguageSkill languageSkill = languageSkillRepository.findByResumeOrElseThrow(resume);
 
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);

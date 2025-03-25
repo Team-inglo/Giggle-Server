@@ -6,12 +6,12 @@ import com.inglo.giggle.document.application.dto.response.ReadPartTimeEmployment
 import com.inglo.giggle.document.application.usecase.ReadPartTimeEmploymentPermitDetailUseCase;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.DocumentRepository;
+import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,12 +32,10 @@ public class ReadPartTimeEmploymentPermitDetailService implements ReadPartTimeEm
     public ReadPartTimeEmploymentPermitDetailResponseDto execute(UUID accountId, Long documentId) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // Document 정보 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
 
         // 계정 타입에 따라 유효성 체크
         String accountDiscriminatorValue = account.getClass().getAnnotation(DiscriminatorValue.class).value();
@@ -68,8 +66,7 @@ public class ReadPartTimeEmploymentPermitDetailService implements ReadPartTimeEm
         }
 
         // PartTimeEmploymentPermit 조회
-        PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByIdOrElseThrow(documentId);
 
         return ReadPartTimeEmploymentPermitDetailResponseDto.fromEntity(partTimeEmploymentPermit);
     }
