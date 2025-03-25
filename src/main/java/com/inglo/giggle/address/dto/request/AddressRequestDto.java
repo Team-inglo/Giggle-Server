@@ -29,7 +29,6 @@ public record AddressRequestDto(
         String region4DepthName,
 
         @JsonProperty("address_detail")
-        @NotBlank(message = "상세 주소를 입력해주세요.")
         @Size(max = 50, message = "상세 주소는 50자 이내로 입력해주세요.")
         String addressDetail,
 
@@ -41,16 +40,16 @@ public record AddressRequestDto(
         @NotNull(message = "경도를 입력해주세요.")
         Double longitude
 ) {
-        public static AddressRequestDto fromEntity(Address address) {
-                return AddressRequestDto.builder()
-                        .addressName(address.getAddressName())
-                        .region1DepthName(address.getRegion1DepthName())
-                        .region2DepthName(address.getRegion2DepthName())
-                        .region3DepthName(address.getRegion3DepthName())
-                        .region4DepthName(address.getRegion4DepthName())
-                        .addressDetail(address.getAddressDetail())
-                        .latitude(address.getLatitude())
-                        .longitude(address.getLongitude())
-                        .build();
-        }
+    public Address toEntity() {
+        return Address.builder()
+                .addressName(addressName)
+                .region1DepthName(region1DepthName)
+                .region2DepthName(region2DepthName)
+                .region3DepthName(region3DepthName)
+                .region4DepthName(region4DepthName)
+                .addressDetail(addressDetail)
+                .longitude(longitude)
+                .latitude(latitude)
+                .build();
+    }
 }
