@@ -1,7 +1,5 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.dto.request.UpdateUserPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateUserPartTimeEmploymentPermitUseCase;
 import com.inglo.giggle.document.domain.Document;

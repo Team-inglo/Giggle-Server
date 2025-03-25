@@ -1,7 +1,5 @@
 package com.inglo.giggle.notification.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.notification.application.usecase.UpdateNotificationIsReadUseCase;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.domain.service.NotificationService;

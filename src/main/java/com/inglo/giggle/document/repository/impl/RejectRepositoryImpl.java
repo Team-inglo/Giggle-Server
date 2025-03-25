@@ -14,26 +14,22 @@ public class RejectRepositoryImpl implements RejectRepository {
 
     private final RejectJpaRepository rejectJpaRepository;
 
+    @Override
     public Reject findTopByDocumentIdOrderByCreatedAtDescOrElseNull(Long id) {
         return rejectJpaRepository.findTopByDocumentIdOrderByCreatedAtDesc(id).orElse(null);
     }
 
+    @Override
     public List<Reject> findAllByDocumentId(Long id) {
         return rejectJpaRepository.findAllByDocumentId(id);
     }
 
+    @Override
     public void save(Reject reject) {
         rejectJpaRepository.save(reject);
     }
 
-    public void delete(Reject reject) {
-        rejectJpaRepository.delete(reject);
-    }
-
-    public void deleteById(Long id) {
-        rejectJpaRepository.deleteById(id);
-    }
-
+    @Override
     public void deleteAll(List<Reject> rejects) {
         rejectJpaRepository.deleteAll(rejects);
     }

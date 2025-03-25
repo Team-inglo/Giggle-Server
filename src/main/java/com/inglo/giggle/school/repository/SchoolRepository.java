@@ -22,7 +22,7 @@ public interface SchoolRepository {
 
     void save(School school);
 
-    void delete(School school);
+    void deleteById(Long schoolId);
 
     Page<School> findAllBySearch(Pageable pageable, String search);
 }

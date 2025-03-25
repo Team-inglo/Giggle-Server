@@ -56,9 +56,4 @@ public class ResumeRepositoryImpl implements ResumeRepository {
     public void save(Resume resume) {
         resumeJpaRepository.save(resume);
     }
-
-    @Override
-    public void delete(Resume resume) {
-        resumeJpaRepository.delete(resume);
-    }
 }

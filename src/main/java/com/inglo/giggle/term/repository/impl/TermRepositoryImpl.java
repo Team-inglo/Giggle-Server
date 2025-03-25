@@ -18,12 +18,6 @@ public class TermRepositoryImpl implements TermRepository {
     private final TermJpaRepository termJpaRepository;
 
     @Override
-    public Term findByIdOrElseThrow(Long id) {
-        return termJpaRepository.findById(id)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TERM));
-    }
-
-    @Override
     public Term findTopByTermTypeOrderByCreatedAtDescOrElseThrow(ETermType termType) {
         return termJpaRepository.findTopByTermTypeOrderByCreatedAtDesc(termType)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TERM));
@@ -38,11 +32,6 @@ public class TermRepositoryImpl implements TermRepository {
     @Override
     public void save(Term term) {
         termJpaRepository.save(term);
-    }
-
-    @Override
-    public void delete(Term term) {
-        termJpaRepository.delete(term);
     }
 
 }

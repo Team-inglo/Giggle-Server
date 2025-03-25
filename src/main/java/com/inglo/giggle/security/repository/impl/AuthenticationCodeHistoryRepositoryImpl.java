@@ -25,11 +25,6 @@ public class AuthenticationCodeHistoryRepositoryImpl implements AuthenticationCo
     }
 
     @Override
-    public void save(AuthenticationCodeHistory authenticationCodeHistory) {
-        authenticationCodeHistoryRedisRepository.save(authenticationCodeHistory);
-    }
-
-    @Override
     public AuthenticationCodeHistory saveAndReturn(AuthenticationCodeHistory authenticationCodeHistory) {
         return authenticationCodeHistoryRedisRepository.save(authenticationCodeHistory);
     }

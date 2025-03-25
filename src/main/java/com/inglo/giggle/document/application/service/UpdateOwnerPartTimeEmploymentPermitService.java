@@ -2,6 +2,7 @@ package com.inglo.giggle.document.application.service;
 
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
+import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.document.application.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
@@ -13,7 +14,6 @@ import com.inglo.giggle.document.repository.DocumentRepository;
 import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.domain.service.NotificationService;
-import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.notification.repository.NotificationRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;

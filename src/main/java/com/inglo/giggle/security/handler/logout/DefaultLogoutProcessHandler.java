@@ -1,10 +1,10 @@
 package com.inglo.giggle.security.handler.logout;
 
 import com.inglo.giggle.security.application.usecase.LogoutUseCase;
+import com.inglo.giggle.security.info.CustomUserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import com.inglo.giggle.security.info.CustomUserPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;

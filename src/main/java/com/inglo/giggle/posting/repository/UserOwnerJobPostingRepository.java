@@ -64,8 +64,6 @@ public interface UserOwnerJobPostingRepository {
             LocalDateTime end
     );
 
-    List<UserOwnerJobPosting> findAllByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
-
     int countByStep(EApplicationStep step);
 
     void save(UserOwnerJobPosting userOwnerJobPosting);

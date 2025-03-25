@@ -33,8 +33,6 @@ public interface AccountRepository {
 
     Account saveAndReturn(Account account);
 
-    void delete(Account account);
-
     void deleteById(UUID accountId);
 
     Page<Account> findAccountByFilter(

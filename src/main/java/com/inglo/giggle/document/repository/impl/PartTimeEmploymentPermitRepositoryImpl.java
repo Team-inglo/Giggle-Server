@@ -28,14 +28,4 @@ public class PartTimeEmploymentPermitRepositoryImpl implements PartTimeEmploymen
     public void save(PartTimeEmploymentPermit partTimeEmploymentPermit) {
         partTimeEmploymentPermitJpaRepository.save(partTimeEmploymentPermit);
     }
-
-    @Override
-    public void delete(PartTimeEmploymentPermit partTimeEmploymentPermit) {
-        partTimeEmploymentPermitJpaRepository.delete(partTimeEmploymentPermit);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        partTimeEmploymentPermitJpaRepository.deleteById(id);
-    }
 }

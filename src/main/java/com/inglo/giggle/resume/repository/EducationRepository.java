@@ -5,7 +5,6 @@ import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface EducationRepository {

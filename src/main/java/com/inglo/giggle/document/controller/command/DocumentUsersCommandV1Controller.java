@@ -2,11 +2,31 @@ package com.inglo.giggle.document.controller.command;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.document.application.dto.request.*;
-import com.inglo.giggle.document.application.usecase.*;
+import com.inglo.giggle.document.application.dto.request.CreateUserIntegratedApplicationRequestDto;
+import com.inglo.giggle.document.application.dto.request.CreateUserPartTimeEmploymentPermitRequestDto;
+import com.inglo.giggle.document.application.dto.request.CreateUserStandardLaborContractRequestDto;
+import com.inglo.giggle.document.application.dto.request.UpdateDocumentStatusReqeustionRequestDto;
+import com.inglo.giggle.document.application.dto.request.UpdateUserIntegratedApplicationRequestDto;
+import com.inglo.giggle.document.application.dto.request.UpdateUserPartTimeEmploymentPermitRequestDto;
+import com.inglo.giggle.document.application.dto.request.UpdateUserStandardLaborContractRequestDto;
+import com.inglo.giggle.document.application.usecase.ConfirmUserDocumentUseCase;
+import com.inglo.giggle.document.application.usecase.CreateUserIntegratedApplicationUseCase;
+import com.inglo.giggle.document.application.usecase.CreateUserPartTimeEmploymentPermitUseCase;
+import com.inglo.giggle.document.application.usecase.CreateUserStandardLaborContractUseCase;
+import com.inglo.giggle.document.application.usecase.UpdateUserDocumentStatusRequestionUseCase;
+import com.inglo.giggle.document.application.usecase.UpdateUserDocumentStatusSubmissionUseCase;
+import com.inglo.giggle.document.application.usecase.UpdateUserIntegratedApplicationUseCase;
+import com.inglo.giggle.document.application.usecase.UpdateUserPartTimeEmploymentPermitUseCase;
+import com.inglo.giggle.document.application.usecase.UpdateUserStandardLaborContractUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 

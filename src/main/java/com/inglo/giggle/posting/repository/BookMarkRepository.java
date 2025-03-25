@@ -11,8 +11,6 @@ import java.util.UUID;
 
 public interface BookMarkRepository {
 
-    BookMark findByIdOrElseThrow(Long id);
-
     Optional<BookMark> findByUserIdAndJobPostingId(UUID userId, Long jobPostingId);
 
     Page<BookMark> findWithOwnerAndWorkDaysTimesByUser(
@@ -25,6 +23,4 @@ public interface BookMarkRepository {
     void save(BookMark bookMark);
 
     void delete(BookMark bookMark);
-
-    void deleteAll(List<BookMark> bookMarks);
 }

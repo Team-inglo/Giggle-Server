@@ -5,10 +5,21 @@ import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.posting.application.dto.request.UpdateUserUserOwnerJobPostingStepRegisteringResultRequestDto;
 import com.inglo.giggle.posting.application.dto.response.CreateUserJobPostingResponseDto;
 import com.inglo.giggle.posting.application.dto.response.UpdateUserJobPostingBookMarkResponseDto;
-import com.inglo.giggle.posting.application.usecase.*;
+import com.inglo.giggle.posting.application.usecase.CreateUserJobPostingUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateUserJobPostingBookMarkUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepApplicationInProgressUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase;
+import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepRegisteringResultUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 

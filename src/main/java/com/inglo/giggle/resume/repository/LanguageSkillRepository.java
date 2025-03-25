@@ -3,7 +3,6 @@ package com.inglo.giggle.resume.repository;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface LanguageSkillRepository {
@@ -15,6 +14,4 @@ public interface LanguageSkillRepository {
     LanguageSkill findByResumeIdOrElseThrow(UUID resumeId);
 
     void save(LanguageSkill languageSkill);
-
-    void delete(LanguageSkill languageSkill);
 }

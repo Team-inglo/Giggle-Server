@@ -33,14 +33,4 @@ public class StandardLaborContractRepositoryImpl implements StandardLaborContrac
     public void save(StandardLaborContract standardLaborContract) {
         standardLaborContractJpaRepository.save(standardLaborContract);
     }
-
-    @Override
-    public void delete(StandardLaborContract standardLaborContract) {
-        standardLaborContractJpaRepository.delete(standardLaborContract);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        standardLaborContractJpaRepository.deleteById(id);
-    }
 }

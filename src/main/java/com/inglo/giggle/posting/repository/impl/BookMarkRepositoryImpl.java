@@ -22,12 +22,6 @@ public class BookMarkRepositoryImpl implements BookMarkRepository {
     private final BookMarkJpaRepository bookMarkJpaRepository;
 
     @Override
-    public BookMark findByIdOrElseThrow(Long id) {
-        return bookMarkJpaRepository.findById(id)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_BOOK_MARK));
-    }
-
-    @Override
     public Optional<BookMark> findByUserIdAndJobPostingId(UUID userId, Long jobPostingId) {
         return bookMarkJpaRepository.findByUserIdAndJobPostingId(userId, jobPostingId);
     }
@@ -53,10 +47,5 @@ public class BookMarkRepositoryImpl implements BookMarkRepository {
     @Override
     public void delete(BookMark bookMark) {
         bookMarkJpaRepository.delete(bookMark);
-    }
-
-    @Override
-    public void deleteAll(List<BookMark> bookMarks) {
-        bookMarkJpaRepository.deleteAll(bookMarks);
     }
 }

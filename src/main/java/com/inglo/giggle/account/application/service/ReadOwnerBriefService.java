@@ -4,8 +4,6 @@ import com.inglo.giggle.account.application.dto.response.ReadOwnerBriefResponseD
 import com.inglo.giggle.account.application.usecase.ReadOwnerBriefUseCase;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.repository.OwnerRepository;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

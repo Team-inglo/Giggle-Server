@@ -17,7 +17,15 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.docx4j.dml.CTPoint2D;
-import org.docx4j.dml.wordprocessingDrawing.*;
+import org.docx4j.dml.wordprocessingDrawing.Anchor;
+import org.docx4j.dml.wordprocessingDrawing.CTPosH;
+import org.docx4j.dml.wordprocessingDrawing.CTPosV;
+import org.docx4j.dml.wordprocessingDrawing.CTWrapNone;
+import org.docx4j.dml.wordprocessingDrawing.Inline;
+import org.docx4j.dml.wordprocessingDrawing.STAlignH;
+import org.docx4j.dml.wordprocessingDrawing.STAlignV;
+import org.docx4j.dml.wordprocessingDrawing.STRelFromH;
+import org.docx4j.dml.wordprocessingDrawing.STRelFromV;
 import org.docx4j.model.datastorage.migration.VariablePrepare;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
@@ -39,7 +47,12 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Base64;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class StandardLaborContractService {

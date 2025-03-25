@@ -15,17 +15,6 @@ public class DocumentRepositoryImpl implements DocumentRepository {
     private final DocumentJpaRepository documentJpaRepository;
 
     @Override
-    public Document findByIdOrElseNull(Long id) {
-        return documentJpaRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public Document findByIdOrElseThrow(Long id) {
-        return documentJpaRepository.findById(id)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_DOCUMENT));
-    }
-
-    @Override
     public Document findWithUserOwnerJobPostingByIdOrElseThrow(Long id) {
         return documentJpaRepository.findWithUserOwnerJobPostingById(id)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_DOCUMENT));
@@ -34,16 +23,6 @@ public class DocumentRepositoryImpl implements DocumentRepository {
     @Override
     public void save(Document document) {
         documentJpaRepository.save(document);
-    }
-
-    @Override
-    public void delete(Document document) {
-        documentJpaRepository.delete(document);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        documentJpaRepository.deleteById(id);
     }
 
 }

@@ -9,7 +9,6 @@ import com.inglo.giggle.resume.repository.mysql.LanguageSkillJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -40,10 +39,5 @@ public class LanguageSkillRepositoryImpl implements LanguageSkillRepository {
     @Override
     public void save(LanguageSkill languageSkill) {
         languageSkillJpaRepository.save(languageSkill);
-    }
-
-    @Override
-    public void delete(LanguageSkill languageSkill) {
-        languageSkillJpaRepository.delete(languageSkill);
     }
 }

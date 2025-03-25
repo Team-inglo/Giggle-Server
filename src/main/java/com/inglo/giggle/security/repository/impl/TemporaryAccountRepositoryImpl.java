@@ -15,11 +15,6 @@ public class TemporaryAccountRepositoryImpl implements TemporaryAccountRepositor
     private final TemporaryAccountRedisRepository temporaryAccountRedisRepository;
 
     @Override
-    public TemporaryAccount findByIdOrElseNull(String id) {
-        return temporaryAccountRedisRepository.findById(id).orElse(null);
-    }
-
-    @Override
     public TemporaryAccount findByIdOrElseThrow(String id) {
         return temporaryAccountRedisRepository.findById(id).orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT));
     }
@@ -27,16 +22,6 @@ public class TemporaryAccountRepositoryImpl implements TemporaryAccountRepositor
     @Override
     public void save(TemporaryAccount temporaryAccount) {
         temporaryAccountRedisRepository.save(temporaryAccount);
-    }
-
-    @Override
-    public TemporaryAccount saveAndReturn(TemporaryAccount temporaryAccount) {
-        return temporaryAccountRedisRepository.save(temporaryAccount);
-    }
-
-    @Override
-    public void delete(TemporaryAccount temporaryAccount) {
-        temporaryAccountRedisRepository.delete(temporaryAccount);
     }
 
     @Override

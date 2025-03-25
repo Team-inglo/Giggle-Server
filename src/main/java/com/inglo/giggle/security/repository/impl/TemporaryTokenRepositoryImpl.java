@@ -15,16 +15,6 @@ public class TemporaryTokenRepositoryImpl implements TemporaryTokenRepository {
     private final TemporaryTokenRedisRepository temporaryTokenRedisRepository;
 
     @Override
-    public TemporaryToken findByIdOrElseNull(String compositeKey) {
-        return temporaryTokenRedisRepository.findById(compositeKey).orElse(null);
-    }
-
-    @Override
-    public TemporaryToken findByIdOrElseThrow(String compositeKey) {
-        return temporaryTokenRedisRepository.findById(compositeKey).orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_TOKEN));
-    }
-
-    @Override
     public TemporaryToken findByValueOrElseThrow(String value) {
         return temporaryTokenRedisRepository.findByValue(value).orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
     }
@@ -32,11 +22,6 @@ public class TemporaryTokenRepositoryImpl implements TemporaryTokenRepository {
     @Override
     public void save(TemporaryToken temporaryToken) {
         temporaryTokenRedisRepository.save(temporaryToken);
-    }
-
-    @Override
-    public TemporaryToken saveAndReturn(TemporaryToken temporaryToken) {
-        return temporaryTokenRedisRepository.save(temporaryToken);
     }
 
     @Override

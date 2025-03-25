@@ -9,6 +9,4 @@ public interface UserRepository {
     User findByIdOrElseThrow(UUID accountId);
 
     void save(User user);
-
-    void delete(User user);
 }

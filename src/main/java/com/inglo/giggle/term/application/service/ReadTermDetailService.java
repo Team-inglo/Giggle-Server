@@ -1,7 +1,5 @@
 package com.inglo.giggle.term.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.term.application.dto.response.ReadTermDetailResponseDto;
 import com.inglo.giggle.term.application.usecase.ReadTermDetailUseCase;
 import com.inglo.giggle.term.domain.Term;

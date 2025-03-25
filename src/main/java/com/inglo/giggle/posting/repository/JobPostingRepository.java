@@ -143,8 +143,6 @@ public interface JobPostingRepository {
 
     JobPosting saveAndReturn(JobPosting jobPosting);
 
-    void delete(JobPosting jobPosting);
-
     void deleteById(Long id);
 
     Page<JobPosting> searchWithConditions(

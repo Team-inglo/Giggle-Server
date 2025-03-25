@@ -88,7 +88,7 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
                 bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
                 s3Util.getUserDefaultImgUrl(), requestDto, address
         );
-        // TODO: 테스트
+
         User savedUser = (User) accountRepository.saveAndReturn(user);
 
         // Resume, LanguageSkill 생성 및 저장

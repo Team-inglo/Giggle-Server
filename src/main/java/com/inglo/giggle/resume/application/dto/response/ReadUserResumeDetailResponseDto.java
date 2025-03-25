@@ -6,7 +6,11 @@ import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.core.utility.DateTimeUtil;
-import com.inglo.giggle.resume.domain.*;
+import com.inglo.giggle.resume.domain.AdditionalLanguage;
+import com.inglo.giggle.resume.domain.Education;
+import com.inglo.giggle.resume.domain.LanguageSkill;
+import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.resume.domain.WorkExperience;
 import lombok.Builder;
 import lombok.Getter;
 

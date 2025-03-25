@@ -288,11 +288,6 @@ public class JobPostingRepositoryImpl implements JobPostingRepository {
     }
 
     @Override
-    public void delete(JobPosting jobPosting) {
-        jobPostingJpaRepository.delete(jobPosting);
-    }
-
-    @Override
     public void deleteById(Long id) {
         jobPostingJpaRepository.deleteById(id);
     }

@@ -7,7 +7,24 @@ import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import jakarta.persistence.*;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +33,12 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter

@@ -4,9 +4,11 @@ import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.school.application.dto.request.CreateAdminSchoolRequestDto;
 import com.inglo.giggle.school.application.dto.request.UpdateAdminSchoolRequestDto;
 import com.inglo.giggle.school.application.usecase.CreateAdminSchoolUseCase;
+import com.inglo.giggle.school.application.usecase.DeleteAdminSchoolUseCase;
 import com.inglo.giggle.school.application.usecase.UpdateAdminSchoolUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +23,7 @@ public class SchoolAdminsCommandV1Controller {
 
     private final CreateAdminSchoolUseCase createAdminSchoolUseCase;
     private final UpdateAdminSchoolUseCase updateAdminSchoolUseCase;
+    private final DeleteAdminSchoolUseCase deleteAdminSchoolUseCase;
 
     /**
      * 9.5 (어드민) 학교 생성하기
@@ -42,6 +45,17 @@ public class SchoolAdminsCommandV1Controller {
             @RequestBody @Valid UpdateAdminSchoolRequestDto requestDto
     ) {
         updateAdminSchoolUseCase.execute(schoolId, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 9.7 (어드민) 학교 삭제하기
+     */
+    @DeleteMapping("/{schoolId}")
+    public ResponseDto<Void> deleteAdminSchool(
+            @PathVariable Long schoolId
+    ) {
+        deleteAdminSchoolUseCase.execute(schoolId);
         return ResponseDto.ok(null);
     }
 

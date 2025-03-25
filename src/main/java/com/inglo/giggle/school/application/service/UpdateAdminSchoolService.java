@@ -1,8 +1,6 @@
 package com.inglo.giggle.school.application.service;
 
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.school.application.dto.request.UpdateAdminSchoolRequestDto;
 import com.inglo.giggle.school.application.usecase.UpdateAdminSchoolUseCase;
 import com.inglo.giggle.school.domain.School;

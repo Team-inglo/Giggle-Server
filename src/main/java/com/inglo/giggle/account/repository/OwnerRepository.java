@@ -11,6 +11,4 @@ public interface OwnerRepository {
     Owner findByDocumentIdOrElseThrow(Long documentId);
 
     void save(Owner owner);
-
-    void delete(Owner owner);
 }

@@ -2,10 +2,30 @@ package com.inglo.giggle.posting.controller.query;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.posting.application.dto.response.*;
-import com.inglo.giggle.posting.application.usecase.*;
+import com.inglo.giggle.posting.application.dto.response.ReadUserBookMarkCountResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserBookMarkOverviewResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingBriefResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingValidationResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingBriefListResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingCountResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingJobPostingRecruiterResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserUserOwnerJobPostingDetailResponseDto;
+import com.inglo.giggle.posting.application.dto.response.ReadUserUserOwnerJobPostingListResponseDto;
+import com.inglo.giggle.posting.application.usecase.ReadUserBookMarkCountUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserBookMarkOverviewUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserJobPostingBriefUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserJobPostingValidationUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserUserOwnerJobPostingBriefListUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserUserOwnerJobPostingCountUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserUserOwnerJobPostingDetailUseCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserUserOwnerJobPostingJobPostingRecruiterUserCase;
+import com.inglo.giggle.posting.application.usecase.ReadUserUserOwnerJobPostingListUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 

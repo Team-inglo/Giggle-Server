@@ -4,8 +4,6 @@ import com.inglo.giggle.account.application.dto.response.ReadUserSummaryResponse
 import com.inglo.giggle.account.application.usecase.ReadUserSummaryUseCase;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.repository.UserRepository;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;

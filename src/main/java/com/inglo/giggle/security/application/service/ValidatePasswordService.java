@@ -1,7 +1,5 @@
 package com.inglo.giggle.security.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.application.dto.request.ValidatePasswordRequestDto;
 import com.inglo.giggle.security.application.dto.response.ValidatePasswordResponseDto;
 import com.inglo.giggle.security.application.usecase.ValidatePasswordUseCase;

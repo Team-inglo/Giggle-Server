@@ -1,7 +1,5 @@
 package com.inglo.giggle.resume.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.resume.application.dto.request.CreateUserAdditionalLanguageSkillRequestDto;
 import com.inglo.giggle.resume.application.usecase.CreateUserAdditionalLanguageSkillUseCase;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
