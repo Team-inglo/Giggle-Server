@@ -11,8 +11,4 @@ public interface IntegratedApplicationRepository {
     IntegratedApplication findWithSchoolByIdOrElseThrow(Long documentId);
 
     void save(IntegratedApplication integratedApplication);
-
-    void delete(IntegratedApplication integratedApplication);
-
-    void deleteById(Long id);
 }

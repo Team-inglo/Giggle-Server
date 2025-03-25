@@ -12,9 +12,5 @@ public interface RejectRepository {
 
     void save(Reject reject);
 
-    void delete(Reject reject);
-
-    void deleteById(Long id);
-
     void deleteAll(List<Reject> rejects);
 }

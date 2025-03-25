@@ -18,12 +18,6 @@ public class CompanyImageRepositoryImpl implements CompanyImageRepository {
     private final CompanyImageJpaRepository companyImageJpaRepository;
 
     @Override
-    public CompanyImage findByIdOrElseThrow(Long id) {
-        return companyImageJpaRepository.findById(id)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_COMPANY_IMAGE));
-    }
-
-    @Override
     public List<CompanyImage> findAllById(List<Long> ids) {
         return companyImageJpaRepository.findAllById(ids);
     }
@@ -41,20 +35,5 @@ public class CompanyImageRepositoryImpl implements CompanyImageRepository {
     @Override
     public List<CompanyImage> findAllByJobPosting(JobPosting jobPosting) {
         return companyImageJpaRepository.findAllByJobPosting(jobPosting);
-    }
-
-    @Override
-    public void save(CompanyImage companyImage) {
-        companyImageJpaRepository.save(companyImage);
-    }
-
-    @Override
-    public void delete(CompanyImage companyImage) {
-        companyImageJpaRepository.delete(companyImage);
-    }
-
-    @Override
-    public void deleteAll(List<CompanyImage> companyImages) {
-        companyImageJpaRepository.deleteAll(companyImages);
     }
 }

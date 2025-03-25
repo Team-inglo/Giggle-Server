@@ -15,11 +15,6 @@ public class AuthenticationCodeRepositoryImpl implements AuthenticationCodeRepos
     private final AuthenticationCodeRedisRepository authenticationCodeRedisRepository;
 
     @Override
-    public AuthenticationCode findByIdOrElseNull(String id) {
-        return authenticationCodeRedisRepository.findById(id).orElse(null);
-    }
-
-    @Override
     public AuthenticationCode findByIdOrElseThrow(String id) {
         return authenticationCodeRedisRepository.findById(id).orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_AUTHENTICATION_CODE));
     }
@@ -30,17 +25,7 @@ public class AuthenticationCodeRepositoryImpl implements AuthenticationCodeRepos
     }
 
     @Override
-    public AuthenticationCode saveAndReturn(AuthenticationCode authenticationCode) {
-        return authenticationCodeRedisRepository.save(authenticationCode);
-    }
-
-    @Override
     public void delete(AuthenticationCode authenticationCode) {
         authenticationCodeRedisRepository.delete(authenticationCode);
-    }
-
-    @Override
-    public void deleteById(String id) {
-        authenticationCodeRedisRepository.deleteById(id);
     }
 }

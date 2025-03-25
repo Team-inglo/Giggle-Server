@@ -11,8 +11,4 @@ public interface StandardLaborContractRepository {
     StandardLaborContract findWithWeeklyRestDaysAndInsurancesByIdOrElseNull(Long documentId);
 
     void save(StandardLaborContract standardLaborContract);
-
-    void delete(StandardLaborContract standardLaborContract);
-
-    void deleteById(Long id);
 }

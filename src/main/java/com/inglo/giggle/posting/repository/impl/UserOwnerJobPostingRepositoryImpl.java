@@ -145,11 +145,6 @@ public class UserOwnerJobPostingRepositoryImpl implements UserOwnerJobPostingRep
     }
 
     @Override
-    public List<UserOwnerJobPosting> findAllByCreatedAtBetween(LocalDateTime start, LocalDateTime end) {
-        return userOwnerJobPostingJpaRepository.findAllByCreatedAtBetween(start, end);
-    }
-
-    @Override
     public int countByStep(EApplicationStep step) {
         return userOwnerJobPostingJpaRepository.countByStep(step);
     }

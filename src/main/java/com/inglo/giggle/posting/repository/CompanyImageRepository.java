@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface CompanyImageRepository {
 
-    CompanyImage findByIdOrElseThrow(Long id);
-
     List<CompanyImage> findAllById(List<Long> ids);
 
     void deleteAllByIdIn(List<Long> ids);
@@ -16,10 +14,4 @@ public interface CompanyImageRepository {
     List<CompanyImage> findAllByJobPostingId(Long jobPostingId);
 
     List<CompanyImage> findAllByJobPosting(JobPosting jobPosting);
-
-    void save(CompanyImage companyImage);
-
-    void delete(CompanyImage companyImage);
-
-    void deleteAll(List<CompanyImage> companyImages);
 }

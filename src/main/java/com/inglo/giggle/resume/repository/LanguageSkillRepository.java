@@ -14,6 +14,4 @@ public interface LanguageSkillRepository {
     LanguageSkill findByResumeIdOrElseThrow(UUID resumeId);
 
     void save(LanguageSkill languageSkill);
-
-    void delete(LanguageSkill languageSkill);
 }

@@ -8,8 +8,6 @@ public interface AuthenticationCodeHistoryRepository {
 
     AuthenticationCodeHistory findByIdOrElseThrow(String id);
 
-    void save(AuthenticationCodeHistory authenticationCodeHistory);
-
     AuthenticationCodeHistory saveAndReturn(AuthenticationCodeHistory authenticationCodeHistory);
 
     void delete(AuthenticationCodeHistory authenticationCodeHistory);

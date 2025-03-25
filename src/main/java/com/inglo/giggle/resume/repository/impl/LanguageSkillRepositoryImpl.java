@@ -40,9 +40,4 @@ public class LanguageSkillRepositoryImpl implements LanguageSkillRepository {
     public void save(LanguageSkill languageSkill) {
         languageSkillJpaRepository.save(languageSkill);
     }
-
-    @Override
-    public void delete(LanguageSkill languageSkill) {
-        languageSkillJpaRepository.delete(languageSkill);
-    }
 }

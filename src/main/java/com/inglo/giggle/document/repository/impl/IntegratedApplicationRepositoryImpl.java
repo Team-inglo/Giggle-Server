@@ -33,14 +33,4 @@ public class IntegratedApplicationRepositoryImpl implements IntegratedApplicatio
     public void save(IntegratedApplication integratedApplication) {
         integratedApplicationJpaRepository.save(integratedApplication);
     }
-
-    @Override
-    public void delete(IntegratedApplication integratedApplication) {
-        integratedApplicationJpaRepository.delete(integratedApplication);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        integratedApplicationJpaRepository.deleteById(id);
-    }
 }

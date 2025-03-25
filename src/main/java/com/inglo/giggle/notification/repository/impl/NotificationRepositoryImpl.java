@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -38,20 +37,5 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     @Override
     public void save(Notification notification) {
         notificationJpaRepository.save(notification);
-    }
-
-    @Override
-    public void delete(Notification notification) {
-        notificationJpaRepository.delete(notification);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        notificationJpaRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteAll(List<Notification> notifications) {
-        notificationJpaRepository.deleteAll(notifications);
     }
 }

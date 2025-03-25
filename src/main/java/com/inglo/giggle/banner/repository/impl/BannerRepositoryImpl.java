@@ -31,11 +31,6 @@ public class BannerRepositoryImpl implements BannerRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Banner findByIdOrElseNull(Long bannerId) {
-        return bannerJpaRepository.findById(bannerId).orElse(null);
-    }
-
-    @Override
     public Banner findByIdOrElseThrow(Long bannerId) {
         return bannerJpaRepository.findById(bannerId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_BANNER));
@@ -54,16 +49,6 @@ public class BannerRepositoryImpl implements BannerRepository {
     @Override
     public void save(Banner banner) {
         bannerJpaRepository.save(banner);
-    }
-
-    @Override
-    public Banner saveAndReturn(Banner banner) {
-        return bannerJpaRepository.save(banner);
-    }
-
-    @Override
-    public void delete(Banner banner) {
-        bannerJpaRepository.delete(banner);
     }
 
     @Override

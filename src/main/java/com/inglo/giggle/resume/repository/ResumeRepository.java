@@ -20,6 +20,4 @@ public interface ResumeRepository {
     Resume findWithEducationsByAccountIdOrElseThrow(UUID accountId);
 
     void save(Resume resume);
-
-    void delete(Resume resume);
 }

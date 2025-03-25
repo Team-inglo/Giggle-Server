@@ -93,11 +93,6 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
-    public void delete(Account account) {
-        accountJpaRepository.delete(account);
-    }
-
-    @Override
     public void deleteById(UUID accountId) {
         accountJpaRepository.deleteById(accountId);
     }
