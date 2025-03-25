@@ -6,7 +6,7 @@ import com.inglo.giggle.document.application.dto.request.CreateUserPartTimeEmplo
 import com.inglo.giggle.document.application.usecase.CreateUserPartTimeEmploymentPermitUseCase;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
-import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;

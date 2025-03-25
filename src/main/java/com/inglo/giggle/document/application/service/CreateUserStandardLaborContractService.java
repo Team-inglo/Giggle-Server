@@ -8,7 +8,7 @@ import com.inglo.giggle.document.application.dto.request.CreateUserStandardLabor
 import com.inglo.giggle.document.application.usecase.CreateUserStandardLaborContractUseCase;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
-import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.document.repository.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;

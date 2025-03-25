@@ -25,6 +25,12 @@ public enum ErrorCode {
     NOT_FOUND_REFRESH_TOKEN(40410, HttpStatus.NOT_FOUND, "존재하지 않는 리프레시 토큰입니다."),
     NOT_FOUND_TEMPORARY_TOKEN(40411, HttpStatus.NOT_FOUND, "존재하지 않는 임시 토큰입니다."),
     NOT_FOUND_BANNER(40412, HttpStatus.NOT_FOUND, "존재하지 않는 배너입니다."),
+    NOT_FOUND_CONTRACT_WORK_DAY_TIME(40413, HttpStatus.NOT_FOUND, "존재하지 않는 근무 시간입니다."),
+    NOT_FOUND_DOCUMENT(40414, HttpStatus.NOT_FOUND, "존재하지 않는 서류입니다."),
+    NOT_FOUND_INTEGRATED_APPLICATION(40415, HttpStatus.NOT_FOUND, "존재하지 않는 통합 지원 서류입니다."),
+    NOT_FOUND_PART_TIME_EMPLOYMENT_PERMIT(40416, HttpStatus.NOT_FOUND, "존재하지 않는 시간제 취업 허가 서류입니다."),
+    NOT_FOUND_REJECT(40417, HttpStatus.NOT_FOUND, "존재하지 않는 미승인입니다."),
+    NOT_FOUND_STANDARD_LABOR_CONTRACT(40418, HttpStatus.NOT_FOUND, "존재하지 않는 표준 근로 계약 서류입니다."),
 
     // Invalid Argument Error
     MISSING_REQUEST_PARAMETER(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),

@@ -12,8 +12,8 @@ import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.service.DocumentService;
 import com.inglo.giggle.document.domain.service.IntegratedApplicationService;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
+import com.inglo.giggle.document.repository.DocumentRepository;
+import com.inglo.giggle.document.repository.IntegratedApplicationRepository;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
@@ -57,8 +57,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         accountService.checkUserValidation(account);
 
         // Document 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
 
         // UserOwnerJobPosting 조회
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithOwnerAndUserJobPostingById(document.getUserOwnerJobPosting().getId())
@@ -71,8 +70,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
 
         // IntegratedApplication 조회
-        IntegratedApplication integratedApplication = integratedApplicationRepository.findById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        IntegratedApplication integratedApplication = integratedApplicationRepository.findByIdOrElseThrow(documentId);
 
         // IntegratedApplication 수정 유효성 체크
         integratedApplicationService.checkUpdateOrSubmitUserIntegratedApplicationValidation(integratedApplication);

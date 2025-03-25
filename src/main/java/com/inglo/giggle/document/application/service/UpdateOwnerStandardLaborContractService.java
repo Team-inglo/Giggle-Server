@@ -16,9 +16,9 @@ import com.inglo.giggle.document.domain.service.ContractWorkDayTimeService;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
-import com.inglo.giggle.document.repository.mysql.ContractWorkDayTimeRepository;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.document.repository.ContractWorkDayTimeRepository;
+import com.inglo.giggle.document.repository.DocumentRepository;
+import com.inglo.giggle.document.repository.StandardLaborContractRepository;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.domain.service.NotificationService;
 import com.inglo.giggle.core.event.dto.NotificationEventDto;
@@ -69,15 +69,13 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
         accountService.checkOwnerValidation(account);
 
         // Document 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
 
         // UserOwnerJobPosting 오너 유효성 체크
         userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
 
         // StandardLaborContract 조회
-        StandardLaborContract standardLaborContract = standardLaborContractRepository.findById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        StandardLaborContract standardLaborContract = standardLaborContractRepository.findByIdOrElseThrow(documentId);
 
         // StandardLaborContract 수정 유효성 체크
         standardLaborContractService.checkUpdateOrSubmitOwnerStandardLaborContractValidation(standardLaborContract);

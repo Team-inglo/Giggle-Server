@@ -7,8 +7,8 @@ import com.inglo.giggle.document.application.usecase.UpdateUserPartTimeEmploymen
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.DocumentRepository;
+import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -41,15 +41,13 @@ public class UpdateUserPartTimeEmploymentPermitService implements UpdateUserPart
         accountService.checkUserValidation(account);
 
         // Document 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
 
         // UserOwnerJobPosting 유저 유효성 체크
         userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
 
         // PartTimeEmploymentPermit 조회
-        PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByIdOrElseThrow(documentId);
 
         // PartTimeEmploymentPermit 수정 유효성 체크
         partTimeEmploymentPermitService.checkUpdateOrSubmitUserPartTimeEmploymentPermitValidation(partTimeEmploymentPermit);

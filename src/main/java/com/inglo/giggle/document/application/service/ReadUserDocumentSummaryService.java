@@ -7,9 +7,9 @@ import com.inglo.giggle.document.application.usecase.ReadUserDocumentSummaryUseC
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.repository.mysql.IntegratedApplicationRepository;
-import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
-import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.document.repository.IntegratedApplicationRepository;
+import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
@@ -50,16 +50,13 @@ public class ReadUserDocumentSummaryService implements ReadUserDocumentSummaryUs
         userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 
         // 시간제 취업 허가서 조회
-        PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
-                .orElse(null);
+        PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         // 표준 근로 계약서 조회
-        StandardLaborContract standardLaborContract = standardLaborContractRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
-                .orElse(null);
+        StandardLaborContract standardLaborContract = standardLaborContractRepository.findByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         // 통합 신청서 조회
-        IntegratedApplication integratedApplication = integratedApplicationRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
-                .orElse(null);
+        IntegratedApplication integratedApplication = integratedApplicationRepository.findByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         return ReadUserDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract, integratedApplication, userOwnerJobPosting.getStep().getLevel() > 3);
     }

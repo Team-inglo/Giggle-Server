@@ -7,9 +7,9 @@ import com.inglo.giggle.document.application.usecase.ReadOwnerDocumentSummaryUse
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.Reject;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
-import com.inglo.giggle.document.repository.mysql.RejectRepository;
-import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.RejectRepository;
+import com.inglo.giggle.document.repository.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
@@ -50,25 +50,21 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
         userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 
         // 시간제 취업 허가서 조회
-        PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
-                .orElse(null);
+        PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         // 표준 근로 계약서 조회
-        StandardLaborContract standardLaborContract = standardLaborContractRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
-                .orElse(null);
+        StandardLaborContract standardLaborContract = standardLaborContractRepository.findByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         // 거절 사유 조회
         Reject partTimeEmploymentPermitReject = null;
         Reject standardLaborContractReject = null;
 
         if (partTimeEmploymentPermit != null) {
-            partTimeEmploymentPermitReject = rejectRepository.findTopByDocumentIdOrderByCreatedAtDesc(partTimeEmploymentPermit.getId())
-                    .orElse(null);
+            partTimeEmploymentPermitReject = rejectRepository.findTopByDocumentIdOrderByCreatedAtDescOrElseNull(partTimeEmploymentPermit.getId());
         }
 
         if (standardLaborContract != null) {
-            standardLaborContractReject = rejectRepository.findTopByDocumentIdOrderByCreatedAtDesc(standardLaborContract.getId())
-                    .orElse(null);
+            standardLaborContractReject = rejectRepository.findTopByDocumentIdOrderByCreatedAtDescOrElseNull(standardLaborContract.getId());
         }
 
         return ReadOwnerDocumentSummaryResponseDto.of(partTimeEmploymentPermit, standardLaborContract, partTimeEmploymentPermitReject, standardLaborContractReject, userOwnerJobPosting.getStep().getLevel() > 3);

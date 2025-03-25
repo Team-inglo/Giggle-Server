@@ -14,10 +14,10 @@ import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.service.DocumentService;
 import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
 import com.inglo.giggle.document.domain.service.StandardLaborContractService;
-import com.inglo.giggle.document.repository.mysql.DocumentRepository;
-import com.inglo.giggle.document.repository.mysql.PartTimeEmploymentPermitRepository;
-import com.inglo.giggle.document.repository.mysql.RejectRepository;
-import com.inglo.giggle.document.repository.mysql.StandardLaborContractRepository;
+import com.inglo.giggle.document.repository.DocumentRepository;
+import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.repository.RejectRepository;
+import com.inglo.giggle.document.repository.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
@@ -63,8 +63,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
         accountService.checkUserValidation(account);
 
         // Document 정보 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingById(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
 
         // UserOwnerJobPosting 유저 유효성 체크
         userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);

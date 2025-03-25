@@ -1,4 +1,4 @@
-package com.inglo.giggle.document.application.controller.command;
+package com.inglo.giggle.document.controller.command;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
