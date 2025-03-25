@@ -1,4 +1,4 @@
-package com.inglo.giggle.banner.application.controller.command;
+package com.inglo.giggle.banner.controller.command;
 
 import com.inglo.giggle.banner.application.dto.request.CreateAdminBannerRequestDto;
 import com.inglo.giggle.banner.application.dto.request.UpdateAdminBannerRequestDto;

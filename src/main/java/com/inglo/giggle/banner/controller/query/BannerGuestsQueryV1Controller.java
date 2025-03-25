@@ -1,4 +1,4 @@
-package com.inglo.giggle.banner.application.controller.query;
+package com.inglo.giggle.banner.controller.query;
 
 import com.inglo.giggle.banner.application.dto.response.ReadBannerDetailResponseDto;
 import com.inglo.giggle.banner.application.dto.response.ReadBannerOverviewResponseDto;

@@ -3,7 +3,7 @@ package com.inglo.giggle.banner.application.service;
 import com.inglo.giggle.banner.application.dto.request.UpdateAdminBannerRequestDto;
 import com.inglo.giggle.banner.application.usecase.UpdateAdminBannerUseCase;
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.banner.repository.mysql.BannerRepository;
+import com.inglo.giggle.banner.repository.BannerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
@@ -34,8 +34,7 @@ public class UpdateAdminBannerService implements UpdateAdminBannerUseCase {
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // Banner 조회
-        Banner banner = bannerRepository.findById(bannerId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Banner banner = bannerRepository.findByIdOrElseThrow(bannerId);
 
         if (image != null) {
             String imgUrl = s3Util.uploadImageFile(image, account.getSerialId(), EImageType.BANNER_IMG);

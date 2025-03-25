@@ -1,7 +1,11 @@
-package com.inglo.giggle.banner.repository.mysql.querydsl;
+package com.inglo.giggle.banner.repository.impl;
 
 import com.inglo.giggle.banner.domain.Banner;
 import com.inglo.giggle.banner.domain.QBanner;
+import com.inglo.giggle.banner.repository.BannerRepository;
+import com.inglo.giggle.banner.repository.mysql.BannerJpaRepository;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -11,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -21,9 +25,51 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class BannerRepositoryQueryImpl implements BannerRepositoryQuery {
+public class BannerRepositoryImpl implements BannerRepository {
 
+    private final BannerJpaRepository bannerJpaRepository;
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public Banner findByIdOrElseNull(Long bannerId) {
+        return bannerJpaRepository.findById(bannerId).orElse(null);
+    }
+
+    @Override
+    public Banner findByIdOrElseThrow(Long bannerId) {
+        return bannerJpaRepository.findById(bannerId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_BANNER));
+    }
+
+    @Override
+    public List<Banner> findByRole(ESecurityRole role) {
+        return bannerJpaRepository.findByRole(role);
+    }
+
+    @Override
+    public List<Banner> findAll() {
+        return bannerJpaRepository.findAll();
+    }
+
+    @Override
+    public void save(Banner banner) {
+        bannerJpaRepository.save(banner);
+    }
+
+    @Override
+    public Banner saveAndReturn(Banner banner) {
+        return bannerJpaRepository.save(banner);
+    }
+
+    @Override
+    public void delete(Banner banner) {
+        bannerJpaRepository.delete(banner);
+    }
+
+    @Override
+    public void deleteById(Long bannerId) {
+        bannerJpaRepository.deleteById(bannerId);
+    }
 
     @Override
     public Page<Banner> findBannersByFilters(
@@ -34,7 +80,7 @@ public class BannerRepositoryQueryImpl implements BannerRepositoryQuery {
             String filterType,
             String filter,
             String sortType,
-            Direction sort
+            Sort.Direction sort
     ) {
 
         QBanner banner = QBanner.banner;
@@ -72,7 +118,7 @@ public class BannerRepositoryQueryImpl implements BannerRepositoryQuery {
 
         // 정렬 조건
         if (sortType != null && !sortType.isBlank()) {
-            Order direction = (sort != null && sort.equals(Direction.DESC))
+            Order direction = (sort != null && sort.equals(Sort.Direction.DESC))
                     ? Order.DESC : Order.ASC;
             baseQuery.orderBy(new OrderSpecifier<>(direction, banner.createdAt));
         }
@@ -90,5 +136,4 @@ public class BannerRepositoryQueryImpl implements BannerRepositoryQuery {
 
         return new PageImpl<>(content, pageable, total);
     }
-
 }

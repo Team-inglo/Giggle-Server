@@ -24,6 +24,7 @@ public enum ErrorCode {
     NOT_FOUND_AUTHENTICATION_CODE_HISTORY(40409, HttpStatus.NOT_FOUND, "존재하지 않는 인증코드 이력입니다."),
     NOT_FOUND_REFRESH_TOKEN(40410, HttpStatus.NOT_FOUND, "존재하지 않는 리프레시 토큰입니다."),
     NOT_FOUND_TEMPORARY_TOKEN(40411, HttpStatus.NOT_FOUND, "존재하지 않는 임시 토큰입니다."),
+    NOT_FOUND_BANNER(40412, HttpStatus.NOT_FOUND, "존재하지 않는 배너입니다."),
 
     // Invalid Argument Error
     MISSING_REQUEST_PARAMETER(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),

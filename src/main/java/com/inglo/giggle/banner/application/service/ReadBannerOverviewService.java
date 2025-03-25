@@ -3,7 +3,7 @@ package com.inglo.giggle.banner.application.service;
 import com.inglo.giggle.banner.application.dto.response.ReadBannerOverviewResponseDto;
 import com.inglo.giggle.banner.application.usecase.ReadBannerOverviewUseCase;
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.banner.repository.mysql.BannerRepository;
+import com.inglo.giggle.banner.repository.BannerRepository;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
