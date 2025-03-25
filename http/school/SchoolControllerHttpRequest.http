@@ -65,3 +65,8 @@ Content-Type: application/json
     "region_3depth_name": "역삼동"
   }
 }
+
+### 9.7 (어드민) 학교 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/admins/schools/108
+Authorization: Bearer {{access_token}}

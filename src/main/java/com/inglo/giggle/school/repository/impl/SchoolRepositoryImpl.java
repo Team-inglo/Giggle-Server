@@ -56,8 +56,8 @@ public class SchoolRepositoryImpl implements SchoolRepository {
     }
 
     @Override
-    public void delete(School school) {
-        schoolJpaRepository.delete(school);
+    public void deleteById(Long schoolId) {
+        schoolJpaRepository.deleteById(schoolId);
     }
 
     @Override
