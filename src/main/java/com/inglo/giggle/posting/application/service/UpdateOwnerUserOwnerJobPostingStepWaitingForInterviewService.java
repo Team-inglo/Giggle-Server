@@ -7,7 +7,7 @@ import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.domain.service.NotificationService;
 import com.inglo.giggle.core.event.dto.NotificationEventDto;
-import com.inglo.giggle.notification.repository.mysql.NotificationRepository;
+import com.inglo.giggle.notification.repository.NotificationRepository;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;

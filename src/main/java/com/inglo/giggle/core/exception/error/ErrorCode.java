@@ -31,6 +31,7 @@ public enum ErrorCode {
     NOT_FOUND_PART_TIME_EMPLOYMENT_PERMIT(40416, HttpStatus.NOT_FOUND, "존재하지 않는 시간제 취업 허가 서류입니다."),
     NOT_FOUND_REJECT(40417, HttpStatus.NOT_FOUND, "존재하지 않는 미승인입니다."),
     NOT_FOUND_STANDARD_LABOR_CONTRACT(40418, HttpStatus.NOT_FOUND, "존재하지 않는 표준 근로 계약 서류입니다."),
+    NOT_FOUND_NOTIFICATION(40419, HttpStatus.NOT_FOUND, "존재하지 않는 알림입니다."),
 
     // Invalid Argument Error
     MISSING_REQUEST_PARAMETER(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),

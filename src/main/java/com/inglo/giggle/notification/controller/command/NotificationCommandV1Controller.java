@@ -1,4 +1,4 @@
-package com.inglo.giggle.notification.application.controller.command;
+package com.inglo.giggle.notification.controller.command;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
