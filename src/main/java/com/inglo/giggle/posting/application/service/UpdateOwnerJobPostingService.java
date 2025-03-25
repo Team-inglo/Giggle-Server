@@ -16,9 +16,9 @@ import com.inglo.giggle.posting.domain.PostingWorkDayTime;
 import com.inglo.giggle.posting.domain.service.CompanyImageService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
 import com.inglo.giggle.posting.domain.service.PostWorkDayTimeService;
-import com.inglo.giggle.posting.repository.mysql.CompanyImageRepository;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
-import com.inglo.giggle.posting.repository.mysql.PostingWorkDayTimeRepository;
+import com.inglo.giggle.posting.repository.CompanyImageRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
+import com.inglo.giggle.posting.repository.PostingWorkDayTimeRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -66,8 +66,7 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
         Owner owner = (Owner) account;
 
         // 공고 조회
-        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
 
         // 공고 수정 유효성 검사
         jobPostingService.validateUpdateJobPosting(jobPosting, owner);

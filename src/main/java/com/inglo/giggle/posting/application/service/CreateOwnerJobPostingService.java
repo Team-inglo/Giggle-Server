@@ -3,8 +3,6 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.core.utility.S3Util;
@@ -15,7 +13,7 @@ import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.CompanyImageService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
 import com.inglo.giggle.posting.domain.service.PostWorkDayTimeService;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -113,7 +111,7 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
         }
 
 
-        JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
+        JobPosting savedJobPosting = jobPostingRepository.saveAndReturn(jobPosting);
 
         return CreateOwnerJobPostingResponseDto.builder()
                 .id(savedJobPosting.getId())

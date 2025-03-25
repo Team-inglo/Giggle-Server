@@ -1,7 +1,5 @@
 package com.inglo.giggle.term.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.repository.AccountRepository;
 import com.inglo.giggle.term.application.dto.request.CreateTermAccountRequestDto;
@@ -10,8 +8,8 @@ import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.TermAccount;
 import com.inglo.giggle.term.domain.service.TermAccountService;
 import com.inglo.giggle.term.domain.type.ETermType;
-import com.inglo.giggle.term.repository.mysql.TermAccountRepository;
-import com.inglo.giggle.term.repository.mysql.TermRepository;
+import com.inglo.giggle.term.repository.TermAccountRepository;
+import com.inglo.giggle.term.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

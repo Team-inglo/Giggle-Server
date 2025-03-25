@@ -1,15 +1,13 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.dto.response.ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -49,8 +47,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
         accountService.checkOwnerValidation(account);
 
         // 채용공고 조회
-        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
 
         // 정렬 방향 설정
         Sort.Direction direction = "ASCENDING".equalsIgnoreCase(sorting) ? Sort.Direction.ASC : Sort.Direction.DESC;

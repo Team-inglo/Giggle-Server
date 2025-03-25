@@ -5,7 +5,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;

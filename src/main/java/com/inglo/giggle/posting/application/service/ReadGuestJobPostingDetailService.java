@@ -7,9 +7,9 @@ import com.inglo.giggle.posting.application.usecase.ReadGuestJobPostingDetailUse
 import com.inglo.giggle.posting.domain.CompanyImage;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.PostingWorkDayTime;
-import com.inglo.giggle.posting.repository.mysql.CompanyImageRepository;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
-import com.inglo.giggle.posting.repository.mysql.PostingWorkDayTimeRepository;
+import com.inglo.giggle.posting.repository.CompanyImageRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
+import com.inglo.giggle.posting.repository.PostingWorkDayTimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

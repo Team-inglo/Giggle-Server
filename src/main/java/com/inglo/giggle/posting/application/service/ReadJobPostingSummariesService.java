@@ -5,7 +5,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.dto.response.ReadJobPostingSummariesResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingSummariesUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

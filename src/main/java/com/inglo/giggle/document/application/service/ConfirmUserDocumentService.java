@@ -20,7 +20,7 @@ import com.inglo.giggle.document.repository.RejectRepository;
 import com.inglo.giggle.document.repository.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -75,8 +75,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
         Owner owner = ownerRepository.findByDocumentIdOrElseThrow(documentId);
 
         // JobPosting 정보 조회
-        JobPosting jobPosting = jobPostingRepository.findById(document.getUserOwnerJobPosting().getJobPosting().getId())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(document.getUserOwnerJobPosting().getJobPosting().getId());
 
         // Reject 정보 조회
         List<Reject> rejects = rejectRepository.findAllByDocumentId(documentId);

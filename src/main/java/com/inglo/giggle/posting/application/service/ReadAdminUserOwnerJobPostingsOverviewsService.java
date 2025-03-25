@@ -4,7 +4,7 @@ import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsOverviewsResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsOverviewsUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

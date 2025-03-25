@@ -1,13 +1,11 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.posting.application.usecase.DeleteOwnerJobPostingUseCase;
-import com.inglo.giggle.posting.repository.mysql.CompanyImageRepository;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.CompanyImageRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;

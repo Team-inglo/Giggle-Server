@@ -11,10 +11,10 @@ import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.WorkExperience;
 import com.inglo.giggle.resume.domain.service.ResumeService;
-import com.inglo.giggle.resume.repository.mysql.EducationRepository;
-import com.inglo.giggle.resume.repository.mysql.LanguageSkillRepository;
-import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
-import com.inglo.giggle.resume.repository.mysql.WorkExperienceRepository;
+import com.inglo.giggle.resume.repository.EducationRepository;
+import com.inglo.giggle.resume.repository.LanguageSkillRepository;
+import com.inglo.giggle.resume.repository.ResumeRepository;
+import com.inglo.giggle.resume.repository.WorkExperienceRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -52,8 +52,7 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
         User user = (User) account;
 
         // Resume 조회
-        Resume resume = resumeRepository.findWithWorkExperiencesAndLanguageSkillByAccountId(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Resume resume = resumeRepository.findWithWorkExperiencesAndLanguageSkillByAccountIdOrElseThrow(accountId);
 
         // Resume 유효성 체크
         resumeService.checkResumeValidation(resume, accountId);
@@ -62,8 +61,7 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
         List<Education> educations = educationRepository.findAllByResume(resume);
 
         // LanguageSkill 조회
-        LanguageSkill languageSkill = languageSkillRepository.findByResume(resume)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        LanguageSkill languageSkill = languageSkillRepository.findByResumeOrElseThrow(resume);
 
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);

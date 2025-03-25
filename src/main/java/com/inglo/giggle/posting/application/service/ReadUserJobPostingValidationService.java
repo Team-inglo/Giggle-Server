@@ -10,16 +10,16 @@ import com.inglo.giggle.posting.domain.JobPostAggregate;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.JobPostAggregateService;
 import com.inglo.giggle.posting.domain.service.JobPostingService;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.domain.service.EducationService;
 import com.inglo.giggle.resume.domain.service.ResumeAggregateService;
-import com.inglo.giggle.resume.repository.mysql.EducationRepository;
-import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
+import com.inglo.giggle.resume.repository.EducationRepository;
+import com.inglo.giggle.resume.repository.ResumeRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -118,7 +118,7 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
 
     // 유저의 학교의 거리로 부터 공고에 적합한지 검증하는 메서드
     private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDesc(resume.getUser().getId());
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDescOptional(resume.getUser().getId());
 
         if(school.isEmpty()) {
             log.info("School is empty");

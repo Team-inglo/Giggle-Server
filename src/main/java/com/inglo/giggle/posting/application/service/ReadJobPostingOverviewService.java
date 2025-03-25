@@ -13,7 +13,7 @@ import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import com.inglo.giggle.posting.domain.type.EWorkingHours;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

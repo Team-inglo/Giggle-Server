@@ -1,13 +1,11 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.dto.response.ReadUserUserOwnerJobPostingListResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadUserUserOwnerJobPostingListUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;

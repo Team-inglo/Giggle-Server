@@ -17,9 +17,9 @@ import com.inglo.giggle.document.repository.IntegratedApplicationRepository;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -88,8 +88,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         );
 
         // School 조회
-        School school = schoolRepository.findBySchoolName(requestDto.schoolName())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        School school = schoolRepository.findBySchoolNameOrElseThrow(requestDto.schoolName());
 
         // IntegratedApplication 수정
         IntegratedApplication updatedIntegratedApplication = integratedApplicationService.updateUserIntegratedApplication(

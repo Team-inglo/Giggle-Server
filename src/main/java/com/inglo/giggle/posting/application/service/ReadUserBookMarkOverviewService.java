@@ -1,12 +1,10 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.application.dto.response.ReadUserBookMarkOverviewResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadUserBookMarkOverviewUseCase;
 import com.inglo.giggle.posting.domain.BookMark;
-import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
+import com.inglo.giggle.posting.repository.BookMarkRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;

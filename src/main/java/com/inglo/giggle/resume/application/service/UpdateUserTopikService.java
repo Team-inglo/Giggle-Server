@@ -6,7 +6,7 @@ import com.inglo.giggle.resume.application.dto.request.UpdateUserTopikReqeustDto
 import com.inglo.giggle.resume.application.usecase.UpdateUserTopikUseCase;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.service.LanguageSkillService;
-import com.inglo.giggle.resume.repository.mysql.LanguageSkillRepository;
+import com.inglo.giggle.resume.repository.LanguageSkillRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -36,8 +36,7 @@ public class UpdateUserTopikService implements UpdateUserTopikUseCase {
         accountService.checkUserValidation(account);
 
         // LanguageSkill 조회
-        LanguageSkill languageSkill = languageSkillRepository.findById(accountId)
-                .orElseThrow(()-> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        LanguageSkill languageSkill = languageSkillRepository.findByIdOrElseThrow(accountId);
 
         // LanguageSkill 유효성 체크
         languageSkillService.checkLanguageSkillValidation(languageSkill, accountId);

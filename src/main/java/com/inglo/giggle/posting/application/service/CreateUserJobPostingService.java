@@ -14,8 +14,8 @@ import com.inglo.giggle.posting.application.usecase.CreateUserJobPostingUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -81,7 +81,7 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
         );
 
         // 유저-공고 매핑 저장
-        UserOwnerJobPosting savedUserOwnerJobPosting = userOwnerJobPostingRepository.save(userOwnerJobPosting);
+        UserOwnerJobPosting savedUserOwnerJobPosting = userOwnerJobPostingRepository.saveAndReturn(userOwnerJobPosting);
 
         // Notification 생성 및 저장
         Notification notification = notificationService.createNotification(

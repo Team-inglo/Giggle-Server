@@ -12,7 +12,7 @@ import com.inglo.giggle.document.repository.RejectRepository;
 import com.inglo.giggle.document.repository.StandardLaborContractRepository;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -43,8 +43,7 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
         accountService.checkOwnerValidation(account);
 
         // UserOwnerJobPosting 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findById(userOwnerJobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByIdOrElseThrow(userOwnerJobPostingId);
 
         // UserOwnerJobPosting 고용주 유효성 체크
         userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);

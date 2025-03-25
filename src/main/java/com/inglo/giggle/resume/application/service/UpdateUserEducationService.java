@@ -7,9 +7,9 @@ import com.inglo.giggle.resume.application.dto.request.UpdateUserEducationReques
 import com.inglo.giggle.resume.application.usecase.UpdateUserEducationUseCase;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.service.EducationService;
-import com.inglo.giggle.resume.repository.mysql.EducationRepository;
+import com.inglo.giggle.resume.repository.EducationRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -41,15 +41,13 @@ public class UpdateUserEducationService implements UpdateUserEducationUseCase {
         accountService.checkUserValidation(account);
 
         // Education 조회
-        Education education = educationRepository.findById(educationId)
-                .orElseThrow(()-> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Education education = educationRepository.findByIdOrElseThrow(educationId);
 
         // Education 유효성 체크
         educationService.checkEducationValidation(education, accountId);
 
         // School 조회
-        School school = schoolRepository.findById(requestDto.schoolId())
-                .orElseThrow(()-> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        School school = schoolRepository.findByIdOrElseThrow(requestDto.schoolId());
 
         // Education 업데이트
         education = educationService.updateEducation(

@@ -7,8 +7,8 @@ import com.inglo.giggle.posting.application.dto.response.UpdateUserJobPostingBoo
 import com.inglo.giggle.posting.application.usecase.UpdateUserJobPostingBookMarkUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.BookMarkService;
-import com.inglo.giggle.posting.repository.mysql.BookMarkRepository;
-import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
+import com.inglo.giggle.posting.repository.BookMarkRepository;
+import com.inglo.giggle.posting.repository.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -49,8 +49,7 @@ public class UpdateUserJobPostingBookMarkService implements UpdateUserJobPosting
                 .orElseGet(() -> {
                     User user = (User) account;
 
-                    JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                            .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+                    JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
 
                     bookMarkRepository.save(
                             bookMarkService.createBookMark(

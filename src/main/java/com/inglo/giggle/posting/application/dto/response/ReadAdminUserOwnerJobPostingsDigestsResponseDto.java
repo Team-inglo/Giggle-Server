@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.inglo.giggle.core.dto.CountInfoDto;
 import com.inglo.giggle.core.dto.SelfValidating;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingQueryRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -124,7 +124,7 @@ public class ReadAdminUserOwnerJobPostingsDigestsResponseDto extends SelfValidat
     }
 
     public static ReadAdminUserOwnerJobPostingsDigestsResponseDto of(
-            List<UserOwnerJobPostingQueryRepository.GraphStats> currentStats,
+            List<UserOwnerJobPostingRepository.GraphStats> currentStats,
             int priorTotalCount
     ) {
         List<GraphDetailDto> totalApply = new ArrayList<>();
@@ -137,7 +137,7 @@ public class ReadAdminUserOwnerJobPostingsDigestsResponseDto extends SelfValidat
         int rejectCount = 0;
         int successCount = 0;
 
-        for (UserOwnerJobPostingQueryRepository.GraphStats stat : currentStats) {
+        for (UserOwnerJobPostingRepository.GraphStats stat : currentStats) {
             int year = stat.year();
             int month = stat.month();
 

@@ -12,7 +12,7 @@ import com.inglo.giggle.posting.application.dto.request.UpdateOwnerUserOwnerJobP
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -65,7 +65,7 @@ public class UpdateOwnerUserOwnerJobPostingStepResumeUnderReviewService implemen
         );
 
         // UserOwnerJobPosting 저장
-        UserOwnerJobPosting savedUserOwnerJobPosting = userOwnerJobPostingRepository.save(userOwnerJobPosting);
+        UserOwnerJobPosting savedUserOwnerJobPosting = userOwnerJobPostingRepository.saveAndReturn(userOwnerJobPosting);
 
         // Notification 생성 및 저장
         Notification notification;

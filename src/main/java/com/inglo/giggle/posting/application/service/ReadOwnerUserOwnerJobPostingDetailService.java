@@ -6,9 +6,9 @@ import com.inglo.giggle.posting.application.dto.response.ReadOwnerUserOwnerJobPo
 import com.inglo.giggle.posting.application.usecase.ReadOwnerUserOwnerJobPostingDetailUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.mysql.SchoolRepository;
+import com.inglo.giggle.school.repository.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -48,7 +48,7 @@ public class ReadOwnerUserOwnerJobPostingDetailService implements ReadOwnerUserO
         userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 
         // User에 속한 School 조회
-        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDesc(
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDescOptional(
                 userOwnerJobPosting.getUser().getId()
         );
 
