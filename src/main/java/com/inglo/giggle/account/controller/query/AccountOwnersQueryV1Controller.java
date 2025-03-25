@@ -1,4 +1,4 @@
-package com.inglo.giggle.account.application.controller.query;
+package com.inglo.giggle.account.controller.query;
 
 import com.inglo.giggle.account.application.dto.response.ReadOwnerBriefResponseDto;
 import com.inglo.giggle.account.application.dto.response.ReadOwnerDetailResponseDto;

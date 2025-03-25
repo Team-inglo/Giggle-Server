@@ -15,7 +15,7 @@ import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.UserOwnerJobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +37,7 @@ public class ReadUserDocumentSummaryService implements ReadUserDocumentSummaryUs
     public ReadUserDocumentSummaryResponseDto readUserDocumentSummary(UUID accountId, Long userOwnerJobPostingId) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);

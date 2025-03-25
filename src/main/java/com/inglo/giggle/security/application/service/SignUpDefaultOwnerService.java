@@ -16,9 +16,9 @@ import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultOwnerRequestDto;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.repository.TemporaryTokenRepository;
+import com.inglo.giggle.security.repository.TemporaryAccountRepository;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.TermAccount;
 import com.inglo.giggle.term.domain.service.TermAccountService;
@@ -58,12 +58,10 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
     public DefaultJsonWebTokenDto execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
 
         // temporary Token 검증. Redis에 있는 토큰인지 확인
-        TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(requestDto.temporaryToken())
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
+        TemporaryToken temporaryToken = temporaryTokenRepository.findByValueOrElseThrow(requestDto.temporaryToken());
 
         // Redis에서 임시 사용자 정보 가져오기
-        TemporaryAccount tempUserInfo = temporaryAccountRepository.findById(temporaryToken.getEmail())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT));
+        TemporaryAccount tempUserInfo = temporaryAccountRepository.findByIdOrElseThrow(temporaryToken.getEmail());
 
         // AccountType 검증
         temporaryAccountService.validateAccountTypeOwner(tempUserInfo);
@@ -93,7 +91,7 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
                 bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
                 iconUrl, requestDto, address
         );
-        account = accountRepository.save(account);
+        account = accountRepository.saveAndReturn(account);
 
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getEmail());

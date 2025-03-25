@@ -4,7 +4,7 @@ import com.inglo.giggle.account.application.dto.request.UpdateOwnerRequestDto;
 import com.inglo.giggle.account.application.usecase.UpdateOwnerUseCase;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.service.OwnerService;
-import com.inglo.giggle.account.repository.mysql.OwnerRepository;
+import com.inglo.giggle.account.repository.OwnerRepository;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.exception.error.ErrorCode;
@@ -13,7 +13,7 @@ import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,13 +36,11 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
     @Transactional
     public void execute(UUID accountId, UpdateOwnerRequestDto requestDto, MultipartFile image) {
 
-        // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        // 계정 정보 조회
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 고용주 조회
-        Owner owner = ownerRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Owner owner = ownerRepository.findByIdOrElseThrow(accountId);
 
         // 아이콘 이미지가 변경됐다면
         if (requestDto.isIconImgChanged() && image != null) {

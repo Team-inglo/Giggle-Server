@@ -1,7 +1,7 @@
 package com.inglo.giggle.school.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.mysql.UserRepository;
+import com.inglo.giggle.account.repository.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
@@ -25,8 +25,7 @@ public class ReadUserSchoolDetailService implements ReadUserSchoolDetailUseCase 
 
     @Override
     public ReadUserSchoolDetailResponseDto execute(UUID accountId) {
-        User user = userRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        User user = userRepository.findByIdOrElseThrow(accountId);
 
         // 유저의 비자에 맵핑되는 educationLevel 조회
         EEducationLevel educationLevel = educationService.getEducationLevelByVisa(user.getVisa());

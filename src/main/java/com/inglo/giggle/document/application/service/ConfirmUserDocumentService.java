@@ -2,7 +2,7 @@ package com.inglo.giggle.document.application.service;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.mysql.OwnerRepository;
+import com.inglo.giggle.account.repository.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.S3Util;
@@ -23,7 +23,7 @@ import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,8 +57,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
     public void execute(UUID accountId, Long documentId) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);
@@ -74,8 +73,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
         User user = (User) account;
 
         // Owner 정보 조회
-        Owner owner = ownerRepository.findByDocumentId(documentId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Owner owner = ownerRepository.findByDocumentIdOrElseThrow(documentId);
 
         // JobPosting 정보 조회
         JobPosting jobPosting = jobPostingRepository.findById(document.getUserOwnerJobPosting().getJobPosting().getId())

@@ -1,4 +1,4 @@
-package com.inglo.giggle.account.application.controller.command;
+package com.inglo.giggle.account.controller.command;
 
 import com.inglo.giggle.account.application.dto.request.UpdateUserLanguageRequestDto;
 import com.inglo.giggle.account.application.dto.request.UpdateUserRequestDto;

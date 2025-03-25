@@ -2,9 +2,6 @@ package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.dto.RouteResponseDto;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.utility.OSRMUtil;
 import com.inglo.giggle.core.utility.RestClientUtil;
 import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingValidationResponseDto;
@@ -23,16 +20,14 @@ import com.inglo.giggle.resume.repository.mysql.EducationRepository;
 import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;

@@ -24,8 +24,8 @@ import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.mysql.AccountDevice;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountDeviceRepository;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountDeviceRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -61,8 +61,7 @@ public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocu
     public void execute(UUID accountId, Long documentId, UpdateDocumentStatusReqeustionRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);

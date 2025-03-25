@@ -9,7 +9,7 @@ import com.inglo.giggle.resume.domain.service.LanguageSkillService;
 import com.inglo.giggle.resume.repository.mysql.LanguageSkillRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +30,7 @@ public class ReadUserLanguageSummaryService implements ReadUserLanguageSummaryUs
     public ReadUserLanguageSummaryResponseDto execute(UUID accountId) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);

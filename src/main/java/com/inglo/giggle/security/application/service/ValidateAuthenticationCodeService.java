@@ -5,9 +5,9 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.security.application.usecase.ValidateAuthenticationCodeUseCase;
 import com.inglo.giggle.security.domain.service.TemporaryTokenService;
-import com.inglo.giggle.security.repository.redis.AuthenticationCodeHistoryRepository;
-import com.inglo.giggle.security.repository.redis.AuthenticationCodeRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
+import com.inglo.giggle.security.repository.AuthenticationCodeHistoryRepository;
+import com.inglo.giggle.security.repository.AuthenticationCodeRepository;
+import com.inglo.giggle.security.repository.TemporaryTokenRepository;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.security.domain.redis.AuthenticationCode;
 import com.inglo.giggle.security.domain.redis.AuthenticationCodeHistory;
@@ -35,12 +35,10 @@ public class ValidateAuthenticationCodeService implements ValidateAuthentication
     @Transactional
     public TemporaryJsonWebTokenDto execute(ValidateAuthenticationCodeRequestDto requestDto) {
         // 해당 이메일로 발급된 인증코드 조회
-        AuthenticationCode authenticationCode = authenticationCodeRepository.findById(requestDto.email())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        AuthenticationCode authenticationCode = authenticationCodeRepository.findByIdOrElseThrow(requestDto.email());
 
         // 해당 이메일로 발급된 인증코드 이력 조회
-        AuthenticationCodeHistory authenticationCodeHistory = authenticationCodeHistoryRepository.findById(requestDto.email())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        AuthenticationCodeHistory authenticationCodeHistory = authenticationCodeHistoryRepository.findByIdOrElseThrow(requestDto.email());
 
         // 인증코드 일치 여부 확인
         if (!bCryptPasswordEncoder.matches(requestDto.authenticationCode(), authenticationCode.getValue())) {

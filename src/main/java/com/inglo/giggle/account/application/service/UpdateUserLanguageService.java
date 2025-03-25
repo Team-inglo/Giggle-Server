@@ -4,7 +4,7 @@ import com.inglo.giggle.account.application.dto.request.UpdateUserLanguageReques
 import com.inglo.giggle.account.application.usecase.UpdateUserLanguageUseCase;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.domain.service.UserService;
-import com.inglo.giggle.account.repository.mysql.UserRepository;
+import com.inglo.giggle.account.repository.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +24,7 @@ public class UpdateUserLanguageService implements UpdateUserLanguageUseCase {
     public void execute(UUID accountId, UpdateUserLanguageRequestDto requestDto) {
 
         // 유저 정보 조회
-        User user = userRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        User user = userRepository.findByIdOrElseThrow(accountId);
 
         // 언어 업데이트
         user = userService.updateLanguage(user, requestDto.language());

@@ -22,7 +22,7 @@ import com.inglo.giggle.school.domain.School;
 import com.inglo.giggle.school.repository.mysql.SchoolRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,8 +51,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
     public void execute(UUID accountId, Long documentId, UpdateUserIntegratedApplicationRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);

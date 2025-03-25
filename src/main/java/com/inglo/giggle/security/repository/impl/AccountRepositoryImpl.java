@@ -1,14 +1,19 @@
-package com.inglo.giggle.security.repository.mysql.querydsl;
+package com.inglo.giggle.security.repository.impl;
 
 import com.inglo.giggle.account.domain.QAdmin;
 import com.inglo.giggle.account.domain.QOwner;
 import com.inglo.giggle.account.domain.QUser;
 import com.inglo.giggle.account.domain.type.ELanguage;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.mysql.QAccount;
+import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.repository.mysql.AccountJpaRepository;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -17,19 +22,85 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class AccountRepositoryQueryImpl implements AccountRepositoryQuery {
+public class AccountRepositoryImpl implements AccountRepository {
 
+    private final AccountJpaRepository accountJpaRepository;
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public Account findByIdOrElseThrow(UUID accountId) {
+        return accountJpaRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+    }
+
+    @Override
+    public Account findBySerialIdOrElseNull(String serialId) {
+        return accountJpaRepository.findBySerialId(serialId).orElse(null);
+    }
+
+    @Override
+    public Account findBySerialIdAndProviderOrElseThrowUserNameNotFoundException(String serialId, ESecurityProvider provider) {
+        return accountJpaRepository.findBySerialIdAndProvider(serialId, provider)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with serialId: " + serialId));
+    }
+
+    @Override
+    public Account findBySerialIdAndProviderOrElseThrow(String serialId, ESecurityProvider provider) {
+        return accountJpaRepository.findBySerialIdAndProvider(serialId, provider)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+    }
+
+    @Override
+    public Account findByEmailAndProviderOrElseNull(String email, ESecurityProvider provider) {
+        return accountJpaRepository.findByEmailAndProvider(email, provider).orElse(null);
+    }
+
+    @Override
+    public Account findByEmailOrElseNull(String email) {
+        return accountJpaRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public List<Account> findAllBeforeEndDate(LocalDateTime endDate) {
+        return accountJpaRepository.findAllBeforeEndDate(endDate);
+    }
+
+    @Override
+    public List<Account> findAllBeforeEndDateWithDeleted(LocalDateTime endDate) {
+        return accountJpaRepository.findAllBeforeEndDateWithDeleted(endDate);
+    }
+
+    @Override
+    public void save(Account account) {
+        accountJpaRepository.save(account);
+    }
+
+    @Override
+    public Account saveAndReturn(Account account) {
+        return accountJpaRepository.save(account);
+    }
+
+    @Override
+    public void delete(Account account) {
+        accountJpaRepository.delete(account);
+    }
+
+    @Override
+    public void deleteById(UUID accountId) {
+        accountJpaRepository.deleteById(accountId);
+    }
 
     @Override
     public Page<Account> findAccountByFilter(
@@ -40,7 +111,7 @@ public class AccountRepositoryQueryImpl implements AccountRepositoryQuery {
             String filterType,
             String filter,
             String sortType,
-            Direction sort
+            Sort.Direction sort
     ) {
         QAccount account = QAccount.account;
         QUser user = QUser.user;
@@ -121,7 +192,7 @@ public class AccountRepositoryQueryImpl implements AccountRepositoryQuery {
 
         // 정렬 조건
         if (sortType != null && !sortType.isBlank()) {
-            Order direction = (sort != null && sort.equals(Direction.DESC))
+            Order direction = (sort != null && sort.equals(Sort.Direction.DESC))
                     ? Order.DESC : Order.ASC;
 
             switch (sortType) {
@@ -151,4 +222,5 @@ public class AccountRepositoryQueryImpl implements AccountRepositoryQuery {
 
         return new PageImpl<>(content, pageable, total);
     }
+
 }

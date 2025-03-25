@@ -2,7 +2,7 @@ package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.security.application.usecase.ValidateIdUseCase;
 import com.inglo.giggle.security.application.dto.response.ValidationResponseDto;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +23,6 @@ public class ValidateIdService implements ValidateIdUseCase {
      * @return 중복된 아이디인지 여부
      */
     private Boolean isValidateId(String id) {
-        return accountRepository.findByEmail(id).isEmpty();
+        return accountRepository.findByEmailOrElseNull(id) == null;
     }
 }

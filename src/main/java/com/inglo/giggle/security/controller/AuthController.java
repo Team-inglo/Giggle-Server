@@ -1,4 +1,4 @@
-package com.inglo.giggle.security.application.controller;
+package com.inglo.giggle.security.controller;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.constant.Constants;

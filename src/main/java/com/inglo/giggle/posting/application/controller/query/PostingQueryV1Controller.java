@@ -10,7 +10,11 @@ import com.inglo.giggle.posting.application.usecase.ReadJobPostingDetailUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingOverviewUseCase;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingSummariesUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 import java.util.UUID;
@@ -99,11 +103,9 @@ public class PostingQueryV1Controller {
      */
     @GetMapping("/job-postings/{job-posting-id}/summaries")
     public ResponseDto<ReadJobPostingSummariesResponseDto> readJobPostingSummaries(
-            @AccountID UUID accountId,
             @PathVariable(name = "job-posting-id") Long jobPostingId
     ) {
         return ResponseDto.ok(readJobPostingSummariesUseCase.execute(
-                accountId,
                 jobPostingId
         ));
     }

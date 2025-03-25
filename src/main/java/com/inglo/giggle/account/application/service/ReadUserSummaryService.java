@@ -3,7 +3,7 @@ package com.inglo.giggle.account.application.service;
 import com.inglo.giggle.account.application.dto.response.ReadUserSummaryResponseDto;
 import com.inglo.giggle.account.application.usecase.ReadUserSummaryUseCase;
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.mysql.UserRepository;
+import com.inglo.giggle.account.repository.UserRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
@@ -37,8 +37,7 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
     public ReadUserSummaryResponseDto execute(UUID accountId) {
 
         // 유저 정보 조회
-        User user = userRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        User user = userRepository.findByIdOrElseThrow(accountId);
         // 이력서 정보 조회
         Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));

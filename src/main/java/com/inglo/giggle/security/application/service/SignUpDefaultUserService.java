@@ -20,9 +20,9 @@ import com.inglo.giggle.security.domain.redis.TemporaryAccount;
 import com.inglo.giggle.security.domain.redis.TemporaryToken;
 import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryAccountRepository;
-import com.inglo.giggle.security.repository.redis.TemporaryTokenRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.repository.TemporaryAccountRepository;
+import com.inglo.giggle.security.repository.TemporaryTokenRepository;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.TermAccount;
 import com.inglo.giggle.term.domain.service.TermAccountService;
@@ -63,12 +63,10 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
     @Transactional
     public DefaultJsonWebTokenDto execute(SignUpDefaultUserRequestDto requestDto) {
         // temporary Token 검증. Redis에 있는 토큰인지 확인
-        TemporaryToken temporaryToken = temporaryTokenRepository.findByValue(requestDto.temporaryToken())
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
+        TemporaryToken temporaryToken = temporaryTokenRepository.findByValueOrElseThrow(requestDto.temporaryToken());
 
         // Redis에서 임시 사용자 정보 가져오기
-        TemporaryAccount tempUserInfo = temporaryAccountRepository.findById(temporaryToken.getEmail())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT));
+        TemporaryAccount tempUserInfo = temporaryAccountRepository.findByIdOrElseThrow(temporaryToken.getEmail());
 
         // AccountType 검증
         temporaryAccountService.validateAccountTypeUser(tempUserInfo);
@@ -92,7 +90,8 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
                 bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
                 s3Util.getUserDefaultImgUrl(), requestDto, address
         );
-        User savedUser = accountRepository.save(user);
+        // TODO: 테스트
+        User savedUser = (User) accountRepository.saveAndReturn(user);
 
         // Resume, LanguageSkill 생성 및 저장
         Resume savedResume = resumeService.createResume(savedUser);

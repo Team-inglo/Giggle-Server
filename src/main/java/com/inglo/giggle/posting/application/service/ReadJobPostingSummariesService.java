@@ -6,27 +6,19 @@ import com.inglo.giggle.posting.application.dto.response.ReadJobPostingSummaries
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingSummariesUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.repository.mysql.JobPostingRepository;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ReadJobPostingSummariesService implements ReadJobPostingSummariesUseCase {
 
-    private final AccountRepository accountRepository;
     private final JobPostingRepository jobPostingRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public ReadJobPostingSummariesResponseDto execute(UUID accountId, Long jobPostingId) {
-
-        // 계정 조회
-        accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+    public ReadJobPostingSummariesResponseDto execute(Long jobPostingId) {
 
         // 공고 조회
         JobPosting jobPosting = jobPostingRepository.findWithOwnerById(jobPostingId)

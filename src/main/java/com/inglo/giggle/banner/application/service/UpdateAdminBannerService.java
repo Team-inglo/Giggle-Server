@@ -9,7 +9,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +31,7 @@ public class UpdateAdminBannerService implements UpdateAdminBannerUseCase {
     public void execute(Long bannerId, UUID accountId, MultipartFile image, UpdateAdminBannerRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // Banner 조회
         Banner banner = bannerRepository.findById(bannerId)

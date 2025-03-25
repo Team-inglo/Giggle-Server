@@ -4,12 +4,11 @@ import com.inglo.giggle.account.domain.Owner;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
-@Repository
-public interface OwnerRepository extends JpaRepository<Owner, UUID>{
+
+public interface OwnerJpaRepository extends JpaRepository<Owner, UUID>{
 
     @Query("SELECT o FROM Owner o " +
             "JOIN UserOwnerJobPosting uojp ON o.id = uojp.owner.id " +

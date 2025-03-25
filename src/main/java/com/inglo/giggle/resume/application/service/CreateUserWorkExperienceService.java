@@ -11,7 +11,7 @@ import com.inglo.giggle.resume.repository.mysql.ResumeRepository;
 import com.inglo.giggle.resume.repository.mysql.WorkExperienceRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +33,7 @@ public class CreateUserWorkExperienceService implements CreateUserWorkExperience
     public void execute(UUID accountId, CreateUserWorkExperienceRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
         accountService.checkUserValidation(account);

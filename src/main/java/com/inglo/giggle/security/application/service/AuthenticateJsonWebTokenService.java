@@ -3,7 +3,7 @@ package com.inglo.giggle.security.application.service;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.mysql.AccountRepository;
+import com.inglo.giggle.security.repository.AccountRepository;
 import com.inglo.giggle.security.application.usecase.AuthenticateJsonWebTokenUseCase;
 import lombok.RequiredArgsConstructor;
 import com.inglo.giggle.security.domain.mysql.Account;
@@ -21,8 +21,8 @@ public class AuthenticateJsonWebTokenService implements AuthenticateJsonWebToken
 
     @Override
     public CustomUserPrincipal execute(UUID accountId) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         return accountService.createCustomUserPrincipalByAccount(account);
     }
