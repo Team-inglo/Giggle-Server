@@ -28,6 +28,12 @@ public class HttpGlobalExceptionHandler {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    private final static ErrorCode[] NOT_SEND_DISCORD_ERROR_CODES = {
+            ErrorCode.INVALID_TOKEN_ERROR,
+            ErrorCode.ACCESS_DENIED,
+            ErrorCode.METHOD_NOT_ALLOWED
+    };
+
     // Convertor 에서 바인딩 실패시 발생하는 예외
     @ExceptionHandler(value = {HttpMessageNotReadableException.class})
     public ResponseDto<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
@@ -127,6 +133,11 @@ public class HttpGlobalExceptionHandler {
     @ExceptionHandler(value = {CommonException.class})
     public ResponseDto<?> handleApiException(CommonException e) {
         log.error("ExceptionHandler catch HttpCommonException : {}", e.getMessage());
+        for (ErrorCode code : NOT_SEND_DISCORD_ERROR_CODES) {
+            if (code.equals(e.getErrorCode())) {
+                return ResponseDto.fail(e);
+            }
+        }
         sendDiscordEvent(e);
         return ResponseDto.fail(e);
     }

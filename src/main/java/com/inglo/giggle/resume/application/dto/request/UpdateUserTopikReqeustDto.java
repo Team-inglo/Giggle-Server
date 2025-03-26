@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record UpdateUserTopikReqeustDto(
         @NotNull(message = "level은 필수 입력 값입니다.")
-        @Max(value = 5, message = "level은 5 이하로 입력 가능합니다.")
+        @Max(value = 6, message = "level은 6 이하로 입력 가능합니다.")
         @Min(value = 0, message = "level은 0 이상으로 입력 가능합니다.")
         @JsonProperty("level")
         Integer level
