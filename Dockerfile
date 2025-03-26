@@ -24,4 +24,4 @@ WORKDIR /app
 COPY --from=build /app/build/libs/application.jar ./app.jar
 
 # 애플리케이션 실행 명령어
-CMD ["java", "-Dhttp.proxyHost=krmp-proxy.9rum.cc", "-Dhttp.proxyPort=3128","-Dhttps.proxyHost=krmp-proxy.9rum.cc", "-Dhttps.proxyPort=3128", "-Dhttp.nonProxyHosts=kapi.kakao.com", "-Dhttps.nonProxyHosts=kapi.kakao.com", "-jar", "./app.jar", "--spring.profiles.active=krampoline"]
+CMD ["java", "-Dhttp.proxyHost=krmp-proxy.9rum.cc", "-Dhttp.proxyPort=3128","-Dhttps.proxyHost=krmp-proxy.9rum.cc", "-Dhttps.proxyPort=3128", "-jar", "./app.jar", "--spring.profiles.active=krampoline"]
