@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Objects;
 
@@ -97,11 +98,19 @@ public class RestClientUtil {
 
     public void sendFormUrlEncodedPostMethod(String url, HttpHeaders headers, MultiValueMap<String, String> body) {
         try {
+
+            String encodedBody = UriComponentsBuilder.newInstance()
+                    .queryParams(body)
+                    .build()
+                    .encode()
+                    .toUriString()
+                    .replaceFirst("\\?", ""); // 맨 앞에 ? 제거
+
             restClient.post()
                     .uri(url)
                     .headers(httpHeaders -> httpHeaders.addAll(headers))
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .body(body)
+                    .body(encodedBody)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
                         log.error("4xx Error sending POST request => {}", response.getStatusCode());
