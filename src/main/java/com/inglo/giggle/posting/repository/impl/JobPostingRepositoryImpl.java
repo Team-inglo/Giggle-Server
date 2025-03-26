@@ -312,7 +312,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepository {
         filterByKeyword(search, builder, jobPosting);
 
         // ENUM 필터 처리
-        fileterByColumn(filterType, filter, builder, jobPosting);
+        filterByColumn(filterType, filter, builder, jobPosting);
 
         // 정렬
         List<OrderSpecifier<?>> orders = getOrderSpecifiers(pageable);
@@ -364,7 +364,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepository {
     }
 
 
-    private void fileterByColumn(String filterType, String filter, BooleanBuilder builder, QJobPosting jobPosting) {
+    private void filterByColumn(String filterType, String filter, BooleanBuilder builder, QJobPosting jobPosting) {
         if (filterType != null && filter != null) {
             switch (filterType) {
                 case "job_category" -> builder.and(jobPosting.jobCategory.stringValue().eq(filter));
