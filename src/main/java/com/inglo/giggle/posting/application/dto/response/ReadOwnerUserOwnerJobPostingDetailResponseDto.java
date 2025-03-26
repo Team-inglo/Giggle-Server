@@ -76,10 +76,19 @@ public class ReadOwnerUserOwnerJobPostingDetailResponseDto extends SelfValidatin
     ) {
         String schoolName = (school != null) ? school.getSchoolName() : DASH;
 
-        int durationOfDays = (int) java.time.Duration.between(
-                userOwnerJobPosting.getUpdatedAt(),
-                LocalDate.now().atStartOfDay()
-        ).toDays();
+        int durationOfDays = 0;
+
+        if (userOwnerJobPosting.getUpdatedAt() == null) {
+            durationOfDays = (int) java.time.Duration.between(
+                    userOwnerJobPosting.getCreatedAt(),
+                    LocalDate.now().atStartOfDay()
+            ).toDays();
+        } else {
+            durationOfDays = (int) java.time.Duration.between(
+                    userOwnerJobPosting.getUpdatedAt(),
+                    LocalDate.now().atStartOfDay()
+            ).toDays();
+        }
 
         return ReadOwnerUserOwnerJobPostingDetailResponseDto.builder()
                 .profileImgUrl(userOwnerJobPosting.getUser().getProfileImgUrl())
