@@ -64,10 +64,19 @@ public class ReadUserUserOwnerJobPostingDetailResponseDto extends SelfValidating
             UserOwnerJobPosting userOwnerJobPosting
     ) {
 
-        int durationOfDays = (int) java.time.Duration.between(
-                userOwnerJobPosting.getUpdatedAt(),
-                LocalDate.now().atStartOfDay()
-        ).toDays();
+        int durationOfDays = 0;
+
+        if (userOwnerJobPosting.getUpdatedAt() == null) {
+            durationOfDays = (int) java.time.Duration.between(
+                    userOwnerJobPosting.getCreatedAt(),
+                    LocalDate.now().atStartOfDay()
+            ).toDays();
+        } else {
+            durationOfDays = (int) java.time.Duration.between(
+                    userOwnerJobPosting.getUpdatedAt(),
+                    LocalDate.now().atStartOfDay()
+            ).toDays();
+        }
 
         return ReadUserUserOwnerJobPostingDetailResponseDto.builder()
                 .title(userOwnerJobPosting.getJobPosting().getTitle())

@@ -75,10 +75,19 @@ public class ReadOwnerUserJobPostingDetailResponseDto extends SelfValidating<Rea
             School school
             ) {
 
-        int durationOfDays = (int) java.time.Duration.between(
-                userOwnerJobPosting.getUpdatedAt(),
-                LocalDate.now().atStartOfDay()
-        ).toDays();
+        int durationOfDays = 0;
+
+        if (userOwnerJobPosting.getUpdatedAt() == null) {
+            durationOfDays = (int) java.time.Duration.between(
+                    userOwnerJobPosting.getCreatedAt(),
+                    LocalDate.now().atStartOfDay()
+            ).toDays();
+        } else {
+            durationOfDays = (int) java.time.Duration.between(
+                    userOwnerJobPosting.getUpdatedAt(),
+                    LocalDate.now().atStartOfDay()
+            ).toDays();
+        }
 
         return ReadOwnerUserJobPostingDetailResponseDto.builder()
                 .profileImgUrl(userOwnerJobPosting.getUser().getProfileImgUrl())
