@@ -135,7 +135,7 @@ public interface JobPostingRepository {
             Pageable pageable
     );
 
-    List<Object[]> countBookmarksByJobPostingIds(List<Long> jobPostingIds);
+    List<Object[]> countBookmarksByJobPostingIdsAndAccountId(List<Long> jobPostingIds, UUID accountId);
 
     int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
