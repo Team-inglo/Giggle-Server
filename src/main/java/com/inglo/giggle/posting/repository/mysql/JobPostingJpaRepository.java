@@ -259,8 +259,15 @@ public interface JobPostingJpaRepository extends JpaRepository<JobPosting, Long>
             Pageable pageable
     );
 
-    @Query("SELECT b.jobPosting.id, COUNT(b) FROM BookMark b WHERE b.jobPosting.id IN :jobPostingIds GROUP BY b.jobPosting.id")
-    List<Object[]> countBookmarksByJobPostingIds(@Param("jobPostingIds") List<Long> jobPostingIds);
+    @Query("SELECT b.jobPosting.id, COUNT(b) " +
+            "FROM BookMark b " +
+            "WHERE b.jobPosting.id IN :jobPostingIds " +
+            "AND b.user.id = :accountId " +
+            "GROUP BY b.jobPosting.id")
+    List<Object[]> countBookmarksByJobPostingIdsAccountId(
+            @Param("jobPostingIds") List<Long> jobPostingIds,
+            @Param("accountId") UUID accountId
+    );
 
     int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 

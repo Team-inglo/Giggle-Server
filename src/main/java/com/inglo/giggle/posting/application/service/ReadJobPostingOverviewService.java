@@ -210,7 +210,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                 .filter(Objects::nonNull) // Map에 없는 ID가 있을 경우 필터링
                 .toList();
 
-        Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds);
+        Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds, accountId);
 
         return ReadJobPostingOverviewResponseDto.of(
                 jobPostingProjections.hasNext(),
@@ -252,7 +252,7 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
                 .filter(Objects::nonNull) // Map에 없는 ID가 있을 경우 필터링
                 .toList();
 
-        Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds);
+        Map<Long, Integer> bookmarkCountMap = getBookmarkCountMap(jobPostingIds, accountId);
 
         return ReadJobPostingOverviewResponseDto.of(
                 jobPostingProjections.hasNext(),
@@ -264,8 +264,8 @@ public class ReadJobPostingOverviewService implements ReadJobPostingOverviewUseC
     /* -------------------------------------------- */
     /* Private Methods ---------------------------- */
     /* -------------------------------------------- */
-    private Map<Long, Integer> getBookmarkCountMap(List<Long> jobPostingIds) {
-        List<Object[]> results = jobPostingRepository.countBookmarksByJobPostingIds(jobPostingIds);
+    private Map<Long, Integer> getBookmarkCountMap(List<Long> jobPostingIds, UUID accountId) {
+        List<Object[]> results = jobPostingRepository.countBookmarksByJobPostingIdsAndAccountId(jobPostingIds, accountId);
         Map<Long, Integer> bookmarkCountMap = new HashMap<>();
         for (Object[] result : results) {
             bookmarkCountMap.put((Long) result[0], ((Number) result[1]).intValue());

@@ -268,8 +268,8 @@ public class JobPostingRepositoryImpl implements JobPostingRepository {
     }
 
     @Override
-    public List<Object[]> countBookmarksByJobPostingIds(List<Long> jobPostingIds) {
-        return jobPostingJpaRepository.countBookmarksByJobPostingIds(jobPostingIds);
+    public List<Object[]> countBookmarksByJobPostingIdsAndAccountId(List<Long> jobPostingIds, UUID accountId) {
+        return jobPostingJpaRepository.countBookmarksByJobPostingIdsAccountId(jobPostingIds, accountId);
     }
 
     @Override
