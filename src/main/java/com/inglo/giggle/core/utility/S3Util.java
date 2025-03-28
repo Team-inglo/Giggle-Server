@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Slf4j
@@ -65,14 +67,21 @@ public class S3Util {
 
     public String uploadWordFile(InputStream inputStream, String type, Long jobPostingId, String jobPostingTitle, String ownerName, String userName) {
         String uuid = UUID.randomUUID().toString();
-        String fileName = "documents/" + jobPostingTitle + ":id_" + jobPostingId + "/" + type + "-" + ownerName + "_" + userName + "-" + uuid + ".docx";
 
         try {
+            String encodedJobPostingTitle = URLEncoder.encode(jobPostingTitle, StandardCharsets.UTF_8);
+            String encodedOwnerName = URLEncoder.encode(ownerName, StandardCharsets.UTF_8);
+            String encodedUserName = URLEncoder.encode(userName, StandardCharsets.UTF_8);
+
+            String fileName = "documents/" + encodedJobPostingTitle + ":id_" + jobPostingId + "/" +
+                    type + "-" + encodedOwnerName + "_" + encodedUserName + "-" + uuid + ".docx";
+
             amazonS3Client.putObject(bucketName, fileName, inputStream, null);
+            return bucketUrl + fileName;
+
         } catch (Exception e) {
             throw new CommonException(ErrorCode.UPLOAD_FILE_ERROR);
         }
-        return bucketUrl + fileName;
     }
 
     public String uploadHwpFile(InputStream inputStream, String type, Long jobPostingId, String jobPostingTitle, String ownerName, String userName) {
