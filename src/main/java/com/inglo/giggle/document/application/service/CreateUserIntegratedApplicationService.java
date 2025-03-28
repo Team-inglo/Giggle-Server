@@ -111,7 +111,7 @@ public class CreateUserIntegratedApplicationService implements CreateUserIntegra
 
         // wordFile 업로드
         String integratedApplicationWordUrl = s3Util.uploadWordFile(
-                integratedApplicationWordStream, "INTEGRATED_APPLICATION", jobPosting.getId(), jobPosting.getTitle(), userOwnerJobPosting.getOwner().getOwnerName(), userOwnerJobPosting.getUser().getName()
+                integratedApplicationWordStream, "INTEGRATED_APPLICATION"
         );
 //        // 통합신청서 hwp 파일 생성
 //        ByteArrayInputStream integratedApplicationHwpStream = integratedApplicationService.createIntegratedApplicationHwpFile(integratedApplication);

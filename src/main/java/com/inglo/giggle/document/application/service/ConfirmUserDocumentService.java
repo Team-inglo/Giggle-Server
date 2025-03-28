@@ -105,8 +105,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
 
                 // wordFile 업로드
                 String partTimeEmploymentPermitWordUrl = s3Util.uploadWordFile(
-                        partTimeEmploymentPermitWordStream, discriminatorValue, jobPosting.getId(),
-                        jobPosting.getTitle(), owner.getOwnerName(), user.getName()
+                        partTimeEmploymentPermitWordStream, discriminatorValue
                 );
 
 //                // 시간제 취업 허가서 Hwp 파일 생성
@@ -140,7 +139,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
 
                 // wordFile 업로드
                 String standardLaborContractWordUrl = s3Util.uploadWordFile(
-                        standardLaborContractWordStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
+                        standardLaborContractWordStream, discriminatorValue
                 );
 
 //                // 표준근로계약서 Hwp 파일 생성
