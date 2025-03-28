@@ -344,12 +344,29 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
         @JsonProperty("longitude")
         private final double longitude;
 
+        @JsonProperty("region_1depth_name")
+        private final String region1DepthName;
+
+        @JsonProperty("region_2depth_name")
+        private final String region2DepthName;
+
+        @JsonProperty("region_3depth_name")
+        private final String region3DepthName;
+
+        @JsonProperty("region_4depth_name")
+        private final String region4DepthName;
+
         @Builder
-        public WorkplaceInformation(String mainAddress, String detailedAddress, double latitude, double longitude) {
+        public WorkplaceInformation(String mainAddress, String detailedAddress, double latitude, double longitude,
+                                    String region1DepthName, String region2DepthName, String region3DepthName, String region4DepthName) {
             this.mainAddress = mainAddress;
             this.detailedAddress = detailedAddress;
             this.latitude = latitude;
             this.longitude = longitude;
+            this.region1DepthName = region1DepthName;
+            this.region2DepthName = region2DepthName;
+            this.region3DepthName = region3DepthName;
+            this.region4DepthName = region4DepthName;
             this.validateSelf();
         }
 
@@ -359,6 +376,10 @@ public class ReadJobPostingDetailResponseDto extends SelfValidating<ReadJobPosti
                     .detailedAddress(jobPosting.getAddress().getAddressDetail())
                     .latitude(jobPosting.getAddress().getLatitude())
                     .longitude(jobPosting.getAddress().getLongitude())
+                    .region1DepthName(jobPosting.getAddress().getRegion1DepthName())
+                    .region2DepthName(jobPosting.getAddress().getRegion2DepthName())
+                    .region3DepthName(jobPosting.getAddress().getRegion3DepthName())
+                    .region4DepthName(jobPosting.getAddress().getRegion4DepthName())
                     .build();
         }
     }
