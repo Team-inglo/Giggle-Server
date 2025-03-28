@@ -73,7 +73,7 @@ public class S3Util {
             String encodedOwnerName = URLEncoder.encode(ownerName, StandardCharsets.UTF_8);
             String encodedUserName = URLEncoder.encode(userName, StandardCharsets.UTF_8);
 
-            String fileName = "documents/" + encodedJobPostingTitle + ":id_" + jobPostingId + "/" +
+            String fileName = "documents/" + encodedJobPostingTitle + "_id_" + jobPostingId + "/" +
                     type + "-" + encodedOwnerName + "_" + encodedUserName + "-" + uuid + ".docx";
 
             amazonS3Client.putObject(bucketName, fileName, inputStream, null);
