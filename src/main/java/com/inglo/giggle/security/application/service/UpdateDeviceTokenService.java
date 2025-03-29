@@ -34,7 +34,7 @@ public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
         // Account 조회
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
-        UUID uuidDeviceId = UUID.fromString(requestDto.deviceId());
+        UUID uuidDeviceId = requestDto.deviceId();
 
         // Device Token 갱신
         // 만약 해당 Account에 해당 DeviceToken이 이미 존재한다면 Device Token을 갱신하고,
