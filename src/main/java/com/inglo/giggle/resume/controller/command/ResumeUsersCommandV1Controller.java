@@ -65,7 +65,10 @@ public class ResumeUsersCommandV1Controller {
             @AccountID UUID accountId,
             @RequestBody @Valid CreateUserWorkExperienceRequestDto requestDto
     ) {
-        createUserWorkExperienceUseCase.execute(accountId, requestDto);
+        createUserWorkExperienceUseCase.execute(
+                accountId,
+                requestDto.validate()
+        );
         return ResponseDto.created(null);
     }
 
@@ -77,7 +80,10 @@ public class ResumeUsersCommandV1Controller {
             @AccountID UUID accountId,
             @RequestBody @Valid CreateUserEducationRequestDto requestDto
     ) {
-        createUserEducationUseCase.execute(accountId, requestDto);
+        createUserEducationUseCase.execute(
+                accountId,
+                requestDto.validate()
+        );
         return ResponseDto.created(null);
     }
 
@@ -114,7 +120,11 @@ public class ResumeUsersCommandV1Controller {
             @PathVariable Long id,
             @RequestBody @Valid UpdateUserWorkExperienceRequestDto requestDto
     ) {
-        updateUserWorkExperienceUseCase.execute(accountId, id, requestDto);
+        updateUserWorkExperienceUseCase.execute(
+                accountId,
+                id,
+                requestDto.validate()
+        );
         return ResponseDto.ok(null);
     }
 
@@ -127,7 +137,11 @@ public class ResumeUsersCommandV1Controller {
             @PathVariable Long id,
             @RequestBody @Valid UpdateUserEducationRequestDto requestDto
     ) {
-        updateUserEducationUseCase.execute(accountId, id, requestDto);
+        updateUserEducationUseCase.execute(
+                accountId,
+                id,
+                requestDto.validate()
+        );
         return ResponseDto.ok(null);
     }
 
