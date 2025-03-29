@@ -15,4 +15,6 @@ public interface AccountDeviceJpaRepository extends JpaRepository<AccountDevice,
     List<AccountDevice> findByAccountId(UUID accountId);
 
     Optional<AccountDevice> findByAccountAndDeviceToken(Account account, String deviceToken);
+
+    void deleteAllByAccountId(UUID accountId);
 }

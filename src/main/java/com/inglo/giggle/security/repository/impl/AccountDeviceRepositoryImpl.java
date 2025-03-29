@@ -30,4 +30,9 @@ public class AccountDeviceRepositoryImpl implements AccountDeviceRepository {
     public void save(AccountDevice accountDevice) {
         accountDeviceJpaRepository.save(accountDevice);
     }
+
+    @Override
+    public void deleteAllByAccountId(UUID accountId) {
+        accountDeviceJpaRepository.deleteAllByAccountId(accountId);
+    }
 }

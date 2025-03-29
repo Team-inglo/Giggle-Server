@@ -13,4 +13,6 @@ public interface AccountDeviceRepository {
     AccountDevice findByAccountAndDeviceTokenOrElseNull(Account account, String deviceToken);
 
     void save(AccountDevice accountDevice);
+
+    void deleteAllByAccountId(UUID accountId);
 }
