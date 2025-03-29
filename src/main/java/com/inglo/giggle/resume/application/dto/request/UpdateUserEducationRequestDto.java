@@ -1,6 +1,8 @@
 package com.inglo.giggle.resume.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -42,4 +44,11 @@ public record UpdateUserEducationRequestDto(
         @JsonProperty("grade")
         Integer grade
 ) {
+    public UpdateUserEducationRequestDto validate() {
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            throw new CommonException(ErrorCode.INVALID_DATE_RANGE);
+        }
+
+        return this;
+    }
 }

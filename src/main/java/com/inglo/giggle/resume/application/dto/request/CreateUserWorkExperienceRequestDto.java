@@ -1,6 +1,8 @@
 package com.inglo.giggle.resume.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -28,4 +30,10 @@ public record CreateUserWorkExperienceRequestDto(
         @Size(min = 1, max = 200, message = "description은 1자 이상 200자 이하로 입력 가능합니다.")
         String description
 ) {
+    public CreateUserWorkExperienceRequestDto validate() {
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            throw new CommonException(ErrorCode.INVALID_DATE_RANGE);
+        }
+        return this;
+    }
 }
