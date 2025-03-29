@@ -47,6 +47,11 @@ public class CreateUserStandardLaborContractService implements CreateUserStandar
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithOwnerAndUserJobPostingById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        // 해당 UserOwnerJobPosting 과 연결된 StandardLaborContract 이 이미 존재하는지 확인
+        if (standardLaborContractRepository.findByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId) != null) {
+            throw new CommonException(ErrorCode.ALREADY_EXIST_RESOURCE);
+        }
+
         // UserOwnerJobPosting 유저 유효성 체크
         userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
 

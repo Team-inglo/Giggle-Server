@@ -59,6 +59,11 @@ public class CreateUserIntegratedApplicationService implements CreateUserIntegra
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithOwnerAndUserJobPostingById(userOwnerJobPostingId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
 
+        // 해당 UserOwnerJobPosting 과 연결된 IntegratedApplication 이 이미 존재하는지 확인
+        if (integratedApplicationRepository.findByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId) != null) {
+            throw new CommonException(ErrorCode.ALREADY_EXIST_RESOURCE);
+        }
+
         // JobPosting 조회
         JobPosting jobPosting =  userOwnerJobPosting.getJobPosting();
 
