@@ -23,7 +23,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "work_experiences")
-@SQLDelete(sql = "UPDATE resumes SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE work_experiences SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 public class WorkExperience extends BaseEntity {
 
