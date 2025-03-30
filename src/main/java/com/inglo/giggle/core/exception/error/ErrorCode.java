@@ -90,6 +90,7 @@ public enum ErrorCode {
     INTERNAL_DATA_ERROR(50001, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 데이터 에러입니다."),
     UPLOAD_FILE_ERROR(50002, HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패하였습니다."),
     INTERNAL_SERVER_ERROR_WITH_OSRM(50003, HttpStatus.INTERNAL_SERVER_ERROR, "OSRM 서버 내부 에러입니다."),
+    FIREBASE_CONFIGURATION_FAILED(50004, HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 설정에 실패하였습니다."),
 
     // External Server Error
     EXTERNAL_SERVER_ERROR(50200, HttpStatus.BAD_GATEWAY, "서버 외부 에러입니다."),

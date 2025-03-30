@@ -43,6 +43,10 @@ spec:
             - name: template-volume
               mountPath: /app/template
               readOnly: true
+            - name: firebase-secret-volume
+              mountPath: /app/main/resources/firebase-key.json
+              subPath: firebase-key.json
+              readOnly: true
           env:
             - name: MYSQL_HOST
               valueFrom:
@@ -244,10 +248,26 @@ spec:
                 secretKeyRef:
                   name: application-yml-secret
                   key: discord-webhook-url
+            - name: FIREBASE_FCM_KEY_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: firebase-fcm-key-path
+            - name: FIREBASE_FCM_KEY_SCOPE
+              valueFrom:
+                secretKeyRef:
+                  name: application-yml-secret
+                  key: firebase-fcm-key-scope
       volumes:
         - name: template-volume
           configMap:
             name: template-config
+        - name: firebase-secret-volume
+          secret:
+            secretName: firebase-key
+            items:
+              - key: firebase-key.json
+                path: firebase-key.json
 ---
 
 apiVersion: v1

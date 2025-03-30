@@ -275,4 +275,7 @@ $RECYCLE.BIN/
 # Http Request Environment
 http-client.private.env.json
 
+# Firebase
+src/main/resources/firebase-key.json
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,macos,windows,intellij+all,java

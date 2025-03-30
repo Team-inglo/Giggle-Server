@@ -123,3 +123,7 @@ management:
     web:
       exposure:
         include: health, info
+
+firebase:
+  fcm-key-path: ${FIREBASE_FCM_KEY_PATH}
+  fcm-key-scope: ${FIREBASE_FCM_KEY_SCOPE}
