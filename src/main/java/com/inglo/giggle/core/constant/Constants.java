@@ -177,9 +177,7 @@ public class Constants {
      */
     public static List<String> REGEX_ADMIN_URLS = List.of(
 
-            // Banner
-            "^/v1/banners$",
-            "^/v1/banners/\\d+$"
+            "^/v1/admins(/.*)?$"
     );
 
     /**
@@ -210,7 +208,11 @@ public class Constants {
             // Notification
             "^/v1/notifications/overviews.*$",
             "^/v1/notifications/\\d+/is-read$",
-            "^/v1/term-accounts$"
+            "^/v1/term-accounts$",
+
+            // Banner
+            "^/v1/banners/overviews$",
+            "^/v1/banners/\\d+/details$"
     );
 
     /**
@@ -219,10 +221,6 @@ public class Constants {
     public static List<String> REGEX_USER_OWNER_ADMIN_URLS = List.of(
 
             // Auth
-            "^/v1/auth/logout$",
-
-            // Banner
-            "^/v1/banners/overviews$",
-            "^/v1/banners/\\d+/details$"
+            "^/v1/auth/logout$"
     );
 }
