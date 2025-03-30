@@ -7,5 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface RefreshTokenRedisRepository extends CrudRepository<RefreshToken, UUID> {
-    Optional<RefreshToken> findByValue(String value);
+    Optional<RefreshToken> findByAccountIdAndValue(UUID accountId, String value);
 }
