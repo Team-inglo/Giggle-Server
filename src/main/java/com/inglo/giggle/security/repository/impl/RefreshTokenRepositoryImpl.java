@@ -16,9 +16,8 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 
-    @Override
-    public RefreshToken findByValueOrElseThrow(String value) {
-        return refreshTokenRedisRepository.findByValue(value)
+    public RefreshToken findByAccountIdAndValueOrElseThrow(UUID accountId, String value) {
+        return refreshTokenRedisRepository.findByAccountIdAndValue(accountId, value)
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR));
     }
 

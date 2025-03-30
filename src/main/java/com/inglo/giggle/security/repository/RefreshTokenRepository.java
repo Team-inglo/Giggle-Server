@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface RefreshTokenRepository {
 
-    RefreshToken findByValueOrElseThrow(String value);
+    RefreshToken findByAccountIdAndValueOrElseThrow(UUID accountId, String value);
 
     void save(RefreshToken refreshToken);
 
