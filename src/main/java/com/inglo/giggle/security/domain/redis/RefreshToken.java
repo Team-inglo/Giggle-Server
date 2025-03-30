@@ -14,8 +14,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RedisHash(value = "refresh_token", timeToLive = 60 * 60 * 24 * 14) // 14일
 public class RefreshToken {
-    @Getter
+
     @Id
+    @Indexed
     private UUID accountId;
 
     @Indexed
