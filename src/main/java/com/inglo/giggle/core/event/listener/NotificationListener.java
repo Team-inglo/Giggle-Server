@@ -47,7 +47,7 @@ public class NotificationListener {
 
         // Kakao Authorization Header 생성
         Map<String, String> kakaoAuthorizationHeader = Map.of(
-                Constants.KAKAO_AUTHORIZATION_HEADER, kakaoSecretKey
+                Constants.AUTHORIZATION_HEADER, Constants.KAKAO_AUTHORIZATION_HEADER + kakaoSecretKey
         );
         HttpHeaders headers = HeaderUtil.createHeaders(kakaoAuthorizationHeader, MediaType.APPLICATION_FORM_URLENCODED);
 

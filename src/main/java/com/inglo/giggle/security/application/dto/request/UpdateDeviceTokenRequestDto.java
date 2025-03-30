@@ -13,6 +13,6 @@ public record UpdateDeviceTokenRequestDto(
 
         @JsonProperty("device_id")
         @NotBlank(message = "deviceId는 null일 수 없습니다.")
-        UUID deviceId
+        String deviceId
 ) {
 }
