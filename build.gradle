@@ -59,6 +59,9 @@ dependencies {
     // MYSQL
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // FIREBASE
+    implementation group: 'com.google.firebase', name: 'firebase-admin', version: '6.8.1'
+    
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
