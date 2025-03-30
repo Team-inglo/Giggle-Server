@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -34,5 +35,10 @@ public class AccountDeviceRepositoryImpl implements AccountDeviceRepository {
     @Override
     public void deleteAllByAccountId(UUID accountId) {
         accountDeviceJpaRepository.deleteAllByAccountId(accountId);
+    }
+
+    @Override
+    public AccountDevice findByDeviceIdOrElseNull(UUID uuidDeviceId) {
+        return accountDeviceJpaRepository.findByDeviceId(uuidDeviceId).orElse(null);
     }
 }

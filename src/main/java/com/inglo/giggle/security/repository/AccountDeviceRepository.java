@@ -15,4 +15,6 @@ public interface AccountDeviceRepository {
     void save(AccountDevice accountDevice);
 
     void deleteAllByAccountId(UUID accountId);
+
+    AccountDevice findByDeviceIdOrElseNull(UUID uuidDeviceId);
 }

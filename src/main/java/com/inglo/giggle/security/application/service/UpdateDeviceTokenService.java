@@ -39,7 +39,7 @@ public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
         // Device Token 갱신
         // 만약 해당 Account에 해당 DeviceToken이 이미 존재한다면 Device Token을 갱신하고,
         // 존재하지 않는다면 새로운 AccountDevice를 생성한다.
-        AccountDevice accountDevice = accountDeviceRepository.findByAccountAndDeviceTokenOrElseNull(account, requestDto.deviceToken());
+        AccountDevice accountDevice = accountDeviceRepository.findByDeviceIdOrElseNull(uuidDeviceId);
 
         if (accountDevice != null) {
             // Device Token 삭제 이벤트 발행
