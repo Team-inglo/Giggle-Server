@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,12 +31,13 @@ public class FireBasePostConstruct {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(
                             GoogleCredentials
-                                    .fromStream(new ClassPathResource(fcmKeyPath).getInputStream())
+                                    .fromStream(new FileInputStream(fcmKeyPath))
                                     .createScoped(List.of(fcmKeyScope))
                     ).build();
 
             if (FirebaseApp.getApps().isEmpty())
                 FirebaseApp.initializeApp(options);
+
         } catch (IOException e) {
             throw new CommonException(ErrorCode.FIREBASE_CONFIGURATION_FAILED);
         }
