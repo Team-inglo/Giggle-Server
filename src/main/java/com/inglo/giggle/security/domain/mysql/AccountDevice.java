@@ -23,7 +23,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "account_devices")
-@SQLDelete(sql = "UPDATE account_devices SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 public class AccountDevice extends BaseEntity {
 
     /* -------------------------------------------- */
