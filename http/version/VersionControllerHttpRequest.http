@@ -1,0 +1,4 @@
+### 0.1 최신 버전 조회하기
+//@no-log
+GET {{host_url}}/v1/versions?os=IOS
+Content-Type: application/json
