@@ -150,6 +150,9 @@ public class Constants {
             "^/v1/guests/banners/overviews$",
             "^/v1/guests/banners/\\d+/details$",
 
+            // Version
+            "^/v1/versions.*$",
+
             // OSRM
             "^/test-osrm(/.*)?$",
 

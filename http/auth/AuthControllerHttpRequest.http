@@ -11,6 +11,8 @@ password={{auth.API_1_1_USER.password}}
     client.global.set("refresh_token", response.body.data.refresh_token);
 %}
 
+
+
 ### 1.1 사용자 로그인 - 고용주
 // @no-log
 POST {{host_url}}/v1/auth/login
@@ -54,8 +56,8 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "device_token": "d0hHBt0hkUKajCSrMlEPYB:APA91bFirQG_GXzBRDuo51TekqU0AYOvugWgIAESIqk5tI5A4yh7U9GBXhR8U3bDpQlSwgr5dyu89OfIzGa6XNHTeDuIc_OFVDgHQTr1suXYe4wZEOlqqc8",
-  "device_id" : "1234"
+  "device_token": "ecyfKxSAJ0-rtRhF4D1Zrw:APA91bGgszjQWrOxzlfabG2ceD6sQPiPIntohwWFGUKKS9lzH3G1epjXkvNfe8OfgervZDuJ4IZ_yUbW9cE1oDCsCFGgC2TYWae-J2gBeczBSAbp4scAve4",
+  "device_id" : "E9E02EB9-A35F-41D9-9AB4-06768F3B6B48"
 }
 
 ### 2.1 아이디 중복검사
@@ -173,7 +175,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "716918"
+@authentication_code_user = "437513"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
