@@ -1,6 +1,6 @@
 package com.inglo.giggle.account.application.usecase;
 
-import com.inglo.giggle.account.application.dto.response.ReadAdminAccountWithdrawalOverviewResponseDto;
+import com.inglo.giggle.account.presentation.dto.response.ReadAdminAccountWithdrawalOverviewResponseDto;
 import com.inglo.giggle.core.annotation.bean.UseCase;
 
 import java.time.LocalDate;

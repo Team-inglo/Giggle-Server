@@ -1,7 +1,7 @@
 package com.inglo.giggle.version.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.version.application.dto.response.ReadRecentVersionResponseDto;
+import com.inglo.giggle.version.presentation.dto.response.ReadRecentVersionResponseDto;
 import com.inglo.giggle.version.domain.type.EOsType;
 
 @UseCase

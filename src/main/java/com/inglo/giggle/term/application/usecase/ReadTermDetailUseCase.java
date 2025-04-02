@@ -1,7 +1,7 @@
 package com.inglo.giggle.term.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.term.application.dto.response.ReadTermDetailResponseDto;
+import com.inglo.giggle.term.presentation.dto.response.ReadTermDetailResponseDto;
 
 @UseCase
 public interface ReadTermDetailUseCase {

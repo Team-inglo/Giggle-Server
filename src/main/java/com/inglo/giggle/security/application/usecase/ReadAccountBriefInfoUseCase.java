@@ -1,7 +1,7 @@
 package com.inglo.giggle.security.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.security.application.dto.response.AccountBriefInfoResponseDto;
+import com.inglo.giggle.security.presentation.dto.response.AccountBriefInfoResponseDto;
 
 import java.util.UUID;
 

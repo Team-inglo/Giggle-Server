@@ -1,26 +1,26 @@
 ### 9.1 (유학생) 학교 검색 조회하기
 // @no-log
-GET {{host_url}}/v1/users/schools/briefs?search={{school.API_9_1.school_name}}&page={{school.API_9_1.page}}&size={{school.API_9_1.size}}
+GET {{host_url}}/v1/users/schoolEntities/briefs?search={{schoolEntity.API_9_1.school_name}}&page={{schoolEntity.API_9_1.page}}&size={{schoolEntity.API_9_1.size}}
 Authorization: Bearer {{access_token}}
 
 ### 9.2 (유학생) 학교 상세 조회
 // @no-log
-GET {{host_url}}/v1/users/resumes/schools/details
+GET {{host_url}}/v1/users/resumes/schoolEntities/details
 Authorization: Bearer {{access_token}}
 
 ### 9.3 (어드민) 학교 목록 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/schools/overviews?page=1&size=10
+GET {{host_url}}/v1/admins/schoolEntities/overviews?page=1&size=10
 Authorization: Bearer {{access_token}}
 
 ### 9.4 (어드민) 학교 상세 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/schools/108/details
+GET {{host_url}}/v1/admins/schoolEntities/108/details
 Authorization: Bearer {{access_token}}
 
 ### 9.5 (어드민) 학교 생성하기
 // @no-log
-POST {{host_url}}/v1/admins/schools
+POST {{host_url}}/v1/admins/schoolEntities
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -31,7 +31,7 @@ Content-Type: application/json
   "institute_name": "학교 소속 기관",
   "coordinator_name": "담당자 이름",
   "coordinator_phone_number": "010-1234-5678",
-  "address": {
+  "addressEntity": {
     "address_name": "서울특별시 강남구 역삼동",
     "address_detail": "123-456",
     "latitude": 37.123456,
@@ -44,7 +44,7 @@ Content-Type: application/json
 
 ### 9.6 (어드민) 학교 수정하기
 // @no-log
-PUT {{host_url}}/v1/admins/schools/108
+PUT {{host_url}}/v1/admins/schoolEntities/108
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -55,7 +55,7 @@ Content-Type: application/json
   "institute_name": "학교 소속 기관",
   "coordinator_name": "담당자 이름",
   "coordinator_phone_number": "010-1234-5678",
-  "address": {
+  "addressEntity": {
     "address_name": "서울특별시 강남�� 역삼동",
     "address_detail": "123-456",
     "latitude": 37.123456,
@@ -68,5 +68,5 @@ Content-Type: application/json
 
 ### 9.7 (어드민) 학교 삭제하기
 // @no-log
-DELETE {{host_url}}/v1/admins/schools/108
+DELETE {{host_url}}/v1/admins/schoolEntities/108
 Authorization: Bearer {{access_token}}

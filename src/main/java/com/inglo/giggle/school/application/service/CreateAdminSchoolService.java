@@ -1,10 +1,10 @@
 package com.inglo.giggle.school.application.service;
 
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.school.application.dto.request.CreateAdminSchoolRequestDto;
 import com.inglo.giggle.school.application.usecase.CreateAdminSchoolUseCase;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.SchoolRepository;
+import com.inglo.giggle.school.persistence.repository.SchoolRepository;
+import com.inglo.giggle.school.presentation.dto.request.CreateAdminSchoolRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,7 @@ public class CreateAdminSchoolService implements CreateAdminSchoolUseCase {
     @Transactional
     public void execute(CreateAdminSchoolRequestDto requestDto) {
 
+        // Address 생성
         Address address = Address.builder()
                 .addressName(requestDto.address().addressName())
                 .addressDetail(requestDto.address().addressDetail())

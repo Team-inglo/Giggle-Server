@@ -1,27 +1,24 @@
 package com.inglo.giggle.document.application.service;
 
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
-import com.inglo.giggle.document.application.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.document.application.usecase.UpdateOwnerPartTimeEmploymentPermitUseCase;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
-import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
-import com.inglo.giggle.document.repository.DocumentRepository;
-import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.persistence.repository.DocumentRepository;
+import com.inglo.giggle.document.persistence.repository.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.presentation.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationService;
-import com.inglo.giggle.notification.repository.NotificationRepository;
-import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
+import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.mysql.AccountDevice;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountDeviceRepository;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.domain.AccountDevice;
+import com.inglo.giggle.security.persistence.repository.AccountDeviceRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -38,13 +35,8 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
     private final DocumentRepository documentRepository;
     private final NotificationRepository notificationRepository;
     private final AccountDeviceRepository accountDeviceRepository;
-
-    private final AccountService accountService;
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
-    private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
-    private final AddressService addressService;
-    private final NotificationService notificationService;
+    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -56,35 +48,37 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
-        accountService.checkOwnerValidation(account);
+        account.checkOwnerValidation();
 
         // Document 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
+        Document document = documentRepository.findByIdOrElseThrow(documentId);
+
+        // UserOwnerJobPosting 정보 조회
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
 
         // UserOwnerJobPosting 고용주 유효성 체크
-        userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+        userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
 
         // PartTimeEmploymentPermit 조회
         PartTimeEmploymentPermit partTimeEmploymentPermit = partTimeEmploymentPermitRepository.findByIdOrElseThrow(documentId);
 
         // PartTimeEmploymentPermit 수정 유효성 체크
-        partTimeEmploymentPermitService.checkUpdateOrSubmitOwnerPartTimeEmploymentPermitValidation(partTimeEmploymentPermit);
+        partTimeEmploymentPermit.checkUpdateOrSubmitOwnerPartTimeEmploymentPermitValidation();
 
         // Address 생성
-        Address address = addressService.createAddress(
-                requestDto.address().addressName(),
-                requestDto.address().region1DepthName(),
-                requestDto.address().region2DepthName(),
-                requestDto.address().region3DepthName(),
-                requestDto.address().region4DepthName(),
-                requestDto.address().addressDetail(),
-                requestDto.address().latitude(),
-                requestDto.address().longitude()
-        );
+        Address address = Address.builder()
+                .addressName(requestDto.address().addressName())
+                .addressDetail(requestDto.address().addressDetail())
+                .region1DepthName(requestDto.address().region1DepthName())
+                .region2DepthName(requestDto.address().region2DepthName())
+                .region3DepthName(requestDto.address().region3DepthName())
+                .region4DepthName(requestDto.address().region4DepthName())
+                .latitude(requestDto.address().latitude())
+                .longitude(requestDto.address().longitude())
+                .build();
 
         // PartTimeEmploymentPermit 수정
-        PartTimeEmploymentPermit updatedPartTimeEmploymentPermit = partTimeEmploymentPermitService.updateOwnerPartTimeEmploymentPermit(
-                partTimeEmploymentPermit,
+        partTimeEmploymentPermit.updateByOwner(
                 requestDto.companyName(),
                 requestDto.companyRegistrationNumber(),
                 requestDto.jobType(),
@@ -97,33 +91,35 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
                 requestDto.workDaysWeekends(),
                 address
         );
-        partTimeEmploymentPermitRepository.save(updatedPartTimeEmploymentPermit);
+        partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
         // Notification 생성 및 저장
-        Notification notification = notificationService.createNotification(
-                EKafkaStatus.USER_PART_TIME_EMPLOYMENT_PERMIT.getMessage(),
-                document.getUserOwnerJobPosting(),
-                ENotificationType.USER
-        );
+        Notification notification = Notification.builder()
+                .message(EKafkaStatus.USER_PART_TIME_EMPLOYMENT_PERMIT.getMessage())
+                .isRead(false)
+                .notificationType(ENotificationType.USER)
+                .build();
+
         notificationRepository.save(notification);
 
-        handlePushAlarm(account, document, notification);
+        // Notification 발송
+        handlePushAlarm(account, userOwnerJobPosting, notification);
     }
 
     /* -------------------------------------------- */
     /* Private Method ----------------------------- */
     /* -------------------------------------------- */
-    private void handlePushAlarm(Account account, Document document, Notification notification) {
+    private void handlePushAlarm(Account account, UserOwnerJobPosting userOwnerJobPosting, Notification notification) {
 
         // User의 Device Token 목록 조회
-        UUID userId = document.getUserOwnerJobPosting().getUser().getId();
+        UUID userId = userOwnerJobPosting.getUserInfo().getId();
         List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(userId);
 
         // NotificationEvent 생성 및 발행
-        if(account.getNotificationAllowed() && !accountDevices.isEmpty()) {
+        if (account.getNotificationAllowed() && !accountDevices.isEmpty()) {
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
-                            document.getUserOwnerJobPosting().getJobPosting().getTitle(),
+                            userOwnerJobPosting.getJobPostingInfo().getTitle(),
                             notification.getMessage(),
                             accountDevices
                     )

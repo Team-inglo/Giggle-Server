@@ -2,8 +2,7 @@ package com.inglo.giggle.notification.application.service;
 
 import com.inglo.giggle.notification.application.usecase.UpdateNotificationIsReadUseCase;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationService;
-import com.inglo.giggle.notification.repository.NotificationRepository;
+import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,6 @@ import java.util.UUID;
 public class UpdateNotificationIsReadService implements UpdateNotificationIsReadUseCase {
 
     private final NotificationRepository notificationRepository;
-    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -23,7 +21,7 @@ public class UpdateNotificationIsReadService implements UpdateNotificationIsRead
 
         Notification notification = notificationRepository.findByIdOrElseThrow(notificationId);
 
-        notificationService.updateNotificationIsRead(notification);
+        notification.updateIsRead();
 
         notificationRepository.save(notification);
     }

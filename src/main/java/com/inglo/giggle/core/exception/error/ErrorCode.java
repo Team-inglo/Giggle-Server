@@ -63,6 +63,7 @@ public enum ErrorCode {
     INVALID_PASSWORD(40012, HttpStatus.BAD_REQUEST, "잘못된 비밀번호입니다."),
     EXPIRED_JOB_POSTING(40013, HttpStatus.BAD_REQUEST, "지원 기간이 지난 공고입니다."),
     INVALID_DATE_RANGE(40014, HttpStatus.BAD_REQUEST, "종료기간이 시작기간보다 빠를 수 없습니다."),
+    INVALID_ENUM_TYPE(40015, HttpStatus.BAD_REQUEST, "잘못된 Enum Type입니다."),
   
     // SIGN UP Error
     ALREADY_EXIST_ID(40200, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),

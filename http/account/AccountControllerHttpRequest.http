@@ -35,23 +35,23 @@ Content-Disposition: form-data; name="body"
 Content-Type: application/json
 
 {
-  "first_name": "{{account.API_3_5.first_name}}",
-  "last_name": "{{account.API_3_5.last_name}}",
-  "birth": "{{account.API_3_5.birth}}",
-  "gender": "{{account.API_3_5.gender}}",
-  "nationality": "{{account.API_3_5.nationality}}",
-  "visa": "{{account.API_3_5.visa}}",
-  "phone_number": "{{account.API_3_5.phone_number}}",
-  "is_profile_img_changed": "{{account.API_3_5.is_profile_img_changed}}",
-  "address": {
-    "address_name": "{{account.API_3_5.address.address_name}}",
-    "region_1depth_name": "{{account.API_3_5.address.region_1depth_name}}",
-    "region_2depth_name": "{{account.API_3_5.address.region_2depth_name}}",
-    "region_3depth_name": "{{account.API_3_5.address.region_3depth_name}}",
-    "region_4depth_name": "{{account.API_3_5.address.region_4depth_name}}",
-    "address_detail": "{{account.API_3_5.address.address_detail}}",
-    "longitude": "{{account.API_3_5.address.longitude}}",
-    "latitude": "{{account.API_3_5.address.latitude}}"
+  "first_name": "{{accountEntity.API_3_5.first_name}}",
+  "last_name": "{{accountEntity.API_3_5.last_name}}",
+  "birth": "{{accountEntity.API_3_5.birth}}",
+  "gender": "{{accountEntity.API_3_5.gender}}",
+  "nationality": "{{accountEntity.API_3_5.nationality}}",
+  "visa": "{{accountEntity.API_3_5.visa}}",
+  "phone_number": "{{accountEntity.API_3_5.phone_number}}",
+  "is_profile_img_changed": "{{accountEntity.API_3_5.is_profile_img_changed}}",
+  "addressEntity": {
+    "address_name": "{{accountEntity.API_3_5.addressEntity.address_name}}",
+    "region_1depth_name": "{{accountEntity.API_3_5.addressEntity.region_1depth_name}}",
+    "region_2depth_name": "{{accountEntity.API_3_5.addressEntity.region_2depth_name}}",
+    "region_3depth_name": "{{accountEntity.API_3_5.addressEntity.region_3depth_name}}",
+    "region_4depth_name": "{{accountEntity.API_3_5.addressEntity.region_4depth_name}}",
+    "address_detail": "{{accountEntity.API_3_5.addressEntity.address_detail}}",
+    "longitude": "{{accountEntity.API_3_5.addressEntity.longitude}}",
+    "latitude": "{{accountEntity.API_3_5.addressEntity.latitude}}"
   }
 }
 
@@ -74,33 +74,33 @@ Content-Type: application/json
 {
 	"owner_info":
 	{
-		"company_name" : "{{account.API_3_6.owner_info.company_name}}",
-		"owner_name" : "{{account.API_3_6.owner_info.owner_name}}",
-		"company_registration_number" : "{{account.API_3_6.owner_info.company_registration_number}}",
-		"phone_number" : "{{account.API_3_6.owner_info.phone_number}}"
+		"company_name" : "{{accountEntity.API_3_6.owner_info.company_name}}",
+		"owner_name" : "{{accountEntity.API_3_6.owner_info.owner_name}}",
+		"company_registration_number" : "{{accountEntity.API_3_6.owner_info.company_registration_number}}",
+		"phone_number" : "{{accountEntity.API_3_6.owner_info.phone_number}}"
 	},
-	"address" :
+	"addressEntity" :
 	{
-		"address_name" : "{{account.API_3_6.address.address_name}}",
-		"region_1depth_name" : "{{account.API_3_6.address.region_1depth_name}}",
-		"region_2depth_name" : "{{account.API_3_6.address.region_2depth_name}}",
-		"region_3depth_name" : "{{account.API_3_6.address.region_3depth_name}}",
-		"region_4depth_name" : "{{account.API_3_6.address.region_4depth_name}}",
-		"address_detail" : "{{account.API_3_6.address.address_detail}}",
-		"longitude" : "{{account.API_3_6.address.longitude}}",
-		"latitude" : "{{account.API_3_6.address.latitude}}"
+		"address_name" : "{{accountEntity.API_3_6.addressEntity.address_name}}",
+		"region_1depth_name" : "{{accountEntity.API_3_6.addressEntity.region_1depth_name}}",
+		"region_2depth_name" : "{{accountEntity.API_3_6.addressEntity.region_2depth_name}}",
+		"region_3depth_name" : "{{accountEntity.API_3_6.addressEntity.region_3depth_name}}",
+		"region_4depth_name" : "{{accountEntity.API_3_6.addressEntity.region_4depth_name}}",
+		"address_detail" : "{{accountEntity.API_3_6.addressEntity.address_detail}}",
+		"longitude" : "{{accountEntity.API_3_6.addressEntity.longitude}}",
+		"latitude" : "{{accountEntity.API_3_6.addressEntity.latitude}}"
 	},
-	"is_icon_img_changed" : "{{account.API_3_6.is_icon_img_changed}}"
+	"is_icon_img_changed" : "{{accountEntity.API_3_6.is_icon_img_changed}}"
 }
 
 ### 3.7 (유학생/고용주) 알람 설정 변경하기
 // @no-log
-PATCH {{host_url}}/v1/notification-allowed
+PATCH {{host_url}}/v1/notificationEntity-allowed
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "is_notification_allowed" : "{{account.API_3_7.is_notification_allowed}}"
+    "is_notification_allowed" : "{{accountEntity.API_3_7.is_notification_allowed}}"
 }
 
 ### 3.8 (유학생) 앱 내 언어 수정
@@ -110,20 +110,20 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "language" : "{{account.API_3_8.language}}"
+    "language" : "{{accountEntity.API_3_8.language}}"
 }
 
 ### 3.9 (어드민) 가입 회원 통계 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/accounts/sign-up/summaries?start_date=2025-03-27&end_date=2025-03-29
+GET {{host_url}}/v1/admins/accountEntities/sign-up/summaries?start_date=2025-03-27&end_date=2025-03-29
 Authorization: Bearer {{access_token}}
 
 ### 3.10 (어드민) 탈퇴 회원 통계 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/accounts/withdrawal/summaries?start_date=2024-12-31&end_date=2025-03-24
+GET {{host_url}}/v1/admins/accountEntities/withdrawal/summaries?start_date=2024-12-31&end_date=2025-03-24
 Authorization: Bearer {{access_token}}
 
 ### 3.11 (어드민) 회원 목록 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/accounts/overviews?page=1&size=30
+GET {{host_url}}/v1/admins/accountEntities/overviews?page=1&size=30
 Authorization: Bearer {{access_token}}

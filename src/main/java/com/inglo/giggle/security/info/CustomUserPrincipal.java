@@ -1,6 +1,7 @@
 package com.inglo.giggle.security.info;
 
-import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import lombok.Builder;
 import lombok.Getter;

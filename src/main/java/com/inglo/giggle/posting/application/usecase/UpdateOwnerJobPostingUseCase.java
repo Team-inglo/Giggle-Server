@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.posting.application.dto.request.UpdateOwnerJobPostingRequestDto;
+import com.inglo.giggle.posting.presentation.dto.request.UpdateOwnerJobPostingRequestDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

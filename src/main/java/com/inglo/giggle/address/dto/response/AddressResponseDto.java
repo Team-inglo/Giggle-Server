@@ -2,6 +2,7 @@ package com.inglo.giggle.address.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.address.persistence.entity.AddressEntity;
 import com.inglo.giggle.core.dto.SelfValidating;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -62,7 +63,7 @@ public class AddressResponseDto extends SelfValidating<AddressResponseDto> {
         this.latitude = latitude;
     }
 
-    public static AddressResponseDto fromEntity(Address address) {
+    public static AddressResponseDto from(Address address) {
         return AddressResponseDto.builder()
                 .addressName(address.getAddressName())
                 .region1depthName(address.getRegion1DepthName())

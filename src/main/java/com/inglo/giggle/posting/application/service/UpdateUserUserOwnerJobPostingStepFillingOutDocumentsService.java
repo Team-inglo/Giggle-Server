@@ -1,22 +1,17 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.core.event.dto.NotificationEventDto;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationService;
-import com.inglo.giggle.notification.repository.NotificationRepository;
+import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
 import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepFillingOutDocumentsUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.mysql.AccountDevice;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountDeviceRepository;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.domain.AccountDevice;
+import com.inglo.giggle.security.persistence.repository.AccountDeviceRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -31,11 +26,7 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
 
     private final AccountRepository accountRepository;
     private final AccountDeviceRepository accountDeviceRepository;
-    private final AccountService accountService;
-
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
-    private final NotificationService notificationService;
     private final NotificationRepository notificationRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -47,28 +38,26 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
         // UserOwnerJobPosting 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingAndOwnerById(userOwnerJobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithJobPostingAndOwnerByIdOrElseThrow(userOwnerJobPostingId);
 
         // UserOwnerJobPosting 유저 유효성 체크
-        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
+        userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
         // UserOwnerJobPosting의 상태 변경
-        userOwnerJobPostingService.updateStepFromStepFillingOutDocument(userOwnerJobPosting);
+        userOwnerJobPosting.updateStepFromStepFillingOutDocument();
 
         // UserOwnerJobPosting 저장
         userOwnerJobPostingRepository.save(userOwnerJobPosting);
 
         // Notification 생성 및 저장
-        Notification notification = notificationService.createNotification(
-                EKafkaStatus.USER_DOCUMENT_COMPLETED.getMessage(),
-                userOwnerJobPosting,
-                ENotificationType.OWNER
-        );
-
+        Notification notification = Notification.builder()
+                .message(EKafkaStatus.USER_DOCUMENT_COMPLETED.getMessage())
+                .isRead(false)
+                .notificationType(ENotificationType.USER)
+                .build();
         notificationRepository.save(notification);
 
         // Notification 발송
@@ -79,12 +68,12 @@ public class UpdateUserUserOwnerJobPostingStepFillingOutDocumentsService impleme
     /* Private Methods ---------------------------- */
     /* -------------------------------------------- */
     private void handlePushAlarm(UserOwnerJobPosting userOwnerJobPosting, Notification notification) {
-        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getOwner().getId());
+        List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(userOwnerJobPosting.getOwnerInfo().getId());
 
-        if(userOwnerJobPosting.getOwner().getNotificationAllowed() && !accountDevices.isEmpty()){
+        if(userOwnerJobPosting.getOwnerInfo().getNotificationAllowed() && !accountDevices.isEmpty()){
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
-                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            userOwnerJobPosting.getJobPostingInfo().getTitle(),
                             notification.getMessage(),
                             accountDevices
                     )

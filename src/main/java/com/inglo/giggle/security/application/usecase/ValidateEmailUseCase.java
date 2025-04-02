@@ -1,7 +1,7 @@
 package com.inglo.giggle.security.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.security.application.dto.response.ValidationResponseDto;
+import com.inglo.giggle.security.presentation.dto.response.ValidationResponseDto;
 
 @UseCase
 public interface ValidateEmailUseCase {

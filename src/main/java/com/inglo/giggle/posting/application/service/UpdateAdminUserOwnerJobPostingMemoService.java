@@ -2,7 +2,7 @@ package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.posting.application.usecase.UpdateAdminUserOwnerJobPostingMemoUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,5 +20,7 @@ public class UpdateAdminUserOwnerJobPostingMemoService implements UpdateAdminUse
         UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByIdOrElseThrow(userOwnerJobPostingId);
 
         userOwnerJobPosting.updateMemo(memo);
+
+        userOwnerJobPostingRepository.save(userOwnerJobPosting);
     }
 }

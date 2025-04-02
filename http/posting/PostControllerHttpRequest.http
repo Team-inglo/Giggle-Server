@@ -68,7 +68,7 @@ Authorization: Bearer {{access_token}}
 
 ### 4.6 (고용주) 공고에 대한 지원자 리스트 조회
 // @no-log
-GET {{host_url}}/v1/owners/job-postings/{{posting.API_4_6.job_posting_id}}/user-owner-job-postings/users/overviews?
+GET {{host_url}}/v1/owners/job-postings/{{posting.API_4_6.job_posting_id}}/userEntity-ownerEntity-job-postings/users/overviews?
     page={{posting.API_4_6.page}}&
     size={{posting.API_4_6.size}}&
     sorting={{posting.API_4_6.sorting}}&
@@ -128,15 +128,15 @@ Content-Type: application/json
   "work_period": "{{posting.API_4_10.work_period}}",
   "hourly_rate": {{posting.API_4_10.hourly_rate}},
   "employment_type": "{{posting.API_4_10.employment_type}}",
-  "address": {
-    "address_name": "{{posting.API_4_10.address.address_name}}",
-    "region_1depth_name": "{{posting.API_4_10.address.region_1depth_name}}",
-    "region_2depth_name": "{{posting.API_4_10.address.region_2depth_name}}",
-    "region_3depth_name": "{{posting.API_4_10.address.region_3depth_name}}",
-    "region_4depth_name": "{{posting.API_4_10.address.region_4depth_name}}",
-    "address_detail": "{{posting.API_4_10.address.address_detail}}",
-    "latitude": {{posting.API_4_10.address.latitude}},
-    "longitude": {{posting.API_4_10.address.longitude}}
+  "addressEntity": {
+    "address_name": "{{posting.API_4_10.addressEntity.address_name}}",
+    "region_1depth_name": "{{posting.API_4_10.addressEntity.region_1depth_name}}",
+    "region_2depth_name": "{{posting.API_4_10.addressEntity.region_2depth_name}}",
+    "region_3depth_name": "{{posting.API_4_10.addressEntity.region_3depth_name}}",
+    "region_4depth_name": "{{posting.API_4_10.addressEntity.region_4depth_name}}",
+    "address_detail": "{{posting.API_4_10.addressEntity.address_detail}}",
+    "latitude": {{posting.API_4_10.addressEntity.latitude}},
+    "longitude": {{posting.API_4_10.addressEntity.longitude}}
   },
   "recruitment_dead_line": "{{posting.API_4_10.recruitment_dead_line}}",
   "recruitment_number": {{posting.API_4_10.recruitment_number}},
@@ -204,15 +204,15 @@ Content-Type: application/json
   "work_period": "{{posting.API_4_11.work_period}}",
   "hourly_rate": {{posting.API_4_11.hourly_rate}},
   "employment_type": "{{posting.API_4_11.employment_type}}",
-  "address": {
-    "address_name": "{{posting.API_4_11.address.address_name}}",
-    "region_1depth_name": "{{posting.API_4_11.address.region_1depth_name}}",
-    "region_2depth_name": "{{posting.API_4_11.address.region_2depth_name}}",
-    "region_3depth_name": "{{posting.API_4_11.address.region_3depth_name}}",
-    "region_4depth_name": "{{posting.API_4_11.address.region_4depth_name}}",
-    "address_detail": "{{posting.API_4_11.address.address_detail}}",
-    "latitude": {{posting.API_4_11.address.latitude}},
-    "longitude": {{posting.API_4_11.address.longitude}}
+  "addressEntity": {
+    "address_name": "{{posting.API_4_11.addressEntity.address_name}}",
+    "region_1depth_name": "{{posting.API_4_11.addressEntity.region_1depth_name}}",
+    "region_2depth_name": "{{posting.API_4_11.addressEntity.region_2depth_name}}",
+    "region_3depth_name": "{{posting.API_4_11.addressEntity.region_3depth_name}}",
+    "region_4depth_name": "{{posting.API_4_11.addressEntity.region_4depth_name}}",
+    "address_detail": "{{posting.API_4_11.addressEntity.address_detail}}",
+    "latitude": {{posting.API_4_11.addressEntity.latitude}},
+    "longitude": {{posting.API_4_11.addressEntity.longitude}}
   },
   "recruitment_dead_line": "{{posting.API_4_11.recruitment_dead_line}}",
   "recruitment_number": {{posting.API_4_11.recruitment_number}},
@@ -316,7 +316,7 @@ Authorization: Bearer {{access_token}}
 
 ### 6.1 (유학생) 지원한 공고 리스트 조회하기
 // @no-log
-GET {{host_url}}/v1/users/user-owner-job-postings/overviews?
+GET {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/overviews?
     page=1&
     size=100&
     sorting={{posting.API_6_1.sorting}}&
@@ -326,14 +326,14 @@ Authorization: Bearer {{access_token}}
 
 ### 6.2 (유학생) 지원한 공고 상세 조회하기
 // @no-log
-GET {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_2.user_owner_job_posting_id}}/details
+GET {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{posting.API_6_2.user_owner_job_posting_id}}/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.3 (유학생) 현재 진행중인 인터뷰 리스트 조회하기
 // @no-log
-GET http://localhost:8080/v1/users/user-owner-job-postings/briefs?
+GET http://localhost:8080/v1/users/userEntity-ownerEntity-job-postings/briefs?
     page={{posting.API_6_3.page}}&
     size={{posting.API_6_3.size}}
 Content-Type: application/json
@@ -342,14 +342,14 @@ Authorization: Bearer {{access_token}}
 
 ### 6.4 (유학생) 지원 현황(개수) 확인하기
 // @no-log
-GET {{host_url}}/v1/users/user-owner-job-postings/counts
+GET {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/counts
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.5 (유학생) 공고 담당자 정보 조회하기
 // @no-log
-GET {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_5.user_owner_job_posting_id}}/recruiters
+GET {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{posting.API_6_5.user_owner_job_posting_id}}/recruiters
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
@@ -365,28 +365,28 @@ Authorization: Bearer {{access_token}}
 
 ### 6.7 (고용주) 지원자 지원 상태 상세 조회
 // @no-log
-GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_7.user_owner_job_posting_id}}/details
+GET {{host_url}}/v1/owners/userEntity-ownerEntity-job-postings/{{posting.API_6_7.user_owner_job_posting_id}}/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.8 (고용주) 지원자 간단 정보 조회하기
 // @no-log
-GET {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_8.user_owner_job_posting_id}}/users/briefs
+GET {{host_url}}/v1/owners/userEntity-ownerEntity-job-postings/{{posting.API_6_8.user_owner_job_posting_id}}/users/briefs
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.9 (고용주) 지원 현황(개수) 확인하기
 // @no-log
-GET {{host_url}}/v1/owners/user-owner-job-postings/counts
+GET {{host_url}}/v1/owners/userEntity-ownerEntity-job-postings/counts
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.10 (고용주) 이력서 수락/거절하기
 // @no-log
-PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_10.user_owner_job_posting_id}}/step-resume-under-review
+PATCH {{host_url}}/v1/owners/userEntity-ownerEntity-job-postings/{{posting.API_6_10.user_owner_job_posting_id}}/step-resumeEntity-under-review
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
@@ -397,35 +397,35 @@ Authorization: Bearer {{access_token}}
 
 ### 6.11 (고용주) 인터뷰 완료하기
 // @no-log
-PATCH {{host_url}}/v1/owners/user-owner-job-postings/{{posting.API_6_11.user_owner_job_posting_id}}/step-waiting-for-interview
+PATCH {{host_url}}/v1/owners/userEntity-ownerEntity-job-postings/{{posting.API_6_11.user_owner_job_posting_id}}/step-waiting-for-interview
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.12 (유학생) 서류 작성 완료하기
 // @no-log
-PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_12.user_owner_job_posting_id}}/step-filling-out-documents
+PATCH {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{posting.API_6_12.user_owner_job_posting_id}}/step-filling-out-documents
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.13 (유학생) 담당자 검토 완료
 // @no-log
-PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_13.user_owner_job_posting_id}}/step-document-under-review
+PATCH {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{posting.API_6_13.user_owner_job_posting_id}}/step-documentEntity-under-review
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.14 (유학생) 하이코리아 지원
 // @no-log
-PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_14.user_owner_job_posting_id}}/step-application-in-progress
+PATCH {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{posting.API_6_14.user_owner_job_posting_id}}/step-application-in-progress
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.15 (유학생) 하이코리아 처리결과 등록하기
 // @no-log
-PATCH {{host_url}}/v1/users/user-owner-job-postings/{{posting.API_6_15.user_owner_job_posting_id}}/step-registering-results
+PATCH {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{posting.API_6_15.user_owner_job_posting_id}}/step-registering-results
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
@@ -437,7 +437,7 @@ Authorization: Bearer {{access_token}}
 
 ### 6.16 (어드민) 공고 신청 수 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/user-owner-job-postings/summaries?
+GET {{host_url}}/v1/admins/userEntity-ownerEntity-job-postings/summaries?
     start_date={{posting.API_6_16.start_date}}&
     end_date={{posting.API_6_16.end_date}}
 Content-Type: application/json
@@ -446,7 +446,7 @@ Authorization: Bearer {{access_token}}
 
 ### 6.17 (어드민) 매칭 성공 수 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/user-owner-job-postings/application-success/summaries?
+GET {{host_url}}/v1/admins/userEntity-ownerEntity-job-postings/application-success/summaries?
     start_date={{posting.API_6_17.start_date}}&
     end_date={{posting.API_6_17.end_date}}
 Content-Type: application/json
@@ -455,7 +455,7 @@ Authorization: Bearer {{access_token}}
 
 ### 6.18 (어드민) 지원 목록 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/user-owner-job-postings/overviews?
+GET {{host_url}}/v1/admins/userEntity-ownerEntity-job-postings/overviews?
     page={{posting.API_6_18.page}}
     &size={{posting.API_6_18.size}}
     &start_date={{posting.API_6_18.start_date}}
@@ -470,7 +470,7 @@ Authorization: Bearer {{access_token}}
 
 ### 6.19 (어드민) 신규 신청 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/user-owner-job-postings/digests?
+GET {{host_url}}/v1/admins/userEntity-ownerEntity-job-postings/digests?
     start_date={{posting.API_6_19.start_date}}
     &end_date={{posting.API_6_19.end_date}}
 Content-Type: application/json
@@ -479,14 +479,14 @@ Authorization: Bearer {{access_token}}
 
 ### 6.20 (어드민) 누적 신청 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/user-owner-job-postings/briefs
+GET {{host_url}}/v1/admins/userEntity-ownerEntity-job-postings/briefs
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 ### 6.21 (어드민) 공고 메모 수정하기
 // @no-log
-PATCH {{host_url}}/v1/admins/user-owner-job-postings/{{posting.API_6_21.user_owner_job_posting_id}}/memo
+PATCH {{host_url}}/v1/admins/userEntity-ownerEntity-job-postings/{{posting.API_6_21.user_owner_job_posting_id}}/memo
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 

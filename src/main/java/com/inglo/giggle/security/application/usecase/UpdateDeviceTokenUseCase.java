@@ -1,7 +1,7 @@
 package com.inglo.giggle.security.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.security.application.dto.request.UpdateDeviceTokenRequestDto;
+import com.inglo.giggle.security.presentation.dto.request.UpdateDeviceTokenRequestDto;
 
 import java.util.UUID;
 

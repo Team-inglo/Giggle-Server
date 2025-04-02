@@ -1,289 +1,289 @@
 ### 8.1 (유학생) 서류 조회하기
 // @no-log
-GET {{host_url}}/v1/users/user-owner-job-postings/{{document.API_8_1.id}}/documents/summaries
+GET {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{documentEntity.API_8_1.id}}/documents/summaries
 Authorization: Bearer {{access_token}}
 
 ### 8.2 (고용주) 서류 조회하기
 // @no-log
-GET {{host_url}}/v1/owners/user-owner-job-postings/{{document.API_8_2.id}}/documents/summaries
+GET {{host_url}}/v1/owners/userEntity-ownerEntity-job-postings/{{documentEntity.API_8_2.id}}/documents/summaries
 Authorization: Bearer {{access_token}}
 
 ### 8.3 (유학생/고용주) 시간제 취업 허가서 조회하기
 // @no-log
-GET {{host_url}}/v1/documents/{{document.API_8_3.id}}/part-time-employment-permit/details
+GET {{host_url}}/v1/documents/{{documentEntity.API_8_3.id}}/part-time-employment-permit/details
 Authorization: Bearer {{access_token}}
 
 ### 8.4 (유학생/고용주) 근로 계약서 조회하기
 // @no-log
-GET {{host_url}}/v1/documents/{{document.API_8_4.id}}/standard-labor-contract/details
+GET {{host_url}}/v1/documents/{{documentEntity.API_8_4.id}}/standard-labor-contract/details
 Authorization: Bearer {{access_token}}
 
 ### 8.5 (유학생/고용주) 통합 신청서 조회하기
 // @no-log
-GET {{host_url}}/v1/documents/{{document.API_8_5.id}}/integrated-application/details
+GET {{host_url}}/v1/documents/{{documentEntity.API_8_5.id}}/integrated-application/details
 Authorization: Bearer {{access_token}}
 
 ### 8.6 (유학생) 시간제 취업허가서 생성하기
 // @no-log
-POST {{host_url}}/v1/users/user-owner-job-postings/{{document.API_8_6.id}}/documents/part-time-employment-permits
+POST {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{documentEntity.API_8_6.id}}/documents/part-time-employment-permits
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "first_name": "{{document.API_8_6.first_name}}",
-  "last_name": "{{document.API_8_6.last_name}}",
-  "major": "{{document.API_8_6.major}}",
-  "term_of_completion": {{document.API_8_6.term_of_completion}},
-  "phone_number": "{{document.API_8_6.phone_number}}",
-  "email": "{{document.API_8_6.email}}"
+  "first_name": "{{documentEntity.API_8_6.first_name}}",
+  "last_name": "{{documentEntity.API_8_6.last_name}}",
+  "major": "{{documentEntity.API_8_6.major}}",
+  "term_of_completion": {{documentEntity.API_8_6.term_of_completion}},
+  "phone_number": "{{documentEntity.API_8_6.phone_number}}",
+  "email": "{{documentEntity.API_8_6.email}}"
 }
 
 ### 8.7 (유학생) 근로 계약서 생성하기
 // @no-log
-POST {{host_url}}/v1/users/user-owner-job-postings/{{document.API_8_7.id}}/documents/standard-labor-contracts
+POST {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{documentEntity.API_8_7.id}}/documents/standard-labor-contracts
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "first_name" : "{{document.API_8_7.first_name}}",
-  "last_name" : "{{document.API_8_7.last_name}}",
-  "address" :
+  "first_name" : "{{documentEntity.API_8_7.first_name}}",
+  "last_name" : "{{documentEntity.API_8_7.last_name}}",
+  "addressEntity" :
   {
-    "address_name" : "{{document.API_8_7.address.address_name}}",
-    "region_1depth_name" : "{{document.API_8_7.address.region_1depth_name}}",
-    "region_2depth_name" : "{{document.API_8_7.address.region_2depth_name}}",
-    "region_3depth_name" : "{{document.API_8_7.address.region_3depth_name}}",
-    "region_4depth_name" : "{{document.API_8_7.address.region_4depth_name}}",
-    "address_detail" : "{{document.API_8_7.address.address_detail}}",
-    "longitude" : {{document.API_8_7.address.longitude}},
-    "latitude" : {{document.API_8_7.address.latitude}}
+    "address_name" : "{{documentEntity.API_8_7.addressEntity.address_name}}",
+    "region_1depth_name" : "{{documentEntity.API_8_7.addressEntity.region_1depth_name}}",
+    "region_2depth_name" : "{{documentEntity.API_8_7.addressEntity.region_2depth_name}}",
+    "region_3depth_name" : "{{documentEntity.API_8_7.addressEntity.region_3depth_name}}",
+    "region_4depth_name" : "{{documentEntity.API_8_7.addressEntity.region_4depth_name}}",
+    "address_detail" : "{{documentEntity.API_8_7.addressEntity.address_detail}}",
+    "longitude" : {{documentEntity.API_8_7.addressEntity.longitude}},
+    "latitude" : {{documentEntity.API_8_7.addressEntity.latitude}}
   },
-  "phone_number" : "{{document.API_8_7.phone_number}}",
-  "signature_base64" : "{{document.API_8_7.signature_base64}}"
+  "phone_number" : "{{documentEntity.API_8_7.phone_number}}",
+  "signature_base64" : "{{documentEntity.API_8_7.signature_base64}}"
 }
 
 ### 8.8 (유학생) 통합 신청서 생성하기
 // @no-log
-POST {{host_url}}/v1/users/user-owner-job-postings/{{document.API_8_8.id}}/documents/integrated-applications
+POST {{host_url}}/v1/users/userEntity-ownerEntity-job-postings/{{documentEntity.API_8_8.id}}/documents/integrated-applications
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "first_name" : "{{document.API_8_8.first_name}}",
-  "last_name" : "{{document.API_8_8.last_name}}",
-  "birth" : "{{document.API_8_8.birth}}",
-  "gender" : "{{document.API_8_8.gender}}",
-  "nationality" : "{{document.API_8_8.nationality}}",
-  "tele_phone_number" : "{{document.API_8_8.tele_phone_number}}",
-  "cell_phone_number" : "{{document.API_8_8.cell_phone_number}}",
-  "is_accredited" : {{document.API_8_8.is_accredited}},
-  "school_name" : "{{document.API_8_8.school_name}}",
-  "school_phone_number" : "{{document.API_8_8.school_phone_number}}",
-  "new_work_place_name" : "{{document.API_8_8.new_work_place_name}}",
-  "new_work_place_registration_number" : "{{document.API_8_8.new_work_place_registration_number}}",
-  "new_work_place_phone_number" : "{{document.API_8_8.new_work_place_phone_number}}",
-  "annual_income_amount" : {{document.API_8_8.annual_income_amount}},
-  "occupation" : "{{document.API_8_8.occupation}}",
-  "email" : "{{document.API_8_8.email}}",
-  "signature_base64" : "{{document.API_8_8.signature_base64}}",
-  "address" : {
-    "address_name" : "{{document.API_8_8.address.address_name}}",
-    "region_1depth_name" : "{{document.API_8_8.address.region_1depth_name}}",
-    "region_2depth_name" : "{{document.API_8_8.address.region_2depth_name}}",
-    "region_3depth_name" : "{{document.API_8_8.address.region_3depth_name}}",
-    "region_4depth_name" : "{{document.API_8_8.address.region_4depth_name}}",
-    "address_detail" : "{{document.API_8_8.address.address_detail}}",
-    "longitude" : {{document.API_8_8.address.longitude}},
-    "latitude" : {{document.API_8_8.address.latitude}}
+  "first_name" : "{{documentEntity.API_8_8.first_name}}",
+  "last_name" : "{{documentEntity.API_8_8.last_name}}",
+  "birth" : "{{documentEntity.API_8_8.birth}}",
+  "gender" : "{{documentEntity.API_8_8.gender}}",
+  "nationality" : "{{documentEntity.API_8_8.nationality}}",
+  "tele_phone_number" : "{{documentEntity.API_8_8.tele_phone_number}}",
+  "cell_phone_number" : "{{documentEntity.API_8_8.cell_phone_number}}",
+  "is_accredited" : {{documentEntity.API_8_8.is_accredited}},
+  "school_name" : "{{documentEntity.API_8_8.school_name}}",
+  "school_phone_number" : "{{documentEntity.API_8_8.school_phone_number}}",
+  "new_work_place_name" : "{{documentEntity.API_8_8.new_work_place_name}}",
+  "new_work_place_registration_number" : "{{documentEntity.API_8_8.new_work_place_registration_number}}",
+  "new_work_place_phone_number" : "{{documentEntity.API_8_8.new_work_place_phone_number}}",
+  "annual_income_amount" : {{documentEntity.API_8_8.annual_income_amount}},
+  "occupation" : "{{documentEntity.API_8_8.occupation}}",
+  "email" : "{{documentEntity.API_8_8.email}}",
+  "signature_base64" : "{{documentEntity.API_8_8.signature_base64}}",
+  "addressEntity" : {
+    "address_name" : "{{documentEntity.API_8_8.addressEntity.address_name}}",
+    "region_1depth_name" : "{{documentEntity.API_8_8.addressEntity.region_1depth_name}}",
+    "region_2depth_name" : "{{documentEntity.API_8_8.addressEntity.region_2depth_name}}",
+    "region_3depth_name" : "{{documentEntity.API_8_8.addressEntity.region_3depth_name}}",
+    "region_4depth_name" : "{{documentEntity.API_8_8.addressEntity.region_4depth_name}}",
+    "address_detail" : "{{documentEntity.API_8_8.addressEntity.address_detail}}",
+    "longitude" : {{documentEntity.API_8_8.addressEntity.longitude}},
+    "latitude" : {{documentEntity.API_8_8.addressEntity.latitude}}
   }
 }
 
 ### 8.9 (유학생) 서류 재검토 요청하기
 // @no-log
-POST {{host_url}}/v1/users/documents/{{document.API_8_9.id}}/status/requestion
+POST {{host_url}}/v1/users/documents/{{documentEntity.API_8_9.id}}/status/requestion
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "reason" : "{{document.API_8_9.reason}}"
+  "reason" : "{{documentEntity.API_8_9.reason}}"
 }
 
 ### 8.10 (유학생) 시간제 취업허가서 수정하기
 // @no-log
-PUT {{host_url}}/v1/users/documents/{{document.API_8_10.id}}/part-time-employment-permits
+PUT {{host_url}}/v1/users/documents/{{documentEntity.API_8_10.id}}/part-time-employment-permits
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "first_name": "{{document.API_8_10.first_name}}",
-  "last_name": "{{document.API_8_10.last_name}}",
-  "major": "{{document.API_8_10.major}}",
-  "term_of_completion": {{document.API_8_10.term_of_completion}},
-  "phone_number": "{{document.API_8_10.phone_number}}",
-  "email": "{{document.API_8_10.email}}"
+  "first_name": "{{documentEntity.API_8_10.first_name}}",
+  "last_name": "{{documentEntity.API_8_10.last_name}}",
+  "major": "{{documentEntity.API_8_10.major}}",
+  "term_of_completion": {{documentEntity.API_8_10.term_of_completion}},
+  "phone_number": "{{documentEntity.API_8_10.phone_number}}",
+  "email": "{{documentEntity.API_8_10.email}}"
 }
 
 ### 8.11 (고용주) 시간제 취업허가서 수정하기
 // @no-log
-PUT {{host_url}}/v1/owners/documents/{{document.API_8_10.id}}/part-time-employment-permits
+PUT {{host_url}}/v1/owners/documents/{{documentEntity.API_8_10.id}}/part-time-employment-permits
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "company_name" : "{{document.API_8_11.company_name}}",
-  "company_registration_number" : "{{document.API_8_11.company_registration_number}}",
-  "job_type" : "{{document.API_8_11.job_type}}",
-  "name" : "{{document.API_8_11.name}}",
-  "phone_number" : "{{document.API_8_11.phone_number}}",
-  "signature_base64" : "{{document.API_8_11.signature_base64}}",
-  "work_period" : "{{document.API_8_11.work_period}}",
-  "hourly_rate" : {{document.API_8_11.hourly_rate}},
-  "work_days_weekdays" : "{{document.API_8_11.work_days_weekdays}}",
-  "work_days_weekends" : "{{document.API_8_11.work_days_weekends}}",
-  "address" :
+  "company_name" : "{{documentEntity.API_8_11.company_name}}",
+  "company_registration_number" : "{{documentEntity.API_8_11.company_registration_number}}",
+  "job_type" : "{{documentEntity.API_8_11.job_type}}",
+  "name" : "{{documentEntity.API_8_11.name}}",
+  "phone_number" : "{{documentEntity.API_8_11.phone_number}}",
+  "signature_base64" : "{{documentEntity.API_8_11.signature_base64}}",
+  "work_period" : "{{documentEntity.API_8_11.work_period}}",
+  "hourly_rate" : {{documentEntity.API_8_11.hourly_rate}},
+  "work_days_weekdays" : "{{documentEntity.API_8_11.work_days_weekdays}}",
+  "work_days_weekends" : "{{documentEntity.API_8_11.work_days_weekends}}",
+  "addressEntity" :
   {
-    "address_name" : "{{document.API_8_11.address.address_name}}",
-    "region_1depth_name" : "{{document.API_8_11.address.region_1depth_name}}",
-    "region_2depth_name" : "{{document.API_8_11.address.region_2depth_name}}",
-    "region_3depth_name" : "{{document.API_8_11.address.region_3depth_name}}",
-    "region_4depth_name" : "{{document.API_8_11.address.region_4depth_name}}",
-    "address_detail" : "{{document.API_8_11.address.address_detail}}",
-    "longitude" : {{document.API_8_11.address.longitude}},
-    "latitude" : {{document.API_8_11.address.latitude}}
+    "address_name" : "{{documentEntity.API_8_11.addressEntity.address_name}}",
+    "region_1depth_name" : "{{documentEntity.API_8_11.addressEntity.region_1depth_name}}",
+    "region_2depth_name" : "{{documentEntity.API_8_11.addressEntity.region_2depth_name}}",
+    "region_3depth_name" : "{{documentEntity.API_8_11.addressEntity.region_3depth_name}}",
+    "region_4depth_name" : "{{documentEntity.API_8_11.addressEntity.region_4depth_name}}",
+    "address_detail" : "{{documentEntity.API_8_11.addressEntity.address_detail}}",
+    "longitude" : {{documentEntity.API_8_11.addressEntity.longitude}},
+    "latitude" : {{documentEntity.API_8_11.addressEntity.latitude}}
   }
 }
 
 ### 8.12 (유학생) 근로 계약서 수정하기
 // @no-log
-PUT {{host_url}}/v1/users/documents/{{document.API_8_12.id}}/standard-labor-contracts
+PUT {{host_url}}/v1/users/documents/{{documentEntity.API_8_12.id}}/standard-labor-contracts
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "first_name" : "{{document.API_8_12.first_name}}",
-  "last_name" : "{{document.API_8_12.last_name}}",
-  "address" :
+  "first_name" : "{{documentEntity.API_8_12.first_name}}",
+  "last_name" : "{{documentEntity.API_8_12.last_name}}",
+  "addressEntity" :
   {
-    "address_name" : "{{document.API_8_12.address.address_name}}",
-    "region_1depth_name" : "{{document.API_8_12.address.region_1depth_name}}",
-    "region_2depth_name" : "{{document.API_8_12.address.region_2depth_name}}",
-    "region_3depth_name" : "{{document.API_8_12.address.region_3depth_name}}",
-    "region_4depth_name" : "{{document.API_8_12.address.region_4depth_name}}",
-    "address_detail" : "{{document.API_8_12.address.address_detail}}",
-    "longitude" : {{document.API_8_12.address.longitude}},
-    "latitude" : {{document.API_8_12.address.latitude}}
+    "address_name" : "{{documentEntity.API_8_12.addressEntity.address_name}}",
+    "region_1depth_name" : "{{documentEntity.API_8_12.addressEntity.region_1depth_name}}",
+    "region_2depth_name" : "{{documentEntity.API_8_12.addressEntity.region_2depth_name}}",
+    "region_3depth_name" : "{{documentEntity.API_8_12.addressEntity.region_3depth_name}}",
+    "region_4depth_name" : "{{documentEntity.API_8_12.addressEntity.region_4depth_name}}",
+    "address_detail" : "{{documentEntity.API_8_12.addressEntity.address_detail}}",
+    "longitude" : {{documentEntity.API_8_12.addressEntity.longitude}},
+    "latitude" : {{documentEntity.API_8_12.addressEntity.latitude}}
   },
-  "phone_number" : "{{document.API_8_12.phone_number}}",
-  "signature_base64" : "{{document.API_8_12.signature_base64}}"
+  "phone_number" : "{{documentEntity.API_8_12.phone_number}}",
+  "signature_base64" : "{{documentEntity.API_8_12.signature_base64}}"
 }
 
 ### 8.13 (고용주) 근로 계약서 수정하기
 // @no-log
-PUT {{host_url}}/v1/owners/documents/{{document.API_8_13.id}}/standard-labor-contracts
+PUT {{host_url}}/v1/owners/documents/{{documentEntity.API_8_13.id}}/standard-labor-contracts
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "company_name" : "{{document.API_8_13.company_name}}",
-  "company_registration_number" : "{{document.API_8_13.company_registration_number}}",
-  "phone_number" : "{{document.API_8_13.phone_number}}",
-  "name" : "{{document.API_8_13.name}}",
-  "start_date" : "{{document.API_8_13.start_date}}",
-  "end_date" : "{{document.API_8_13.end_date}}",
-  "address" :
+  "company_name" : "{{documentEntity.API_8_13.company_name}}",
+  "company_registration_number" : "{{documentEntity.API_8_13.company_registration_number}}",
+  "phone_number" : "{{documentEntity.API_8_13.phone_number}}",
+  "name" : "{{documentEntity.API_8_13.name}}",
+  "start_date" : "{{documentEntity.API_8_13.start_date}}",
+  "end_date" : "{{documentEntity.API_8_13.end_date}}",
+  "addressEntity" :
   {
-    "address_name" : "{{document.API_8_13.address.address_name}}",
-    "region_1depth_name" : "{{document.API_8_13.address.region_1depth_name}}",
-    "region_2depth_name" : "{{document.API_8_13.address.region_2depth_name}}",
-    "region_3depth_name" : "{{document.API_8_13.address.region_3depth_name}}",
-    "region_4depth_name" : "{{document.API_8_13.address.region_4depth_name}}",
-    "detail_address" : "{{document.API_8_13.address.detail_address}}",
-    "longitude" : {{document.API_8_13.address.longitude}},
-    "latitude" : {{document.API_8_13.address.latitude}}
+    "address_name" : "{{documentEntity.API_8_13.addressEntity.address_name}}",
+    "region_1depth_name" : "{{documentEntity.API_8_13.addressEntity.region_1depth_name}}",
+    "region_2depth_name" : "{{documentEntity.API_8_13.addressEntity.region_2depth_name}}",
+    "region_3depth_name" : "{{documentEntity.API_8_13.addressEntity.region_3depth_name}}",
+    "region_4depth_name" : "{{documentEntity.API_8_13.addressEntity.region_4depth_name}}",
+    "detail_address" : "{{documentEntity.API_8_13.addressEntity.detail_address}}",
+    "longitude" : {{documentEntity.API_8_13.addressEntity.longitude}},
+    "latitude" : {{documentEntity.API_8_13.addressEntity.latitude}}
   },
-  "description" : "{{document.API_8_13.description}}",
+  "description" : "{{documentEntity.API_8_13.description}}",
   "work_day_time_list" : [
     {
-      "day_of_week" : "{{document.API_8_13.work_day_time_list[0].day_of_week}}",
-      "work_start_time" : "{{document.API_8_13.work_day_time_list[0].work_start_time}}",
-      "work_end_time" : "{{document.API_8_13.work_day_time_list[0].work_end_time}}",
-      "break_start_time" : "{{document.API_8_13.work_day_time_list[0].break_start_time}}",
-      "break_end_time" : "{{document.API_8_13.work_day_time_list[0].break_end_time}}"
+      "day_of_week" : "{{documentEntity.API_8_13.work_day_time_list[0].day_of_week}}",
+      "work_start_time" : "{{documentEntity.API_8_13.work_day_time_list[0].work_start_time}}",
+      "work_end_time" : "{{documentEntity.API_8_13.work_day_time_list[0].work_end_time}}",
+      "break_start_time" : "{{documentEntity.API_8_13.work_day_time_list[0].break_start_time}}",
+      "break_end_time" : "{{documentEntity.API_8_13.work_day_time_list[0].break_end_time}}"
     },
     {
-      "day_of_week" : "{{document.API_8_13.work_day_time_list[1].day_of_week}}",
-      "work_start_time" : "{{document.API_8_13.work_day_time_list[1].work_start_time}}",
-      "work_end_time" : "{{document.API_8_13.work_day_time_list[1].work_end_time}}",
-      "break_start_time" : "{{document.API_8_13.work_day_time_list[1].break_start_time}}",
-      "break_end_time" : "{{document.API_8_13.work_day_time_list[1].break_end_time}}"
+      "day_of_week" : "{{documentEntity.API_8_13.work_day_time_list[1].day_of_week}}",
+      "work_start_time" : "{{documentEntity.API_8_13.work_day_time_list[1].work_start_time}}",
+      "work_end_time" : "{{documentEntity.API_8_13.work_day_time_list[1].work_end_time}}",
+      "break_start_time" : "{{documentEntity.API_8_13.work_day_time_list[1].break_start_time}}",
+      "break_end_time" : "{{documentEntity.API_8_13.work_day_time_list[1].break_end_time}}"
     },
     {
-      "day_of_week" : "{{document.API_8_13.work_day_time_list[2].day_of_week}}",
-      "work_start_time" : "{{document.API_8_13.work_day_time_list[2].work_start_time}}",
-      "work_end_time" : "{{document.API_8_13.work_day_time_list[2].work_end_time}}",
-      "break_start_time" : "{{document.API_8_13.work_day_time_list[2].break_start_time}}",
-      "break_end_time" : "{{document.API_8_13.work_day_time_list[2].break_end_time}}"
+      "day_of_week" : "{{documentEntity.API_8_13.work_day_time_list[2].day_of_week}}",
+      "work_start_time" : "{{documentEntity.API_8_13.work_day_time_list[2].work_start_time}}",
+      "work_end_time" : "{{documentEntity.API_8_13.work_day_time_list[2].work_end_time}}",
+      "break_start_time" : "{{documentEntity.API_8_13.work_day_time_list[2].break_start_time}}",
+      "break_end_time" : "{{documentEntity.API_8_13.work_day_time_list[2].break_end_time}}"
     }
   ],
-  "weekly_last_days" : ["{{document.API_8_13.weekly_last_days1}}", "{{document.API_8_13.weekly_last_days2}}"],
-  "hourly_rate" : {{document.API_8_13.hourly_rate}},
-  "bonus" : {{document.API_8_13.bonus}},
-  "additional_salary" : {{document.API_8_13.additional_salary}},
-  "wage_rate" : {{document.API_8_13.wage_rate}},
-  "payment_day" : {{document.API_8_13.payment_day}},
-  "payment_method" : "{{document.API_8_13.payment_method}}",
-  "insurance" : ["{{document.API_8_13.insurance1}}", "{{document.API_8_13.insurance2}}"],
-  "signature_base64" : "{{document.API_8_13.signature_base64}}"
+  "weekly_last_days" : ["{{documentEntity.API_8_13.weekly_last_days1}}", "{{documentEntity.API_8_13.weekly_last_days2}}"],
+  "hourly_rate" : {{documentEntity.API_8_13.hourly_rate}},
+  "bonus" : {{documentEntity.API_8_13.bonus}},
+  "additional_salary" : {{documentEntity.API_8_13.additional_salary}},
+  "wage_rate" : {{documentEntity.API_8_13.wage_rate}},
+  "payment_day" : {{documentEntity.API_8_13.payment_day}},
+  "payment_method" : "{{documentEntity.API_8_13.payment_method}}",
+  "insurance" : ["{{documentEntity.API_8_13.insurance1}}", "{{documentEntity.API_8_13.insurance2}}"],
+  "signature_base64" : "{{documentEntity.API_8_13.signature_base64}}"
 }
 
 ### 8.14 (유학생) 통합 신청서 수정하기
 // @no-log
-PUT {{host_url}}/v1/users/documents/{{document.API_8_14.id}}/integrated-applications
+PUT {{host_url}}/v1/users/documents/{{documentEntity.API_8_14.id}}/integrated-applications
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "first_name" : "{{document.API_8_14.first_name}}",
-  "last_name" : "{{document.API_8_14.last_name}}",
-  "birth" : "{{document.API_8_14.birth}}",
-  "gender" : "{{document.API_8_14.gender}}",
-  "nationality" : "{{document.API_8_14.nationality}}",
-  "tele_phone_number" : "{{document.API_8_14.tele_phone_number}}",
-  "cell_phone_number" : "{{document.API_8_14.cell_phone_number}}",
-  "is_accredited" : {{document.API_8_14.is_accredited}},
-  "school_name" : "{{document.API_8_14.school_name}}",
-  "school_phone_number" : "{{document.API_8_14.school_phone_number}}",
-  "new_work_place_name" : "{{document.API_8_14.new_work_place_name}}",
-  "new_work_place_registration_number" : "{{document.API_8_14.new_work_place_registration_number}}",
-  "new_work_place_phone_number" : "{{document.API_8_14.new_work_place_phone_number}}",
-  "annual_income_amount" : {{document.API_8_14.annual_income_amount}},
-  "occupation" : "{{document.API_8_14.occupation}}",
-  "email" : "{{document.API_8_14.email}}",
-  "signature_base64" : "{{document.API_8_14.signature_base64}}",
-  "address" : {
-    "address_name" : "{{document.API_8_14.address.address_name}}",
-    "region_1depth_name" : "{{document.API_8_14.address.region_1depth_name}}",
-    "region_2depth_name" : "{{document.API_8_14.address.region_2depth_name}}",
-    "region_3depth_name" : "{{document.API_8_14.address.region_3depth_name}}",
-    "region_4depth_name" : "{{document.API_8_14.address.region_4depth_name}}",
-    "address_detail" : "{{document.API_8_14.address.address_detail}}",
-    "longitude" : {{document.API_8_14.address.longitude}},
-    "latitude" : {{document.API_8_14.address.latitude}}
+  "first_name" : "{{documentEntity.API_8_14.first_name}}",
+  "last_name" : "{{documentEntity.API_8_14.last_name}}",
+  "birth" : "{{documentEntity.API_8_14.birth}}",
+  "gender" : "{{documentEntity.API_8_14.gender}}",
+  "nationality" : "{{documentEntity.API_8_14.nationality}}",
+  "tele_phone_number" : "{{documentEntity.API_8_14.tele_phone_number}}",
+  "cell_phone_number" : "{{documentEntity.API_8_14.cell_phone_number}}",
+  "is_accredited" : {{documentEntity.API_8_14.is_accredited}},
+  "school_name" : "{{documentEntity.API_8_14.school_name}}",
+  "school_phone_number" : "{{documentEntity.API_8_14.school_phone_number}}",
+  "new_work_place_name" : "{{documentEntity.API_8_14.new_work_place_name}}",
+  "new_work_place_registration_number" : "{{documentEntity.API_8_14.new_work_place_registration_number}}",
+  "new_work_place_phone_number" : "{{documentEntity.API_8_14.new_work_place_phone_number}}",
+  "annual_income_amount" : {{documentEntity.API_8_14.annual_income_amount}},
+  "occupation" : "{{documentEntity.API_8_14.occupation}}",
+  "email" : "{{documentEntity.API_8_14.email}}",
+  "signature_base64" : "{{documentEntity.API_8_14.signature_base64}}",
+  "addressEntity" : {
+    "address_name" : "{{documentEntity.API_8_14.addressEntity.address_name}}",
+    "region_1depth_name" : "{{documentEntity.API_8_14.addressEntity.region_1depth_name}}",
+    "region_2depth_name" : "{{documentEntity.API_8_14.addressEntity.region_2depth_name}}",
+    "region_3depth_name" : "{{documentEntity.API_8_14.addressEntity.region_3depth_name}}",
+    "region_4depth_name" : "{{documentEntity.API_8_14.addressEntity.region_4depth_name}}",
+    "address_detail" : "{{documentEntity.API_8_14.addressEntity.address_detail}}",
+    "longitude" : {{documentEntity.API_8_14.addressEntity.longitude}},
+    "latitude" : {{documentEntity.API_8_14.addressEntity.latitude}}
   }
 }
 
 ### 8.15 (유학생) 서류 제출하기
 // @no-log
-PATCH {{host_url}}/v1/users/documents/{{document.API_8_15.id}}/status/submission
+PATCH {{host_url}}/v1/users/documents/{{documentEntity.API_8_15.id}}/status/submission
 Authorization: Bearer {{access_token}}
 
 ### 8.16 (고용주) 서류 제출하기
 // @no-log
-PATCH {{host_url}}/v1/owners/documents/{{document.API_8_16.id}}/status/submission
+PATCH {{host_url}}/v1/owners/documents/{{documentEntity.API_8_16.id}}/status/submission
 Authorization: Bearer {{access_token}}
 
 ### 8.17 (유학생) 서류 컨펌하기
 // @no-log
-PATCH {{host_url}}/v1/users/documents/{{document.API_8_17.id}}/status/confirmation
+PATCH {{host_url}}/v1/users/documents/{{documentEntity.API_8_17.id}}/status/confirmation
 Authorization: Bearer {{access_token}}
 

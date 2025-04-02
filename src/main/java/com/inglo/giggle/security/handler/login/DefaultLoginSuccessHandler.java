@@ -2,7 +2,7 @@ package com.inglo.giggle.security.handler.login;
 
 import com.inglo.giggle.core.utility.HttpServletUtil;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
-import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
+import com.inglo.giggle.security.presentation.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.application.usecase.LoginByDefaultUseCase;
 import com.inglo.giggle.security.info.CustomUserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;

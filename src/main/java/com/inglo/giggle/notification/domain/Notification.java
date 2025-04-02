@@ -1,71 +1,81 @@
 package com.inglo.giggle.notification.domain;
 
-import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.core.dto.BaseDomain;
 import com.inglo.giggle.core.type.ENotificationType;
-import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
-@Entity
+import java.time.LocalDateTime;
+
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "notifications")
-@SQLDelete(sql = "UPDATE notifications SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
-public class Notification extends BaseEntity {
+public class Notification extends BaseDomain {
 
-    /* -------------------------------------------- */
-    /* Default Column ----------------------------- */
-    /* -------------------------------------------- */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    /* -------------------------------------------- */
-    /* Information Column ------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "message", length = 100, nullable = false)
     private String message;
-
-    @Column(name = "is_read", nullable = false)
     private Boolean isRead;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "notification_type", nullable = false)
     private ENotificationType notificationType;
 
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_owner_job_postings_id", nullable = false)
-    private UserOwnerJobPosting userOwnerJobPosting;
+    private Long userOwnerJobPostingId;
+
+    /* -------------------------------------------- */
+    /* Nested Class ------------------------------- */
+    /* -------------------------------------------- */
+    private UserOwnerJobPostingInfo userOwnerJobPostingInfo;
 
     @Builder
     public Notification(
+            Long id,
             String message,
-            UserOwnerJobPosting userOwnerJobPosting,
-            ENotificationType notificationType
+            Boolean isRead,
+            ENotificationType notificationType,
+            Long userOwnerJobPostingId,
+            UserOwnerJobPostingInfo userOwnerJobPostingInfo,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            LocalDateTime deletedAt
     ) {
+        this.id = id;
         this.message = message;
-        this.isRead = false;
-        this.userOwnerJobPosting = userOwnerJobPosting;
+        this.isRead = isRead;
         this.notificationType = notificationType;
+        this.userOwnerJobPostingId = userOwnerJobPostingId;
+        this.userOwnerJobPostingInfo = userOwnerJobPostingInfo;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
+
+    @Getter
+    public static class UserOwnerJobPostingInfo {
+        private Long id;
+        private JobPostingInfo jobPostingInfo;
+
+        @Builder
+        public UserOwnerJobPostingInfo(
+                Long id,
+                JobPostingInfo jobPostingInfo
+        ) {
+            this.id = id;
+            this.jobPostingInfo = jobPostingInfo;
+        }
+    }
+
+    @Getter
+    public static class JobPostingInfo {
+        private Long id;
+        private String title;
+
+        @Builder
+        public JobPostingInfo(
+                Long id,
+                String title
+        ) {
+            this.id = id;
+            this.title = title;
+        }
     }
 
     public void updateIsRead() {

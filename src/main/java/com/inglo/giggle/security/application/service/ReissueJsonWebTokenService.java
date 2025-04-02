@@ -2,13 +2,13 @@ package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
-import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.presentation.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.application.usecase.ReissueJsonWebTokenUseCase;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.redis.RefreshToken;
+import com.inglo.giggle.security.persistence.entity.redis.RefreshTokenEntity;
 import com.inglo.giggle.security.domain.service.RefreshTokenService;
-import com.inglo.giggle.security.repository.AccountRepository;
-import com.inglo.giggle.security.repository.RefreshTokenRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,9 +36,9 @@ public class ReissueJsonWebTokenService implements ReissueJsonWebTokenUseCase {
         UUID claimsAccountId = UUID.fromString(claims.get(Constants.ACCOUNT_ID_CLAIM_NAME, String.class));
 
         // refresh Token 검증. Redis에 있는 토큰인지 확인 -> accountId 추출
-        RefreshToken refreshToken = refreshTokenRepository.findByAccountIdAndValueOrElseThrow(claimsAccountId, refreshTokenValue);
+        RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findByAccountIdAndValueOrElseThrow(claimsAccountId, refreshTokenValue);
 
-        UUID accountId = refreshToken.getAccountId();
+        UUID accountId = refreshTokenEntity.getAccountId();
 
         // Account 조회
         Account account = accountRepository.findByIdOrElseThrow(accountId);

@@ -1,7 +1,7 @@
 package com.inglo.giggle.school.application.service;
 
 import com.inglo.giggle.school.application.usecase.DeleteAdminSchoolUseCase;
-import com.inglo.giggle.school.repository.SchoolRepository;
+import com.inglo.giggle.school.persistence.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

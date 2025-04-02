@@ -1,16 +1,15 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.posting.application.dto.response.ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto;
+import com.inglo.giggle.posting.presentation.dto.response.ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
-import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.school.repository.SchoolRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.school.persistence.repository.SchoolRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService implements ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
 
     private final JobPostingRepository jobPostingRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
@@ -44,7 +42,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
-        accountService.checkOwnerValidation(account);
+        account.checkOwnerValidation();
 
         // 채용공고 조회
         JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
@@ -90,7 +88,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
 
         // 지원자 리스트의 학교 정보 조회
         List<UUID> userIds = userOwnerJobPostingPage.stream()
-                .map(userOwnerJobPosting -> userOwnerJobPosting.getUser().getId())
+                .map(userOwnerJobPosting -> userOwnerJobPosting.getUserInfo().getId())
                 .toList();
 
         // 학교 정보 조회
@@ -103,7 +101,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
 
         // DTO 반환
         List<ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto.ApplicantOverviewDto> applicantList = userOwnerJobPostingPage.stream().map(userOwnerJobPosting -> {
-            UUID userId = userOwnerJobPosting.getUser().getId();
+            UUID userId = userOwnerJobPosting.getUserInfo().getId();
             String schoolName = userSchoolMap.getOrDefault(userId, DASH);
 
             return ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto.ApplicantOverviewDto.of(

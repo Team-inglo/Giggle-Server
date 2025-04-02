@@ -1,9 +1,9 @@
 package com.inglo.giggle.account.application.service;
 
-import com.inglo.giggle.account.application.dto.response.ReadUserDetailResponseDto;
-import com.inglo.giggle.account.application.usecase.ReadUserDetailUseCase;
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.UserRepository;
+import com.inglo.giggle.account.presentation.dto.response.ReadUserDetailResponseDto;
+import com.inglo.giggle.account.application.usecase.ReadUserDetailUseCase;
+import com.inglo.giggle.account.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ public class ReadUserDetailService implements ReadUserDetailUseCase {
         // 유저 정보 조회
         User user = userRepository.findByIdOrElseThrow(accountId);
 
-        return ReadUserDetailResponseDto.fromEntity(user);
+        return ReadUserDetailResponseDto.from(user);
     }
 
 }

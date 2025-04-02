@@ -1,9 +1,9 @@
 package com.inglo.giggle.account.application.service;
 
-import com.inglo.giggle.account.application.dto.response.ReadOwnerDetailResponseDto;
-import com.inglo.giggle.account.application.usecase.ReadOwnerDetailUseCase;
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.repository.OwnerRepository;
+import com.inglo.giggle.account.presentation.dto.response.ReadOwnerDetailResponseDto;
+import com.inglo.giggle.account.application.usecase.ReadOwnerDetailUseCase;
+import com.inglo.giggle.account.persistence.repository.OwnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ public class ReadOwnerDetailService implements ReadOwnerDetailUseCase {
         // 고용주 정보 조회
         Owner owner = ownerRepository.findByIdOrElseThrow(accountId);
 
-        return ReadOwnerDetailResponseDto.fromEntity(owner);
+        return ReadOwnerDetailResponseDto.from(owner);
     }
 
 }

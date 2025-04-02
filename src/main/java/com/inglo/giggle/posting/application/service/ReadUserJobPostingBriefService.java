@@ -1,30 +1,29 @@
 package com.inglo.giggle.posting.application.service;
 
+import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.dto.RouteResponseDto;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.utility.OSRMUtil;
 import com.inglo.giggle.core.utility.RestClientUtil;
-import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingBriefResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadUserJobPostingBriefUseCase;
 import com.inglo.giggle.posting.domain.JobPostAggregate;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.JobPostAggregateService;
-import com.inglo.giggle.posting.domain.service.JobPostingService;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.presentation.dto.response.ReadUserJobPostingBriefResponseDto;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.domain.service.EducationService;
 import com.inglo.giggle.resume.domain.service.ResumeAggregateService;
-import com.inglo.giggle.resume.repository.EducationRepository;
-import com.inglo.giggle.resume.repository.ResumeRepository;
+import com.inglo.giggle.resume.persistence.repository.EducationRepository;
+import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.SchoolRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.school.persistence.repository.SchoolRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -42,12 +41,10 @@ import java.util.UUID;
 public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
 
     private final JobPostingRepository jobPostingRepository;
     private final ResumeRepository resumeRepository;
     private final EducationRepository educationRepository;
-    private final JobPostingService jobPostingService;
     private final EducationService educationService;
     private final ResumeAggregateService resumeAggregateService;
     private final JobPostAggregateService jobPostAggregateService;
@@ -66,7 +63,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
         // JobPosting 조회
         List<JobPosting> jobPostings = jobPostingRepository.findAll().stream()
@@ -79,7 +76,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
                     }
 
                     Resume resume = optionalResume.get();
-                    return isUserApplicableForJobPosting(resume, jobPosting);
+                    return isUserApplicableForJobPosting(account, resume, jobPosting);
                 })
                 .limit(2)
                 .toList();
@@ -93,15 +90,16 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
     /* -------------------------------------------- */
     /* Private Methods ---------------------------- */
     /* -------------------------------------------- */
-    private boolean isUserApplicableForJobPosting(Resume resume, JobPosting jobPosting) {
+    private boolean isUserApplicableForJobPosting(Account account, Resume resume, JobPosting jobPosting) {
         try {
-            EEducationLevel educationLevel = educationService.getEducationLevelByVisa(resume.getUser().getVisa());
-            List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(resume.getUser().getId(), educationLevel);
+            User user = (User) account;
+            EEducationLevel educationLevel = Education.getEducationLevelByVisa(user.getVisa());
+            List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(user.getId(), educationLevel);
 
-            Education education = educationService.getLatestEducation(educations);
+            Education educationEntity = educationService.getLatestEducation(educations);
 
-            boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(resume, education, jobPosting);
-            boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(resume, jobPosting);
+            boolean isApplicableFromEducation = validateUserIsApplicableFromEducationAndResume(account, resume, educationEntity, jobPosting);
+            boolean isApplicableFromSchoolDistance = validateUserIsApplicableFromSchoolDistance(account, jobPosting);
 
             return isApplicableFromEducation && isApplicableFromSchoolDistance;
 
@@ -113,29 +111,38 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
     }
 
 
-    private Boolean validateUserIsApplicableFromEducationAndResume(Resume resume, Education education, JobPosting jobPosting) {
-        ResumeAggregate resumeAggregate = resumeAggregateService.createResumeAggregate(resume.getUser(), resume, education);
+    private Boolean validateUserIsApplicableFromEducationAndResume(Account account, Resume resume, Education education, JobPosting jobPosting) {
+        User user = (User) account;
+        ResumeAggregate resumeAggregate = ResumeAggregate.builder()
+                .user(user)
+                .education(education)
+                .resume(resume)
+                .build();
 
         Map<String, Integer> userWorkDayTimeMap = resumeAggregateService.calculateWorkHours(resumeAggregate);
-        Map<String, Integer> jobPostingWorkDayTimeMap = jobPostingService.calculateWorkHours(jobPosting);
+        Map<String, Integer> jobPostingWorkDayTimeMap = jobPosting.calculateWorkHours();
 
-        JobPostAggregate jobPostAggregate = jobPostAggregateService.createJobPostAggregate(resume, jobPosting);
+        JobPostAggregate jobPostAggregate = JobPostAggregate.builder()
+                .jobPosting(jobPosting)
+                .resume(resume)
+                .build();
+
         return jobPostAggregateService.isUserApplicable(jobPostAggregate, userWorkDayTimeMap, jobPostingWorkDayTimeMap);
     }
 
 
-    private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDescOptional(resume.getUser().getId());
+    private Boolean validateUserIsApplicableFromSchoolDistance(Account account, JobPosting jobPosting) throws Exception {
+        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDescOptional(account.getId());
         if (school.isEmpty()) {
             return false;
         }
 
         School graduationSchool = school.get();
-        Address schoolAddress = graduationSchool.getAddress();
+        Address schoolAddressEntity = graduationSchool.getAddress();
         Address jobPostingAddress = jobPosting.getAddress();
 
         JSONObject jsonObject = restClientUtil.sendGetMethod(osrmUtil.createOSRMRequestUrl(
-                schoolAddress.getLatitude(), schoolAddress.getLongitude(),
+                schoolAddressEntity.getLatitude(), schoolAddressEntity.getLongitude(),
                 jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()),
                 null
         );

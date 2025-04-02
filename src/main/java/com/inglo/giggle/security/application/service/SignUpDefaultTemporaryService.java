@@ -3,19 +3,19 @@ package com.inglo.giggle.security.application.service;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.PasswordUtil;
-import com.inglo.giggle.security.application.dto.request.SignUpDefaultTemporaryRequestDto;
-import com.inglo.giggle.security.application.dto.response.IssueAuthenticationCodeResponseDto;
+import com.inglo.giggle.security.presentation.dto.request.SignUpDefaultTemporaryRequestDto;
+import com.inglo.giggle.security.presentation.dto.response.IssueAuthenticationCodeResponseDto;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultTemporaryUseCase;
-import com.inglo.giggle.security.domain.redis.AuthenticationCodeHistory;
+import com.inglo.giggle.security.persistence.entity.redis.AuthenticationCodeHistoryEntity;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.domain.service.AuthenticationCodeHistoryService;
 import com.inglo.giggle.security.domain.service.AuthenticationCodeService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.event.CompleteEmailValidationEvent;
-import com.inglo.giggle.security.repository.AccountRepository;
-import com.inglo.giggle.security.repository.AuthenticationCodeHistoryRepository;
-import com.inglo.giggle.security.repository.AuthenticationCodeRepository;
-import com.inglo.giggle.security.repository.TemporaryAccountRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.AuthenticationCodeHistoryRepository;
+import com.inglo.giggle.security.persistence.repository.AuthenticationCodeRepository;
+import com.inglo.giggle.security.persistence.repository.TemporaryAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,7 +44,7 @@ public class SignUpDefaultTemporaryService implements SignUpDefaultTemporaryUseC
         }
 
         // 인증코드 발급 이력 조회
-        AuthenticationCodeHistory history = authenticationCodeHistoryRepository.findByIdOrElseNull(requestDto.email());
+        AuthenticationCodeHistoryEntity history = authenticationCodeHistoryRepository.findByIdOrElseNull(requestDto.email());
 
         // 인증코드 발급 제한, 발급 속도 제한 유효성 검사
         authenticationCodeHistoryService.validateAuthenticationCodeHistory(history);

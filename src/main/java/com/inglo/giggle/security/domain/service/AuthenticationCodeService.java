@@ -1,12 +1,12 @@
 package com.inglo.giggle.security.domain.service;
 
-import com.inglo.giggle.security.domain.redis.AuthenticationCode;
+import com.inglo.giggle.security.persistence.entity.redis.AuthenticationCodeEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationCodeService {
-    public AuthenticationCode createAuthenticationCode(String email, String code) {
-        return AuthenticationCode.builder()
+    public AuthenticationCodeEntity createAuthenticationCode(String email, String code) {
+        return AuthenticationCodeEntity.builder()
                 .email(email)
                 .value(code)
                 .build();

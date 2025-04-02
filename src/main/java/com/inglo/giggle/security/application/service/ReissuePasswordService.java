@@ -2,13 +2,14 @@ package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.core.utility.PasswordUtil;
 import com.inglo.giggle.security.application.usecase.ReissuePasswordUseCase;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.redis.TemporaryToken;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
+import com.inglo.giggle.security.persistence.entity.redis.TemporaryTokenEntity;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.event.ChangePasswordBySystemEvent;
-import com.inglo.giggle.security.repository.AccountRepository;
-import com.inglo.giggle.security.repository.TemporaryTokenRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.TemporaryTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,8 +33,8 @@ public class ReissuePasswordService implements ReissuePasswordUseCase {
     @Transactional
     public void execute(String temporaryTokenValue) {
         // temporary Token 검증. Redis에 있는 토큰인지 확인 -> email 추출
-        TemporaryToken temporaryToken = temporaryTokenRepository.findByValueOrElseThrow(temporaryTokenValue);
-        String email = temporaryToken.getEmail();
+        TemporaryTokenEntity temporaryTokenEntity = temporaryTokenRepository.findByValueOrElseThrow(temporaryTokenValue);
+        String email = temporaryTokenEntity.getEmail();
 
         // 계정 조회
         Account account = accountRepository.findBySerialIdAndProviderOrElseThrow(email, ESecurityProvider.DEFAULT);
@@ -46,6 +47,6 @@ public class ReissuePasswordService implements ReissuePasswordUseCase {
         applicationEventPublisher.publishEvent(ChangePasswordBySystemEvent.of(email, temporaryPassword));
 
         // 임시 토큰 삭제
-        temporaryTokenRepository.delete(temporaryToken);
+        temporaryTokenRepository.delete(temporaryTokenEntity);
     }
 }

@@ -1,15 +1,14 @@
 package com.inglo.giggle.resume.application.service;
 
-import com.inglo.giggle.resume.application.dto.request.CreateUserAdditionalLanguageSkillRequestDto;
 import com.inglo.giggle.resume.application.usecase.CreateUserAdditionalLanguageSkillUseCase;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.service.AdditionalLanguageService;
-import com.inglo.giggle.resume.repository.AdditionalLanguageRepository;
-import com.inglo.giggle.resume.repository.ResumeRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.resume.persistence.repository.AdditionalLanguageRepository;
+import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
+import com.inglo.giggle.resume.presentation.dto.request.CreateUserAdditionalLanguageSkillRequestDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,6 @@ import java.util.UUID;
 public class CreateUserAdditionalLanguageSkillService implements CreateUserAdditionalLanguageSkillUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final AdditionalLanguageRepository additionalLanguageRepository;
     private final ResumeRepository resumeRepository;
     private final AdditionalLanguageService additionalLanguageService;
@@ -35,7 +33,7 @@ public class CreateUserAdditionalLanguageSkillService implements CreateUserAddit
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
         // Resume 조회
         Resume resume = resumeRepository.findWithLanguageSkillByAccountIdOrElseThrow(accountId);
@@ -47,11 +45,12 @@ public class CreateUserAdditionalLanguageSkillService implements CreateUserAddit
         additionalLanguageService.checkIsExistAdditionalLanguage(additionalLanguages, requestDto.languageName());
 
         // AdditionalLanguage 생성
-        AdditionalLanguage additionalLanguage = additionalLanguageService.createAdditionalLanguage(
-                requestDto.languageName(),
-                requestDto.level(),
-                resume.getLanguageSkill()
-        );
+        AdditionalLanguage additionalLanguage = AdditionalLanguage.builder()
+                .languageName(requestDto.languageName())
+                .level(requestDto.level())
+                .languageSkillId(resume.getLanguageSkill().getResumeId())
+                .build();
+
         additionalLanguageRepository.save(additionalLanguage);
     }
 

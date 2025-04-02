@@ -2,16 +2,20 @@ package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.posting.application.dto.response.ReadJobPostingDetailResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadJobPostingDetailUseCase;
 import com.inglo.giggle.posting.domain.CompanyImage;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.PostingWorkDayTime;
-import com.inglo.giggle.posting.repository.CompanyImageRepository;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
-import com.inglo.giggle.posting.repository.PostingWorkDayTimeRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.posting.presentation.dto.response.ReadJobPostingDetailResponseDto;
+import com.inglo.giggle.posting.application.usecase.ReadJobPostingDetailUseCase;
+import com.inglo.giggle.posting.persistence.entity.CompanyImageEntity;
+import com.inglo.giggle.posting.persistence.entity.JobPostingEntity;
+import com.inglo.giggle.posting.persistence.entity.PostingWorkDayTimeEntity;
+import com.inglo.giggle.posting.persistence.repository.CompanyImageRepository;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.persistence.repository.PostingWorkDayTimeRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,20 +41,19 @@ public class ReadJobPostingDetailService implements ReadJobPostingDetailUseCase 
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 공고조회
-        JobPosting jobPosting = jobPostingRepository.findWithOwnerById(jobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        JobPosting jobPosting = jobPostingRepository.findWithOwnerByIdOrElseThrow(jobPostingId);
 
-        boolean isMyPost = jobPosting.getOwner().getId().equals(accountId);
+        boolean isMyPost = jobPosting.getOwnerInfo().getId().equals(accountId);
 
         // 회사이미지, 근무시간 조회
-        List<CompanyImage> companyImageList = companyImageRepository.findAllByJobPosting(jobPosting);
-        List<PostingWorkDayTime> postingWorkDayTimeList = postingWorkDayTimeRepository.findAllByJobPosting(jobPosting);
+        List<CompanyImage> companyImageEntityList = companyImageRepository.findAllByJobPosting(jobPosting);
+        List<PostingWorkDayTime> postingWorkDayTimeEntityList = postingWorkDayTimeRepository.findAllByJobPosting(jobPosting);
 
         return ReadJobPostingDetailResponseDto.of(
                 account,
                 jobPosting,
-                companyImageList,
-                postingWorkDayTimeList,
+                companyImageEntityList,
+                postingWorkDayTimeEntityList,
                 isMyPost
         );
 

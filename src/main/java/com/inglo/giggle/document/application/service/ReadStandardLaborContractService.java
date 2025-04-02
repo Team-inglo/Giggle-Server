@@ -2,18 +2,18 @@ package com.inglo.giggle.document.application.service;
 
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.document.application.dto.response.ReadStandardLaborContractDetailResponseDto;
 import com.inglo.giggle.document.application.usecase.ReadStandardLaborContractDetailUseCase;
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.repository.ContractWorkDayTimeRepository;
-import com.inglo.giggle.document.repository.DocumentRepository;
-import com.inglo.giggle.document.repository.StandardLaborContractRepository;
-import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.document.persistence.repository.ContractWorkDayTimeRepository;
+import com.inglo.giggle.document.persistence.repository.DocumentRepository;
+import com.inglo.giggle.document.persistence.repository.StandardLaborContractRepository;
+import com.inglo.giggle.document.presentation.dto.response.ReadStandardLaborContractDetailResponseDto;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,11 +26,10 @@ import java.util.UUID;
 public class ReadStandardLaborContractService implements ReadStandardLaborContractDetailUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final DocumentRepository documentRepository;
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final ContractWorkDayTimeRepository contractWorkDayTimeRepository;
+    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
 
     @Override
     public ReadStandardLaborContractDetailResponseDto execute(UUID accountId, Long documentId) {
@@ -39,7 +38,10 @@ public class ReadStandardLaborContractService implements ReadStandardLaborContra
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // Document 정보 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
+        Document document = documentRepository.findByIdOrElseThrow(documentId);
+
+        // UserOwnerJobPosting 정보 조회
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
 
         // 계정 타입에 따라 유효성 체크
         String accountDiscriminatorValue = account.getClass().getAnnotation(DiscriminatorValue.class).value();
@@ -48,20 +50,20 @@ public class ReadStandardLaborContractService implements ReadStandardLaborContra
             case "USER":
 
                 // 계정 타입 유효성 체크
-                accountService.checkUserValidation(account);
+                account.checkUserValidation();
 
                 // UserOwnerJobPosting 유저 유효성 체크
-                userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+                userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
                 break;
 
             case "OWNER":
 
                 // 계정 타입 유효성 체크
-                accountService.checkOwnerValidation(account);
+                account.checkOwnerValidation();
 
                 // UserOwnerJobPosting 고용주 유효성 체크
-                userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
+                userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
 
                 break;
 

@@ -1,7 +1,7 @@
 package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.security.application.usecase.DeleteAccountUseCase;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.inglo.giggle.address.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.address.persistence.entity.AddressEntity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -40,8 +40,8 @@ public record AddressRequestDto(
         @NotNull(message = "경도를 입력해주세요.")
         Double longitude
 ) {
-    public Address toEntity() {
-        return Address.builder()
+    public AddressEntity toEntity() {
+        return AddressEntity.builder()
                 .addressName(addressName)
                 .region1DepthName(region1DepthName)
                 .region2DepthName(region2DepthName)

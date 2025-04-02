@@ -1,9 +1,11 @@
 package com.inglo.giggle.security.config;
 
 import com.inglo.giggle.account.domain.Admin;
-import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.account.persistence.entity.AdminEntity;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,9 +32,9 @@ public class AdminConfig {
     public ApplicationRunner createSuperUser() {
         return args -> {
 
-            Account account = accountRepository.findBySerialIdOrElseNull(superUserSerialId);
+            Account accountEntity = accountRepository.findBySerialIdOrElseNull(superUserSerialId);
 
-            if (account != null) {
+            if (accountEntity != null) {
                 log.info("관리자가 이미 생성되어 있습니다.");
                 return;
             }
@@ -41,10 +43,6 @@ public class AdminConfig {
                     .serialId(superUserSerialId)
                     .password(passwordEncoder.encode(superUserPassword))
                     .email("")
-                    .profileImgUrl("default.jpg")
-                    .phoneNumber("010-0000-0000")
-                    .marketingAllowed(false)
-                    .notificationAllowed(false)
                     .build();
             accountRepository.save(superUser);
             log.info("관리자가 생성되었습니다.");

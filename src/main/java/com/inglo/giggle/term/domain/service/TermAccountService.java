@@ -2,10 +2,12 @@ package com.inglo.giggle.term.domain.service;
 
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.Account;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.TermAccount;
+import com.inglo.giggle.term.persistence.entity.TermAccountEntity;
+import com.inglo.giggle.term.persistence.entity.TermEntity;
 import com.inglo.giggle.term.domain.type.ETermType;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +43,8 @@ public class TermAccountService {
         return terms.stream()
                 .map(term -> TermAccount.builder()
                         .isAccepted(true)
-                        .account(account)
-                        .term(term)
+                        .accountId(account.getId())
+                        .termId(term.getId())
                         .build())
                 .toList();
     }

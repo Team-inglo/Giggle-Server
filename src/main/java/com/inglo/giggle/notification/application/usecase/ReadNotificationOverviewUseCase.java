@@ -1,7 +1,7 @@
 package com.inglo.giggle.notification.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.notification.application.dto.ReadNotificationOverviewResponseDto;
+import com.inglo.giggle.notification.presentation.dto.ReadNotificationOverviewResponseDto;
 
 import java.util.UUID;
 

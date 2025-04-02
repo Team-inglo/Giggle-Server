@@ -1,12 +1,12 @@
 package com.inglo.giggle.account.application.service;
 
-import com.inglo.giggle.account.application.dto.response.ReadAdminAccountWithdrawalOverviewResponseDto;
+import com.inglo.giggle.account.presentation.dto.response.ReadAdminAccountWithdrawalOverviewResponseDto;
 import com.inglo.giggle.account.application.usecase.ReadAdminAccountWithdrawalOverviewUseCase;
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.CountInfoDto;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +27,19 @@ public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccou
         LocalDate priorStartDate = startDate.minusDays(duration);
         LocalDate priorEndDate = endDate.minusDays(duration);
 
-        List<Account> accumulatedAccounts = accountRepository.findAllBeforeEndDateWithDeleted(endDate.plusDays(1).atStartOfDay());
+        List<Account> accumulatedAccount = accountRepository.findAllBeforeEndDateWithDeleted(endDate.plusDays(1).atStartOfDay());
 
-        List<User> deletedAccumulatedUsers = accumulatedAccounts.stream()
+        List<User> deletedAccumulatedUser = accumulatedAccount.stream()
                 .filter(account -> account instanceof User && account.getDeletedAt() != null)
                 .map(account -> (User) account)
                 .toList();
 
-        List<Owner> deletedAccumulatedOwners = accumulatedAccounts.stream()
+        List<Owner> deletedAccumulatedOwners = accumulatedAccount.stream()
                 .filter(account -> account instanceof Owner && account.getDeletedAt() != null)
                 .map(account -> (Owner) account)
                 .toList();
 
-        List<User> newUsers = deletedAccumulatedUsers.stream()
+        List<User> newUsers = deletedAccumulatedUser.stream()
                 .filter(user -> user.getCreatedAt().isAfter(startDate.atStartOfDay()))
                 .toList();
 
@@ -47,7 +47,7 @@ public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccou
                 .filter(owner -> owner.getCreatedAt().isAfter(startDate.atStartOfDay()))
                 .toList();
 
-        List<User> priorAccumulatedUsers = deletedAccumulatedUsers.stream()
+        List<User> priorAccumulatedUsers = deletedAccumulatedUser.stream()
                 .filter(user -> user.getCreatedAt().isBefore(startDate.atStartOfDay()))
                 .toList();
 
@@ -55,7 +55,7 @@ public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccou
                 .filter(owner -> owner.getCreatedAt().isBefore(startDate.atStartOfDay()))
                 .toList();
 
-        List<User> priorUsers = deletedAccumulatedUsers.stream()
+        List<User> priorUsers = deletedAccumulatedUser.stream()
                 .filter(user -> user.getCreatedAt().isAfter(priorStartDate.atStartOfDay()) && user.getCreatedAt().isBefore(priorEndDate.atStartOfDay()))
                 .toList();
 
@@ -64,7 +64,7 @@ public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccou
                 .toList();
 
         CountInfoDto userSignUpInfo = CountInfoDto.of(newUsers.size(), priorUsers.size(), calculatePercentage(newUsers.size(), priorUsers.size()));
-        CountInfoDto accumulatedUserSignUpInfo = CountInfoDto.of(deletedAccumulatedUsers.size(), priorAccumulatedUsers.size(), calculatePercentage(deletedAccumulatedUsers.size(), priorAccumulatedUsers.size()));
+        CountInfoDto accumulatedUserSignUpInfo = CountInfoDto.of(deletedAccumulatedUser.size(), priorAccumulatedUsers.size(), calculatePercentage(deletedAccumulatedUser.size(), priorAccumulatedUsers.size()));
         CountInfoDto ownerSignUpInfo = CountInfoDto.of(newOwners.size(), priorOwners.size(), calculatePercentage(newOwners.size(), priorOwners.size()));
         CountInfoDto accumulatedOwnerSignUpInfo = CountInfoDto.of(deletedAccumulatedOwners.size(), priorAccumulatedOwners.size(), calculatePercentage(deletedAccumulatedOwners.size(), priorAccumulatedOwners.size()));
 

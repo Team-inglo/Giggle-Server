@@ -1,7 +1,7 @@
 package com.inglo.giggle.document.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.document.application.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
+import com.inglo.giggle.document.presentation.dto.request.UpdateOwnerPartTimeEmploymentPermitRequestDto;
 
 import java.util.UUID;
 

@@ -1,8 +1,8 @@
 package com.inglo.giggle.security.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.security.application.dto.request.SignUpDefaultTemporaryRequestDto;
-import com.inglo.giggle.security.application.dto.response.IssueAuthenticationCodeResponseDto;
+import com.inglo.giggle.security.presentation.dto.request.SignUpDefaultTemporaryRequestDto;
+import com.inglo.giggle.security.presentation.dto.response.IssueAuthenticationCodeResponseDto;
 
 @UseCase
 public interface SignUpDefaultTemporaryUseCase {

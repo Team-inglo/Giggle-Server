@@ -7,20 +7,18 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.domain.service.NotificationService;
-import com.inglo.giggle.notification.repository.NotificationRepository;
-import com.inglo.giggle.posting.application.dto.response.CreateUserJobPostingResponseDto;
+import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
 import com.inglo.giggle.posting.application.usecase.CreateUserJobPostingUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
-import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.mysql.AccountDevice;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountDeviceRepository;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.posting.domain.type.EApplicationStep;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.presentation.dto.response.CreateUserJobPostingResponseDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.domain.AccountDevice;
+import com.inglo.giggle.security.persistence.repository.AccountDeviceRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -35,17 +33,12 @@ import java.util.UUID;
 public class CreateUserJobPostingService implements CreateUserJobPostingUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
-
     private final JobPostingRepository jobPostingRepository;
     private final AccountDeviceRepository accountDeviceRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
-    private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -55,13 +48,9 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
-        // 유저, 공고 조회
-        User user = (User) account;
-
-        JobPosting jobPosting = jobPostingRepository.findWithOwnerById(jobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        JobPosting jobPosting = jobPostingRepository.findWithOwnerByIdOrElseThrow(jobPostingId);
 
         // 지원 기간이 지난 공고인지 확인
         if((jobPosting.getRecruitmentDeadLine() != null) && jobPosting.getRecruitmentDeadLine().isBefore(LocalDate.now())) {
@@ -69,26 +58,27 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
         }
 
         // 유저가 이미 지원한 공고인지 확인
-        if(userOwnerJobPostingRepository.existsByUserAndJobPosting(user, jobPosting)){
+        if(userOwnerJobPostingRepository.existsByUserAndJobPosting((User) account, jobPosting)){
             throw new CommonException(ErrorCode.ALREADY_APPLIED_JOB_POSTING);
         }
 
         // 유저-공고 매핑 생성
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingService.createUserOwnerJobPosting(
-                user,
-                jobPosting,
-                jobPosting.getOwner()
-        );
+        UserOwnerJobPosting userOwnerJobPosting = UserOwnerJobPosting.builder()
+                .step(EApplicationStep.RESUME_UNDER_REVIEW)
+                .lastStepUpdated(LocalDate.now())
+                .userId(accountId)
+                .jobPostingId(jobPostingId)
+                .build();
 
         // 유저-공고 매핑 저장
-        UserOwnerJobPosting savedUserOwnerJobPosting = userOwnerJobPostingRepository.saveAndReturn(userOwnerJobPosting);
+        UserOwnerJobPosting savedUserOwnerJobPosting = userOwnerJobPostingRepository.save(userOwnerJobPosting);
 
         // Notification 생성 및 저장
-        Notification notification = notificationService.createNotification(
-                EKafkaStatus.OWNER_NEW_APPLICANT.getMessage(),
-                userOwnerJobPosting,
-                ENotificationType.OWNER
-        );
+        Notification notification = Notification.builder()
+                .message(EKafkaStatus.OWNER_NEW_APPLICANT.getMessage())
+                .isRead(false)
+                .notificationType(ENotificationType.OWNER)
+                .build();
         notificationRepository.save(notification);
 
         // NotificationEvent 발행
@@ -106,14 +96,14 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
     private void handlePushAlarm(Account account, UserOwnerJobPosting userOwnerJobPosting, Notification notification) {
 
         // Owner의 AccountDevice 목록 조회
-        UUID ownerId = userOwnerJobPosting.getOwner().getId();
+        UUID ownerId = userOwnerJobPosting.getOwnerInfo().getId();
         List<AccountDevice> accountDevices = accountDeviceRepository.findByAccountId(ownerId);
 
         // NotificationEvent 생성 및 발행
         if(account.getNotificationAllowed() && !accountDevices.isEmpty()) {
             applicationEventPublisher.publishEvent(
                     NotificationEventDto.of(
-                            userOwnerJobPosting.getJobPosting().getTitle(),
+                            userOwnerJobPosting.getJobPostingInfo().getTitle(),
                             notification.getMessage(),
                             accountDevices
                     )

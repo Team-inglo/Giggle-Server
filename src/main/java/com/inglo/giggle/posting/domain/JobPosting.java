@@ -2,7 +2,9 @@ package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.core.dto.BaseDomain;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;
@@ -10,151 +12,67 @@ import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "job_postings")
-@SQLDelete(sql = "UPDATE job_postings SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
-public class JobPosting extends BaseEntity {
-
-    /* -------------------------------------------- */
-    /* Default Column ----------------------------- */
-    /* -------------------------------------------- */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class JobPosting extends BaseDomain {
     private Long id;
-
-    /* -------------------------------------------- */
-    /* Information Column ------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "title", length = 100, nullable = false)
     private String title;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "job_category", nullable = false)
     private EJobCategory jobCategory;
-
-    @Column(name = "hourly_rate", nullable = false)
     private Integer hourlyRate;
-
-    @Column(name = "recruitment_dead_line")
     private LocalDate recruitmentDeadLine;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "work_period", nullable = false)
     private EWorkPeriod workPeriod;
-
-    @Column(name = "recruitment_number")
     private Integer recruitmentNumber;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
     private EGender gender;
-
-    @Column(name = "age_restriction")
     private Integer ageRestriction;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "education_level", nullable = false)
     private EEducationLevel educationLevel;
-
-    @ElementCollection(targetClass = EVisa.class, fetch = FetchType.LAZY)
-    @CollectionTable(name = "job_posting_visas", joinColumns = @JoinColumn(name = "job_posting_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "visa")
-    private Set<EVisa> visa = new HashSet<>();
-
-    @Column(name = "recruiter_name", length = 10, nullable = false)
+    private Set<EVisa> visa;
     private String recruiterName;
-
-    @Column(name = "recruiter_email", length = 320, nullable = false)
     private String recruiterEmail;
-
-    @Column(name = "recruiter_phone_number", length = 20, nullable = false)
     private String recruiterPhoneNumber;
-
-    @Lob
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
-
-    @Column(name = "preferred_conditions", length = 50)
     private String preferredConditions;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "employment_type")
     private EEmploymentType employmentType;
-
-    /* -------------------------------------------- */
-    /* Embedded Column ---------------------------- */
-    /* -------------------------------------------- */
-    @Embedded
     private Address address;
 
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owners_id", nullable = false)
-    private Owner owner;
+    private UUID ownerId;
 
     /* -------------------------------------------- */
     /* One To Many Mapping ------------------------ */
     /* -------------------------------------------- */
-    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostingWorkDayTime> workDayTimes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CompanyImage> companyImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookMark> bookMarks = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserOwnerJobPosting> userOwnerJobPostings = new ArrayList<>();
+    private List<PostingWorkDayTime> workDayTimes;
+    private List<CompanyImage> companyImages;
+    private List<BookMark> bookMarks;
+    private List<UserOwnerJobPosting> userOwnerJobPostings;
 
     /* -------------------------------------------- */
-    /* Methods ------------------------------------ */
+    /* Nested class ------------------------------- */
     /* -------------------------------------------- */
+    private OwnerInfo ownerInfo;
+
     @Builder
-    public JobPosting(String title, EJobCategory jobCategory, Integer hourlyRate, LocalDate recruitmentDeadLine,
+    public JobPosting(Long id, String title, EJobCategory jobCategory, Integer hourlyRate, LocalDate recruitmentDeadLine,
                       EWorkPeriod workPeriod, Integer recruitmentNumber, EGender gender, Integer ageRestriction,
                       EEducationLevel educationLevel, Set<EVisa> visa, String recruiterName, String recruiterEmail,
                       String recruiterPhoneNumber, String description, String preferredConditions,
-                      EEmploymentType employmentType, Owner owner, Address address) {
+                      EEmploymentType employmentType, Address address,
+                      UUID ownerId,
+                      List<PostingWorkDayTime> workDayTimes, List<CompanyImage> companyImages, List<BookMark> bookMarks, List<UserOwnerJobPosting> userOwnerJobPostings,
+                      LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, OwnerInfo ownerInfo) {
+        this.id = id;
         this.title = title;
         this.jobCategory = jobCategory;
         this.hourlyRate = hourlyRate;
@@ -171,46 +89,34 @@ public class JobPosting extends BaseEntity {
         this.description = description;
         this.preferredConditions = preferredConditions;
         this.employmentType = employmentType;
-        this.owner = owner;
         this.address = address;
+        this.ownerId = ownerId;
+        this.workDayTimes = workDayTimes;
+        this.companyImages = companyImages;
+        this.userOwnerJobPostings = userOwnerJobPostings;
+        this.bookMarks = bookMarks;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+        this.ownerInfo = ownerInfo;
     }
 
-    public void updateJobPosting(
-            String title,
-            EJobCategory jobCategory,
-            Integer hourlyRate,
-            LocalDate recruitmentDeadLine,
-            EWorkPeriod workPeriod,
-            Integer recruitmentNumber,
-            EGender gender,
-            Integer ageRestriction,
-            EEducationLevel educationLevel,
-            Set<EVisa> visa,
-            String recruiterName,
-            String recruiterEmail,
-            String recruiterPhoneNumber,
-            String description,
-            String preferredConditions,
-            EEmploymentType employmentType,
-            Address address
-    ){
-        this.title = title;
-        this.jobCategory = jobCategory;
-        this.hourlyRate = hourlyRate;
-        this.recruitmentDeadLine = recruitmentDeadLine;
-        this.workPeriod = workPeriod;
-        this.recruitmentNumber = recruitmentNumber;
-        this.gender = gender;
-        this.ageRestriction = ageRestriction;
-        this.educationLevel = educationLevel;
-        this.visa = visa;
-        this.recruiterName = recruiterName;
-        this.recruiterEmail = recruiterEmail;
-        this.recruiterPhoneNumber = recruiterPhoneNumber;
-        this.description = description;
-        this.preferredConditions = preferredConditions;
-        this.employmentType = employmentType;
-        this.address = address;
+    @Getter
+    public static class OwnerInfo {
+        private UUID id;
+        private String profileImgUrl;
+        private String companyName;
+        private String name;
+        private Address address;
+
+        @Builder
+        public OwnerInfo(UUID id, String profileImgUrl, String companyName, String name, Address address) {
+            this.id = id;
+            this.profileImgUrl = profileImgUrl;
+            this.companyName = companyName;
+            this.name = name;
+            this.address = address;
+        }
     }
 
     public String getWorkDaysPerWeekToString() {
@@ -238,40 +144,75 @@ public class JobPosting extends BaseEntity {
         };
     }
 
+    public String getWorkDaysPerWeekDescription() {
+        if (workDayTimes.stream().anyMatch(d -> d.getDayOfWeek() == EDayOfWeek.NEGOTIABLE)) return "협의 가능";
+        return workDayTimes.stream().map(PostingWorkDayTime::getDayOfWeek).distinct().count() + " days per week";
+    }
+
     public Map<String, Integer> calculateWorkHours() {
-        int weekdayHours = 0;
-        int weekendHours = 0;
-
-        for (PostingWorkDayTime workDayTime : workDayTimes) {
-            if (workDayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE || workDayTime.getWorkStartTime() == null || workDayTime.getWorkEndTime() == null) {
-                continue;
-            }
-
-            Duration workDuration = Duration.between(workDayTime.getWorkStartTime(), workDayTime.getWorkEndTime());
-            int hours = (int) workDuration.toHours();
-
-            if (isWeekday(workDayTime.getDayOfWeek())) {
-                weekdayHours += hours;
-            } else if (isWeekend(workDayTime.getDayOfWeek())) {
-                weekendHours += hours;
-            }
+        int weekday = 0, weekend = 0;
+        for (PostingWorkDayTime time : workDayTimes) {
+            if (time.getWorkStartTime() == null || time.getWorkEndTime() == null) continue;
+            int hours = (int) Duration.between(time.getWorkStartTime(), time.getWorkEndTime()).toHours();
+            if (isWeekday(time.getDayOfWeek())) weekday += hours;
+            else if (isWeekend(time.getDayOfWeek())) weekend += hours;
         }
-
-        Map<String, Integer> workHoursMap = new HashMap<>();
-        workHoursMap.put("weekdayWorkHours", weekdayHours);
-        workHoursMap.put("weekendWorkHours", weekendHours);
-
-        return workHoursMap;
+        Map<String, Integer> result = new HashMap<>();
+        result.put("weekdayWorkHours", weekday);
+        result.put("weekendWorkHours", weekend);
+        return result;
     }
 
-    private boolean isWeekday(EDayOfWeek dayOfWeek) {
-        return dayOfWeek == EDayOfWeek.MONDAY || dayOfWeek == EDayOfWeek.TUESDAY ||
-                dayOfWeek == EDayOfWeek.WEDNESDAY || dayOfWeek == EDayOfWeek.THURSDAY ||
-                dayOfWeek == EDayOfWeek.FRIDAY;
+    private boolean isWeekday(EDayOfWeek d) {
+        return Set.of(EDayOfWeek.MONDAY, EDayOfWeek.TUESDAY, EDayOfWeek.WEDNESDAY, EDayOfWeek.THURSDAY, EDayOfWeek.FRIDAY).contains(d);
     }
 
-    private boolean isWeekend(EDayOfWeek dayOfWeek) {
-        return dayOfWeek == EDayOfWeek.SATURDAY || dayOfWeek == EDayOfWeek.SUNDAY;
+    private boolean isWeekend(EDayOfWeek d) {
+        return d == EDayOfWeek.SATURDAY || d == EDayOfWeek.SUNDAY;
+    }
+
+    public void validateUpdateJobPosting(Owner owner) {
+        if (!ownerInfo.getId().equals(owner.getId())) {
+            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+        }
+    }
+
+    public void updateSelf(
+            String title,
+            EJobCategory jobCategory,
+            Integer hourlyRate,
+            LocalDate recruitmentDeadLine,
+            EWorkPeriod workPeriod,
+            Integer recruitmentNumber,
+            EGender gender,
+            Integer ageRestriction,
+            EEducationLevel educationLevel,
+            Set<EVisa> visa,
+            String recruiterName,
+            String recruiterEmail,
+            String recruiterPhoneNumber,
+            String description,
+            String preferredConditions,
+            EEmploymentType employmentType,
+            Address address
+    ) {
+        this.title = title;
+        this.jobCategory = jobCategory;
+        this.hourlyRate = hourlyRate;
+        this.recruitmentDeadLine = recruitmentDeadLine;
+        this.workPeriod = workPeriod;
+        this.recruitmentNumber = recruitmentNumber;
+        this.gender = gender;
+        this.ageRestriction = ageRestriction;
+        this.educationLevel = educationLevel;
+        this.visa = visa;
+        this.recruiterName = recruiterName;
+        this.recruiterEmail = recruiterEmail;
+        this.recruiterPhoneNumber = recruiterPhoneNumber;
+        this.description = description;
+        this.preferredConditions = preferredConditions;
+        this.employmentType = employmentType;
+        this.address = address;
     }
 
     public void updatePostWorkDayTimes(List<PostingWorkDayTime> workDayTimes) {

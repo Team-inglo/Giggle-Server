@@ -1,118 +1,124 @@
 package com.inglo.giggle.resume.domain;
 
-import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.dto.BaseDomain;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
-import com.inglo.giggle.school.domain.School;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
+import com.inglo.giggle.core.type.EVisa;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "educations")
-@SQLDelete(sql = "UPDATE educations SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
-public class Education extends BaseEntity {
-
-    /* -------------------------------------------- */
-    /* Default Column ----------------------------- */
-    /* -------------------------------------------- */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Education extends BaseDomain {
     private Long id;
-
-    /* -------------------------------------------- */
-    /* Information Column ------------------------- */
-    /* -------------------------------------------- */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "education_level", nullable = false) // BACHELOR(4년제), ASSOCIATE(2년제), HIGHSCHOOL(고졸)
     private EEducationLevel educationLevel;
-
-    @Column(name = "major", length = 30, nullable = false)
     private String major;
-
-    @Column(name = "gpa", nullable = false)
     private Double gpa;
-
-    @Column(name = "enrollment_date", nullable = false)
     private LocalDate enrollmentDate;
-
-    @Column(name = "graduation_date", nullable = false)
     private LocalDate graduationDate;
-
-    @Column(name = "grade", nullable = false)
     private Integer grade;
-
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resume_id", nullable = false)
-    private Resume resume;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", nullable = false)
-    private School school;
+    private UUID resumeId;
+    private Long schoolId;
 
     /* -------------------------------------------- */
-    /* Methods ------------------------------------ */
+    /* Nested Class ------------------------------- */
     /* -------------------------------------------- */
+    private SchoolInfo schoolInfo;
+
     @Builder
-    public Education(EEducationLevel educationLevel, String major, Double gpa, LocalDate enrollmentDate,
-                     LocalDate graduationDate, Integer grade, School school, Resume resume) {
+    public Education(
+            Long id,
+            EEducationLevel educationLevel,
+            String major,
+            Double gpa,
+            LocalDate enrollmentDate,
+            LocalDate graduationDate,
+            Integer grade,
+            UUID resumeId,
+            Long schoolId,
+            SchoolInfo schoolInfo
+    ) {
+        this.id = id;
         this.educationLevel = educationLevel;
         this.major = major;
         this.gpa = gpa;
         this.enrollmentDate = enrollmentDate;
         this.graduationDate = graduationDate;
         this.grade = grade;
-        this.school = school;
-        this.resume = resume;
+        this.resumeId = resumeId;
+        this.schoolId = schoolId;
+        this.schoolInfo = schoolInfo;
+    }
+    @Getter
+    public static class SchoolInfo {
+        private Long id;
+        private String schoolName;
+        private Boolean isMetropolitan;
+        private String instituteName;
+        private String coordinatorName;
+        private String coordinatorPhoneNumber;
+        private Address address;
+
+        @Builder
+        public SchoolInfo(Long id, String schoolName, Boolean isMetropolitan, String instituteName, String coordinatorName, String coordinatorPhoneNumber, Address address) {
+            this.id = id;
+            this.schoolName = schoolName;
+            this.isMetropolitan = isMetropolitan;
+            this.instituteName = instituteName;
+            this.coordinatorName = coordinatorName;
+            this.coordinatorPhoneNumber = coordinatorPhoneNumber;
+            this.address = address;
+        }
     }
 
-    public void updateEducationLevel(EEducationLevel educationLevel) {
+    public static EEducationLevel getEducationLevelByVisa(EVisa visa) {
+        switch (visa) {
+            case D_2_1 -> {
+                return EEducationLevel.ASSOCIATE;
+            }
+            case D_2_2 -> {
+                return EEducationLevel.BACHELOR;
+            }
+            case D_2_3 -> {
+                return EEducationLevel.MASTER;
+            }
+            case D_2_4 -> {
+                return EEducationLevel.DOCTOR;
+            }
+            default -> {
+                return EEducationLevel.HIGHSCHOOL;
+            }
+        }
+    }
+
+    public void checkValidation(UUID accountId) {
+        if (!resumeId.equals(accountId)) {
+            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+        }
+    }
+
+    public void updateSelf(
+            EEducationLevel educationLevel,
+            Long schoolId,
+            String major,
+            Double gpa,
+            LocalDate enrollmentDate,
+            LocalDate graduationDate,
+            Integer grade
+    ) {
         this.educationLevel = educationLevel;
-    }
-
-    public void updateMajor(String major) {
+        this.schoolId = schoolId;
         this.major = major;
-    }
-
-    public void updateGpa(Double gpa) {
         this.gpa = gpa;
-    }
-
-    public void updateEnrollmentDate(LocalDate enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
-    }
-
-    public void updateGraduationDate(LocalDate graduationDate) {
         this.graduationDate = graduationDate;
-    }
-
-    public void updateGrade(Integer grade) {
         this.grade = grade;
     }
-
-    public void updateSchool(School school) {
-        this.school = school;
-    }
-
 }

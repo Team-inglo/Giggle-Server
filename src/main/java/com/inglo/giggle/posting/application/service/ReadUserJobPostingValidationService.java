@@ -4,24 +4,21 @@ import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.dto.RouteResponseDto;
 import com.inglo.giggle.core.utility.OSRMUtil;
 import com.inglo.giggle.core.utility.RestClientUtil;
-import com.inglo.giggle.posting.application.dto.response.ReadUserJobPostingValidationResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadUserJobPostingValidationUseCase;
 import com.inglo.giggle.posting.domain.JobPostAggregate;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.JobPostAggregateService;
-import com.inglo.giggle.posting.domain.service.JobPostingService;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
-import com.inglo.giggle.resume.domain.Education;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.presentation.dto.response.ReadUserJobPostingValidationResponseDto;
 import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.resume.persistence.entity.EducationEntity;
+import com.inglo.giggle.resume.persistence.entity.ResumeEntity;
 import com.inglo.giggle.resume.domain.ResumeAggregate;
-import com.inglo.giggle.resume.domain.service.EducationService;
 import com.inglo.giggle.resume.domain.service.ResumeAggregateService;
-import com.inglo.giggle.resume.repository.EducationRepository;
-import com.inglo.giggle.resume.repository.ResumeRepository;
+import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.SchoolRepository;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.school.persistence.repository.SchoolRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -37,16 +34,10 @@ import java.util.UUID;
 @Slf4j
 public class ReadUserJobPostingValidationService implements ReadUserJobPostingValidationUseCase {
 
-    private final AccountRepository accountRepository;
-    private final AccountService accountService;
-
     private final JobPostAggregateService jobPostAggregateService;
     private final ResumeAggregateService resumeAggregateService;
 
-    private final JobPostingService jobPostingService;
-    private final EducationService educationService;
-
-    private final EducationRepository educationRepository;
+    private final AccountRepository accountRepository;
     private final SchoolRepository schoolRepository;
     private final JobPostingRepository jobPostingRepository;
     private final ResumeRepository resumeRepository;
@@ -64,19 +55,16 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
         return ReadUserJobPostingValidationResponseDto.of(true);
 
 //        // Account 조회
-//        Account account = accountRepository.findById(accountId)
-//                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+//        Account account = accountRepository.findByIdOrElseThrow(accountId);
 //
 //        // 계정 타입 유효성 검사
-//        accountService.checkUserValidation(account);
+//        account.checkUserValidation();
 //
 //        // 공고 조회
-//        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-//                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+//        JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
 //
 //        // 이력서 정보 조회
-//        Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountId(accountId)
-//                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+//        Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountIdOrElseThrow(accountId);
 //
 //        // 유저의 비자에 맵핑되는 educationLevel 조회
 //        EEducationLevel educationLevel = educationService.getEducationLevelByVisa(resume.getUser().getVisa());
@@ -99,51 +87,56 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
 
     }
 
+
     /* -------------------------------------------- */
     /* Private Methods ---------------------------- */
     /* -------------------------------------------- */
 
     // 유저의 학력, 이력 정보를 통해 공고에 적합한지 검증하는 메서드
-    private Boolean validateUserIsApplicableFromEducationAndResume(Resume resume, Education education, JobPosting jobPosting) {
-        // ResumeAggregate 생성 및 반환
-        ResumeAggregate resumeAggregate = resumeAggregateService.createResumeAggregate(resume.getUser(), resume, education);
-
-        Map<String, Integer> userWorkDayTimeMap = resumeAggregateService.calculateWorkHours(resumeAggregate);
-        Map<String, Integer> jobPostingWorkDayTimeMap = jobPostingService.calculateWorkHours(jobPosting);
-
-        JobPostAggregate jobPostAggregate = jobPostAggregateService.createJobPostAggregate(resume, jobPosting);
-
-        return jobPostAggregateService.isUserApplicable(jobPostAggregate, userWorkDayTimeMap, jobPostingWorkDayTimeMap);
-    }
-
-    // 유저의 학교의 거리로 부터 공고에 적합한지 검증하는 메서드
-    private Boolean validateUserIsApplicableFromSchoolDistance(Resume resume, JobPosting jobPosting) throws Exception {
-        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDescOptional(resume.getUser().getId());
-
-        if(school.isEmpty()) {
-            log.info("School is empty");
-            return false;
-        }
-
-        School graduationSchool = school.get();
-        Address schoolAddress = graduationSchool.getAddress();
-        Address jobPostingAddress = jobPosting.getAddress();
-
-        log.info("before OSRM Request");
-        JSONObject jsonObject = restClientUtil.sendGetMethod(osrmUtil.createOSRMRequestUrl(
-                schoolAddress.getLatitude(), schoolAddress.getLongitude(),
-                jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()),
-                null
-        );
-        log.info("OSRM Response: {}", jsonObject.toString());
-
-        RouteResponseDto routeResponseDto = osrmUtil.mapToRouteResponseDto(jsonObject);
-        log.info("RouteResponseDto: {}", routeResponseDto.toString());
-
-        if(graduationSchool.getIsMetropolitan()){
-            return routeResponseDto.routes().get(0).duration() < Double.parseDouble(METROPOLITAN_DURATION);
-        }else{
-            return routeResponseDto.routes().get(0).duration() < Double.parseDouble(NON_METROPOLITAN_DURATION);
-        }
-    }
+//    private Boolean validateUserIsApplicableFromEducationAndResume(Resume resume, EducationEntity educationEntity, JobPosting jobPosting) {
+//        // ResumeAggregate 생성 및 반환
+//        ResumeAggregate resumeAggregate = ResumeAggregate.builder()
+//                .user(resume)
+//                .resume(resumeEntity)
+//                .education(educationEntity)
+//                .build();
+//
+//        Map<String, Integer> userWorkDayTimeMap = resumeAggregateService.calculateWorkHours(resumeAggregate);
+//        Map<String, Integer> jobPostingWorkDayTimeMap = jobPosting.calculateWorkHours();
+//
+//        JobPostAggregate jobPostAggregate = jobPostAggregateService.createJobPostAggregate(resumeEntity, jobPosting);
+//
+//        return jobPostAggregateService.isUserApplicable(jobPostAggregate, userWorkDayTimeMap, jobPostingWorkDayTimeMap);
+//    }
+//
+//    // 유저의 학교의 거리로 부터 공고에 적합한지 검증하는 메서드
+//    private Boolean validateUserIsApplicableFromSchoolDistance(ResumeEntity resumeEntity, JobPosting jobPosting) throws Exception {
+//        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDescOptional(resumeEntity.getUserEntity().getId());
+//
+//        if(school.isEmpty()) {
+//            log.info("School is empty");
+//            return false;
+//        }
+//
+//        School graduationSchool = school.get();
+//        Address schoolAddress = graduationSchool.getAddress();
+//        Address jobPostingAddress = jobPosting.getAddress();
+//
+//        log.info("before OSRM Request");
+//        JSONObject jsonObject = restClientUtil.sendGetMethod(osrmUtil.createOSRMRequestUrl(
+//                schoolAddress.getLatitude(), schoolAddress.getLongitude(),
+//                jobPostingAddress.getLatitude(), jobPostingAddress.getLongitude()),
+//                null
+//        );
+//        log.info("OSRM Response: {}", jsonObject.toString());
+//
+//        RouteResponseDto routeResponseDto = osrmUtil.mapToRouteResponseDto(jsonObject);
+//        log.info("RouteResponseDto: {}", routeResponseDto.toString());
+//
+//        if(graduationSchool.getIsMetropolitan()){
+//            return routeResponseDto.routes().get(0).duration() < Double.parseDouble(METROPOLITAN_DURATION);
+//        }else{
+//            return routeResponseDto.routes().get(0).duration() < Double.parseDouble(NON_METROPOLITAN_DURATION);
+//        }
+//    }
 }

@@ -1,25 +1,19 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.repository.OwnerRepository;
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.core.utility.S3Util;
-import com.inglo.giggle.posting.application.dto.request.UpdateOwnerJobPostingRequestDto;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerJobPostingUseCase;
+import com.inglo.giggle.posting.domain.CompanyImage;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.PostingWorkDayTime;
-import com.inglo.giggle.posting.domain.service.CompanyImageService;
-import com.inglo.giggle.posting.domain.service.JobPostingService;
-import com.inglo.giggle.posting.domain.service.PostWorkDayTimeService;
-import com.inglo.giggle.posting.repository.CompanyImageRepository;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
-import com.inglo.giggle.posting.repository.PostingWorkDayTimeRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.posting.persistence.repository.CompanyImageRepository;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.presentation.dto.request.UpdateOwnerJobPostingRequestDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,19 +30,10 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
 
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
-
-    private final OwnerRepository ownerRepository;
     private final JobPostingRepository jobPostingRepository;
-    private final PostingWorkDayTimeRepository postingWorkDayTimeRepository;
     private final CompanyImageRepository companyImageRepository;
 
-    private final JobPostingService jobPostingService;
-    private final PostWorkDayTimeService postWorkDayTimeService;
-    private final CompanyImageService companyImageService;
-
     private final S3Util s3Util;
-    private final AddressService addressService;
 
     @Override
     @Transactional
@@ -58,32 +43,28 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
-        accountService.checkOwnerValidation(account);
-
-        // 고용주 조회
-        Owner owner = (Owner) account;
+        account.checkOwnerValidation();
 
         // 공고 조회
         JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
 
         // 공고 수정 유효성 검사
-        jobPostingService.validateUpdateJobPosting(jobPosting, owner);
+        jobPosting.validateUpdateJobPosting((Owner) account);
 
-        // 주소 생성
-        Address address = addressService.createAddress(
-                requestDto.address().addressName(),
-                requestDto.address().region1DepthName(),
-                requestDto.address().region2DepthName(),
-                requestDto.address().region3DepthName(),
-                requestDto.address().region4DepthName(),
-                requestDto.address().addressDetail(),
-                requestDto.address().latitude(),
-                requestDto.address().longitude()
-        );
+        // Address 생성
+        Address address = Address.builder()
+                .addressName(requestDto.address().addressName())
+                .addressDetail(requestDto.address().addressDetail())
+                .region1DepthName(requestDto.address().region1DepthName())
+                .region2DepthName(requestDto.address().region2DepthName())
+                .region3DepthName(requestDto.address().region3DepthName())
+                .region4DepthName(requestDto.address().region4DepthName())
+                .latitude(requestDto.address().latitude())
+                .longitude(requestDto.address().longitude())
+                .build();
 
         // 공고 수정
-        jobPostingService.updateJobPosting(
-                jobPosting,
+        jobPosting.updateSelf(
                 requestDto.title(),
                 requestDto.jobCategory(),
                 requestDto.hourlyRate(),
@@ -107,18 +88,14 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
             List<PostingWorkDayTime> workDayTimes = new ArrayList<>();
 
             requestDto.workDayTimes().forEach(workDayTime -> {
-                PostingWorkDayTime postingWorkDayTime = postWorkDayTimeService.createPostingWorkDayTime(
-                        workDayTime.dayOfWeek(),
-                        (workDayTime.workStartTime() == null || workDayTime.workStartTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()),
-                        (workDayTime.workEndTime() == null || workDayTime.workEndTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workEndTime()),
-                        jobPosting
-                );
-
+                PostingWorkDayTime postingWorkDayTime = PostingWorkDayTime.builder()
+                        .dayOfWeek(workDayTime.dayOfWeek())
+                        .workStartTime((workDayTime.workStartTime() == null || workDayTime.workStartTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workStartTime()))
+                        .workEndTime((workDayTime.workEndTime() == null || workDayTime.workEndTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTime.workEndTime()))
+                        .build();
                 workDayTimes.add(postingWorkDayTime);
             });
             jobPosting.updatePostWorkDayTimes(workDayTimes);
-
-            postingWorkDayTimeRepository.saveAll(workDayTimes);
         }
 
         if (requestDto.deletedImgIds() != null && !requestDto.deletedImgIds().isEmpty()) {
@@ -126,7 +103,7 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
                     .forEach(companyImage -> s3Util.deleteFile(
                             companyImage.getImgUrl(),
                             EImageType.COMPANY_IMG,
-                            owner.getSerialId()
+                            account.getSerialId()
                             )
                     );
             companyImageRepository.deleteAllByIdIn(requestDto.deletedImgIds());
@@ -134,12 +111,11 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
 
         if (image != null && !image.isEmpty()) {
             image.forEach(img -> {
-                String uploadImageFile = s3Util.uploadImageFile(img, owner.getSerialId(), EImageType.COMPANY_IMG);
+                String uploadImageFile = s3Util.uploadImageFile(img, account.getSerialId(), EImageType.COMPANY_IMG);
                 jobPosting.getCompanyImages().add(
-                        companyImageService.createCompanyImage(
-                                uploadImageFile,
-                                jobPosting
-                        )
+                        CompanyImage.builder()
+                                .imgUrl(uploadImageFile)
+                                .build()
                 );
             });
         }

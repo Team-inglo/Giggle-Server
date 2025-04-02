@@ -2,10 +2,10 @@ package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.security.application.dto.request.ChangePasswordRequestDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.presentation.dto.request.ChangePasswordRequestDto;
 import com.inglo.giggle.security.application.usecase.ChangePasswordUseCase;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

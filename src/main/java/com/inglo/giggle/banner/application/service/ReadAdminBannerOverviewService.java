@@ -1,9 +1,10 @@
 package com.inglo.giggle.banner.application.service;
 
-import com.inglo.giggle.banner.application.dto.response.ReadAdminBannerOverviewResponseDto;
-import com.inglo.giggle.banner.application.usecase.ReadAdminBannerOverviewUseCase;
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.banner.repository.BannerRepository;
+import com.inglo.giggle.banner.persistence.entity.BannerEntity;
+import com.inglo.giggle.banner.presentation.dto.response.ReadAdminBannerOverviewResponseDto;
+import com.inglo.giggle.banner.application.usecase.ReadAdminBannerOverviewUseCase;
+import com.inglo.giggle.banner.persistence.repository.BannerRepository;
 import com.inglo.giggle.core.dto.PageInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

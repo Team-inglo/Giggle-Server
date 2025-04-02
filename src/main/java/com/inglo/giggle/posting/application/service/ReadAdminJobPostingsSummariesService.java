@@ -1,9 +1,9 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.core.utility.DateTimeUtil;
-import com.inglo.giggle.posting.application.dto.response.ReadAdminJobPostingsSummariesResponseDto;
+import com.inglo.giggle.posting.presentation.dto.response.ReadAdminJobPostingsSummariesResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadAdminJobPostingsSummariesUseCase;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

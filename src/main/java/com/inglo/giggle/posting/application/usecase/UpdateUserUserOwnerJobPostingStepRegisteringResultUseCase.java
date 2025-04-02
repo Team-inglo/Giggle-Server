@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.posting.application.dto.request.UpdateUserUserOwnerJobPostingStepRegisteringResultRequestDto;
+import com.inglo.giggle.posting.presentation.dto.request.UpdateUserUserOwnerJobPostingStepRegisteringResultRequestDto;
 
 import java.util.UUID;
 

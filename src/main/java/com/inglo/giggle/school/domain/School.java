@@ -1,87 +1,60 @@
 package com.inglo.giggle.school.domain;
 
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.core.dto.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
+import com.inglo.giggle.core.dto.BaseDomain;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
-@Entity
+import java.time.LocalDateTime;
+
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "schools")
-@SQLDelete(sql = "UPDATE schools SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
-public class School extends BaseEntity {
+public class School extends BaseDomain {
 
-    /* -------------------------------------------- */
-    /* Default Column ----------------------------- */
-    /* -------------------------------------------- */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final Long id;
+    private final String schoolName;
+    private final String schoolPhoneNumber;
+    private final String instituteName;
+    private final String coordinatorName;
+    private final String coordinatorPhoneNumber;
+    private final Boolean isMetropolitan;
+    private final Address address;
 
-    /* -------------------------------------------- */
-    /* Information Column ------------------------- */
-    /* -------------------------------------------- */
-    @Column(name = "school_name", length = 100, nullable = false)
-    private String schoolName;
-
-    @Column(name = "school_phone_number", length = 20, nullable = false)
-    private String schoolPhoneNumber;
-
-    @Column(name = "institute_name", length = 100, nullable = false)
-    private String instituteName;
-
-    @Column(name = "coordinator_name", length = 50, nullable = false)
-    private String coordinatorName;
-
-    @Column(name = "coordinator_phone_number", length = 20, nullable = false)
-    private String coordinatorPhoneNumber;
-
-    @Column(name = "is_metropolitan", nullable = false)
-    private Boolean isMetropolitan;
-
-    /* -------------------------------------------- */
-    /* Embedded Column ---------------------------- */
-    /* -------------------------------------------- */
-    @Embedded
-    private Address address;
-
-    /* -------------------------------------------- */
-    /* Methods ------------------------------------ */
-    /* -------------------------------------------- */
     @Builder
-    public School(String schoolName, String schoolPhoneNumber, String instituteName,
-                  String coordinatorName, String coordinatorPhoneNumber, Address address, Boolean isMetropolitan) {
+    public School(Long id,
+                  String schoolName,
+                  String schoolPhoneNumber,
+                  String instituteName,
+                  String coordinatorName,
+                  String coordinatorPhoneNumber,
+                  Boolean isMetropolitan,
+                  Address address,
+                  LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
+    ) {
+        this.id = id;
         this.schoolName = schoolName;
         this.schoolPhoneNumber = schoolPhoneNumber;
         this.instituteName = instituteName;
         this.coordinatorName = coordinatorName;
         this.coordinatorPhoneNumber = coordinatorPhoneNumber;
-        this.address = address;
         this.isMetropolitan = isMetropolitan;
+        this.address = address;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
-    public void updateSelf(String schoolName, String schoolPhoneNumber, String instituteName,
-                String coordinatorName, String coordinatorPhoneNumber, Address address, Boolean isMetropolitan) {
-        this.schoolName = schoolName;
-        this.schoolPhoneNumber = schoolPhoneNumber;
-        this.instituteName = instituteName;
-        this.coordinatorName = coordinatorName;
-        this.coordinatorPhoneNumber = coordinatorPhoneNumber;
-        this.address = address;
-        this.isMetropolitan = isMetropolitan;
+    public School updateSelf(String schoolName, String schoolPhoneNumber, String instituteName,
+                             String coordinatorName, String coordinatorPhoneNumber, Address address, Boolean isMetropolitan) {
+        return School.builder()
+                .id(this.id)
+                .schoolName(schoolName)
+                .schoolPhoneNumber(schoolPhoneNumber)
+                .instituteName(instituteName)
+                .coordinatorName(coordinatorName)
+                .coordinatorPhoneNumber(coordinatorPhoneNumber)
+                .isMetropolitan(isMetropolitan)
+                .address(address)
+                .build();
     }
-
 }
+

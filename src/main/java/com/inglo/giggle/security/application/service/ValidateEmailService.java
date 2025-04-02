@@ -1,9 +1,9 @@
 package com.inglo.giggle.security.application.service;
 
-import com.inglo.giggle.security.application.dto.response.ValidationResponseDto;
+import com.inglo.giggle.security.presentation.dto.response.ValidationResponseDto;
 import com.inglo.giggle.security.application.usecase.ValidateEmailUseCase;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

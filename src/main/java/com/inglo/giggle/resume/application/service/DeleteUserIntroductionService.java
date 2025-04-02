@@ -2,11 +2,9 @@ package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.resume.application.usecase.DeleteUserIntroductionUseCase;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.service.ResumeService;
-import com.inglo.giggle.resume.repository.ResumeRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,7 @@ import java.util.UUID;
 public class DeleteUserIntroductionService implements DeleteUserIntroductionUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final ResumeRepository resumeRepository;
-    private final ResumeService resumeService;
 
     @Override
     @Transactional
@@ -30,13 +26,13 @@ public class DeleteUserIntroductionService implements DeleteUserIntroductionUseC
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
         // Resume 조회
         Resume resume = resumeRepository.findByIdOrElseThrow(accountId);
 
         // Introduction null로 업데이트
-        resume = resumeService.updateIntroduction(resume, null);
+        resume.deleteIntroduction();
         resumeRepository.save(resume);
     }
 

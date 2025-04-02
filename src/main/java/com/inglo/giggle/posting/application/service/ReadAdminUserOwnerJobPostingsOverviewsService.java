@@ -1,10 +1,11 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.core.utility.DateTimeUtil;
-import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsOverviewsResponseDto;
-import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsOverviewsUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.presentation.dto.response.ReadAdminUserOwnerJobPostingsOverviewsResponseDto;
+import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsOverviewsUseCase;
+import com.inglo.giggle.posting.persistence.entity.UserOwnerJobPostingEntity;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

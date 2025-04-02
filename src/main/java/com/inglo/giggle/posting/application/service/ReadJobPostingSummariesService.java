@@ -1,11 +1,9 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.posting.application.dto.response.ReadJobPostingSummariesResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadJobPostingSummariesUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.presentation.dto.response.ReadJobPostingSummariesResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +19,10 @@ public class ReadJobPostingSummariesService implements ReadJobPostingSummariesUs
     public ReadJobPostingSummariesResponseDto execute(Long jobPostingId) {
 
         // 공고 조회
-        JobPosting jobPosting = jobPostingRepository.findWithOwnerById(jobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        JobPosting jobPosting = jobPostingRepository.findWithOwnerByIdOrElseThrow(jobPostingId);
 
         // DTO 변환
-        return ReadJobPostingSummariesResponseDto.fromEntity(
+        return ReadJobPostingSummariesResponseDto.from(
                 jobPosting
         );
     }

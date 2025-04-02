@@ -1,10 +1,10 @@
 package com.inglo.giggle.account.application.service;
 
-import com.inglo.giggle.account.application.dto.response.ReadAdminAccountOverviewResponseDto;
+import com.inglo.giggle.account.presentation.dto.response.ReadAdminAccountOverviewResponseDto;
 import com.inglo.giggle.account.application.usecase.ReadAdminAccountOverviewUseCase;
 import com.inglo.giggle.core.dto.PageInfoDto;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

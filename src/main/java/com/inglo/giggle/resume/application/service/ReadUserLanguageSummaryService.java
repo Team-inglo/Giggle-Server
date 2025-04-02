@@ -1,13 +1,11 @@
 package com.inglo.giggle.resume.application.service;
 
-import com.inglo.giggle.resume.application.dto.response.ReadUserLanguageSummaryResponseDto;
 import com.inglo.giggle.resume.application.usecase.ReadUserLanguageSummaryUseCase;
 import com.inglo.giggle.resume.domain.LanguageSkill;
-import com.inglo.giggle.resume.domain.service.LanguageSkillService;
-import com.inglo.giggle.resume.repository.LanguageSkillRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.resume.persistence.repository.LanguageSkillRepository;
+import com.inglo.giggle.resume.presentation.dto.response.ReadUserLanguageSummaryResponseDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +17,7 @@ import java.util.UUID;
 public class ReadUserLanguageSummaryService implements ReadUserLanguageSummaryUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final LanguageSkillRepository languageSkillRepository;
-    private final LanguageSkillService languageSkillService;
 
     @Override
     @Transactional(readOnly = true)
@@ -31,15 +27,15 @@ public class ReadUserLanguageSummaryService implements ReadUserLanguageSummaryUs
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
         // LanguageSkill 조회
         LanguageSkill languageSkill = languageSkillRepository.findByResumeIdOrElseThrow(accountId);
 
         // LanguageSkill 유효성 체크
-        languageSkillService.checkLanguageSkillValidation(languageSkill, accountId);
+        languageSkill.checkValidation(accountId);
 
-        return ReadUserLanguageSummaryResponseDto.fromEntity(languageSkill);
+        return ReadUserLanguageSummaryResponseDto.from(languageSkill);
     }
 
 }

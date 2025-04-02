@@ -1,9 +1,9 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.posting.application.dto.response.ReadAdminUserOwnerJobPostingsBriefsResponseDto;
+import com.inglo.giggle.posting.presentation.dto.response.ReadAdminUserOwnerJobPostingsBriefsResponseDto;
 import com.inglo.giggle.posting.application.usecase.ReadAdminUserOwnerJobPostingsBriefsUseCase;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
-import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

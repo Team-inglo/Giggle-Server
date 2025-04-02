@@ -1,7 +1,7 @@
 package com.inglo.giggle.term.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.term.application.dto.request.CreateTermAccountRequestDto;
+import com.inglo.giggle.term.presentation.dto.request.CreateTermAccountRequestDto;
 
 import java.util.UUID;
 

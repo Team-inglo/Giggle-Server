@@ -1,28 +1,27 @@
 package com.inglo.giggle.security.application.service;
 
-import com.inglo.giggle.account.domain.service.OwnerService;
+import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.core.utility.S3Util;
-import com.inglo.giggle.security.application.dto.request.SignUpDefaultOwnerRequestDto;
-import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultOwnerUseCase;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.redis.TemporaryAccount;
-import com.inglo.giggle.security.domain.redis.TemporaryToken;
+import com.inglo.giggle.security.domain.Account;
 import com.inglo.giggle.security.domain.service.TemporaryAccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.repository.AccountRepository;
-import com.inglo.giggle.security.repository.TemporaryAccountRepository;
-import com.inglo.giggle.security.repository.TemporaryTokenRepository;
+import com.inglo.giggle.security.persistence.entity.redis.TemporaryAccountEntity;
+import com.inglo.giggle.security.persistence.entity.redis.TemporaryTokenEntity;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.TemporaryAccountRepository;
+import com.inglo.giggle.security.persistence.repository.TemporaryTokenRepository;
+import com.inglo.giggle.security.presentation.dto.request.SignUpDefaultOwnerRequestDto;
+import com.inglo.giggle.security.presentation.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.TermAccount;
 import com.inglo.giggle.term.domain.service.TermAccountService;
 import com.inglo.giggle.term.domain.type.ETermType;
-import com.inglo.giggle.term.repository.TermAccountRepository;
-import com.inglo.giggle.term.repository.TermRepository;
+import com.inglo.giggle.term.persistence.repository.TermAccountRepository;
+import com.inglo.giggle.term.persistence.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,8 +41,6 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
     private final TermAccountRepository termAccountRepository;
 
     private final TemporaryAccountService temporaryAccountService;
-    private final AddressService addressService;
-    private final OwnerService ownerService;
     private final TermAccountService termAccountService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -56,10 +53,10 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
     public DefaultJsonWebTokenDto execute(SignUpDefaultOwnerRequestDto requestDto, MultipartFile file) {
 
         // temporary Token 검증. Redis에 있는 토큰인지 확인
-        TemporaryToken temporaryToken = temporaryTokenRepository.findByValueOrElseThrow(requestDto.temporaryToken());
+        TemporaryTokenEntity temporaryTokenEntity = temporaryTokenRepository.findByValueOrElseThrow(requestDto.temporaryToken());
 
         // Redis에서 임시 사용자 정보 가져오기
-        TemporaryAccount tempUserInfo = temporaryAccountRepository.findByIdOrElseThrow(temporaryToken.getEmail());
+        TemporaryAccountEntity tempUserInfo = temporaryAccountRepository.findByIdOrElseThrow(temporaryTokenEntity.getEmail());
 
         // AccountType 검증
         temporaryAccountService.validateAccountTypeOwner(tempUserInfo);
@@ -71,28 +68,43 @@ public class SignUpDefaultOwnerService implements SignUpDefaultOwnerUseCase {
         }
 
         // Address 생성
-        Address address = addressService.createAddress(
-                requestDto.address().addressName(),
-                requestDto.address().region1DepthName(),
-                requestDto.address().region2DepthName(),
-                requestDto.address().region3DepthName(),
-                requestDto.address().region4DepthName(),
-                requestDto.address().addressDetail(),
-                requestDto.address().latitude(),
-                requestDto.address().longitude()
-        );
+        Address address;
+
+        if (requestDto.address().addressName() == null || requestDto.address().addressName().isEmpty()) {
+            address = null;
+        } else {
+            address = Address.builder()
+                    .addressName(requestDto.address().addressName())
+                    .addressDetail(requestDto.address().addressDetail())
+                    .region1DepthName(requestDto.address().region1DepthName())
+                    .region2DepthName(requestDto.address().region2DepthName())
+                    .region3DepthName(requestDto.address().region3DepthName())
+                    .region4DepthName(requestDto.address().region4DepthName())
+                    .latitude(requestDto.address().latitude())
+                    .longitude(requestDto.address().longitude())
+                    .build();
+        }
 
         // Owner 생성 및 저장
-        Account account = ownerService.createOwner(
-                ESecurityProvider.DEFAULT,
-                tempUserInfo,
-                bCryptPasswordEncoder.encode(tempUserInfo.getPassword()),
-                iconUrl, requestDto, address
-        );
-        account = accountRepository.saveAndReturn(account);
+        Account account = Owner.builder()
+                .provider(ESecurityProvider.DEFAULT)
+                .serialId(tempUserInfo.getEmail())
+                .password(bCryptPasswordEncoder.encode(tempUserInfo.getPassword()))
+                .email(tempUserInfo.getEmail())
+                .profileImgUrl(iconUrl)
+                .phoneNumber(requestDto.signUpDefaultOwnerOwnerInfo().phoneNumber())
+                .companyName(requestDto.signUpDefaultOwnerOwnerInfo().companyName())
+                .ownerName(requestDto.signUpDefaultOwnerOwnerInfo().ownerName())
+                .companyRegistrationNumber(requestDto.signUpDefaultOwnerOwnerInfo().companyRegistrationNumber())
+                .marketingAllowed(requestDto.marketingAllowed())
+                .notificationAllowed(requestDto.notificationAllowed())
+                .address(address)
+                .build();
+
+        account = accountRepository.save(account);
 
         // temporary Token 삭제
-        temporaryTokenRepository.deleteById(temporaryToken.getEmail());
+        temporaryTokenRepository.deleteById(temporaryTokenEntity.getEmail());
 
         // temporary User Info 삭제
         temporaryAccountRepository.deleteById(tempUserInfo.getEmail());

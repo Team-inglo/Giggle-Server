@@ -1,13 +1,14 @@
 package com.inglo.giggle.banner.application.service;
 
-import com.inglo.giggle.banner.application.dto.request.CreateAdminBannerRequestDto;
-import com.inglo.giggle.banner.application.usecase.CreateAdminBannerUseCase;
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.banner.repository.BannerRepository;
+import com.inglo.giggle.banner.presentation.dto.request.CreateAdminBannerRequestDto;
+import com.inglo.giggle.banner.application.usecase.CreateAdminBannerUseCase;
+import com.inglo.giggle.banner.persistence.entity.BannerEntity;
+import com.inglo.giggle.banner.persistence.repository.BannerRepository;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

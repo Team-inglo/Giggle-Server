@@ -15,6 +15,6 @@ limitations under the License.
 This project includes libraries licensed under the Eclipse Public License (EPL)
 and the GNU Lesser General Public License (LGPL), 
 which are linked in compliance with the Classpath Exception 
-and/or dynamic linking terms. The inclusion of these libraries 
-does not imply that this project is subject to the full terms of the EPL 
+and/or dynamic linking termEntities. The inclusion of these libraries
+does not imply that this project is subject to the full termEntities of the EPL
 or LGPL.

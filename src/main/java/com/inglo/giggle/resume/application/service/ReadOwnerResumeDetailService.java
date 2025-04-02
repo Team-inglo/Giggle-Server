@@ -1,23 +1,19 @@
 package com.inglo.giggle.resume.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDto;
-import com.inglo.giggle.resume.application.usecase.ReadOwnerResumeDetailUseCase;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.WorkExperience;
-import com.inglo.giggle.resume.repository.EducationRepository;
-import com.inglo.giggle.resume.repository.LanguageSkillRepository;
-import com.inglo.giggle.resume.repository.ResumeRepository;
-import com.inglo.giggle.resume.repository.WorkExperienceRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.resume.presentation.dto.response.ReadOwnerResumeDetailResponseDto;
+import com.inglo.giggle.resume.application.usecase.ReadOwnerResumeDetailUseCase;
+import com.inglo.giggle.resume.persistence.repository.EducationRepository;
+import com.inglo.giggle.resume.persistence.repository.LanguageSkillRepository;
+import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
+import com.inglo.giggle.resume.persistence.repository.WorkExperienceRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +26,7 @@ import java.util.UUID;
 public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
     private final ResumeRepository resumeRepository;
     private final EducationRepository educationRepository;
     private final LanguageSkillRepository languageSkillRepository;
@@ -46,17 +40,16 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
-        accountService.checkOwnerValidation(account);
+        account.checkOwnerValidation();
 
         // UserOwnerJobPosting 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithUserById(userOwnerJobPostingId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithUserByIdOrElseThrow(userOwnerJobPostingId);
 
         // UserOwnerJobPosting 유효성 체크
-        userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
+        userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
 
         // Resume 조회
-        Resume resume = resumeRepository.findWithEducationsByAccountIdOrElseThrow(userOwnerJobPosting.getUser().getId());
+        Resume resume = resumeRepository.findWithEducationsByAccountIdOrElseThrow(userOwnerJobPosting.getUserInfo().getId());
 
         // education 조회
         List<Education> educations = educationRepository.findAllByResume(resume);
@@ -67,7 +60,7 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
-        return ReadOwnerResumeDetailResponseDto.of(resume, workExperiences, educations, languageSkill, userOwnerJobPosting.getUser());
+        return ReadOwnerResumeDetailResponseDto.of(resume, workExperiences, educations, languageSkill, userOwnerJobPosting.getUserInfo());
     }
 
 }

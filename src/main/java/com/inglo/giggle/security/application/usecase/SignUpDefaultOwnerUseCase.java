@@ -1,8 +1,8 @@
 package com.inglo.giggle.security.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.security.application.dto.request.SignUpDefaultOwnerRequestDto;
-import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
+import com.inglo.giggle.security.presentation.dto.request.SignUpDefaultOwnerRequestDto;
+import com.inglo.giggle.security.presentation.dto.response.DefaultJsonWebTokenDto;
 import org.springframework.web.multipart.MultipartFile;
 @UseCase
 public interface SignUpDefaultOwnerUseCase {

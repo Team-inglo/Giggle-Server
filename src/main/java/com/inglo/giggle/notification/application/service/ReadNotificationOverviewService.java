@@ -1,12 +1,12 @@
 package com.inglo.giggle.notification.application.service;
 
-import com.inglo.giggle.notification.application.dto.ReadNotificationOverviewResponseDto;
+import com.inglo.giggle.notification.presentation.dto.ReadNotificationOverviewResponseDto;
 import com.inglo.giggle.notification.application.usecase.ReadNotificationOverviewUseCase;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.repository.NotificationRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
+import com.inglo.giggle.security.domain.Account;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

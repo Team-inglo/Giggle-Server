@@ -1,41 +1,17 @@
 package com.inglo.giggle.address.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Embeddable
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
-    //* -------------------------------------------- */
-    //* Address Information Column ----------------- */
-    //* -------------------------------------------- */
-    @Column(name = "address_name", length = 50)
     private String addressName;
-
-    @Column(name = "region_1depth_name", length = 50)
     private String region1DepthName;
-
-    @Column(name = "region_2depth_name", length = 50)
     private String region2DepthName;
-
-    @Column(name = "region_3depth_name", length = 50)
     private String region3DepthName;
-
-    @Column(name = "region_4depth_name", length = 50)
     private String region4DepthName;
-
-    @Column(name = "address_detail", length = 100)
     private String addressDetail;
-
-    @Column(name = "longitude")
     private Double longitude;
-
-    @Column(name = "latitude")
     private Double latitude;
 
     @Builder
@@ -60,11 +36,9 @@ public class Address {
     }
 
     public String getFullAddress() {
-
-        String addressName = this.addressName == null ? "" : this.addressName;
-        String addressDetail = this.addressDetail == null ? "" : this.addressDetail;
-
-        return addressName + " " + addressDetail;
+        String safeName = this.addressName == null ? "" : this.addressName;
+        String safeDetail = this.addressDetail == null ? "" : this.addressDetail;
+        return safeName + " " + safeDetail;
     }
 
     public void updateAddressName(String addressName) {
@@ -87,15 +61,8 @@ public class Address {
         this.region4DepthName = region4DepthName;
     }
 
-    public void updateLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public void updateLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
     public void updateAddressDetail(String addressDetail) {
         this.addressDetail = addressDetail;
     }
 }
+

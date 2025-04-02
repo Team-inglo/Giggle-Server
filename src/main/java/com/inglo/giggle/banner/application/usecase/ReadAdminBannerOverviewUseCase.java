@@ -1,6 +1,6 @@
 package com.inglo.giggle.banner.application.usecase;
 
-import com.inglo.giggle.banner.application.dto.response.ReadAdminBannerOverviewResponseDto;
+import com.inglo.giggle.banner.presentation.dto.response.ReadAdminBannerOverviewResponseDto;
 import com.inglo.giggle.core.annotation.bean.UseCase;
 import org.springframework.data.domain.Sort;
 

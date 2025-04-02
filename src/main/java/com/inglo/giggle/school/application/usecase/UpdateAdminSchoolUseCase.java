@@ -1,7 +1,7 @@
 package com.inglo.giggle.school.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.school.application.dto.request.UpdateAdminSchoolRequestDto;
+import com.inglo.giggle.school.presentation.dto.request.UpdateAdminSchoolRequestDto;
 
 @UseCase
 public interface UpdateAdminSchoolUseCase {

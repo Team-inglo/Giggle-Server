@@ -1,7 +1,7 @@
 package com.inglo.giggle.banner.application.service;
 
 import com.inglo.giggle.banner.application.usecase.DeleteAdminBannerUseCase;
-import com.inglo.giggle.banner.repository.BannerRepository;
+import com.inglo.giggle.banner.persistence.repository.BannerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

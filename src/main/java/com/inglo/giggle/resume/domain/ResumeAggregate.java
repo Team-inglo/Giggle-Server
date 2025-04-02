@@ -1,6 +1,7 @@
 package com.inglo.giggle.resume.domain;
 
 import com.inglo.giggle.account.domain.User;
+import com.inglo.giggle.core.dto.BaseDomain;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,12 +12,10 @@ import java.util.Map;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ResumeAggregate {
+public class ResumeAggregate extends BaseDomain {
 
     private User user;
-
     private Resume resume;
-
     private Education education;
 
     @Builder

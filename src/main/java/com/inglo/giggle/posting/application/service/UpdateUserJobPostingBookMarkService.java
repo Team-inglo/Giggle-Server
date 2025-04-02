@@ -1,15 +1,14 @@
 package com.inglo.giggle.posting.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.posting.application.dto.response.UpdateUserJobPostingBookMarkResponseDto;
 import com.inglo.giggle.posting.application.usecase.UpdateUserJobPostingBookMarkUseCase;
+import com.inglo.giggle.posting.domain.BookMark;
 import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.domain.service.BookMarkService;
-import com.inglo.giggle.posting.repository.BookMarkRepository;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.posting.persistence.repository.BookMarkRepository;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.presentation.dto.response.UpdateUserJobPostingBookMarkResponseDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +21,7 @@ public class UpdateUserJobPostingBookMarkService implements UpdateUserJobPosting
 
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
-
     private final BookMarkRepository bookMarkRepository;
-    private final BookMarkService bookMarkService;
     private final JobPostingRepository jobPostingRepository;
 
     @Override
@@ -36,7 +32,7 @@ public class UpdateUserJobPostingBookMarkService implements UpdateUserJobPosting
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
         // 북마크 여부 확인 -> 북마크 생성 및 삭제
         boolean isBookMarked = bookMarkRepository.findByUserIdAndJobPostingId(accountId, jobPostingId)
@@ -50,11 +46,10 @@ public class UpdateUserJobPostingBookMarkService implements UpdateUserJobPosting
                     JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
 
                     bookMarkRepository.save(
-                            bookMarkService.createBookMark(
-                                    user,
-                                    jobPosting
-                            )
-                    );
+                            BookMark.builder()
+                                    .userId(user.getId())
+                                    .jobPostingId(jobPosting.getId())
+                                    .build());
                     return true; // 생성되면 true
                 });
 

@@ -6,26 +6,26 @@ Authorization: Bearer {{owner_access_token}}
 Content-Type: application/json
 
 {
-  "company_name" : "{{document.API_8_11.company_name}}",
-  "company_registration_number" : "{{document.API_8_11.company_registration_number}}",
-  "job_type" : "{{document.API_8_11.job_type}}",
-  "name" : "{{document.API_8_11.name}}",
-  "phone_number" : "{{document.API_8_11.phone_number}}",
-  "signature_base64" : "{{document.API_8_11.signature_base64}}",
-  "work_period" : "{{document.API_8_11.work_period}}",
-  "hourly_rate" : {{document.API_8_11.hourly_rate}},
-  "work_days_weekdays" : "{{document.API_8_11.work_days_weekdays}}",
-  "work_days_weekends" : "{{document.API_8_11.work_days_weekends}}",
-  "address" :
+  "company_name" : "{{documentEntity.API_8_11.company_name}}",
+  "company_registration_number" : "{{documentEntity.API_8_11.company_registration_number}}",
+  "job_type" : "{{documentEntity.API_8_11.job_type}}",
+  "name" : "{{documentEntity.API_8_11.name}}",
+  "phone_number" : "{{documentEntity.API_8_11.phone_number}}",
+  "signature_base64" : "{{documentEntity.API_8_11.signature_base64}}",
+  "work_period" : "{{documentEntity.API_8_11.work_period}}",
+  "hourly_rate" : {{documentEntity.API_8_11.hourly_rate}},
+  "work_days_weekdays" : "{{documentEntity.API_8_11.work_days_weekdays}}",
+  "work_days_weekends" : "{{documentEntity.API_8_11.work_days_weekends}}",
+  "addressEntity" :
   {
-    "address_name" : "{{document.API_8_11.address.address_name}}",
-    "region_1depth_name" : "{{document.API_8_11.address.region_1depth_name}}",
-    "region_2depth_name" : "{{document.API_8_11.address.region_2depth_name}}",
-    "region_3depth_name" : "{{document.API_8_11.address.region_3depth_name}}",
-    "region_4depth_name" : "{{document.API_8_11.address.region_4depth_name}}",
-    "address_detail" : "{{document.API_8_11.address.address_detail}}",
-    "longitude" : {{document.API_8_11.address.longitude}},
-    "latitude" : {{document.API_8_11.address.latitude}}
+    "address_name" : "{{documentEntity.API_8_11.addressEntity.address_name}}",
+    "region_1depth_name" : "{{documentEntity.API_8_11.addressEntity.region_1depth_name}}",
+    "region_2depth_name" : "{{documentEntity.API_8_11.addressEntity.region_2depth_name}}",
+    "region_3depth_name" : "{{documentEntity.API_8_11.addressEntity.region_3depth_name}}",
+    "region_4depth_name" : "{{documentEntity.API_8_11.addressEntity.region_4depth_name}}",
+    "address_detail" : "{{documentEntity.API_8_11.addressEntity.address_detail}}",
+    "longitude" : {{documentEntity.API_8_11.addressEntity.longitude}},
+    "latitude" : {{documentEntity.API_8_11.addressEntity.latitude}}
   }
 }
 

@@ -15,12 +15,12 @@ public class JobPostAggregate {
 
     private JobPosting jobPosting;
 
-    private Resume resume;
+    private Resume resumeEntity;
 
     @Builder
     public JobPostAggregate(JobPosting jobPosting, Resume resume) {
         this.jobPosting = jobPosting;
-        this.resume = resume;
+        this.resumeEntity = resume;
     }
 
     public Boolean isUserApplicableByWorkTime(Map<String, Integer> userWorkHours, Map<String, Integer> jobWorkHours) {
@@ -30,7 +30,7 @@ public class JobPostAggregate {
 
     public Boolean isUserApplicableByJobCategory() {
         if(jobPosting.getJobCategory().equals(EJobCategory.MANUFACTURING)){
-            return (this.resume.getLanguageSkill().getTopikLevel() >= 4 && this.resume.getLanguageSkill().getSocialIntegrationLevel() >= 4);
+            return (this.resumeEntity.getLanguageSkill().getTopikLevel() >= 4 && this.resumeEntity.getLanguageSkill().getSocialIntegrationLevel() >= 4);
         }
         return true;
     }

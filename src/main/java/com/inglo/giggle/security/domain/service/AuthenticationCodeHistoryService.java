@@ -2,21 +2,21 @@ package com.inglo.giggle.security.domain.service;
 
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.security.domain.redis.AuthenticationCodeHistory;
+import com.inglo.giggle.security.persistence.entity.redis.AuthenticationCodeHistoryEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
 public class AuthenticationCodeHistoryService {
-    public AuthenticationCodeHistory createAuthenticationCodeHistory(String email) {
-        return AuthenticationCodeHistory.builder()
+    public AuthenticationCodeHistoryEntity createAuthenticationCodeHistory(String email) {
+        return AuthenticationCodeHistoryEntity.builder()
                 .email(email)
                 .count(1)
                 .build();
     }
 
-    public void validateAuthenticationCodeHistory(AuthenticationCodeHistory history) {
+    public void validateAuthenticationCodeHistory(AuthenticationCodeHistoryEntity history) {
         if (isBlockedIssuingAuthenticationCode(history)) {
             throw new CommonException(ErrorCode.TOO_MANY_AUTHENTICATION_CODE_REQUESTS);
         }
@@ -25,20 +25,20 @@ public class AuthenticationCodeHistoryService {
         }
     }
 
-    public AuthenticationCodeHistory incrementAuthenticationCodeCount(AuthenticationCodeHistory history) {
+    public AuthenticationCodeHistoryEntity incrementAuthenticationCodeCount(AuthenticationCodeHistoryEntity history) {
         history.incrementCount();
         history.updateLastSentAt();
         return history;
     }
 
-    private Boolean isBlockedIssuingAuthenticationCode(AuthenticationCodeHistory history) {
+    private Boolean isBlockedIssuingAuthenticationCode(AuthenticationCodeHistoryEntity history) {
         if (history == null) {
             return false;
         }
         return history.getCount() >= 5;
     }
 
-    private Boolean isTooFastIssuingAuthenticationCode(AuthenticationCodeHistory history) {
+    private Boolean isTooFastIssuingAuthenticationCode(AuthenticationCodeHistoryEntity history) {
         if (history == null) {
             return false;
         }

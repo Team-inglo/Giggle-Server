@@ -3,10 +3,9 @@ package com.inglo.giggle.resume.application.service;
 import com.inglo.giggle.resume.application.usecase.DeleteUserAdditionalLanguageUseCase;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
 import com.inglo.giggle.resume.domain.service.AdditionalLanguageService;
-import com.inglo.giggle.resume.repository.AdditionalLanguageRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.resume.persistence.repository.AdditionalLanguageRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ import java.util.UUID;
 public class DeleteUserAdditionalLanguageService implements DeleteUserAdditionalLanguageUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final AdditionalLanguageRepository additionalLanguageRepository;
     private final AdditionalLanguageService additionalLanguageService;
 
@@ -30,13 +28,13 @@ public class DeleteUserAdditionalLanguageService implements DeleteUserAdditional
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
         // AdditionalLanguage 조회
         AdditionalLanguage additionalLanguage = additionalLanguageRepository.findWithLanguageSkillByIdOrElseThrow(additionalLanguageId);
 
         // AdditionalLanguage 유효성 체크
-        additionalLanguageService.checkAdditionalLanguageValidation(additionalLanguage, accountId);
+        additionalLanguage.checkValidation(accountId);
 
         // AdditionalLanguage 삭제
         additionalLanguageRepository.delete(additionalLanguage);

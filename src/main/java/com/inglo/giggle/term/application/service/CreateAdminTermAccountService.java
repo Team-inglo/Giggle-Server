@@ -1,9 +1,9 @@
 package com.inglo.giggle.term.application.service;
 
-import com.inglo.giggle.term.application.dto.request.CreateAdminTermAccountRequestDto;
+import com.inglo.giggle.term.presentation.dto.request.CreateAdminTermAccountRequestDto;
 import com.inglo.giggle.term.application.usecase.CreateAdminTermAccountUseCase;
 import com.inglo.giggle.term.domain.Term;
-import com.inglo.giggle.term.repository.TermRepository;
+import com.inglo.giggle.term.persistence.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

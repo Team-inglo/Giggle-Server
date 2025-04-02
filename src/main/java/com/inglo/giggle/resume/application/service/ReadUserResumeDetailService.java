@@ -1,21 +1,18 @@
 package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.UserRepository;
-import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDto;
 import com.inglo.giggle.resume.application.usecase.ReadUserResumeDetailUseCase;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.WorkExperience;
-import com.inglo.giggle.resume.domain.service.ResumeService;
-import com.inglo.giggle.resume.repository.EducationRepository;
-import com.inglo.giggle.resume.repository.LanguageSkillRepository;
-import com.inglo.giggle.resume.repository.ResumeRepository;
-import com.inglo.giggle.resume.repository.WorkExperienceRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.resume.persistence.repository.EducationRepository;
+import com.inglo.giggle.resume.persistence.repository.LanguageSkillRepository;
+import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
+import com.inglo.giggle.resume.persistence.repository.WorkExperienceRepository;
+import com.inglo.giggle.resume.presentation.dto.response.ReadUserResumeDetailResponseDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +25,7 @@ import java.util.UUID;
 public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
-    private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
-    private final ResumeService resumeService;
     private final EducationRepository educationRepository;
     private final LanguageSkillRepository languageSkillRepository;
     private final WorkExperienceRepository workExperienceRepository;
@@ -44,16 +38,13 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
-        accountService.checkUserValidation(account);
-
-        // User 형변환
-        User user = (User) account;
+        account.checkUserValidation();
 
         // Resume 조회
         Resume resume = resumeRepository.findWithWorkExperiencesAndLanguageSkillByAccountIdOrElseThrow(accountId);
 
         // Resume 유효성 체크
-        resumeService.checkResumeValidation(resume, accountId);
+        resume.checkValidation(accountId);
 
         // education 조회
         List<Education> educations = educationRepository.findAllByResume(resume);
@@ -64,7 +55,7 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
-        return ReadUserResumeDetailResponseDto.of(resume, workExperiences, educations, languageSkill, user);
+        return ReadUserResumeDetailResponseDto.of(resume, workExperiences, educations, languageSkill, (User) account);
     }
 
 }

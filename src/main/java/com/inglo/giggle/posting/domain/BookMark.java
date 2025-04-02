@@ -1,53 +1,81 @@
 package com.inglo.giggle.posting.domain;
 
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.core.dto.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
+import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.dto.BaseDomain;
+import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.posting.domain.type.EJobCategory;
+import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
-@Entity
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.UUID;
+
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "book_marks")
-@SQLDelete(sql = "UPDATE book_marks SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
-public class BookMark extends BaseEntity {
-    /* -------------------------------------------- */
-    /* Default Column ----------------------------- */
-    /* -------------------------------------------- */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class BookMark extends BaseDomain {
+    private final Long id;
 
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_posting_id", nullable = false)
-    private JobPosting jobPosting;
+    private final UUID userId;
+    private final Long jobPostingId;
 
     /* -------------------------------------------- */
-    /* Methods ------------------------------------ */
+    /* Nested class ------------------------------- */
     /* -------------------------------------------- */
+    private final JobPostingInfo jobPostingInfo;
+
     @Builder
-    public BookMark(User user, JobPosting jobPosting) {
-        this.user = user;
-        this.jobPosting = jobPosting;
+    public BookMark(Long id, UUID userId, Long jobPostingId, JobPostingInfo jobPostingInfo, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.id = id;
+        this.userId = userId;
+        this.jobPostingId = jobPostingId;
+        this.jobPostingInfo = jobPostingInfo;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
+    @Getter
+    public static class JobPostingInfo {
+        private Long id;
+        private String title;
+        private Integer hourlyRate;
+        private LocalDate recruitmentDeadLine;
+        private Address address;
+        private EWorkPeriod workPeriod;
+        private String workDaysPerWeek;
+        private Set<EVisa> visa;
+        private EJobCategory jobCategory;
+        private LocalDateTime createdAt;
+        private OwnerInfo ownerInfo;
+
+        @Builder
+        public JobPostingInfo(Long id, String title, Integer hourlyRate, LocalDate recruitmentDeadLine, Address address, EWorkPeriod workPeriod, String workDaysPerWeek, Set<EVisa> visa, EJobCategory jobCategory, LocalDateTime createdAt, OwnerInfo ownerInfo) {
+            this.id = id;
+            this.title = title;
+            this.hourlyRate = hourlyRate;
+            this.recruitmentDeadLine = recruitmentDeadLine;
+            this.address = address;
+            this.workPeriod = workPeriod;
+            this.workDaysPerWeek = workDaysPerWeek;
+            this.visa = visa;
+            this.jobCategory = jobCategory;
+            this.createdAt = createdAt;
+            this.ownerInfo = ownerInfo;
+        }
+
+        @Getter
+        public static class OwnerInfo {
+            private String profileImgUrl;
+
+            @Builder
+            public OwnerInfo(String profileImgUrl) {
+                this.profileImgUrl = profileImgUrl;
+            }
+        }
+    }
+
 }

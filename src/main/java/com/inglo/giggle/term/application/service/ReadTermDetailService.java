@@ -1,10 +1,10 @@
 package com.inglo.giggle.term.application.service;
 
-import com.inglo.giggle.term.application.dto.response.ReadTermDetailResponseDto;
+import com.inglo.giggle.term.presentation.dto.response.ReadTermDetailResponseDto;
 import com.inglo.giggle.term.application.usecase.ReadTermDetailUseCase;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.type.ETermType;
-import com.inglo.giggle.term.repository.TermRepository;
+import com.inglo.giggle.term.persistence.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

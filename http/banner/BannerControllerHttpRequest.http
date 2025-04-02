@@ -1,34 +1,34 @@
 ### 12.1 (게스트) 배너 요약 조회하기
 // @no-log
-GET {{host_url}}/v1/guests/banners/overviews
+GET {{host_url}}/v1/guests/bannerEntities/overviews
 
 ### 12.2 (게스트) 배너 상세 조회하기
 // @no-log
-GET {{host_url}}/v1/guests/banners/1/details
+GET {{host_url}}/v1/guests/bannerEntities/1/details
 
 ### 12.3 (유학생/고용주) 배너 요약 조회하기
 // @no-log
-GET {{host_url}}/v1/banners/overviews
+GET {{host_url}}/v1/bannerEntities/overviews
 Authorization: Bearer {{access_token}}
 
 ### 12.4 (유학생/고용주) 배너 상세 조회하기
 // @no-log
-GET {{host_url}}/v1/banners/1/details
+GET {{host_url}}/v1/bannerEntities/1/details
 Authorization: Bearer {{access_token}}
 
 ### 12.5 (어드민) 배너 목록 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/banners/overviews?page=1&size=10
+GET {{host_url}}/v1/admins/bannerEntities/overviews?page=1&size=10
 Authorization: Bearer {{access_token}}
 
 ### 12.6 (어드민) 배너 상세 조회하기
 // @no-log
-GET {{host_url}}/v1/admins/banners/2/details
+GET {{host_url}}/v1/admins/bannerEntities/2/details
 Authorization: Bearer {{access_token}}
 
 ### 12.7 (어드민) 배너 생성하기
 // @no-log
-POST {{host_url}}/v1/admins/banners
+POST {{host_url}}/v1/admins/bannerEntities
 Content-Type: multipart/form-data; boundary=boundary
 Authorization: Bearer {{access_token}}
 
@@ -51,7 +51,7 @@ Content-Type: image/png
 
 ### 12.8 (어드민) 배너 수정하기
 // @no-log
-PUT {{host_url}}/v1/admins/banners/2
+PUT {{host_url}}/v1/admins/bannerEntities/2
 Content-Type: multipart/form-data; boundary=boundary
 Authorization: Bearer {{access_token}}
 
@@ -68,5 +68,5 @@ Content-Type: application/json
 
 ### 12.9 배너 삭제하기
 // @no-log
-DELETE {{host_url}}/v1/admins/banners/1
+DELETE {{host_url}}/v1/admins/bannerEntities/1
 Authorization: Bearer {{access_token}}

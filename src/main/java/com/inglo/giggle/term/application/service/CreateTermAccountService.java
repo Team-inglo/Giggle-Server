@@ -1,15 +1,15 @@
 package com.inglo.giggle.term.application.service;
 
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.repository.AccountRepository;
-import com.inglo.giggle.term.application.dto.request.CreateTermAccountRequestDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.term.presentation.dto.request.CreateTermAccountRequestDto;
 import com.inglo.giggle.term.application.usecase.CreateTermAccountUseCase;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.TermAccount;
 import com.inglo.giggle.term.domain.service.TermAccountService;
 import com.inglo.giggle.term.domain.type.ETermType;
-import com.inglo.giggle.term.repository.TermAccountRepository;
-import com.inglo.giggle.term.repository.TermRepository;
+import com.inglo.giggle.term.persistence.repository.TermAccountRepository;
+import com.inglo.giggle.term.persistence.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

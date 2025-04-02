@@ -1,8 +1,5 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.OwnerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.S3Util;
@@ -11,19 +8,14 @@ import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.Reject;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.domain.service.DocumentService;
-import com.inglo.giggle.document.domain.service.PartTimeEmploymentPermitService;
-import com.inglo.giggle.document.domain.service.StandardLaborContractService;
-import com.inglo.giggle.document.repository.DocumentRepository;
-import com.inglo.giggle.document.repository.PartTimeEmploymentPermitRepository;
-import com.inglo.giggle.document.repository.RejectRepository;
-import com.inglo.giggle.document.repository.StandardLaborContractRepository;
-import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.document.persistence.repository.DocumentRepository;
+import com.inglo.giggle.document.persistence.repository.PartTimeEmploymentPermitRepository;
+import com.inglo.giggle.document.persistence.repository.RejectRepository;
+import com.inglo.giggle.document.persistence.repository.StandardLaborContractRepository;
+import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
+import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,14 +30,8 @@ import java.util.UUID;
 public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
     private final DocumentRepository documentRepository;
-    private final UserOwnerJobPostingService userOwnerJobPostingService;
-    private final JobPostingRepository jobPostingRepository;
-    private final OwnerRepository ownerRepository;
-    private final DocumentService documentService;
-    private final PartTimeEmploymentPermitService partTimeEmploymentPermitService;
-    private final StandardLaborContractService standardLaborContractService;
+    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final PartTimeEmploymentPermitRepository partTimeEmploymentPermitRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
     private final RejectRepository rejectRepository;
@@ -60,22 +46,15 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 체크
-        accountService.checkUserValidation(account);
+        account.checkUserValidation();
 
         // Document 정보 조회
-        Document document = documentRepository.findWithUserOwnerJobPostingByIdOrElseThrow(documentId);
+        Document document = documentRepository.findByIdOrElseThrow(documentId);
+
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
 
         // UserOwnerJobPosting 유저 유효성 체크
-        userOwnerJobPostingService.checkUserUserOwnerJobPostingValidation(document.getUserOwnerJobPosting(), accountId);
-
-        // User 형변환
-        User user = (User) account;
-
-        // Owner 정보 조회
-        Owner owner = ownerRepository.findByDocumentIdOrElseThrow(documentId);
-
-        // JobPosting 정보 조회
-        JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(document.getUserOwnerJobPosting().getJobPosting().getId());
+        userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
         // Reject 정보 조회
         List<Reject> rejects = rejectRepository.findAllByDocumentId(documentId);
@@ -95,31 +74,19 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 PartTimeEmploymentPermit partTimeEmploymentPermit = (PartTimeEmploymentPermit) document;
 
                 // 시간제 취업 허가서 유학생, 고용주 상태 Confirmation으로 업데이트
-                partTimeEmploymentPermit =
-                        partTimeEmploymentPermitService.updateStatusByConfirmation(partTimeEmploymentPermit);
-                partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
+                partTimeEmploymentPermit.updateStatusByConfirmation();
 
                 // 시간제 취업 허가서 word 파일 생성
-                ByteArrayInputStream partTimeEmploymentPermitWordStream
-                        = partTimeEmploymentPermitService.createPartTimeEmploymentPermitDocxFile(partTimeEmploymentPermit);
+                ByteArrayInputStream partTimeEmploymentPermitWordStream = partTimeEmploymentPermit.createPartTimeEmploymentPermitDocxFile();
 
                 // wordFile 업로드
                 String partTimeEmploymentPermitWordUrl = s3Util.uploadWordFile(
                         partTimeEmploymentPermitWordStream, discriminatorValue
                 );
 
-//                // 시간제 취업 허가서 Hwp 파일 생성
-//                ByteArrayInputStream partTimeEmploymentPermitHwpStream
-//                        = partTimeEmploymentPermitService.createPartTimeEmploymentPermitHwpFile(partTimeEmploymentPermit);
-//
-//                // hwpFile 업로드
-//                String partTimeEmploymentPermitHwpUrl = s3Util.uploadHwpFile(
-//                        partTimeEmploymentPermitHwpStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
-//                );
+                // Document의 wordUrl 업데이트
+                partTimeEmploymentPermit.updateWordUrl(partTimeEmploymentPermitWordUrl);
 
-                // Document의 wordUrl, hwpUrl 업데이트
-                partTimeEmploymentPermit
-                        = (PartTimeEmploymentPermit) documentService.updateUrls(partTimeEmploymentPermit, partTimeEmploymentPermitWordUrl);
                 partTimeEmploymentPermitRepository.save(partTimeEmploymentPermit);
 
                 break;
@@ -130,29 +97,19 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
                 StandardLaborContract standardLaborContract = (StandardLaborContract) document;
 
                 // 표준근로계약서 유학생, 고용주 상태 Confirmation으로 업데이트
-                standardLaborContract =
-                        standardLaborContractService.updateStatusByConfirmation(standardLaborContract);
-                standardLaborContractRepository.save(standardLaborContract);
+                standardLaborContract.updateStatusByConfirmation();
 
                 // 표준근로계약서 word 파일 생성
-                ByteArrayInputStream standardLaborContractWordStream = standardLaborContractService.createStandardLaborContractDocxFile(standardLaborContract);
+                ByteArrayInputStream standardLaborContractWordStream = standardLaborContract.createStandardLaborContractDocxFile();
 
                 // wordFile 업로드
                 String standardLaborContractWordUrl = s3Util.uploadWordFile(
                         standardLaborContractWordStream, discriminatorValue
                 );
 
-//                // 표준근로계약서 Hwp 파일 생성
-//                ByteArrayInputStream standardLaborContractHwpStream = standardLaborContractService.createStandardLaborContractHwpFile(standardLaborContract);
-//
-//                // hwpFile 업로드
-//                String standardLaborContractHwpUrl = s3Util.uploadHwpFile(
-//                        standardLaborContractHwpStream, discriminatorValue, jobPosting.getId(), jobPosting.getTitle(), owner.getOwnerName(), user.getName()
-//                );
+                // Document의 wordUrl 업데이트
+                standardLaborContract.updateWordUrl(standardLaborContractWordUrl);
 
-                // Document의 wordUrl, hwpUrl 업데이트
-                standardLaborContract
-                        = (StandardLaborContract) documentService.updateUrls(standardLaborContract, standardLaborContractWordUrl);
                 standardLaborContractRepository.save(standardLaborContract);
 
                 break;

@@ -1,8 +1,8 @@
 package com.inglo.giggle.security.application.usecase;
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.security.application.dto.request.ValidateAuthenticationCodeRequestDto;
-import com.inglo.giggle.security.application.dto.response.TemporaryJsonWebTokenDto;
+import com.inglo.giggle.security.presentation.dto.request.ValidateAuthenticationCodeRequestDto;
+import com.inglo.giggle.security.presentation.dto.response.TemporaryJsonWebTokenDto;
 
 @UseCase
 public interface ValidateAuthenticationCodeUseCase {

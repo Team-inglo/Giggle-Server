@@ -1,10 +1,10 @@
 package com.inglo.giggle.security.application.service;
 
 import com.inglo.giggle.security.application.usecase.AuthenticateUserNameUseCase;
-import com.inglo.giggle.security.domain.mysql.Account;
+import com.inglo.giggle.security.domain.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

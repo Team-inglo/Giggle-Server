@@ -2,7 +2,7 @@ package com.inglo.giggle.posting.application.usecase;
 
 
 import com.inglo.giggle.core.annotation.bean.UseCase;
-import com.inglo.giggle.posting.application.dto.response.ReadUserOwnerJobPostingBriefListResponseDto;
+import com.inglo.giggle.posting.presentation.dto.response.ReadUserOwnerJobPostingBriefListResponseDto;
 
 import java.util.UUID;
 

@@ -1,9 +1,10 @@
 package com.inglo.giggle.school.application.service;
 
-import com.inglo.giggle.school.application.dto.response.ReadUserSchoolBriefResponseDto;
-import com.inglo.giggle.school.application.usecase.ReadUserSchoolBriefUseCase;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.repository.SchoolRepository;
+import com.inglo.giggle.school.presentation.dto.response.ReadUserSchoolBriefResponseDto;
+import com.inglo.giggle.school.application.usecase.ReadUserSchoolBriefUseCase;
+import com.inglo.giggle.school.persistence.entity.SchoolEntity;
+import com.inglo.giggle.school.persistence.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

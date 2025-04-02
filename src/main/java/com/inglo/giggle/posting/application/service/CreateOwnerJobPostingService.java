@@ -1,22 +1,18 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.address.domain.service.AddressService;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.core.utility.S3Util;
-import com.inglo.giggle.posting.application.dto.request.CreateOwnerJobPostingRequestDto;
-import com.inglo.giggle.posting.application.dto.response.CreateOwnerJobPostingResponseDto;
 import com.inglo.giggle.posting.application.usecase.CreateOwnerJobPostingUseCase;
+import com.inglo.giggle.posting.domain.CompanyImage;
 import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.domain.service.CompanyImageService;
-import com.inglo.giggle.posting.domain.service.JobPostingService;
-import com.inglo.giggle.posting.domain.service.PostWorkDayTimeService;
-import com.inglo.giggle.posting.repository.JobPostingRepository;
-import com.inglo.giggle.security.domain.mysql.Account;
-import com.inglo.giggle.security.domain.service.AccountService;
-import com.inglo.giggle.security.repository.AccountRepository;
+import com.inglo.giggle.posting.domain.PostingWorkDayTime;
+import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
+import com.inglo.giggle.posting.presentation.dto.request.CreateOwnerJobPostingRequestDto;
+import com.inglo.giggle.posting.presentation.dto.response.CreateOwnerJobPostingResponseDto;
+import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,16 +26,9 @@ import java.util.UUID;
 public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCase {
 
     private final AccountRepository accountRepository;
-    private final AccountService accountService;
-
-    private final JobPostingService jobPostingService;
-    private final PostWorkDayTimeService postWorkDayTimeService;
-
     private final JobPostingRepository jobPostingRepository;
 
     private final S3Util s3Util;
-    private final CompanyImageService companyImageService;
-    private final AddressService addressService;
 
     @Override
     @Transactional
@@ -49,69 +38,65 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
         Account account = accountRepository.findByIdOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
-        accountService.checkOwnerValidation(account);
+        account.checkOwnerValidation();
 
-        // 고용주 조회
-        Owner owner = (Owner) account;
+        // Address 생성
+        Address address = Address.builder()
+                .addressName(requestDto.address().addressName())
+                .addressDetail(requestDto.address().addressDetail())
+                .region1DepthName(requestDto.address().region1DepthName())
+                .region2DepthName(requestDto.address().region2DepthName())
+                .region3DepthName(requestDto.address().region3DepthName())
+                .region4DepthName(requestDto.address().region4DepthName())
+                .latitude(requestDto.address().latitude())
+                .longitude(requestDto.address().longitude())
+                .build();
 
-        // 주소 생성
-        Address address = addressService.createAddress(
-                requestDto.address().addressName(),
-                requestDto.address().region1DepthName(),
-                requestDto.address().region2DepthName(),
-                requestDto.address().region3DepthName(),
-                requestDto.address().region4DepthName(),
-                requestDto.address().addressDetail(),
-                requestDto.address().latitude(),
-                requestDto.address().longitude()
-        );
-
-        // 공고 생성
-        JobPosting jobPosting = jobPostingService.createJobPosting(
-                requestDto.title(),
-                requestDto.jobCategory(),
-                requestDto.hourlyRate(),
-                requestDto.recruitmentDeadLine() == null ? null : DateTimeUtil.convertStringToLocalDate(requestDto.recruitmentDeadLine()),
-                requestDto.workPeriod(),
-                requestDto.recruitmentNumber() == null ? null: requestDto.recruitmentNumber(),
-                requestDto.gender(),
-                requestDto.ageRestriction() == null ? null : requestDto.ageRestriction(),
-                requestDto.educationLevel(),
-                requestDto.visa(),
-                requestDto.recruiterName(),
-                requestDto.recruiterEmail(),
-                requestDto.recruiterPhoneNumber(),
-                requestDto.description(),
-                requestDto.preferredConditions(),
-                requestDto.employmentType(),
-                owner,
-                address
-        );
+        JobPosting jobPosting = JobPosting.builder()
+                .title(requestDto.title())
+                .jobCategory(requestDto.jobCategory())
+                .hourlyRate(requestDto.hourlyRate())
+                .recruitmentDeadLine(requestDto.recruitmentDeadLine() == null ? null : DateTimeUtil.convertStringToLocalDate(requestDto.recruitmentDeadLine()))
+                .workPeriod(requestDto.workPeriod())
+                .recruitmentNumber(requestDto.recruitmentNumber() == null ? null : requestDto.recruitmentNumber())
+                .gender(requestDto.gender())
+                .ageRestriction(requestDto.ageRestriction() == null ? null : requestDto.ageRestriction())
+                .educationLevel(requestDto.educationLevel())
+                .visa(requestDto.visa())
+                .recruiterName(requestDto.recruiterName())
+                .recruiterEmail(requestDto.recruiterEmail())
+                .recruiterPhoneNumber(requestDto.recruiterPhoneNumber())
+                .description(requestDto.description())
+                .preferredConditions(requestDto.preferredConditions())
+                .employmentType(requestDto.employmentType())
+                .ownerId(account.getId())
+                .address(address)
+                .build();
 
         requestDto.workDayTimes().forEach(workDayTimeDto -> jobPosting.getWorkDayTimes().add(
-                postWorkDayTimeService.createPostingWorkDayTime(
-                        workDayTimeDto.dayOfWeek(),
-                        (workDayTimeDto.workStartTime() == null || workDayTimeDto.workStartTime().isBlank()) ? null : DateTimeUtil.convertStringToLocalTime(workDayTimeDto.workStartTime()),
-                        (workDayTimeDto.workEndTime() == null || workDayTimeDto.workEndTime().isBlank() ) ? null : DateTimeUtil.convertStringToLocalTime(workDayTimeDto.workEndTime()),
-                        jobPosting
+                        PostingWorkDayTime.builder()
+                                .dayOfWeek(workDayTimeDto.dayOfWeek())
+                                .workStartTime(workDayTimeDto.workStartTime() == null || workDayTimeDto.workStartTime().isBlank() ? null : DateTimeUtil.convertStringToLocalTime(workDayTimeDto.workStartTime()))
+                                .workEndTime(workDayTimeDto.workEndTime() == null || workDayTimeDto.workEndTime().isBlank() ? null : DateTimeUtil.convertStringToLocalTime(workDayTimeDto.workEndTime()))
+                                .jobPostingId(jobPosting.getId())
+                                .build()
                 )
-        ));
+        );
 
-        if(image != null && !image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             // 이미지 업로드 및 저장
             image.forEach(img -> {
-                String uploadImageFile = s3Util.uploadImageFile(img, owner.getSerialId(), EImageType.COMPANY_IMG);
+                String uploadImageFile = s3Util.uploadImageFile(img, account.getSerialId(), EImageType.COMPANY_IMG);
                 jobPosting.getCompanyImages().add(
-                        companyImageService.createCompanyImage(
-                                uploadImageFile,
-                                jobPosting
-                        )
+                        CompanyImage.builder()
+                                .imgUrl(uploadImageFile)
+                                .jobPostingId(jobPosting.getId())
+                                .build()
                 );
             });
         }
 
-
-        JobPosting savedJobPosting = jobPostingRepository.saveAndReturn(jobPosting);
+        JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
 
         return CreateOwnerJobPostingResponseDto.builder()
                 .id(savedJobPosting.getId())
