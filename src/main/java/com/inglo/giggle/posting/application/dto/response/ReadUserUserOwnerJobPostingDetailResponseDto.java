@@ -2,40 +2,42 @@ package com.inglo.giggle.posting.application.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
-import com.inglo.giggle.core.utility.DateTimeUtil;
-import com.inglo.giggle.posting.domain.JobPosting;
-import com.inglo.giggle.posting.domain.PostingWorkDayTime;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Getter
 public class ReadUserUserOwnerJobPostingDetailResponseDto extends SelfValidating<ReadUserUserOwnerJobPostingDetailResponseDto> {
+
+    @NotNull(message = "id는 null일 수 없습니다.")
+    @JsonProperty("id")
+    private final Long id;
 
     @NotBlank(message = "title은 null일 수 없습니다.")
     @JsonProperty("title")
     private final String title;
 
-    @NotBlank(message = "icon_img_url은 null일 수 없습니다.")
-    @JsonProperty("icon_img_url")
-    private final String iconImgUrl;
+    @NotBlank(message = "company_name은 null일 수 없습니다.")
+    @JsonProperty("company_name")
+    private final String companyName;
 
     @NotBlank(message = "address_name은 null일 수 없습니다.")
     @JsonProperty("address_name")
     private final String addressName;
 
-    @NotNull(message = "duration_of_days는 null일 수 없습니다.")
-    @JsonProperty("duration_of_days")
-    private final Integer durationOfDays;
+    @NotNull(message = "hourly_rate는 null일 수 없습니다.")
+    @JsonProperty("hourly_rate")
+    private final Integer hourlyRate;
 
-    @NotNull(message = "job_info는 null일 수 없습니다.")
-    @JsonProperty("job_info")
-    private final JobInfo jobInfo;
+    @NotNull(message = "work_days_per_week는 null이 될 수 없습니다.")
+    @JsonProperty("work_days_per_week")
+    private final String workDaysPerWeek;
+
+    @NotNull(message = "work_period는 null일 수 없습니다.")
+    @JsonProperty("work_period")
+    private final String workPeriod;
 
     @NotBlank(message = "step은 null일 수 없습니다.")
     @JsonProperty("step")
@@ -43,102 +45,40 @@ public class ReadUserUserOwnerJobPostingDetailResponseDto extends SelfValidating
 
     @Builder
     public ReadUserUserOwnerJobPostingDetailResponseDto(
+            Long id,
             String title,
-            String iconImgUrl,
+            String companyName,
             String addressName,
-            Integer durationOfDays,
-            JobInfo jobInfo,
+            Integer hourlyRate,
+            String workDaysPerWeek,
+            String workPeriod,
             String step
     ) {
+        this.id = id;
         this.title = title;
-        this.iconImgUrl = iconImgUrl;
+        this.companyName = companyName;
         this.addressName = addressName;
-        this.durationOfDays = durationOfDays;
-        this.jobInfo = jobInfo;
+        this.hourlyRate = hourlyRate;
+        this.workDaysPerWeek = workDaysPerWeek;
+        this.workPeriod = workPeriod;
         this.step = step;
 
-        this.validateSelf();
+        validateSelf();
     }
 
     public static ReadUserUserOwnerJobPostingDetailResponseDto fromEntity(
             UserOwnerJobPosting userOwnerJobPosting
     ) {
 
-        int durationOfDays = 0;
-
-        if (userOwnerJobPosting.getUpdatedAt() == null) {
-            durationOfDays = (int) java.time.Duration.between(
-                    userOwnerJobPosting.getCreatedAt(),
-                    LocalDate.now().atStartOfDay()
-            ).toDays();
-        } else {
-            durationOfDays = (int) java.time.Duration.between(
-                    userOwnerJobPosting.getUpdatedAt(),
-                    LocalDate.now().atStartOfDay()
-            ).toDays();
-        }
-
         return ReadUserUserOwnerJobPostingDetailResponseDto.builder()
+                .id(userOwnerJobPosting.getJobPosting().getId())
                 .title(userOwnerJobPosting.getJobPosting().getTitle())
-                .iconImgUrl(userOwnerJobPosting.getOwner().getProfileImgUrl())
+                .companyName(userOwnerJobPosting.getJobPosting().getOwner().getCompanyName())
                 .addressName(userOwnerJobPosting.getJobPosting().getAddress().getAddressName())
-                .durationOfDays(durationOfDays)
-                .jobInfo(JobInfo.fromEntity(userOwnerJobPosting.getJobPosting()))
+                .hourlyRate(userOwnerJobPosting.getJobPosting().getHourlyRate())
+                .workDaysPerWeek(userOwnerJobPosting.getJobPosting().getWorkDaysPerWeekToString())
+                .workPeriod(userOwnerJobPosting.getJobPosting().getWorkPeriod().toString())
                 .step(userOwnerJobPosting.getStep().name())
                 .build();
-    }
-
-    @Getter
-    @Builder
-    public static class JobInfo {
-
-        @NotNull(message = "hourly_rate는 null일 수 없습니다.")
-        @JsonProperty("hourly_rate")
-        private final Integer hourlyRate;
-
-        @NotNull(message = "work_period는 null일 수 없습니다.")
-        @JsonProperty("work_period")
-        private final String workPeriod;
-
-        @NotNull(message = "work_day_times는 null일 수 없습니다.")
-        @JsonProperty("work_day_times")
-        private final List<WorkDayTime> workDayTimes;
-
-        public static JobInfo fromEntity(
-                JobPosting jobPosting
-        ) {
-            return JobInfo.builder()
-                    .hourlyRate(jobPosting.getHourlyRate())
-                    .workPeriod(jobPosting.getWorkPeriod().toString())
-                    .workDayTimes(jobPosting.getWorkDayTimes().stream()
-                            .map(WorkDayTime::fromEntity)
-                            .toList())
-                    .build();
-        }
-    }
-
-    @Getter
-    @Builder
-    public static class WorkDayTime {
-
-        @NotBlank(message = "day_of_week는 null일 수 없습니다.")
-        @JsonProperty("day_of_week")
-        private final String dayOfWeek;
-
-        @NotBlank(message = "work_start_time은 null일 수 없습니다.")
-        @JsonProperty("work_start_time")
-        private final String workStartTime;
-
-        @NotBlank(message = "work_end_time은 null일 수 없습니다.")
-        @JsonProperty("work_end_time")
-        private final String workEndTime;
-
-        public static WorkDayTime fromEntity(PostingWorkDayTime postingWorkDayTime) {
-            return WorkDayTime.builder()
-                    .dayOfWeek(postingWorkDayTime.getDayOfWeek().toString())
-                    .workStartTime(postingWorkDayTime.getWorkStartTime() == null ? null : DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkStartTime()))
-                    .workEndTime(postingWorkDayTime.getWorkEndTime() == null ? null: DateTimeUtil.convertLocalTimeToString(postingWorkDayTime.getWorkEndTime()))
-                    .build();
-        }
     }
 }
