@@ -3,7 +3,9 @@ package com.inglo.giggle.posting.persistence.mapper;
 import com.inglo.giggle.address.persistence.mapper.AddressMapper;
 import com.inglo.giggle.posting.domain.BookMark;
 import com.inglo.giggle.posting.persistence.entity.BookMarkEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BookMarkMapper {
@@ -13,9 +15,9 @@ public class BookMarkMapper {
         }
         return BookMark.builder()
                 .id(entity.getId())
-                .userId(entity.getUserEntity() != null ? entity.getUserEntity().getId() : null)
-                .jobPostingId(entity.getJobPostingEntity() != null ? entity.getJobPostingEntity().getId() : null)
-                .jobPostingInfo(entity.getJobPostingEntity() != null ?
+                .userId(isInitialized(entity.getUserEntity()) ? entity.getUserEntity().getId() : null)
+                .jobPostingId(isInitialized(entity.getJobPostingEntity()) ? entity.getJobPostingEntity().getId() : null)
+                .jobPostingInfo(isInitialized(entity.getJobPostingEntity()) ?
                         BookMark.JobPostingInfo.builder()
                                 .id(entity.getJobPostingEntity().getId())
                                 .title(entity.getJobPostingEntity().getTitle())
@@ -27,7 +29,7 @@ public class BookMarkMapper {
                                 .visa(entity.getJobPostingEntity().getVisa())
                                 .jobCategory(entity.getJobPostingEntity().getJobCategory())
                                 .createdAt(entity.getJobPostingEntity().getCreatedAt())
-                                .ownerInfo(entity.getJobPostingEntity().getOwnerEntity() != null ?
+                                .ownerInfo(isInitialized(entity.getJobPostingEntity().getOwnerEntity()) ?
                                         BookMark.JobPostingInfo.OwnerInfo.builder()
                                                 .profileImgUrl(entity.getJobPostingEntity().getOwnerEntity().getProfileImgUrl())
                                                 .build()
@@ -57,5 +59,10 @@ public class BookMarkMapper {
         return domains.stream()
                 .map(BookMarkMapper::toEntity)
                 .toList();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

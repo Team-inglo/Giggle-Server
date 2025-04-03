@@ -2,6 +2,9 @@ package com.inglo.giggle.resume.persistence.mapper;
 
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.persistence.entity.LanguageSkillEntity;
+import org.hibernate.collection.spi.PersistentCollection;
+
+import java.util.Collection;
 
 public class LanguageSkillMapper {
     public static LanguageSkill toDomain(LanguageSkillEntity entity) {
@@ -12,8 +15,8 @@ public class LanguageSkillMapper {
                 .topikLevel(entity.getTopikLevel())
                 .socialIntegrationLevel(entity.getSocialIntegrationLevel())
                 .sejongInstituteLevel(entity.getSejongInstituteLevel())
-                .additionalLanguages(entity.getAdditionalLanguageEntities() != null ? AdditionalLanguageMapper.toDomains(entity.getAdditionalLanguageEntities()) : null)
-                .resumeId(entity.getResumeEntity() != null ? entity.getResumeEntity().getAccountId() : null)
+                .additionalLanguages(isInitialized(entity.getAdditionalLanguageEntities()) ? AdditionalLanguageMapper.toDomains(entity.getAdditionalLanguageEntities()) : null)
+                .resumeId(isInitialized(entity.getResumeEntity()) ? entity.getResumeEntity().getAccountId() : null)
                 .build();
     }
 
@@ -27,5 +30,15 @@ public class LanguageSkillMapper {
                 .sejongInstituteLevel(domain.getSejongInstituteLevel())
                 .additionalLanguageEntities(domain.getAdditionalLanguages() != null ? AdditionalLanguageMapper.toEntities(domain.getAdditionalLanguages()) : null)
                 .build();
+    }
+
+    private static boolean isInitialized(Collection<?> collection) {
+        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) collection).wasInitialized();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

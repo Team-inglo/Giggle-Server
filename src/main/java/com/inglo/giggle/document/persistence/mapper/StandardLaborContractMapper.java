@@ -5,7 +5,9 @@ import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.persistence.entity.StandardLaborContractEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.EnumSet;
 
 public class StandardLaborContractMapper {
@@ -38,7 +40,7 @@ public class StandardLaborContractMapper {
                 .insurances(entity.getInsurances())
                 .employerSignatureBase64(entity.getEmployerSignatureBase64())
                 .employerStatus(entity.getEmployerStatus())
-                .contractWorkDayTimes(ContractWorkDayTimeMapper.toDomains(entity.getContractWorkDayTimeEntities()))
+                .contractWorkDayTimes(isInitialized(entity.getContractWorkDayTimeEntities()) ? ContractWorkDayTimeMapper.toDomains(entity.getContractWorkDayTimeEntities()) : null)
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
@@ -76,5 +78,15 @@ public class StandardLaborContractMapper {
                 .employerStatus(domain.getEmployerStatus())
                 .contractWorkDayTimeEntities(ContractWorkDayTimeMapper.toEntities(domain.getContractWorkDayTimes()))
                 .build();
+    }
+
+    private static boolean isInitialized(Collection<?> collection) {
+        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) collection).wasInitialized();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

@@ -2,6 +2,9 @@ package com.inglo.giggle.resume.persistence.mapper;
 
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.persistence.entity.ResumeEntity;
+import org.hibernate.collection.spi.PersistentCollection;
+
+import java.util.Collection;
 
 public class ResumeMapper {
     public static Resume toDomain(ResumeEntity entity) {
@@ -11,9 +14,9 @@ public class ResumeMapper {
         return Resume.builder()
                 .accountId(entity.getAccountId())
                 .introduction(entity.getIntroduction())
-                .workExperiences(WorkExperienceMapper.toDomains(entity.getWorkExperienceEntities()))
-                .educations(EducationMapper.toDomains(entity.getEducationEntities()))
-                .languageSkill(LanguageSkillMapper.toDomain(entity.getLanguageSkillEntity()))
+                .workExperiences(isInitialized(entity.getWorkExperienceEntities()) ? WorkExperienceMapper.toDomains(entity.getWorkExperienceEntities()) : null)
+                .educations(isInitialized(entity.getEducationEntities()) ? EducationMapper.toDomains(entity.getEducationEntities()) : null)
+                .languageSkill(isInitialized(entity.getLanguageSkillEntity()) ? LanguageSkillMapper.toDomain(entity.getLanguageSkillEntity()) : null)
                 .build();
     }
 
@@ -27,5 +30,15 @@ public class ResumeMapper {
                 .educationEntities(EducationMapper.toEntities(domain.getEducations()))
                 .languageSkillEntity(LanguageSkillMapper.toEntity(domain.getLanguageSkill()))
                 .build();
+    }
+
+    private static boolean isInitialized(Collection<?> collection) {
+        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) collection).wasInitialized();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

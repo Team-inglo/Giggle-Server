@@ -7,6 +7,9 @@ import com.inglo.giggle.posting.persistence.mapper.UserOwnerJobPostingMapper;
 import com.inglo.giggle.resume.persistence.mapper.ResumeMapper;
 import com.inglo.giggle.security.persistence.mapper.AccountDeviceMapper;
 import com.inglo.giggle.term.persistence.mapper.TermAccountMapper;
+import org.hibernate.collection.spi.PersistentCollection;
+
+import java.util.Collection;
 
 public class UserMapper {
     public static User toDomain(UserEntity entity) {
@@ -27,8 +30,8 @@ public class UserMapper {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .termAccounts(entity.getTermAccountEntities() != null && !entity.getTermAccountEntities().isEmpty() ? TermAccountMapper.toDomains(entity.getTermAccountEntities()) : null)
-                .accountDevices(entity.getAccountDeviceEntities() != null && !entity.getAccountDeviceEntities().isEmpty() ? AccountDeviceMapper.toDomains(entity.getAccountDeviceEntities()) : null)
+                .termAccounts(isInitialized(entity.getTermAccountEntities()) ? TermAccountMapper.toDomains(entity.getTermAccountEntities()) : null)
+                .accountDevices(isInitialized(entity.getAccountDeviceEntities()) ? AccountDeviceMapper.toDomains(entity.getAccountDeviceEntities()) : null)
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .gender(entity.getGender())
@@ -36,9 +39,9 @@ public class UserMapper {
                 .language(entity.getLanguage())
                 .birth(entity.getBirth())
                 .visa(entity.getVisa())
-                .bookMarks(entity.getBookMarkEntities() != null && !entity.getBookMarkEntities().isEmpty() ? BookMarkMapper.toDomains(entity.getBookMarkEntities()) : null)
-                .userOwnerJobPostings(entity.getUserOwnerJobPostingEntities() != null && !entity.getUserOwnerJobPostingEntities().isEmpty() ? UserOwnerJobPostingMapper.toDomains(entity.getUserOwnerJobPostingEntities()) : null)
-                .resume(entity.getResumeEntity() != null ? ResumeMapper.toDomain(entity.getResumeEntity()) : null)
+                .bookMarks(isInitialized(entity.getBookMarkEntities()) ? BookMarkMapper.toDomains(entity.getBookMarkEntities()) : null)
+                .userOwnerJobPostings(isInitialized(entity.getUserOwnerJobPostingEntities()) ? UserOwnerJobPostingMapper.toDomains(entity.getUserOwnerJobPostingEntities()) : null)
+                .resume(isInitialized(entity.getResumeEntity()) ? ResumeMapper.toDomain(entity.getResumeEntity()) : null)
                 .build();
     }
 
@@ -69,5 +72,15 @@ public class UserMapper {
                 .userOwnerJobPostingEntities(domain.getUserOwnerJobPostings() != null && !domain.getUserOwnerJobPostings().isEmpty() ? UserOwnerJobPostingMapper.toEntities(domain.getUserOwnerJobPostings()) : null)
                 .resumeEntity(domain.getResume() != null ? ResumeMapper.toEntity(domain.getResume()) : null)
                 .build();
+    }
+
+    private static boolean isInitialized(Collection<?> collection) {
+        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) collection).wasInitialized();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

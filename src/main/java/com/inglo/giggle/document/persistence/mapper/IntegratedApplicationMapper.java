@@ -3,6 +3,9 @@ package com.inglo.giggle.document.persistence.mapper;
 import com.inglo.giggle.address.persistence.mapper.AddressMapper;
 import com.inglo.giggle.document.domain.IntegratedApplication;
 import com.inglo.giggle.document.persistence.entity.IntegratedApplicationEntity;
+import org.hibernate.collection.spi.PersistentCollection;
+
+import java.util.Collection;
 
 public class IntegratedApplicationMapper {
     public static IntegratedApplication toDomain(IntegratedApplicationEntity entity) {
@@ -28,11 +31,11 @@ public class IntegratedApplicationMapper {
                 .employeeSignatureBase64(entity.getEmployeeSignatureBase64())
                 .employeeStatus(entity.getEmployeeStatus())
                 .employeeAddress(AddressMapper.toDomain(entity.getEmployeeAddressEntity()))
-                .schoolId(entity.getSchoolEntity() != null ? entity.getSchoolEntity().getId() : null)
+                .schoolId(isInitialized(entity.getSchoolEntity())? entity.getSchoolEntity().getId() : null)
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .schoolInfo(entity.getSchoolEntity() != null ? IntegratedApplication.SchoolInfo.builder()
+                .schoolInfo(isInitialized(entity.getSchoolEntity()) ? IntegratedApplication.SchoolInfo.builder()
                         .schoolName(entity.getSchoolEntity().getSchoolName())
                         .schoolPhoneNumber(entity.getSchoolEntity().getSchoolPhoneNumber())
                         .build() : null)
@@ -62,5 +65,10 @@ public class IntegratedApplicationMapper {
                 .employeeStatus(domain.getEmployeeStatus())
                 .employeeAddressEntity(AddressMapper.toEntity(domain.getEmployeeAddress()))
                 .build();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

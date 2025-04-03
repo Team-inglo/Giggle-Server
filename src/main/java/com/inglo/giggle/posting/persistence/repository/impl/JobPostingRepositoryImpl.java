@@ -329,7 +329,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepository {
         List<JobPosting> content = JobPostingMapper.toDomains(queryFactory
                 .selectFrom(jobPosting)
                 .distinct()
-                .leftJoin(jobPosting.workDayTimes, QPostingWorkDayTimeEntity.postingWorkDayTimeEntity).fetchJoin()
+                .leftJoin(jobPosting.workDayTimeEntities, QPostingWorkDayTimeEntity.postingWorkDayTimeEntity).fetchJoin()
                 .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

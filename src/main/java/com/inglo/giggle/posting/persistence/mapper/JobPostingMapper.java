@@ -3,7 +3,9 @@ package com.inglo.giggle.posting.persistence.mapper;
 import com.inglo.giggle.address.persistence.mapper.AddressMapper;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.persistence.entity.JobPostingEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.List;
 
 public class JobPostingMapper {
@@ -30,15 +32,15 @@ public class JobPostingMapper {
                 .preferredConditions(entity.getPreferredConditions())
                 .employmentType(entity.getEmploymentType())
                 .address(AddressMapper.toDomain(entity.getAddressEntity()))
-                .ownerId(entity.getOwnerEntity() != null ? entity.getOwnerEntity().getId() : null)
-                .workDayTimes(PostingWorkDayTimeMapper.toDomains(entity.getWorkDayTimes()))
-                .companyImages(CompanyImageMapper.toDomains(entity.getCompanyImageEntities()))
-                .bookMarks(BookMarkMapper.toDomains(entity.getBookMarkEntities()))
-                .userOwnerJobPostings(entity.getUserOwnerJobPostingEntities() != null ? UserOwnerJobPostingMapper.toDomains(entity.getUserOwnerJobPostingEntities()) : null)
+                .ownerId(isInitialized(entity.getOwnerEntity()) ? entity.getOwnerEntity().getId() : null)
+                .workDayTimes(isInitialized(entity.getWorkDayTimeEntities()) ? PostingWorkDayTimeMapper.toDomains(entity.getWorkDayTimeEntities()) : null)
+                .companyImages(isInitialized(entity.getCompanyImageEntities()) ? CompanyImageMapper.toDomains(entity.getCompanyImageEntities()) : null)
+                .bookMarks(isInitialized(entity.getBookMarkEntities()) ? BookMarkMapper.toDomains(entity.getBookMarkEntities()) : null)
+                .userOwnerJobPostings(isInitialized(entity.getUserOwnerJobPostingEntities()) ? UserOwnerJobPostingMapper.toDomains(entity.getUserOwnerJobPostingEntities()) : null)
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .ownerInfo(entity.getOwnerEntity() != null ? JobPosting.OwnerInfo.builder()
+                .ownerInfo(isInitialized(entity.getOwnerEntity()) ? JobPosting.OwnerInfo.builder()
                         .id(entity.getOwnerEntity().getId())
                         .profileImgUrl(entity.getOwnerEntity().getProfileImgUrl())
                         .companyName(entity.getOwnerEntity().getCompanyName())
@@ -71,7 +73,7 @@ public class JobPostingMapper {
                 .preferredConditions(domain.getPreferredConditions())
                 .employmentType(domain.getEmploymentType())
                 .addressEntity(AddressMapper.toEntity(domain.getAddress()))
-                .workDayTimes(PostingWorkDayTimeMapper.toEntities(domain.getWorkDayTimes()))
+                .workDayTimeEntities(PostingWorkDayTimeMapper.toEntities(domain.getWorkDayTimes()))
                 .companyImageEntities(CompanyImageMapper.toEntities(domain.getCompanyImages()))
                 .bookMarkEntities(BookMarkMapper.toEntities(domain.getBookMarks()))
                 .build();
@@ -87,5 +89,15 @@ public class JobPostingMapper {
         return domains.stream()
                 .map(JobPostingMapper::toEntity)
                 .toList();
+    }
+
+    private static boolean isInitialized(Collection<?> collection) {
+        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) collection).wasInitialized();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

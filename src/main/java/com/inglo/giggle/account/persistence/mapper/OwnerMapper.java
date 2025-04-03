@@ -6,6 +6,9 @@ import com.inglo.giggle.address.persistence.mapper.AddressMapper;
 import com.inglo.giggle.posting.persistence.mapper.JobPostingMapper;
 import com.inglo.giggle.security.persistence.mapper.AccountDeviceMapper;
 import com.inglo.giggle.term.persistence.mapper.TermAccountMapper;
+import org.hibernate.collection.spi.PersistentCollection;
+
+import java.util.Collection;
 
 public class OwnerMapper {
     public static Owner toDomain(OwnerEntity entity) {
@@ -25,13 +28,13 @@ public class OwnerMapper {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .termAccounts(entity.getTermAccountEntities() != null && !entity.getTermAccountEntities().isEmpty() ? TermAccountMapper.toDomains(entity.getTermAccountEntities()) : null)
-                .accountDevices(entity.getAccountDeviceEntities() != null && !entity.getAccountDeviceEntities().isEmpty() ? AccountDeviceMapper.toDomains(entity.getAccountDeviceEntities()) : null)
+                .termAccounts(isInitialized(entity.getTermAccountEntities()) ? TermAccountMapper.toDomains(entity.getTermAccountEntities()) : null)
+                .accountDevices(isInitialized(entity.getAccountDeviceEntities()) ? AccountDeviceMapper.toDomains(entity.getAccountDeviceEntities()) : null)
                 .companyName(entity.getCompanyName())
                 .ownerName(entity.getOwnerName())
                 .companyRegistrationNumber(entity.getCompanyRegistrationNumber())
                 .address(AddressMapper.toDomain(entity.getAddressEntity()))
-                .jobPostings(entity.getJobPostingEntities() != null && !entity.getJobPostingEntities().isEmpty() ? JobPostingMapper.toDomains(entity.getJobPostingEntities()) : null)
+                .jobPostings(isInitialized(entity.getJobPostingEntities()) ? JobPostingMapper.toDomains(entity.getJobPostingEntities()) : null)
                 .build();
     }
 
@@ -56,5 +59,10 @@ public class OwnerMapper {
                 .addressEntity(AddressMapper.toEntity(domain.getAddress()))
                 .jobPostingEntities(domain.getJobPostings() != null && !domain.getJobPostings().isEmpty() ? JobPostingMapper.toEntities(domain.getJobPostings()) : null)
                 .build();
+    }
+
+    private static boolean isInitialized(Collection<?> collection) {
+        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) collection).wasInitialized();
     }
 }

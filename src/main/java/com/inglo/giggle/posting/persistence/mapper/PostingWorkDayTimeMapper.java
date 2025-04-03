@@ -2,7 +2,9 @@ package com.inglo.giggle.posting.persistence.mapper;
 
 import com.inglo.giggle.posting.domain.PostingWorkDayTime;
 import com.inglo.giggle.posting.persistence.entity.PostingWorkDayTimeEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.List;
 
 public class PostingWorkDayTimeMapper {
@@ -16,7 +18,7 @@ public class PostingWorkDayTimeMapper {
                 .dayOfWeek(entity.getDayOfWeek())
                 .workStartTime(entity.getWorkStartTime())
                 .workEndTime(entity.getWorkEndTime())
-                .jobPostingId(entity.getJobPostingEntity() != null ? entity.getJobPostingEntity().getId() : null)
+                .jobPostingId(isInitialized(entity.getJobPostingEntity()) ? entity.getJobPostingEntity().getId() : null)
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
@@ -44,5 +46,10 @@ public class PostingWorkDayTimeMapper {
         return domains.stream()
                 .map(PostingWorkDayTimeMapper::toEntity)
                 .toList();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

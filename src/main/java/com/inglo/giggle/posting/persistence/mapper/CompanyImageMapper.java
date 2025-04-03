@@ -2,7 +2,9 @@ package com.inglo.giggle.posting.persistence.mapper;
 
 import com.inglo.giggle.posting.domain.CompanyImage;
 import com.inglo.giggle.posting.persistence.entity.CompanyImageEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CompanyImageMapper {
@@ -16,7 +18,7 @@ public class CompanyImageMapper {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .jobPostingId(entity.getJobPostingEntity() != null ? entity.getJobPostingEntity().getId() : null)
+                .jobPostingId(isInitialized(entity.getJobPostingEntity()) ? entity.getJobPostingEntity().getId() : null)
                 .build();
     }
 
@@ -39,5 +41,10 @@ public class CompanyImageMapper {
         return domains.stream()
                 .map(CompanyImageMapper::toEntity)
                 .toList();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

@@ -2,7 +2,9 @@ package com.inglo.giggle.notification.persistence.mapper;
 
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.persistence.entity.NotificationEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.List;
 
 public class NotificationMapper {
@@ -13,10 +15,10 @@ public class NotificationMapper {
                 .message(entity.getMessage())
                 .isRead(entity.getIsRead())
                 .notificationType(entity.getNotificationType())
-                .userOwnerJobPostingId(entity.getUserOwnerJobPostingEntity() != null ? entity.getUserOwnerJobPostingEntity().getId() : null)
-                .userOwnerJobPostingInfo(entity.getUserOwnerJobPostingEntity() != null ? Notification.UserOwnerJobPostingInfo.builder()
+                .userOwnerJobPostingId(isInitialized(entity.getUserOwnerJobPostingEntity()) ? entity.getUserOwnerJobPostingEntity().getId() : null)
+                .userOwnerJobPostingInfo(isInitialized(entity.getUserOwnerJobPostingEntity()) ? Notification.UserOwnerJobPostingInfo.builder()
                         .id(entity.getUserOwnerJobPostingEntity().getId())
-                        .jobPostingInfo(entity.getUserOwnerJobPostingEntity().getJobPostingEntity() != null ? Notification.JobPostingInfo.builder()
+                        .jobPostingInfo(isInitialized(entity.getUserOwnerJobPostingEntity().getJobPostingEntity()) ? Notification.JobPostingInfo.builder()
                                 .id(entity.getUserOwnerJobPostingEntity().getJobPostingEntity().getId())
                                 .title(entity.getUserOwnerJobPostingEntity().getJobPostingEntity().getTitle())
                                 .build() : null)
@@ -45,5 +47,10 @@ public class NotificationMapper {
         return domains.stream()
                 .map(NotificationMapper::toEntity)
                 .toList();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

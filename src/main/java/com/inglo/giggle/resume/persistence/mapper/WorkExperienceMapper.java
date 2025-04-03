@@ -2,7 +2,9 @@ package com.inglo.giggle.resume.persistence.mapper;
 
 import com.inglo.giggle.resume.domain.WorkExperience;
 import com.inglo.giggle.resume.persistence.entity.WorkExperienceEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.List;
 
 public class WorkExperienceMapper {
@@ -17,7 +19,7 @@ public class WorkExperienceMapper {
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
                 .description(entity.getDescription())
-                .resumeId(entity.getResumeEntity() != null ? entity.getResumeEntity().getAccountId() : null)
+                .resumeId(isInitialized(entity.getResumeEntity()) ? entity.getResumeEntity().getAccountId() : null)
                 .build();
     }
 
@@ -44,5 +46,15 @@ public class WorkExperienceMapper {
         return domains.stream()
                 .map(WorkExperienceMapper::toEntity)
                 .toList();
+    }
+
+    private static boolean isInitialized(Collection<?> collection) {
+        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) collection).wasInitialized();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

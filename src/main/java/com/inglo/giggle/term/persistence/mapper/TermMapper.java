@@ -2,7 +2,9 @@ package com.inglo.giggle.term.persistence.mapper;
 
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.persistence.entity.TermEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TermMapper {
@@ -19,7 +21,7 @@ public class TermMapper {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .termAccounts(entity.getTermAccountEntities() != null && !entity.getTermAccountEntities().isEmpty() ? TermAccountMapper.toDomains(entity.getTermAccountEntities()) : null)
+                .termAccounts(isInitialized(entity.getTermAccountEntities()) ? TermAccountMapper.toDomains(entity.getTermAccountEntities()) : null)
                 .build();
     }
 
@@ -46,5 +48,10 @@ public class TermMapper {
         return domains.stream()
                 .map(TermMapper::toEntity)
                 .toList();
+    }
+
+    private static boolean isInitialized(Collection<?> collection) {
+        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) collection).wasInitialized();
     }
 }

@@ -2,7 +2,9 @@ package com.inglo.giggle.document.persistence.mapper;
 
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
 import com.inglo.giggle.document.persistence.entity.ContractWorkDayTimeEntity;
+import org.hibernate.collection.spi.PersistentCollection;
 
+import java.util.Collection;
 import java.util.List;
 
 public class ContractWorkDayTimeMapper {
@@ -20,7 +22,7 @@ public class ContractWorkDayTimeMapper {
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .standardLaborContractId(entity.getStandardLaborContractEntity() != null ? entity.getStandardLaborContractEntity().getId() : null)
+                .standardLaborContractId(isInitialized(entity.getStandardLaborContractEntity()) ? entity.getStandardLaborContractEntity().getId() : null)
                 .build();
     }
 
@@ -43,6 +45,11 @@ public class ContractWorkDayTimeMapper {
 
     public static List<ContractWorkDayTimeEntity> toEntities(List<ContractWorkDayTime> domains) {
         return domains.stream().map(ContractWorkDayTimeMapper::toEntity).toList();
+    }
+
+    private static boolean isInitialized(Object object) {
+        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
+                ((PersistentCollection<?>) object).wasInitialized();
     }
 }
 
