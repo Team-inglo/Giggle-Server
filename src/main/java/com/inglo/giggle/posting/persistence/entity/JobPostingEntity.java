@@ -135,7 +135,7 @@ public class JobPostingEntity extends BaseEntity {
     /* One To Many Mapping ------------------------ */
     /* -------------------------------------------- */
     @OneToMany(mappedBy = "jobPostingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostingWorkDayTimeEntity> workDayTimes = new ArrayList<>();
+    private List<PostingWorkDayTimeEntity> workDayTimeEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "jobPostingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CompanyImageEntity> companyImageEntities = new ArrayList<>();
@@ -155,7 +155,7 @@ public class JobPostingEntity extends BaseEntity {
                             EEducationLevel educationLevel, Set<EVisa> visa, String recruiterName, String recruiterEmail,
                             String recruiterPhoneNumber, String description, String preferredConditions,
                             EEmploymentType employmentType, OwnerEntity ownerEntity, AddressEntity addressEntity,
-                            List<PostingWorkDayTimeEntity> workDayTimes, List<CompanyImageEntity> companyImageEntities, List<BookMarkEntity> bookMarkEntities,
+                            List<PostingWorkDayTimeEntity> workDayTimeEntities, List<CompanyImageEntity> companyImageEntities, List<BookMarkEntity> bookMarkEntities,
                             List<UserOwnerJobPostingEntity> userOwnerJobPostingEntities) {
         this.title = title;
         this.jobCategory = jobCategory;
@@ -175,7 +175,7 @@ public class JobPostingEntity extends BaseEntity {
         this.employmentType = employmentType;
         this.ownerEntity = ownerEntity;
         this.addressEntity = addressEntity;
-        this.workDayTimes = workDayTimes;
+        this.workDayTimeEntities = workDayTimeEntities;
         this.companyImageEntities = companyImageEntities;
         this.bookMarkEntities = bookMarkEntities;
         this.userOwnerJobPostingEntities = userOwnerJobPostingEntities;
@@ -221,12 +221,12 @@ public class JobPostingEntity extends BaseEntity {
 
     public String getWorkDaysPerWeekToString() {
         // 협의 가능 요일이 포함되어 있는 경우
-        if (workDayTimes.stream().anyMatch(dayTime -> dayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE)) {
+        if (workDayTimeEntities.stream().anyMatch(dayTime -> dayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE)) {
             return "협의 가능";
         }
 
         // 중복되지 않은 요일의 개수 세기
-        long distinctDays = workDayTimes.stream()
+        long distinctDays = workDayTimeEntities.stream()
                 .map(PostingWorkDayTimeEntity::getDayOfWeek)
                 .distinct()
                 .count();
@@ -248,7 +248,7 @@ public class JobPostingEntity extends BaseEntity {
         int weekdayHours = 0;
         int weekendHours = 0;
 
-        for (PostingWorkDayTimeEntity workDayTime : workDayTimes) {
+        for (PostingWorkDayTimeEntity workDayTime : workDayTimeEntities) {
             if (workDayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE || workDayTime.getWorkStartTime() == null || workDayTime.getWorkEndTime() == null) {
                 continue;
             }
@@ -281,8 +281,8 @@ public class JobPostingEntity extends BaseEntity {
     }
 
     public void updatePostWorkDayTimes(List<PostingWorkDayTimeEntity> workDayTimes) {
-        this.workDayTimes.clear();
-        this.workDayTimes.addAll(workDayTimes);
+        this.workDayTimeEntities.clear();
+        this.workDayTimeEntities.addAll(workDayTimes);
     }
 
     public void fetchOwner(OwnerEntity ownerEntity) {

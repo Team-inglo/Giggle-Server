@@ -38,7 +38,7 @@ public interface JobPostingJpaRepository extends JpaRepository<JobPostingEntity,
     // 인기순 공고 조회 쿼리
     @Query("SELECT DISTINCT jp.id AS jobPostingId, jp AS jobPosting " +
             "FROM JobPostingEntity jp " +
-            "JOIN jp.workDayTimes pw " +
+            "JOIN jp.workDayTimeEntities pw " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND ( " +
             "( " +
@@ -64,9 +64,9 @@ public interface JobPostingJpaRepository extends JpaRepository<JobPostingEntity,
             "AND (:industryList IS NULL OR jp.jobCategory IN :industryList) " +
             "AND (:workPeriodList IS NULL OR jp.workPeriod IN :workPeriodList) " +
             "AND (:workDaysPerWeekList IS NULL OR " +
-            "(SELECT COUNT(wdt) FROM jp.workDayTimes wdt WHERE wdt.dayOfWeek <> :negotiableDay) IN :workDaysPerWeekList) " +
+            "(SELECT COUNT(wdt) FROM jp.workDayTimeEntities wdt WHERE wdt.dayOfWeek <> :negotiableDay) IN :workDaysPerWeekList) " +
             "AND (:workingDayList IS NULL OR pw.dayOfWeek IN :workingDayList " +
-            "OR EXISTS (SELECT 1 FROM jp.workDayTimes wdt WHERE wdt.dayOfWeek = :negotiableDay)) " +
+            "OR EXISTS (SELECT 1 FROM jp.workDayTimeEntities wdt WHERE wdt.dayOfWeek = :negotiableDay)) " +
             "AND (:workingHoursList IS NULL OR " +
             "( " +
             ":morningStart BETWEEN pw.workStartTime AND pw.workEndTime OR :morningEnd BETWEEN pw.workStartTime AND pw.workEndTime) AND :morningSelected = TRUE " +
@@ -124,7 +124,7 @@ public interface JobPostingJpaRepository extends JpaRepository<JobPostingEntity,
     // 최신순 공고 조회 쿼리
     @Query("SELECT DISTINCT jp.id AS jobPostingId, jp AS jobPosting " +
             "FROM JobPostingEntity jp " +
-            "JOIN jp.workDayTimes pw " +
+            "JOIN jp.workDayTimeEntities pw " +
             "WHERE (:jobTitle IS NULL OR jp.title LIKE CONCAT('%', :jobTitle, '%')) " +
             "AND ( " +
             "( " +
@@ -152,12 +152,12 @@ public interface JobPostingJpaRepository extends JpaRepository<JobPostingEntity,
             "AND ((" +
             "(:workDaysPerWeekList IS NULL OR " +
             "(:workDaysPerWeekList IS NOT NULL AND " +
-            "(SELECT COUNT(wdt) FROM jp.workDayTimes wdt WHERE wdt.dayOfWeek <> :negotiableDay) IN :workDaysPerWeekList) " +
+            "(SELECT COUNT(wdt) FROM jp.workDayTimeEntities wdt WHERE wdt.dayOfWeek <> :negotiableDay) IN :workDaysPerWeekList) " +
             ") " +
-            "OR EXISTS (SELECT 1 FROM jp.workDayTimes wdt WHERE wdt.dayOfWeek = :negotiableDay)) " +
+            "OR EXISTS (SELECT 1 FROM jp.workDayTimeEntities wdt WHERE wdt.dayOfWeek = :negotiableDay)) " +
             ")" +
             "AND (:workingDayList IS NULL OR pw.dayOfWeek IN :workingDayList " +
-            "OR EXISTS (SELECT 1 FROM jp.workDayTimes wdt WHERE wdt.dayOfWeek = :negotiableDay)) " +
+            "OR EXISTS (SELECT 1 FROM jp.workDayTimeEntities wdt WHERE wdt.dayOfWeek = :negotiableDay)) " +
             "AND (:workingHoursList IS NULL OR " +
             "( " +
             ":morningStart BETWEEN pw.workStartTime AND pw.workEndTime OR :morningEnd BETWEEN pw.workStartTime AND pw.workEndTime) AND :morningSelected = TRUE " +
@@ -215,7 +215,7 @@ public interface JobPostingJpaRepository extends JpaRepository<JobPostingEntity,
 
     @Query("SELECT jp FROM JobPostingEntity jp " +
             "JOIN FETCH jp.ownerEntity o " +
-            "JOIN FETCH jp.workDayTimes wdt " +
+            "JOIN FETCH jp.workDayTimeEntities wdt " +
             "JOIN FETCH jp.visa v " +
             "WHERE jp.id IN :jobPostingIds")
     List<JobPostingEntity> findJobPostingsWithDetailsByIds(
