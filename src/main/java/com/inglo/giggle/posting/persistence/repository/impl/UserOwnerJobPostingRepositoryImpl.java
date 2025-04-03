@@ -186,6 +186,7 @@ public class UserOwnerJobPostingRepositoryImpl implements UserOwnerJobPostingRep
     }
 
     @Override
+    //TODO: 수정해야함
     public UserOwnerJobPosting save(UserOwnerJobPosting userOwnerJobPosting) {
         UserOwnerJobPostingEntity entity = UserOwnerJobPostingMapper.toEntity(userOwnerJobPosting);
         UserEntity userEntity = userJpaRepository.findById(userOwnerJobPosting.getUserId())
