@@ -118,20 +118,20 @@ Content-Type: application/json
     "visa": "{{auth.API_2_5.user_info.visa}}",
     "phone_number": "{{auth.API_2_5.user_info.phone_number}}"
   },
-  "addressEntity": {
-    "address_name": "{{auth.API_2_5.addressEntity.address_name}}",
-    "region_1depth_name": "{{auth.API_2_5.addressEntity.region_1depth_name}}",
-    "region_2depth_name": "{{auth.API_2_5.addressEntity.region_2depth_name}}",
-    "region_3depth_name": "{{auth.API_2_5.addressEntity.region_3depth_name}}",
-    "region_4depth_name": "{{auth.API_2_5.addressEntity.region_4depth_name}}",
-    "address_detail": "{{auth.API_2_5.addressEntity.address_detail}}",
-    "latitude": "{{auth.API_2_5.addressEntity.latitude}}",
-    "longitude": "{{auth.API_2_5.addressEntity.longitude}}"
+  "address": {
+    "address_name": "{{auth.API_2_5.address.address_name}}",
+    "region_1depth_name": "{{auth.API_2_5.address.region_1depth_name}}",
+    "region_2depth_name": "{{auth.API_2_5.address.region_2depth_name}}",
+    "region_3depth_name": "{{auth.API_2_5.address.region_3depth_name}}",
+    "region_4depth_name": "{{auth.API_2_5.address.region_4depth_name}}",
+    "address_detail": "{{auth.API_2_5.address.address_detail}}",
+    "latitude": "{{auth.API_2_5.address.latitude}}",
+    "longitude": "{{auth.API_2_5.address.longitude}}"
   },
   "marketing_allowed": "{{auth.API_2_5.marketing_allowed}}",
   "notification_allowed": "{{auth.API_2_5.notification_allowed}}",
   "language": "{{auth.API_2_5.language}}",
-  "term_types": ["personal-service-termEntities", "privacy-policy","location-based-termEntities"]
+  "term_types": ["personal-service-terms", "privacy-policy","location-based-terms"]
 }
 
 ### 2.6 기본 고용주 회원가입
@@ -169,13 +169,13 @@ Content-Type: application/json
     },
     "marketing_allowed": "{{auth.API_2_6.marketing_allowed}}",
     "notification_allowed": "{{auth.API_2_6.notification_allowed}}",
-    "term_types": ["enterprise-service-termEntities", "privacy-policy","location-based-termEntities"]
+    "term_types": ["enterprise-service-terms", "privacy-policy","location-based-terms"]
 }
 
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "437513"
+@authentication_code_user = "934331"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 
@@ -191,7 +191,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 고용주
 // @no-log
-@authentication_code_owner = "962078"
+@authentication_code_owner = "379779"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 

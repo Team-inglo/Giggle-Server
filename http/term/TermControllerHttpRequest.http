@@ -10,7 +10,7 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-    "term_types": ["personal-service-termEntities", "privacy-policy"]
+    "term_types": ["personal-service-terms", "privacy-policy"]
 }
 
 ### 약관 생성하기

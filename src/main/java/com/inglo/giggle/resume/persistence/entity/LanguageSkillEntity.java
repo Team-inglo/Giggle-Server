@@ -74,4 +74,8 @@ public class LanguageSkillEntity extends BaseEntity {
         this.sejongInstituteLevel = sejongInstituteLevel;
         this.additionalLanguageEntities = additionalLanguageEntities;
     }
+
+    public void fetchResumeEntity(ResumeEntity resumeEntity) {
+        this.resumeEntity = resumeEntity;
+    }
 }

@@ -7,7 +7,7 @@ import com.inglo.giggle.term.persistence.entity.TermEntity;
 import com.inglo.giggle.term.domain.type.ETermType;
 import com.inglo.giggle.term.persistence.mapper.TermMapper;
 import com.inglo.giggle.term.persistence.repository.TermRepository;
-import com.inglo.giggle.termEntity.persistence.repository.mysql.TermJpaRepository;
+import com.inglo.giggle.term.persistence.repository.mysql.TermJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

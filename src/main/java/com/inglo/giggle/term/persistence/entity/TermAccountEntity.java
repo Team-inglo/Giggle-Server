@@ -61,4 +61,12 @@ public class TermAccountEntity extends BaseEntity {
         this.termEntity = termEntity;
     }
 
+    public void fetchAccountEntity(AccountEntity accountEntity) {
+        this.accountEntity = accountEntity;
+    }
+
+    public void fetchTermEntity(TermEntity termEntity) {
+        this.termEntity = termEntity;
+    }
+
 }

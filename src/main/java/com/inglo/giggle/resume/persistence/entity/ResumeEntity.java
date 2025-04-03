@@ -76,4 +76,8 @@ public class ResumeEntity extends BaseEntity {
         this.languageSkillEntity = languageSkillEntity;
     }
 
+    public void fetchUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
 }

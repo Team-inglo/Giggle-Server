@@ -26,9 +26,9 @@ public class ResumeMapper {
         }
         return ResumeEntity.builder()
                 .introduction(domain.getIntroduction())
-                .workExperienceEntities(WorkExperienceMapper.toEntities(domain.getWorkExperiences()))
-                .educationEntities(EducationMapper.toEntities(domain.getEducations()))
-                .languageSkillEntity(LanguageSkillMapper.toEntity(domain.getLanguageSkill()))
+                .workExperienceEntities(domain.getWorkExperiences() != null ? WorkExperienceMapper.toEntities(domain.getWorkExperiences()) : null)
+                .educationEntities(domain.getEducations() != null ? EducationMapper.toEntities(domain.getEducations()) : null)
+                .languageSkillEntity(domain.getLanguageSkill() != null ? LanguageSkillMapper.toEntity(domain.getLanguageSkill()) : null)
                 .build();
     }
 

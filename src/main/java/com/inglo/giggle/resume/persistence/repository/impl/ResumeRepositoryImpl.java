@@ -1,5 +1,7 @@
 package com.inglo.giggle.resume.persistence.repository.impl;
 
+import com.inglo.giggle.account.persistence.entity.UserEntity;
+import com.inglo.giggle.account.persistence.repository.mysql.UserJpaRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.resume.domain.Resume;
@@ -18,6 +20,7 @@ import java.util.UUID;
 public class ResumeRepositoryImpl implements ResumeRepository {
 
     private final ResumeJpaRepository resumeJpaRepository;
+    private final UserJpaRepository userJpaRepository;
 
     @Override
     public Resume findByIdOrElseThrow(UUID id) {
@@ -57,7 +60,11 @@ public class ResumeRepositoryImpl implements ResumeRepository {
 
     @Override
     public Resume save(Resume resume) {
-        ResumeEntity entity = resumeJpaRepository.save(ResumeMapper.toEntity(resume));
+        UserEntity userEntity = userJpaRepository.findById(resume.getAccountId())
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
+        ResumeEntity entity = ResumeMapper.toEntity(resume);
+        entity.fetchUserEntity(userEntity);
+        entity = resumeJpaRepository.save(entity);
         return ResumeMapper.toDomain(entity);
     }
 }

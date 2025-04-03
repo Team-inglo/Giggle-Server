@@ -1,4 +1,4 @@
-package com.inglo.giggle.termEntity.persistence.repository.mysql;
+package com.inglo.giggle.term.persistence.repository.mysql;
 
 import com.inglo.giggle.term.domain.type.ETermType;
 import com.inglo.giggle.term.persistence.entity.TermEntity;
