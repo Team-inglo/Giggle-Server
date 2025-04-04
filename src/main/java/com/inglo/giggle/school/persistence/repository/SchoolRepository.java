@@ -12,6 +12,8 @@ public interface SchoolRepository {
 
     School findByIdOrElseThrow(Long id);
 
+    List<School> findAllByIds(List<Long> ids);
+
     Optional<School> findTopByUserIdOrderByGraduationDateDescOptional(UUID userId);
 
     List<Object[]> findUserIdsWithMostRecentSchoolNames(List<UUID> userIds);

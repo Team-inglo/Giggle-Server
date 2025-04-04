@@ -4,15 +4,9 @@ import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.address.persistence.entity.AddressEntity;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
-import com.inglo.giggle.posting.persistence.entity.BookMarkEntity;
-import com.inglo.giggle.posting.persistence.entity.UserOwnerJobPostingEntity;
-import com.inglo.giggle.resume.persistence.entity.ResumeEntity;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
-import com.inglo.giggle.security.persistence.entity.mysql.AccountDeviceEntity;
 import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
-import com.inglo.giggle.term.persistence.entity.TermAccountEntity;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
@@ -20,8 +14,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -33,8 +25,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -83,31 +74,19 @@ public class UserEntity extends AccountEntity {
     private AddressEntity addressEntity;
 
     /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookMarkEntity> bookMarkEntities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
-    private List<UserOwnerJobPostingEntity> userOwnerJobPostingEntities = new ArrayList<>();
-
-    /* -------------------------------------------- */
-    /* One To One Mapping ------------------------- */
-    /* -------------------------------------------- */
-    @OneToOne(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ResumeEntity resumeEntity;
-
-    /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
     public UserEntity(
+            UUID id,
             ESecurityProvider provider,
             String serialId,
             String password,
             String email,
             String profileImgUrl,
             String phoneNumber,
+            Boolean notificationAllowed,
+            Boolean marketingAllowed,
             String firstName,
             String lastName,
             EGender gender,
@@ -115,16 +94,10 @@ public class UserEntity extends AccountEntity {
             ELanguage language,
             LocalDate birth,
             EVisa visa,
-            AddressEntity addressEntity,
-            Boolean notificationAllowed,
-            Boolean marketingAllowed,
-            List<TermAccountEntity> termAccountEntities,
-            List<AccountDeviceEntity> accountDeviceEntities,
-            List<BookMarkEntity> bookMarkEntities,
-            List<UserOwnerJobPostingEntity> userOwnerJobPostingEntities,
-            ResumeEntity resumeEntity
+            AddressEntity addressEntity
     ) {
         super(
+                id,
                 provider,
                 serialId,
                 password,
@@ -132,9 +105,7 @@ public class UserEntity extends AccountEntity {
                 profileImgUrl,
                 phoneNumber,
                 notificationAllowed,
-                marketingAllowed,
-                termAccountEntities,
-                accountDeviceEntities
+                marketingAllowed
         );
         this.firstName = firstName;
         this.lastName = lastName;
@@ -144,9 +115,6 @@ public class UserEntity extends AccountEntity {
         this.birth = birth;
         this.visa = visa;
         this.addressEntity = addressEntity;
-        this.bookMarkEntities = bookMarkEntities;
-        this.userOwnerJobPostingEntities = userOwnerJobPostingEntities;
-        this.resumeEntity = resumeEntity;
     }
 
     @Override

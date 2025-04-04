@@ -2,9 +2,7 @@ package com.inglo.giggle.document.persistence.mapper;
 
 import com.inglo.giggle.document.domain.ContractWorkDayTime;
 import com.inglo.giggle.document.persistence.entity.ContractWorkDayTimeEntity;
-import org.hibernate.collection.spi.PersistentCollection;
 
-import java.util.Collection;
 import java.util.List;
 
 public class ContractWorkDayTimeMapper {
@@ -19,10 +17,10 @@ public class ContractWorkDayTimeMapper {
                 .workEndTime(entity.getWorkEndTime())
                 .breakStartTime(entity.getBreakStartTime())
                 .breakEndTime(entity.getBreakEndTime())
+                .standardLaborContractId(entity.getStandardLaborContractId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .standardLaborContractId(isInitialized(entity.getStandardLaborContractEntity()) ? entity.getStandardLaborContractEntity().getId() : null)
                 .build();
     }
 
@@ -31,11 +29,13 @@ public class ContractWorkDayTimeMapper {
             return null;
         }
         return ContractWorkDayTimeEntity.builder()
+                .id(domain.getId())
                 .dayOfWeek(domain.getDayOfWeek())
                 .workStartTime(domain.getWorkStartTime())
                 .workEndTime(domain.getWorkEndTime())
                 .breakStartTime(domain.getBreakStartTime())
                 .breakEndTime(domain.getBreakEndTime())
+                .standardLaborContractId(domain.getStandardLaborContractId())
                 .build();
     }
 
@@ -45,11 +45,6 @@ public class ContractWorkDayTimeMapper {
 
     public static List<ContractWorkDayTimeEntity> toEntities(List<ContractWorkDayTime> domains) {
         return domains.stream().map(ContractWorkDayTimeMapper::toEntity).toList();
-    }
-
-    private static boolean isInitialized(Object object) {
-        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
-                ((PersistentCollection<?>) object).wasInitialized();
     }
 }
 

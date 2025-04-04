@@ -2,9 +2,7 @@ package com.inglo.giggle.term.persistence.mapper;
 
 import com.inglo.giggle.term.domain.TermAccount;
 import com.inglo.giggle.term.persistence.entity.TermAccountEntity;
-import org.hibernate.collection.spi.PersistentCollection;
 
-import java.util.Collection;
 import java.util.List;
 
 public class TermAccountMapper {
@@ -16,11 +14,11 @@ public class TermAccountMapper {
         return TermAccount.builder()
                 .id(entity.getId())
                 .isAccepted(entity.getIsAccepted())
+                .accountId(entity.getAccountId())
+                .termId(entity.getTermId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .accountId(isInitialized(entity.getAccountEntity()) ? entity.getAccountEntity().getId() : null)
-                .termId(isInitialized(entity.getTermEntity()) ? entity.getTermEntity().getId() : null)
                 .build();
     }
 
@@ -30,7 +28,10 @@ public class TermAccountMapper {
         }
 
         return TermAccountEntity.builder()
+                .id(domain.getId())
                 .isAccepted(domain.getIsAccepted())
+                .accountId(domain.getAccountId())
+                .termId(domain.getTermId())
                 .build();
     }
 
@@ -44,10 +45,5 @@ public class TermAccountMapper {
         return domains.stream()
                 .map(TermAccountMapper::toEntity)
                 .toList();
-    }
-
-    private static boolean isInitialized(Object object) {
-        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
-                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

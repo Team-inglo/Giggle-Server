@@ -17,13 +17,13 @@ public class CompanyImage extends BaseDomain {
     private Long jobPostingId;
 
     @Builder
-    public CompanyImage(Long id, String imgUrl, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, Long jobPostingId) {
+    public CompanyImage(Long id, String imgUrl, Long jobPostingId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.imgUrl = imgUrl;
+        this.jobPostingId = jobPostingId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
-        this.jobPostingId = jobPostingId;
     }
 }
 

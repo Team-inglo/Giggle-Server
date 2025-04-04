@@ -34,6 +34,11 @@ public class SchoolRepositoryImpl implements SchoolRepository {
     }
 
     @Override
+    public List<School> findAllByIds(List<Long> ids) {
+        return SchoolMapper.toDomains(schoolJpaRepository.findAllById(ids));
+    }
+
+    @Override
     public Optional<School> findTopByUserIdOrderByGraduationDateDescOptional(UUID userId) {
         return schoolJpaRepository.findTopByUserIdOrderByGraduationDateDesc(userId)
                 .map(SchoolMapper::toDomain);

@@ -5,11 +5,9 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
-import com.inglo.giggle.term.domain.TermAccount;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -27,12 +25,6 @@ public abstract class Account extends BaseDomain {
     protected LocalDateTime updatedAt;
     protected LocalDateTime deletedAt;
 
-    /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    protected List<TermAccount> termAccounts;
-    protected List<AccountDevice> accountDevices;
-
     protected Account(
             UUID id,
             ESecurityProvider provider,
@@ -43,13 +35,7 @@ public abstract class Account extends BaseDomain {
             String phoneNumber,
             Boolean marketingAllowed,
             Boolean notificationAllowed,
-            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-
-            /* -------------------------------------------- */
-            /* One To Many Mapping ------------------------ */
-            /* -------------------------------------------- */
-            List<TermAccount> termAccounts,
-            List<AccountDevice> accountDevices
+            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
         this.id = id;
         this.provider = provider;
@@ -63,8 +49,6 @@ public abstract class Account extends BaseDomain {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
-        this.termAccounts = termAccounts;
-        this.accountDevices = accountDevices;
     }
 
     public abstract ESecurityRole getRole();
@@ -96,10 +80,6 @@ public abstract class Account extends BaseDomain {
 
     public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public void updateAccountDevices(List<AccountDevice> accountDevices) {
-        this.accountDevices = accountDevices;
     }
 
     public void updateNotificationAllowed(Boolean notificationAllowed) {

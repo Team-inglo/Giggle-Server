@@ -3,7 +3,7 @@ package com.inglo.giggle.resume.presentation.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
-import com.inglo.giggle.resume.domain.LanguageSkill;
+import com.inglo.giggle.resume.domain.ResumeAggregate;
 import lombok.Builder;
 
 import java.util.List;
@@ -56,12 +56,12 @@ public class ReadUserLanguageSummaryResponseDto extends SelfValidating<ReadUserL
         }
     }
 
-    public static ReadUserLanguageSummaryResponseDto from(LanguageSkill languageSkill) {
+    public static ReadUserLanguageSummaryResponseDto from(ResumeAggregate resumeAggregate) {
         return ReadUserLanguageSummaryResponseDto.builder()
-                .topikLevel(languageSkill.getTopikLevel())
-                .socialIntegrationLevel(languageSkill.getSocialIntegrationLevel())
-                .sejongInstitute(languageSkill.getSejongInstituteLevel())
-                .additionalLanguageDto(!languageSkill.getAdditionalLanguages().isEmpty() ? languageSkill.getAdditionalLanguages().stream().map(AdditionalLanguageDto::from).toList() : null)
+                .topikLevel(resumeAggregate.getLanguageSkill().getTopikLevel())
+                .socialIntegrationLevel(resumeAggregate.getLanguageSkill().getSocialIntegrationLevel())
+                .sejongInstitute(resumeAggregate.getLanguageSkill().getSejongInstituteLevel())
+                .additionalLanguageDto(!resumeAggregate.getAdditionalLanguages().isEmpty() ? resumeAggregate.getAdditionalLanguages().stream().map(AdditionalLanguageDto::from).toList() : null)
                 .build();
     }
 }

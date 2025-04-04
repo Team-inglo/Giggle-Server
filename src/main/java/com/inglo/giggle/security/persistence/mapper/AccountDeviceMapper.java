@@ -2,9 +2,7 @@ package com.inglo.giggle.security.persistence.mapper;
 
 import com.inglo.giggle.security.domain.AccountDevice;
 import com.inglo.giggle.security.persistence.entity.mysql.AccountDeviceEntity;
-import org.hibernate.collection.spi.PersistentCollection;
 
-import java.util.Collection;
 import java.util.List;
 
 public class AccountDeviceMapper {
@@ -17,10 +15,10 @@ public class AccountDeviceMapper {
                 .id(entity.getId())
                 .deviceId(entity.getDeviceId())
                 .deviceToken(entity.getDeviceToken())
+                .accountId(entity.getAccountId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .accountId(isInitialized(entity.getAccountEntity()) ? entity.getAccountEntity().getId() : null)
                 .build();
     }
 
@@ -29,8 +27,10 @@ public class AccountDeviceMapper {
             return null;
         }
         return AccountDeviceEntity.builder()
+                .id(domain.getId())
                 .deviceId(domain.getDeviceId())
                 .deviceToken(domain.getDeviceToken())
+                .accountId(domain.getAccountId())
                 .build();
     }
 
@@ -44,10 +44,5 @@ public class AccountDeviceMapper {
         return domains.stream()
                 .map(AccountDeviceMapper::toEntity)
                 .toList();
-    }
-
-    private static boolean isInitialized(Object object) {
-        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
-                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

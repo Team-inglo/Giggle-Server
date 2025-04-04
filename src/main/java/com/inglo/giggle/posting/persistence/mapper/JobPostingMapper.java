@@ -3,9 +3,7 @@ package com.inglo.giggle.posting.persistence.mapper;
 import com.inglo.giggle.address.persistence.mapper.AddressMapper;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.persistence.entity.JobPostingEntity;
-import org.hibernate.collection.spi.PersistentCollection;
 
-import java.util.Collection;
 import java.util.List;
 
 public class JobPostingMapper {
@@ -32,22 +30,10 @@ public class JobPostingMapper {
                 .preferredConditions(entity.getPreferredConditions())
                 .employmentType(entity.getEmploymentType())
                 .address(AddressMapper.toDomain(entity.getAddressEntity()))
-                .ownerId(isInitialized(entity.getOwnerEntity()) ? entity.getOwnerEntity().getId() : null)
-                .workDayTimes(isInitialized(entity.getWorkDayTimeEntities()) ? PostingWorkDayTimeMapper.toDomains(entity.getWorkDayTimeEntities()) : null)
-                .companyImages(isInitialized(entity.getCompanyImageEntities()) ? CompanyImageMapper.toDomains(entity.getCompanyImageEntities()) : null)
-                .bookMarks(isInitialized(entity.getBookMarkEntities()) ? BookMarkMapper.toDomains(entity.getBookMarkEntities()) : null)
-                .userOwnerJobPostings(isInitialized(entity.getUserOwnerJobPostingEntities()) ? UserOwnerJobPostingMapper.toDomains(entity.getUserOwnerJobPostingEntities()) : null)
+                .ownerId(entity.getOwnerId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .ownerInfo(isInitialized(entity.getOwnerEntity()) ? JobPosting.OwnerInfo.builder()
-                        .id(entity.getOwnerEntity().getId())
-                        .profileImgUrl(entity.getOwnerEntity().getProfileImgUrl())
-                        .companyName(entity.getOwnerEntity().getCompanyName())
-                        .name(entity.getOwnerEntity().getName())
-                        .address(AddressMapper.toDomain(entity.getOwnerEntity().getAddressEntity()))
-                        .build() : null
-                )
                 .build();
     }
 
@@ -56,6 +42,7 @@ public class JobPostingMapper {
             return null;
         }
         return JobPostingEntity.builder()
+                .id(domain.getId())
                 .title(domain.getTitle())
                 .jobCategory(domain.getJobCategory())
                 .hourlyRate(domain.getHourlyRate())
@@ -73,9 +60,7 @@ public class JobPostingMapper {
                 .preferredConditions(domain.getPreferredConditions())
                 .employmentType(domain.getEmploymentType())
                 .addressEntity(AddressMapper.toEntity(domain.getAddress()))
-                .workDayTimeEntities(PostingWorkDayTimeMapper.toEntities(domain.getWorkDayTimes()))
-                .companyImageEntities(CompanyImageMapper.toEntities(domain.getCompanyImages()))
-                .bookMarkEntities(BookMarkMapper.toEntities(domain.getBookMarks()))
+                .ownerId(domain.getOwnerId())
                 .build();
     }
 
@@ -89,15 +74,5 @@ public class JobPostingMapper {
         return domains.stream()
                 .map(JobPostingMapper::toEntity)
                 .toList();
-    }
-
-    private static boolean isInitialized(Collection<?> collection) {
-        return collection instanceof org.hibernate.collection.spi.PersistentCollection &&
-                ((PersistentCollection<?>) collection).wasInitialized();
-    }
-
-    private static boolean isInitialized(Object object) {
-        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
-                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

@@ -48,6 +48,7 @@ public class VersionEntity {
     /* -------------------------------------------- */
     @Builder
     public VersionEntity(
+            Long id,
             Integer major,
             Integer minor,
             Integer patch,

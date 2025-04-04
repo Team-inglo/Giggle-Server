@@ -1,6 +1,5 @@
 package com.inglo.giggle.resume.domain;
 
-import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.dto.BaseDomain;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
@@ -10,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -27,11 +27,6 @@ public class Education extends BaseDomain {
     private UUID resumeId;
     private Long schoolId;
 
-    /* -------------------------------------------- */
-    /* Nested Class ------------------------------- */
-    /* -------------------------------------------- */
-    private SchoolInfo schoolInfo;
-
     @Builder
     public Education(
             Long id,
@@ -43,7 +38,9 @@ public class Education extends BaseDomain {
             Integer grade,
             UUID resumeId,
             Long schoolId,
-            SchoolInfo schoolInfo
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            LocalDateTime deletedAt
     ) {
         this.id = id;
         this.educationLevel = educationLevel;
@@ -54,28 +51,9 @@ public class Education extends BaseDomain {
         this.grade = grade;
         this.resumeId = resumeId;
         this.schoolId = schoolId;
-        this.schoolInfo = schoolInfo;
-    }
-    @Getter
-    public static class SchoolInfo {
-        private Long id;
-        private String schoolName;
-        private Boolean isMetropolitan;
-        private String instituteName;
-        private String coordinatorName;
-        private String coordinatorPhoneNumber;
-        private Address address;
-
-        @Builder
-        public SchoolInfo(Long id, String schoolName, Boolean isMetropolitan, String instituteName, String coordinatorName, String coordinatorPhoneNumber, Address address) {
-            this.id = id;
-            this.schoolName = schoolName;
-            this.isMetropolitan = isMetropolitan;
-            this.instituteName = instituteName;
-            this.coordinatorName = coordinatorName;
-            this.coordinatorPhoneNumber = coordinatorPhoneNumber;
-            this.address = address;
-        }
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
     public static EEducationLevel getEducationLevelByVisa(EVisa visa) {
@@ -106,12 +84,12 @@ public class Education extends BaseDomain {
 
     public void updateSelf(
             EEducationLevel educationLevel,
-            Long schoolId,
             String major,
             Double gpa,
             LocalDate enrollmentDate,
             LocalDate graduationDate,
-            Integer grade
+            Integer grade,
+            Long schoolId
     ) {
         this.educationLevel = educationLevel;
         this.schoolId = schoolId;

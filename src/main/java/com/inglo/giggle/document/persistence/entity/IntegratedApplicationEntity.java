@@ -3,8 +3,6 @@ package com.inglo.giggle.document.persistence.entity;
 import com.inglo.giggle.address.persistence.entity.AddressEntity;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
-import com.inglo.giggle.posting.persistence.entity.UserOwnerJobPostingEntity;
-import com.inglo.giggle.school.persistence.entity.SchoolEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -13,11 +11,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -114,21 +109,20 @@ public class IntegratedApplicationEntity extends DocumentEntity {
     /* -------------------------------------------- */
     /* One To One Mapping ------------------------- */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", nullable = false)
-    private SchoolEntity schoolEntity;
+    @Column(name = "school_id", nullable = false)
+    private Long schoolId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public IntegratedApplicationEntity(UserOwnerJobPostingEntity userOwnerJobPostingEntity, String firstName, String lastName,
+    public IntegratedApplicationEntity(Long id, String hwpUrl, String wordUrl, Long userOwnerJobPostingId, String firstName, String lastName,
                                        LocalDate birth, EGender gender, String nationality, String telePhoneNumber,
                                        String cellPhoneNumber, Boolean isAccredited, String newWorkPlaceName,
                                        String newWorkPlaceRegistrationNumber, String newWorkPlacePhoneNumber,
                                        Integer annualIncomeAmount, String occupation, String email, String employeeSignatureBase64,
-                                       EEmployeeStatus employeeStatus, AddressEntity employeeAddressEntity, SchoolEntity schoolEntity) {
-        super(userOwnerJobPostingEntity);
+                                       EEmployeeStatus employeeStatus, AddressEntity employeeAddressEntity, Long schoolId) {
+        super(id, hwpUrl, wordUrl, userOwnerJobPostingId);
         this.firstName = firstName;
         this.lastName = lastName;
         this.birth = birth;
@@ -146,11 +140,6 @@ public class IntegratedApplicationEntity extends DocumentEntity {
         this.employeeSignatureBase64 = employeeSignatureBase64;
         this.employeeStatus = employeeStatus;
         this.employeeAddressEntity = employeeAddressEntity;
-        this.schoolEntity = schoolEntity;
+        this.schoolId = schoolId;
     }
-
-    public void fetchSchool(SchoolEntity schoolEntity) {
-        this.schoolEntity = schoolEntity;
-    }
-
 }

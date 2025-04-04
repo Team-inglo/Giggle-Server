@@ -31,6 +31,7 @@ public class SchoolMapper {
             return null;
         }
         return SchoolEntity.builder()
+                .id(domain.getId())
                 .schoolName(domain.getSchoolName())
                 .schoolPhoneNumber(domain.getSchoolPhoneNumber())
                 .instituteName(domain.getInstituteName())

@@ -20,15 +20,15 @@ public class TermAccount extends BaseDomain {
 
     @Builder
     public TermAccount(Long id, Boolean isAccepted,
-                       LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-                       UUID accountId, Long termId
+                       UUID accountId, Long termId,
+                       LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
         this.id = id;
         this.isAccepted = isAccepted;
+        this.accountId = accountId;
+        this.termId = termId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
-        this.accountId = accountId;
-        this.termId = termId;
     }
 }

@@ -1,17 +1,15 @@
 package com.inglo.giggle.account.domain;
 
 import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.posting.domain.JobPosting;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.domain.AccountDevice;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
-import com.inglo.giggle.term.domain.TermAccount;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -21,19 +19,13 @@ public class Owner extends Account {
     private String companyRegistrationNumber;
     private Address address;
 
-    /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    private List<JobPosting> jobPostings;
-
     @Builder
     public Owner(UUID id, ESecurityProvider provider, String serialId, String password,
                  String email, String profileImgUrl, String phoneNumber,
                  Boolean marketingAllowed, Boolean notificationAllowed,
                  String companyName, String ownerName, String companyRegistrationNumber,
                  LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-                 Address address, List<TermAccount> termAccounts, List<AccountDevice> accountDevices,
-                 List<JobPosting> jobPostings
+                 Address address
     ) {
         super(
                 id,
@@ -47,15 +39,12 @@ public class Owner extends Account {
                 notificationAllowed,
                 createdAt,
                 updatedAt,
-                deletedAt,
-                termAccounts,
-                accountDevices
+                deletedAt
         );
         this.companyName = companyName;
         this.ownerName = ownerName;
         this.companyRegistrationNumber = companyRegistrationNumber;
         this.address = address;
-        this.jobPostings = jobPostings;
     }
 
     @Override
@@ -66,6 +55,12 @@ public class Owner extends Account {
     @Override
     public String getName() {
         return this.companyName;
+    }
+
+    public void validateOwnerOwn(UUID ownerId) {
+        if (! this.id.equals(ownerId)) {
+            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+        }
     }
 
     public void updateSelf(

@@ -1,19 +1,14 @@
 package com.inglo.giggle.account.persistence.entity;
 
 import com.inglo.giggle.address.persistence.entity.AddressEntity;
-import com.inglo.giggle.posting.persistence.entity.JobPostingEntity;
-import com.inglo.giggle.security.persistence.entity.mysql.AccountDeviceEntity;
-import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
-import com.inglo.giggle.term.persistence.entity.TermAccountEntity;
-import jakarta.persistence.CascadeType;
+import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -24,7 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -58,33 +53,26 @@ public class OwnerEntity extends AccountEntity {
     private AddressEntity addressEntity;
 
     /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    @OneToMany(mappedBy = "ownerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JobPostingEntity> jobPostingEntities;
-
-    /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
     public OwnerEntity(
+            UUID id,
             ESecurityProvider provider,
             String serialId,
             String password,
             String email,
             String profileImgUrl,
             String phoneNumber,
+            Boolean notificationAllowed,
+            Boolean marketingAllowed,
             String companyName,
             String ownerName,
             String companyRegistrationNumber,
-            AddressEntity addressEntity,
-            Boolean notificationAllowed,
-            Boolean marketingAllowed,
-            List<TermAccountEntity> termAccountEntities,
-            List<AccountDeviceEntity> accountDeviceEntities,
-            List<JobPostingEntity> jobPostingEntities
+            AddressEntity addressEntity
     ) {
         super(
+                id,
                 provider,
                 serialId,
                 password,
@@ -92,15 +80,12 @@ public class OwnerEntity extends AccountEntity {
                 profileImgUrl,
                 phoneNumber,
                 notificationAllowed,
-                marketingAllowed,
-                termAccountEntities,
-                accountDeviceEntities
+                marketingAllowed
         );
         this.companyName = companyName;
         this.ownerName = ownerName;
         this.companyRegistrationNumber = companyRegistrationNumber;
         this.addressEntity = addressEntity;
-        this.jobPostingEntities = jobPostingEntities;
     }
 
     @Override

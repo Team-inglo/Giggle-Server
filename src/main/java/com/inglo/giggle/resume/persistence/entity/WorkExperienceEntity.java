@@ -3,12 +3,9 @@ package com.inglo.giggle.resume.persistence.entity;
 import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,6 +15,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -55,24 +53,20 @@ public class WorkExperienceEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resume_id")
-    private ResumeEntity resumeEntity;
+    @Column(name = "resume_id")
+    private UUID resumeId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public WorkExperienceEntity(String experienceTitle, String workplace, LocalDate startDate, LocalDate endDate, String description, ResumeEntity resumeEntity) {
+    public WorkExperienceEntity(Long id, String experienceTitle, String workplace, LocalDate startDate, LocalDate endDate, String description, UUID resumeId) {
+        this.id = id;
         this.experienceTitle = experienceTitle;
         this.workplace = workplace;
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
-        this.resumeEntity = resumeEntity;
-    }
-
-    public void fetchResumeEntity(ResumeEntity resumeEntity) {
-        this.resumeEntity = resumeEntity;
+        this.resumeId = resumeId;
     }
 }

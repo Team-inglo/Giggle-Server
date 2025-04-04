@@ -164,23 +164,17 @@ public class StandardLaborContractEntity extends DocumentEntity {
     private AddressEntity employerAddressEntity;
 
     /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    @OneToMany(mappedBy = "standardLaborContractEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ContractWorkDayTimeEntity> contractWorkDayTimeEntities = new ArrayList<>();
-
-    /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public StandardLaborContractEntity(UserOwnerJobPostingEntity userOwnerJobPostingEntity, String employeeFirstName, String employeeLastName,
+    public StandardLaborContractEntity(Long id, String hwpUrl, String wordUrl, Long userOwnerJobPostingId, String employeeFirstName, String employeeLastName,
                                        String employeePhoneNumber, String employeeSignatureBase64, AddressEntity employeeAddressEntity,
                                        EEmployeeStatus employeeStatus, String companyName, String companyRegistrationNumber,
                                        String employerName, String employerPhoneNumber, LocalDate startDate, LocalDate endDate, AddressEntity employerAddressEntity,
                                        String description, EnumSet<EDayOfWeek> weeklyRestDays, Integer hourlyRate, Integer bonus, Integer additionalSalary,
                                        Double wageRate, Integer paymentDay, EPaymentMethod paymentMethod, EnumSet<EInsurance> insurances,
-                                       String employerSignatureBase64, EEmployerStatus employerStatus, List<ContractWorkDayTimeEntity> contractWorkDayTimeEntities) {
-        super(userOwnerJobPostingEntity);
+                                       String employerSignatureBase64, EEmployerStatus employerStatus) {
+        super(id, hwpUrl, wordUrl, userOwnerJobPostingId);
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.employeePhoneNumber = employeePhoneNumber;
@@ -205,6 +199,5 @@ public class StandardLaborContractEntity extends DocumentEntity {
         this.insurances = insurances != null ? insurances : EnumSet.noneOf(EInsurance.class);
         this.employerSignatureBase64 = employerSignatureBase64;
         this.employerStatus = employerStatus;
-        this.contractWorkDayTimeEntities = contractWorkDayTimeEntities;
     }
 }

@@ -1,9 +1,7 @@
 package com.inglo.giggle.posting.persistence.repository.impl;
 
 import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.persistence.entity.OwnerEntity;
 import com.inglo.giggle.account.persistence.mapper.OwnerMapper;
-import com.inglo.giggle.account.persistence.repository.mysql.OwnerJpaRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
@@ -36,7 +34,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -45,7 +42,6 @@ import java.util.UUID;
 public class JobPostingRepositoryImpl implements JobPostingRepository {
 
     private final JobPostingJpaRepository jobPostingJpaRepository;
-    private final OwnerJpaRepository ownerJpaRepository;
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -288,11 +284,6 @@ public class JobPostingRepositoryImpl implements JobPostingRepository {
     @Override
     public JobPosting save(JobPosting jobPosting) {
         JobPostingEntity entity = jobPostingJpaRepository.save(JobPostingMapper.toEntity(jobPosting));
-        Optional<OwnerEntity> ownerEntity = ownerJpaRepository.findById(jobPosting.getOwnerId());
-        if (ownerEntity.isPresent()) {
-            entity.fetchOwner(ownerEntity.get());
-            jobPostingJpaRepository.save(entity);
-        }
         return JobPostingMapper.toDomain(entity);
     }
 

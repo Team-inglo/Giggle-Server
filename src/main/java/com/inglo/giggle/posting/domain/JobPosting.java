@@ -50,19 +50,6 @@ public class JobPosting extends BaseDomain {
     /* -------------------------------------------- */
     private UUID ownerId;
 
-    /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    private List<PostingWorkDayTime> workDayTimes;
-    private List<CompanyImage> companyImages;
-    private List<BookMark> bookMarks;
-    private List<UserOwnerJobPosting> userOwnerJobPostings;
-
-    /* -------------------------------------------- */
-    /* Nested class ------------------------------- */
-    /* -------------------------------------------- */
-    private OwnerInfo ownerInfo;
-
     @Builder
     public JobPosting(Long id, String title, EJobCategory jobCategory, Integer hourlyRate, LocalDate recruitmentDeadLine,
                       EWorkPeriod workPeriod, Integer recruitmentNumber, EGender gender, Integer ageRestriction,
@@ -70,8 +57,7 @@ public class JobPosting extends BaseDomain {
                       String recruiterPhoneNumber, String description, String preferredConditions,
                       EEmploymentType employmentType, Address address,
                       UUID ownerId,
-                      List<PostingWorkDayTime> workDayTimes, List<CompanyImage> companyImages, List<BookMark> bookMarks, List<UserOwnerJobPosting> userOwnerJobPostings,
-                      LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, OwnerInfo ownerInfo) {
+                      LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.title = title;
         this.jobCategory = jobCategory;
@@ -91,14 +77,9 @@ public class JobPosting extends BaseDomain {
         this.employmentType = employmentType;
         this.address = address;
         this.ownerId = ownerId;
-        this.workDayTimes = workDayTimes;
-        this.companyImages = companyImages;
-        this.userOwnerJobPostings = userOwnerJobPostings;
-        this.bookMarks = bookMarks;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
-        this.ownerInfo = ownerInfo;
     }
 
     @Getter
@@ -119,7 +100,8 @@ public class JobPosting extends BaseDomain {
         }
     }
 
-    public String getWorkDaysPerWeekToString() {
+    // TODO: 애그리게이트로 이동
+    public String getWorkDaysPerWeekToString(List<PostingWorkDayTime> workDayTimes) {
         // 협의 가능 요일이 포함되어 있는 경우
         if (workDayTimes.stream().anyMatch(dayTime -> dayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE)) {
             return "협의 가능";
@@ -144,12 +126,14 @@ public class JobPosting extends BaseDomain {
         };
     }
 
-    public String getWorkDaysPerWeekDescription() {
+    // TODO: 애그리게이트로 이동
+    public String getWorkDaysPerWeekDescription(List<PostingWorkDayTime> workDayTimes) {
         if (workDayTimes.stream().anyMatch(d -> d.getDayOfWeek() == EDayOfWeek.NEGOTIABLE)) return "협의 가능";
         return workDayTimes.stream().map(PostingWorkDayTime::getDayOfWeek).distinct().count() + " days per week";
     }
 
-    public Map<String, Integer> calculateWorkHours() {
+    // TODO: 애그리게이트로 이동
+    public Map<String, Integer> calculateWorkHours(List<PostingWorkDayTime> workDayTimes) {
         int weekday = 0, weekend = 0;
         for (PostingWorkDayTime time : workDayTimes) {
             if (time.getWorkStartTime() == null || time.getWorkEndTime() == null) continue;
@@ -171,11 +155,12 @@ public class JobPosting extends BaseDomain {
         return d == EDayOfWeek.SATURDAY || d == EDayOfWeek.SUNDAY;
     }
 
-    public void validateUpdateJobPosting(Owner owner) {
-        if (!ownerInfo.getId().equals(owner.getId())) {
-            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
-        }
-    }
+    // TODO: 애그리게이트로 이동
+//    public void validateUpdateJobPosting(Owner owner) {
+//        if (!ownerInfo.getId().equals(owner.getId())) {
+//            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+//        }
+//    }
 
     public void updateSelf(
             String title,
@@ -213,11 +198,6 @@ public class JobPosting extends BaseDomain {
         this.preferredConditions = preferredConditions;
         this.employmentType = employmentType;
         this.address = address;
-    }
-
-    public void updatePostWorkDayTimes(List<PostingWorkDayTime> workDayTimes) {
-        this.workDayTimes.clear();
-        this.workDayTimes.addAll(workDayTimes);
     }
 }
 

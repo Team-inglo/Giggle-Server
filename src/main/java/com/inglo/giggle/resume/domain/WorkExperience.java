@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -25,7 +26,9 @@ public class WorkExperience extends BaseDomain {
     private UUID resumeId;
 
     @Builder
-    public WorkExperience(Long id, String experienceTitle, String workplace, LocalDate startDate, LocalDate endDate, String description, UUID resumeId) {
+    public WorkExperience(Long id, String experienceTitle, String workplace, LocalDate startDate, LocalDate endDate, String description, UUID resumeId,
+                          LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
+    ) {
         this.id = id;
         this.experienceTitle = experienceTitle;
         this.workplace = workplace;
@@ -33,6 +36,9 @@ public class WorkExperience extends BaseDomain {
         this.endDate = endDate;
         this.description = description;
         this.resumeId = resumeId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
     public void checkValidation(UUID accountId) {

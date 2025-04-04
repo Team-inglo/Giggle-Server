@@ -2,9 +2,7 @@ package com.inglo.giggle.notification.persistence.mapper;
 
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.persistence.entity.NotificationEntity;
-import org.hibernate.collection.spi.PersistentCollection;
 
-import java.util.Collection;
 import java.util.List;
 
 public class NotificationMapper {
@@ -15,14 +13,7 @@ public class NotificationMapper {
                 .message(entity.getMessage())
                 .isRead(entity.getIsRead())
                 .notificationType(entity.getNotificationType())
-                .userOwnerJobPostingId(isInitialized(entity.getUserOwnerJobPostingEntity()) ? entity.getUserOwnerJobPostingEntity().getId() : null)
-                .userOwnerJobPostingInfo(isInitialized(entity.getUserOwnerJobPostingEntity()) ? Notification.UserOwnerJobPostingInfo.builder()
-                        .id(entity.getUserOwnerJobPostingEntity().getId())
-                        .jobPostingInfo(isInitialized(entity.getUserOwnerJobPostingEntity().getJobPostingEntity()) ? Notification.JobPostingInfo.builder()
-                                .id(entity.getUserOwnerJobPostingEntity().getJobPostingEntity().getId())
-                                .title(entity.getUserOwnerJobPostingEntity().getJobPostingEntity().getTitle())
-                                .build() : null)
-                        .build() : null)
+                .userOwnerJobPostingId(entity.getUserOwnerJobPostingId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
@@ -31,9 +22,11 @@ public class NotificationMapper {
 
     public static NotificationEntity toEntity(Notification domain) {
         return NotificationEntity.builder()
+                .id(domain.getId())
                 .message(domain.getMessage())
                 .isRead(domain.getIsRead())
                 .notificationType(domain.getNotificationType())
+                .userOwnerJobPostingId(domain.getUserOwnerJobPostingId())
                 .build();
     }
 
@@ -47,10 +40,5 @@ public class NotificationMapper {
         return domains.stream()
                 .map(NotificationMapper::toEntity)
                 .toList();
-    }
-
-    private static boolean isInitialized(Object object) {
-        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
-                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

@@ -9,15 +9,11 @@ public interface ResumeRepository {
 
     Resume findByIdOrElseThrow(UUID id);
 
-    Resume findWithWorkExperiencesAndLanguageSkillByAccountIdOrElseThrow(UUID id);
-
-    Resume findWithLanguageSkillByAccountIdOrElseThrow(UUID id);
-
     Resume findWithEducationsAndLanguageSkillByAccountIdOrElseThrow(UUID accountId);
 
     Optional<Resume> findWithEducationsAndLanguageSkillByAccountIdOptional(UUID accountId);
 
-    Resume findWithEducationsByAccountIdOrElseThrow(UUID accountId);
+    Resume findByAccountIdOrElseThrow(UUID accountId);
 
     Resume save(Resume resume);
 }

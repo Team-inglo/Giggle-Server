@@ -3,12 +3,8 @@ package com.inglo.giggle.posting.persistence.repository.impl;
 
 import com.inglo.giggle.account.domain.Owner;
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.persistence.entity.OwnerEntity;
-import com.inglo.giggle.account.persistence.entity.UserEntity;
 import com.inglo.giggle.account.persistence.mapper.OwnerMapper;
 import com.inglo.giggle.account.persistence.mapper.UserMapper;
-import com.inglo.giggle.account.persistence.repository.mysql.OwnerJpaRepository;
-import com.inglo.giggle.account.persistence.repository.mysql.UserJpaRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.domain.Document;
@@ -16,13 +12,11 @@ import com.inglo.giggle.document.persistence.mapper.DocumentMapper;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
-import com.inglo.giggle.posting.persistence.entity.JobPostingEntity;
 import com.inglo.giggle.posting.persistence.entity.QUserOwnerJobPostingEntity;
 import com.inglo.giggle.posting.persistence.entity.UserOwnerJobPostingEntity;
 import com.inglo.giggle.posting.persistence.mapper.JobPostingMapper;
 import com.inglo.giggle.posting.persistence.mapper.UserOwnerJobPostingMapper;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.posting.persistence.repository.mysql.JobPostingJpaRepository;
 import com.inglo.giggle.posting.persistence.repository.mysql.UserOwnerJobPostingJpaRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -47,9 +41,6 @@ import java.util.List;
 public class UserOwnerJobPostingRepositoryImpl implements UserOwnerJobPostingRepository {
 
     private final UserOwnerJobPostingJpaRepository userOwnerJobPostingJpaRepository;
-    private final UserJpaRepository userJpaRepository;
-    private final OwnerJpaRepository ownerJpaRepository;
-    private final JobPostingJpaRepository jobPostingJpaRepository;
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -186,17 +177,9 @@ public class UserOwnerJobPostingRepositoryImpl implements UserOwnerJobPostingRep
     }
 
     @Override
-    //TODO: 수정해야함
     public UserOwnerJobPosting save(UserOwnerJobPosting userOwnerJobPosting) {
-        UserOwnerJobPostingEntity entity = UserOwnerJobPostingMapper.toEntity(userOwnerJobPosting);
-        UserEntity userEntity = userJpaRepository.findById(userOwnerJobPosting.getUserId())
-                .orElse(null);
-        OwnerEntity ownerEntity = ownerJpaRepository.findById(userOwnerJobPosting.getOwnerId())
-                .orElse(null);
-        JobPostingEntity jobPostingEntity = jobPostingJpaRepository.findById(userOwnerJobPosting.getJobPostingId())
-                .orElse(null);
-        entity.updateChild(userEntity, jobPostingEntity, ownerEntity);
-        return UserOwnerJobPostingMapper.toDomain(userOwnerJobPostingJpaRepository.save(entity));
+        UserOwnerJobPostingEntity entity = userOwnerJobPostingJpaRepository.save(UserOwnerJobPostingMapper.toEntity(userOwnerJobPosting));
+        return UserOwnerJobPostingMapper.toDomain(entity);
     }
 
     @Override

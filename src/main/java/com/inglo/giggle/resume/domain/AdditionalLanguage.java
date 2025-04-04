@@ -35,12 +35,6 @@ public class AdditionalLanguage extends BaseDomain {
         this.deletedAt = deletedAt;
     }
 
-    public void checkValidation(UUID accountId) {
-        if (!languageSkillId.equals(accountId)) {
-            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
-        }
-    }
-
     public void updateSelf(String languageName, Integer level) {
         this.languageName = languageName;
         this.level = level;

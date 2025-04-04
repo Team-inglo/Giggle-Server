@@ -6,7 +6,6 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -15,24 +14,10 @@ public class Resume extends BaseDomain {
     private UUID accountId;
     private String introduction;
 
-    /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    private List<WorkExperience> workExperiences;
-    private List<Education> educations;
-
-    /* -------------------------------------------- */
-    /* One To One Mapping ------------------------- */
-    /* -------------------------------------------- */
-    private LanguageSkill languageSkill;
-
     @Builder
-    public Resume(UUID accountId, String introduction, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill) {
+    public Resume(UUID accountId, String introduction) {
         this.accountId = accountId;
         this.introduction = introduction;
-        this.workExperiences = workExperiences;
-        this.educations = educations;
-        this.languageSkill = languageSkill;
     }
 
     public void checkValidation(UUID accountId) {
@@ -41,7 +26,7 @@ public class Resume extends BaseDomain {
         }
     }
 
-    public void deleteIntroduction() {
+    public void clearIntroduction() {
         this.introduction = null;
     }
 

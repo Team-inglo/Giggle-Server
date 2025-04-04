@@ -3,13 +3,10 @@ package com.inglo.giggle.posting.persistence.entity;
 import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,16 +40,16 @@ public class CompanyImageEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_postings_id", nullable = false)
-    private JobPostingEntity jobPostingEntity;
+    @Column(name = "job_postings_id", nullable = false)
+    private Long jobPostingsId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public CompanyImageEntity(String imgUrl, JobPostingEntity jobPostingEntity) {
+    public CompanyImageEntity(Long id, String imgUrl, Long jobPostingsId) {
+        this.id = id;
         this.imgUrl = imgUrl;
-        this.jobPostingEntity = jobPostingEntity;
+        this.jobPostingsId = jobPostingsId;
     }
 }

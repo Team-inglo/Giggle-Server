@@ -55,7 +55,8 @@ public class BannerEntity extends BaseEntity {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public BannerEntity(String title, String imgUrl, String content, ESecurityRole role) {
+    public BannerEntity(Long id, String title, String imgUrl, String content, ESecurityRole role) {
+        this.id = id;
         this.title = title;
         this.imgUrl = imgUrl;
         this.content = content;

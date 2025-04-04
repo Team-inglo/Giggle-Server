@@ -6,10 +6,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
-import com.inglo.giggle.document.persistence.entity.IntegratedApplicationEntity;
-import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.entity.SchoolEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -72,24 +69,17 @@ public class IntegratedApplication extends Document {
     /* -------------------------------------------- */
     private Long schoolId;
 
-    /* -------------------------------------------- */
-    /* Nested Class ------------------------------- */
-    /* -------------------------------------------- */
-    private SchoolInfo schoolInfo;
-
     @Builder
-    public IntegratedApplication(Long id, String wordUrl, List<Reject> rejects,
+    public IntegratedApplication(Long id, String wordUrl, Long userOwnerJobPostingId,
                                  String firstName, String lastName, LocalDate birth, EGender gender, String nationality,
                                  String telePhoneNumber, String cellPhoneNumber, Boolean isAccredited,
                                  String newWorkPlaceName, String newWorkPlaceRegistrationNumber, String newWorkPlacePhoneNumber,
                                  Integer annualIncomeAmount, String occupation, String email,
                                  String employeeSignatureBase64, EEmployeeStatus employeeStatus,
                                  Address employeeAddress, Long schoolId,
-                                 LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-                                 Long userOwnerJobPostingId,
-                                 SchoolInfo schoolInfo
+                                 LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
-        super(id, wordUrl, rejects, createdAt, updatedAt, deletedAt, userOwnerJobPostingId);
+        super(id, wordUrl, userOwnerJobPostingId, createdAt, updatedAt, deletedAt);
         this.firstName = firstName;
         this.lastName = lastName;
         this.birth = birth;
@@ -108,21 +98,7 @@ public class IntegratedApplication extends Document {
         this.employeeStatus = employeeStatus;
         this.employeeAddress = employeeAddress;
         this.schoolId = schoolId;
-        this.schoolInfo = schoolInfo;
     }
-
-    @Getter
-    public static class SchoolInfo {
-        private String schoolName;
-        private String schoolPhoneNumber;
-
-        @Builder
-        public SchoolInfo(String schoolName, String schoolPhoneNumber) {
-            this.schoolName = schoolName;
-            this.schoolPhoneNumber = schoolPhoneNumber;
-        }
-    }
-
     public void updateByUser(
             String firstName,
             String lastName,

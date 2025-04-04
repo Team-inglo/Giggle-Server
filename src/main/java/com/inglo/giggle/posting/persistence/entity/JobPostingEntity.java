@@ -1,16 +1,13 @@
 package com.inglo.giggle.posting.persistence.entity;
 
-import com.inglo.giggle.account.persistence.entity.OwnerEntity;
 import com.inglo.giggle.address.persistence.entity.AddressEntity;
 import com.inglo.giggle.core.dto.BaseEntity;
-import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -24,8 +21,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,14 +29,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -127,79 +118,19 @@ public class JobPostingEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owners_id", nullable = false)
-    private OwnerEntity ownerEntity;
-
-    /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    @OneToMany(mappedBy = "jobPostingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostingWorkDayTimeEntity> workDayTimeEntities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobPostingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CompanyImageEntity> companyImageEntities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobPostingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookMarkEntity> bookMarkEntities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "jobPostingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserOwnerJobPostingEntity> userOwnerJobPostingEntities = new ArrayList<>();
+    @Column(name = "owners_id", nullable = false)
+    private UUID ownerId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public JobPostingEntity(String title, EJobCategory jobCategory, Integer hourlyRate, LocalDate recruitmentDeadLine,
+    public JobPostingEntity(Long id, String title, EJobCategory jobCategory, Integer hourlyRate, LocalDate recruitmentDeadLine,
                             EWorkPeriod workPeriod, Integer recruitmentNumber, EGender gender, Integer ageRestriction,
                             EEducationLevel educationLevel, Set<EVisa> visa, String recruiterName, String recruiterEmail,
                             String recruiterPhoneNumber, String description, String preferredConditions,
-                            EEmploymentType employmentType, OwnerEntity ownerEntity, AddressEntity addressEntity,
-                            List<PostingWorkDayTimeEntity> workDayTimeEntities, List<CompanyImageEntity> companyImageEntities, List<BookMarkEntity> bookMarkEntities,
-                            List<UserOwnerJobPostingEntity> userOwnerJobPostingEntities) {
-        this.title = title;
-        this.jobCategory = jobCategory;
-        this.hourlyRate = hourlyRate;
-        this.recruitmentDeadLine = recruitmentDeadLine;
-        this.workPeriod = workPeriod;
-        this.recruitmentNumber = recruitmentNumber;
-        this.gender = gender;
-        this.ageRestriction = ageRestriction;
-        this.educationLevel = educationLevel;
-        this.visa = visa;
-        this.recruiterName = recruiterName;
-        this.recruiterEmail = recruiterEmail;
-        this.recruiterPhoneNumber = recruiterPhoneNumber;
-        this.description = description;
-        this.preferredConditions = preferredConditions;
-        this.employmentType = employmentType;
-        this.ownerEntity = ownerEntity;
-        this.addressEntity = addressEntity;
-        this.workDayTimeEntities = workDayTimeEntities;
-        this.companyImageEntities = companyImageEntities;
-        this.bookMarkEntities = bookMarkEntities;
-        this.userOwnerJobPostingEntities = userOwnerJobPostingEntities;
-    }
-
-    public void updateJobPosting(
-            String title,
-            EJobCategory jobCategory,
-            Integer hourlyRate,
-            LocalDate recruitmentDeadLine,
-            EWorkPeriod workPeriod,
-            Integer recruitmentNumber,
-            EGender gender,
-            Integer ageRestriction,
-            EEducationLevel educationLevel,
-            Set<EVisa> visa,
-            String recruiterName,
-            String recruiterEmail,
-            String recruiterPhoneNumber,
-            String description,
-            String preferredConditions,
-            EEmploymentType employmentType,
-            AddressEntity addressEntity
-    ){
+                            EEmploymentType employmentType, AddressEntity addressEntity, UUID ownerId) {
+        this.id = id;
         this.title = title;
         this.jobCategory = jobCategory;
         this.hourlyRate = hourlyRate;
@@ -217,76 +148,7 @@ public class JobPostingEntity extends BaseEntity {
         this.preferredConditions = preferredConditions;
         this.employmentType = employmentType;
         this.addressEntity = addressEntity;
-    }
-
-    public String getWorkDaysPerWeekToString() {
-        // 협의 가능 요일이 포함되어 있는 경우
-        if (workDayTimeEntities.stream().anyMatch(dayTime -> dayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE)) {
-            return "협의 가능";
-        }
-
-        // 중복되지 않은 요일의 개수 세기
-        long distinctDays = workDayTimeEntities.stream()
-                .map(PostingWorkDayTimeEntity::getDayOfWeek)
-                .distinct()
-                .count();
-
-        // 작업일 수에 따라 적절한 문자열 반환
-        return switch ((int) distinctDays) {
-            case 1 -> "1 day per week";
-            case 2 -> "2 days per week";
-            case 3 -> "3 days per week";
-            case 4 -> "4 days per week";
-            case 5 -> "5 days per week";
-            case 6 -> "6 days per week";
-            case 7 -> "7 days per week";
-            default -> "협의 가능";
-        };
-    }
-
-    public Map<String, Integer> calculateWorkHours() {
-        int weekdayHours = 0;
-        int weekendHours = 0;
-
-        for (PostingWorkDayTimeEntity workDayTime : workDayTimeEntities) {
-            if (workDayTime.getDayOfWeek() == EDayOfWeek.NEGOTIABLE || workDayTime.getWorkStartTime() == null || workDayTime.getWorkEndTime() == null) {
-                continue;
-            }
-
-            Duration workDuration = Duration.between(workDayTime.getWorkStartTime(), workDayTime.getWorkEndTime());
-            int hours = (int) workDuration.toHours();
-
-            if (isWeekday(workDayTime.getDayOfWeek())) {
-                weekdayHours += hours;
-            } else if (isWeekend(workDayTime.getDayOfWeek())) {
-                weekendHours += hours;
-            }
-        }
-
-        Map<String, Integer> workHoursMap = new HashMap<>();
-        workHoursMap.put("weekdayWorkHours", weekdayHours);
-        workHoursMap.put("weekendWorkHours", weekendHours);
-
-        return workHoursMap;
-    }
-
-    private boolean isWeekday(EDayOfWeek dayOfWeek) {
-        return dayOfWeek == EDayOfWeek.MONDAY || dayOfWeek == EDayOfWeek.TUESDAY ||
-                dayOfWeek == EDayOfWeek.WEDNESDAY || dayOfWeek == EDayOfWeek.THURSDAY ||
-                dayOfWeek == EDayOfWeek.FRIDAY;
-    }
-
-    private boolean isWeekend(EDayOfWeek dayOfWeek) {
-        return dayOfWeek == EDayOfWeek.SATURDAY || dayOfWeek == EDayOfWeek.SUNDAY;
-    }
-
-    public void updatePostWorkDayTimes(List<PostingWorkDayTimeEntity> workDayTimes) {
-        this.workDayTimeEntities.clear();
-        this.workDayTimeEntities.addAll(workDayTimes);
-    }
-
-    public void fetchOwner(OwnerEntity ownerEntity) {
-        this.ownerEntity = ownerEntity;
+        this.ownerId = ownerId;
     }
 }
 

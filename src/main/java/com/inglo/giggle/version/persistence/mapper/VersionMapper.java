@@ -18,6 +18,7 @@ public class VersionMapper {
 
     public static VersionEntity toEntity(Version domain) {
         return VersionEntity.builder()
+                .id(domain.getId())
                 .major(domain.getMajor())
                 .minor(domain.getMinor())
                 .patch(domain.getPatch())

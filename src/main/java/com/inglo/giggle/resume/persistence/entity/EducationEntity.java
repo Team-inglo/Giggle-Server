@@ -2,17 +2,13 @@ package com.inglo.giggle.resume.persistence.entity;
 
 import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.core.type.EEducationLevel;
-import com.inglo.giggle.school.persistence.entity.SchoolEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,6 +18,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -63,36 +60,26 @@ public class EducationEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resume_id", nullable = false)
-    private ResumeEntity resumeEntity;
+    @Column(name = "resume_id", nullable = false)
+    private UUID resumeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id", nullable = false)
-    private SchoolEntity schoolEntity;
+    @Column(name = "school_id", nullable = false)
+    private Long schoolId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public EducationEntity(EEducationLevel educationLevel, String major, Double gpa, LocalDate enrollmentDate,
-                           LocalDate graduationDate, Integer grade, SchoolEntity schoolEntity, ResumeEntity resumeEntity) {
+    public EducationEntity(Long id, EEducationLevel educationLevel, String major, Double gpa, LocalDate enrollmentDate,
+                           LocalDate graduationDate, Integer grade, UUID resumeId, Long schoolId) {
+        this.id = id;
         this.educationLevel = educationLevel;
         this.major = major;
         this.gpa = gpa;
         this.enrollmentDate = enrollmentDate;
         this.graduationDate = graduationDate;
         this.grade = grade;
-        this.schoolEntity = schoolEntity;
-        this.resumeEntity = resumeEntity;
+        this.resumeId = resumeId;
+        this.schoolId = schoolId;
     }
-
-    public void fetchSchoolEntity(SchoolEntity schoolEntity) {
-        this.schoolEntity = schoolEntity;
-    }
-
-    public void fetchResumeEntity(ResumeEntity resumeEntity) {
-        this.resumeEntity = resumeEntity;
-    }
-
 }

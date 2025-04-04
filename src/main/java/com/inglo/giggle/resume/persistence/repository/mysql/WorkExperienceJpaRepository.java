@@ -5,8 +5,9 @@ import com.inglo.giggle.resume.persistence.entity.WorkExperienceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface WorkExperienceJpaRepository extends JpaRepository<WorkExperienceEntity, Long>{
 
-    List<WorkExperienceEntity> findAllByResumeEntity(ResumeEntity resumeEntity);
+    List<WorkExperienceEntity> findAllByResumeId(UUID resumeId);
 }

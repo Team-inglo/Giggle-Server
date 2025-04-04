@@ -4,7 +4,6 @@ import com.inglo.giggle.address.persistence.entity.AddressEntity;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
-import com.inglo.giggle.posting.persistence.entity.UserOwnerJobPostingEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -120,14 +119,14 @@ public class PartTimeEmploymentPermitEntity extends DocumentEntity {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public PartTimeEmploymentPermitEntity(UserOwnerJobPostingEntity userOwnerJobPostingEntity, String employeeFirstName, String employeeLastName,
+    public PartTimeEmploymentPermitEntity(Long id, String hwpUrl, String wordUrl, Long userOwnerJobPostingId, String employeeFirstName, String employeeLastName,
                                           String major, Integer termOfCompletion, String employeePhoneNumber,
                                           String employeeEmail, EEmployeeStatus employeeStatus, String companyName,
                                           String companyRegistrationNumber, String jobType, String employerName,
                                           String employerPhoneNumber, String employerSignatureBase64, EWorkPeriod workPeriod,
                                           Integer hourlyRate, String workDaysWeekDays, String workDaysWeekends,
                                           EEmployerStatus employerStatus, AddressEntity employerAddressEntity) {
-        super(userOwnerJobPostingEntity);
+        super(id, hwpUrl, wordUrl, userOwnerJobPostingId);
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.major = major;

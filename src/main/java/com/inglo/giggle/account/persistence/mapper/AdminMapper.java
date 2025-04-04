@@ -22,6 +22,7 @@ public class AdminMapper {
             return null;
         }
         return AdminEntity.builder()
+                .id(domain.getId())
                 .provider(domain.getProvider())
                 .serialId(domain.getSerialId())
                 .password(domain.getPassword())

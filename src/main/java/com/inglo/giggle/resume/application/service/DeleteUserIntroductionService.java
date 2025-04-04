@@ -2,9 +2,8 @@ package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.resume.application.usecase.DeleteUserIntroductionUseCase;
 import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,25 +14,33 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DeleteUserIntroductionService implements DeleteUserIntroductionUseCase {
 
-    private final AccountRepository accountRepository;
     private final ResumeRepository resumeRepository;
 
     @Override
     @Transactional
     public void execute(UUID accountId) {
 
-        // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        // ResumeAggregate 생성
+        ResumeAggregate resumeAggregate = getResumeAggregate(accountId);
 
-        // 계정 타입 유효성 체크
-        account.checkUserValidation();
+        // Introduction null 로 업데이트
+        resumeAggregate.clearResumeIntroduction();
+
+        resumeRepository.save(resumeAggregate.getResume());
+    }
+
+    /* ---------------------------------------------------------------------------------------------------------------*
+     * -------                                       private method                                            -------*
+     * -------------------------------------------------------------------------------------------------------------- */
+    private ResumeAggregate getResumeAggregate(UUID resumeId) {
 
         // Resume 조회
-        Resume resume = resumeRepository.findByIdOrElseThrow(accountId);
+        Resume resume = resumeRepository.findByAccountIdOrElseThrow(resumeId);
 
-        // Introduction null로 업데이트
-        resume.deleteIntroduction();
-        resumeRepository.save(resume);
+        // ResumeAggregate 생성
+        return ResumeAggregate.builder()
+                .resume(resume)
+                .build();
     }
 
 }

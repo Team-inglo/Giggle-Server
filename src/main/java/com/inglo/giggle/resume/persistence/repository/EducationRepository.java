@@ -2,7 +2,6 @@ package com.inglo.giggle.resume.persistence.repository;
 
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.resume.domain.Education;
-import com.inglo.giggle.resume.domain.Resume;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,11 +12,11 @@ public interface EducationRepository {
 
     List<Education> findEducationByAccountIdAndEducationLevel(UUID userId, EEducationLevel educationLevel);
 
-    List<Education> findAllByResume(Resume resume);
-
-    Education findWithSchoolByIdOrElseThrow(Long id);
+    List<Education> findAllByResumeId(UUID resumeId);
 
     Education save(Education education);
+
+    void saveAll(List<Education> educations);
 
     void delete(Education education);
 }

@@ -24,17 +24,17 @@ public class ContractWorkDayTime extends BaseDomain {
 
     @Builder
     public ContractWorkDayTime(Long id, EDayOfWeek dayOfWeek, LocalTime workStartTime, LocalTime workEndTime,
-                               LocalTime breakStartTime, LocalTime breakEndTime, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, Long standardLaborContractId) {
+                               LocalTime breakStartTime, LocalTime breakEndTime, Long standardLaborContractId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.dayOfWeek = dayOfWeek;
         this.workStartTime = workStartTime;
         this.workEndTime = workEndTime;
         this.breakStartTime = breakStartTime;
         this.breakEndTime = breakEndTime;
+        this.standardLaborContractId = standardLaborContractId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
-        this.standardLaborContractId = standardLaborContractId;
     }
 }
 

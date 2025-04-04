@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,9 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -51,19 +47,13 @@ public class TermEntity extends BaseEntity {
     private Double version;
 
     /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    @OneToMany(mappedBy = "termEntity")
-    private List<TermAccountEntity> termAccountEntities;
-
-    /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public TermEntity(String content, ETermType termType, Double version, List<TermAccountEntity> termAccountEntities) {
+    public TermEntity(Long id, String content, ETermType termType, Double version) {
+        this.id = id;
         this.content = content;
         this.termType = termType;
         this.version = version;
-        this.termAccountEntities = termAccountEntities;
     }
 }

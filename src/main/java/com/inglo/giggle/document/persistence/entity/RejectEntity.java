@@ -3,12 +3,9 @@ package com.inglo.giggle.document.persistence.entity;
 import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,16 +38,16 @@ public class RejectEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "document_id", nullable = false)
-    private DocumentEntity documentEntity;
+    @Column(name = "document_id", nullable = false)
+    private Long documentId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public RejectEntity(DocumentEntity documentEntity, String reason) {
-        this.documentEntity = documentEntity;
+    public RejectEntity(Long id, Long documentId, String reason) {
+        this.id = id;
+        this.documentId = documentId;
         this.reason = reason;
     }
 }

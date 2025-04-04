@@ -27,8 +27,6 @@ public class Admin extends Account {
                 null,
                 null,
                 null,
-                null,
-                null,
                 null
         );
     }

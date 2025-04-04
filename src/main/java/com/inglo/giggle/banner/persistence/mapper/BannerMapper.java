@@ -21,6 +21,7 @@ public class BannerMapper {
 
     public static BannerEntity toEntity(Banner banner) {
         return BannerEntity.builder()
+                .id(banner.getId())
                 .title(banner.getTitle())
                 .imgUrl(banner.getImgUrl())
                 .content(banner.getContent())

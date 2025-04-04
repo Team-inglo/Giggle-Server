@@ -3,12 +3,9 @@ package com.inglo.giggle.resume.persistence.entity;
 import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -42,23 +41,19 @@ public class AdditionalLanguageEntity extends BaseEntity {
     private Integer level;
 
     /* -------------------------------------------- */
-    /* Many To One Mapping ------------------------ */
+    /* One To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_skills_id", nullable = false)
-    private LanguageSkillEntity languageSkillEntity;
+    @Column(name = "language_skills_id", nullable = false)
+    private UUID languageSkillsId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public AdditionalLanguageEntity(String languageName, Integer level, LanguageSkillEntity languageSkillEntity) {
+    public AdditionalLanguageEntity(Long id, String languageName, Integer level, UUID languageSkillsId) {
+        this.id = id;
         this.languageName = languageName;
         this.level = level;
-        this.languageSkillEntity = languageSkillEntity;
-    }
-
-    public void fetchLanguageSkillEntity(LanguageSkillEntity languageSkillEntity) {
-        this.languageSkillEntity = languageSkillEntity;
+        this.languageSkillsId = languageSkillsId;
     }
 }

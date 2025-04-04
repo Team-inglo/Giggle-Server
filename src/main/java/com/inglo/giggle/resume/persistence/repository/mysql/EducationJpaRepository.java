@@ -12,17 +12,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface EducationJpaRepository extends JpaRepository<EducationEntity, Long>{
+public interface EducationJpaRepository extends JpaRepository<EducationEntity, Long> {
     @EntityGraph(attributePaths = {"schoolEntity"})
     @Query("SELECT e FROM EducationEntity e " +
             "JOIN ResumeEntity r ON e.resumeEntity.accountId = r.accountId " +
             "WHERE e.educationLevel = :educationLevel AND r.accountId = :userId"
     )
-    List<EducationEntity> findEducationByAccountIdAndEducationLevel(@Param("userId")UUID userId, @Param("educationLevel") EEducationLevel educationLevel);
+    List<EducationEntity> findEducationByAccountIdAndEducationLevel(@Param("userId") UUID userId, @Param("educationLevel") EEducationLevel educationLevel);
 
-    @EntityGraph(attributePaths = {"schoolEntity"})
-    List<EducationEntity> findAllByResumeEntity(ResumeEntity resumeEntity);
+    List<EducationEntity> findAllByResumeId(UUID resumeId);
 
-    @EntityGraph(attributePaths = {"schoolEntity"})
-    Optional<EducationEntity> findWithSchoolById(Long id);
 }

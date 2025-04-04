@@ -2,17 +2,13 @@ package com.inglo.giggle.notification.persistence.entity;
 
 import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.core.type.ENotificationType;
-import com.inglo.giggle.posting.persistence.entity.UserOwnerJobPostingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -52,20 +48,21 @@ public class NotificationEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_owner_job_postings_id", nullable = false)
-    private UserOwnerJobPostingEntity userOwnerJobPostingEntity;
+    @Column(name = "user_owner_job_postings_id", nullable = false)
+    private Long userOwnerJobPostingId;
 
     @Builder
     public NotificationEntity(
+            Long id,
             String message,
             Boolean isRead,
-            UserOwnerJobPostingEntity userOwnerJobPostingEntity,
+            Long userOwnerJobPostingId,
             ENotificationType notificationType
     ) {
+        this.id = id;
         this.message = message;
         this.isRead = isRead;
-        this.userOwnerJobPostingEntity = userOwnerJobPostingEntity;
+        this.userOwnerJobPostingId = userOwnerJobPostingId;
         this.notificationType = notificationType;
     }
 }

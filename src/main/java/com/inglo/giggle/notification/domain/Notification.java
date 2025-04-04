@@ -20,11 +20,6 @@ public class Notification extends BaseDomain {
     /* -------------------------------------------- */
     private Long userOwnerJobPostingId;
 
-    /* -------------------------------------------- */
-    /* Nested Class ------------------------------- */
-    /* -------------------------------------------- */
-    private UserOwnerJobPostingInfo userOwnerJobPostingInfo;
-
     @Builder
     public Notification(
             Long id,
@@ -32,7 +27,6 @@ public class Notification extends BaseDomain {
             Boolean isRead,
             ENotificationType notificationType,
             Long userOwnerJobPostingId,
-            UserOwnerJobPostingInfo userOwnerJobPostingInfo,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             LocalDateTime deletedAt
@@ -42,40 +36,9 @@ public class Notification extends BaseDomain {
         this.isRead = isRead;
         this.notificationType = notificationType;
         this.userOwnerJobPostingId = userOwnerJobPostingId;
-        this.userOwnerJobPostingInfo = userOwnerJobPostingInfo;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
-    }
-
-    @Getter
-    public static class UserOwnerJobPostingInfo {
-        private Long id;
-        private JobPostingInfo jobPostingInfo;
-
-        @Builder
-        public UserOwnerJobPostingInfo(
-                Long id,
-                JobPostingInfo jobPostingInfo
-        ) {
-            this.id = id;
-            this.jobPostingInfo = jobPostingInfo;
-        }
-    }
-
-    @Getter
-    public static class JobPostingInfo {
-        private Long id;
-        private String title;
-
-        @Builder
-        public JobPostingInfo(
-                Long id,
-                String title
-        ) {
-            this.id = id;
-            this.title = title;
-        }
     }
 
     public void updateIsRead() {

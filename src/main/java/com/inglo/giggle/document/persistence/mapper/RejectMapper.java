@@ -2,9 +2,7 @@ package com.inglo.giggle.document.persistence.mapper;
 
 import com.inglo.giggle.document.domain.Reject;
 import com.inglo.giggle.document.persistence.entity.RejectEntity;
-import org.hibernate.collection.spi.PersistentCollection;
 
-import java.util.Collection;
 import java.util.List;
 
 public class RejectMapper {
@@ -15,10 +13,10 @@ public class RejectMapper {
         return Reject.builder()
                 .id(entity.getId())
                 .reason(entity.getReason())
+                .documentId(entity.getDocumentId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
-                .documentId(isInitialized(entity.getDocumentEntity()) ? entity.getDocumentEntity().getId() : null)
                 .build();
     }
 
@@ -27,7 +25,9 @@ public class RejectMapper {
             return null;
         }
         return RejectEntity.builder()
+                .id(domain.getId())
                 .reason(domain.getReason())
+                .documentId(domain.getDocumentId())
                 .build();
     }
 
@@ -41,10 +41,5 @@ public class RejectMapper {
         return domains.stream()
                 .map(RejectMapper::toEntity)
                 .toList();
-    }
-
-    private static boolean isInitialized(Object object) {
-        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
-                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,12 +34,13 @@ public class AdminEntity extends AccountEntity {
 
     @Builder
     public AdminEntity(
+            UUID id,
             ESecurityProvider provider,
             String serialId,
             String password,
             String email
     ) {
-        super(provider, serialId, password, email, null, null, null, null, null, null);
+        super(id, provider, serialId, password, email, null, null, null, null);
     }
 
     @Override

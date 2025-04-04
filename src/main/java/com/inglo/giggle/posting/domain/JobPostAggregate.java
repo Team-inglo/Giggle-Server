@@ -1,12 +1,14 @@
 package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.posting.domain.type.EJobCategory;
+import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -15,12 +17,19 @@ public class JobPostAggregate {
 
     private JobPosting jobPosting;
 
-    private Resume resumeEntity;
+    private List<CompanyImage> companyImages;
+
+    private List<PostingWorkDayTime> postingWorkDayTimes;
 
     @Builder
-    public JobPostAggregate(JobPosting jobPosting, Resume resume) {
+    public JobPostAggregate(
+            JobPosting jobPosting,
+            List<CompanyImage> companyImages,
+            List<PostingWorkDayTime> postingWorkDayTimes
+    ) {
         this.jobPosting = jobPosting;
-        this.resumeEntity = resume;
+        this.companyImages = companyImages;
+        this.postingWorkDayTimes = postingWorkDayTimes;
     }
 
     public Boolean isUserApplicableByWorkTime(Map<String, Integer> userWorkHours, Map<String, Integer> jobWorkHours) {
@@ -28,9 +37,9 @@ public class JobPostAggregate {
                 && userWorkHours.get("weekdayWorkHours") >= jobWorkHours.get("weekdayWorkHours");
     }
 
-    public Boolean isUserApplicableByJobCategory() {
+    public Boolean isUserApplicableByJobCategory(LanguageSkill languageSkill) {
         if(jobPosting.getJobCategory().equals(EJobCategory.MANUFACTURING)){
-            return (this.resumeEntity.getLanguageSkill().getTopikLevel() >= 4 && this.resumeEntity.getLanguageSkill().getSocialIntegrationLevel() >= 4);
+            return (languageSkill.getTopikLevel() >= 4 && languageSkill.getSocialIntegrationLevel() >= 4);
         }
         return true;
     }

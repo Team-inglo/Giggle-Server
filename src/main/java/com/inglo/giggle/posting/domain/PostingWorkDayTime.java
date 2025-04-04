@@ -21,7 +21,7 @@ public class PostingWorkDayTime extends BaseDomain {
     private Long jobPostingId;
 
     @Builder
-    public PostingWorkDayTime(Long id, EDayOfWeek dayOfWeek, LocalTime workStartTime, LocalTime workEndTime, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, Long jobPostingId) {
+    public PostingWorkDayTime(Long id, EDayOfWeek dayOfWeek, LocalTime workStartTime, LocalTime workEndTime, Long jobPostingId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.dayOfWeek = dayOfWeek;
         this.workStartTime = workStartTime;

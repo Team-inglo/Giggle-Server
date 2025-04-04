@@ -6,11 +6,13 @@ import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.core.utility.DateTimeUtil;
+import com.inglo.giggle.resume.application.vo.EducationWithSchoolDto;
+import com.inglo.giggle.resume.application.vo.ResumeAggregateWithUserDto;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
 import com.inglo.giggle.resume.domain.Education;
-import com.inglo.giggle.resume.domain.LanguageSkill;
-import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.domain.WorkExperience;
+import com.inglo.giggle.school.domain.School;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -83,7 +85,7 @@ public class ReadUserResumeDetailResponseDto extends SelfValidating<ReadUserResu
             this.description = description;
         }
 
-        public static VisaDto fromEntity(EVisa visa) {
+        public static VisaDto from(EVisa visa) {
             return VisaDto.builder()
                     .visa(visa.toString())
                     .description(visa.getDescription())
@@ -224,11 +226,23 @@ public class ReadUserResumeDetailResponseDto extends SelfValidating<ReadUserResu
             this.grade = grade;
         }
 
-        public static EducationDto from(Education education) {
+        public static EducationDto from(Education education, School school) {
+            if (school == null) {
+                return EducationDto.builder()
+                        .id(education.getId())
+                        .educationLevel(education.getEducationLevel().name())
+                        .schoolName(null)
+                        .major(education.getMajor())
+                        .startDate(DateTimeUtil.convertLocalDateToString(education.getEnrollmentDate()))
+                        .endDate(DateTimeUtil.convertLocalDateToString(education.getGraduationDate()))
+                        .grade(education.getGrade())
+                        .build();
+            }
+
             return EducationDto.builder()
                     .id(education.getId())
                     .educationLevel(education.getEducationLevel().name())
-                    .schoolName(education.getSchoolInfo().getSchoolName())
+                    .schoolName(school.getSchoolName())
                     .major(education.getMajor())
                     .startDate(DateTimeUtil.convertLocalDateToString(education.getEnrollmentDate()))
                     .endDate(DateTimeUtil.convertLocalDateToString(education.getGraduationDate()))
@@ -260,15 +274,15 @@ public class ReadUserResumeDetailResponseDto extends SelfValidating<ReadUserResu
             this.etc = etc;
         }
 
-        public static LanguagesDto from(LanguageSkill language) {
-            List<LanguageDetailDto> languageDetails = language.getAdditionalLanguages().stream()
+        public static LanguagesDto from(ResumeAggregate resumeAggregate) {
+            List<LanguageDetailDto> languageDetails = resumeAggregate.getAdditionalLanguages().stream()
                     .map(LanguageDetailDto::from)
                     .toList();
 
             return LanguagesDto.builder()
-                    .topik(language.getTopikLevel())
-                    .socialIntegration(language.getSocialIntegrationLevel())
-                    .sejongInstitute(language.getSejongInstituteLevel())
+                    .topik(resumeAggregate.getLanguageSkill().getTopikLevel())
+                    .socialIntegration(resumeAggregate.getLanguageSkill().getSocialIntegrationLevel())
+                    .sejongInstitute(resumeAggregate.getLanguageSkill().getSejongInstituteLevel())
                     .etc(languageDetails)
                     .build();
         }
@@ -302,16 +316,25 @@ public class ReadUserResumeDetailResponseDto extends SelfValidating<ReadUserResu
         }
     }
 
-    public static ReadUserResumeDetailResponseDto of(Resume resume, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill, User user) {
+    public static ReadUserResumeDetailResponseDto of(ResumeAggregateWithUserDto resumeAggregateWithUserDto, List<EducationWithSchoolDto> educationWithSchoolDtos) {
         return ReadUserResumeDetailResponseDto.builder()
-                .profileImgUrl(user.getProfileImgUrl())
-                .name(user.getName())
-                .visa(VisaDto.fromEntity(user.getVisa()))
-                .personalInformation(PersonalInformationDto.from(user))
-                .introduction(resume.getIntroduction())
-                .workExperience(!workExperiences.isEmpty() ? workExperiences.stream().map(WorkExperienceDto::from).toList() : null)
-                .education(!educations.isEmpty() ? educations.stream().map(EducationDto::from).toList() : null)
-                .languages(LanguagesDto.from(languageSkill))
+                .profileImgUrl(resumeAggregateWithUserDto.user().getProfileImgUrl())
+                .name(resumeAggregateWithUserDto.user().getName())
+                .visa(VisaDto.from(resumeAggregateWithUserDto.user().getVisa()))
+                .personalInformation(PersonalInformationDto.from(resumeAggregateWithUserDto.user()))
+                .introduction(resumeAggregateWithUserDto.resumeAggregate().getResume().getIntroduction())
+                .workExperience(!resumeAggregateWithUserDto.resumeAggregate().getWorkExperiences().isEmpty() ? resumeAggregateWithUserDto.resumeAggregate().getWorkExperiences().stream().map(WorkExperienceDto::from).toList() : null)
+                .education(!resumeAggregateWithUserDto.resumeAggregate().getEducations().isEmpty() ? resumeAggregateWithUserDto.resumeAggregate().getEducations().stream().map(
+                        education -> {
+                            School school = educationWithSchoolDtos.stream()
+                                    .filter(educationWithSchoolDto -> educationWithSchoolDto.education().getId().equals(education.getId()))
+                                    .map(EducationWithSchoolDto::school)
+                                    .findFirst()
+                                    .orElse(null);
+                            return EducationDto.from(education, school);
+                        }
+                ).toList() : null)
+                .languages(LanguagesDto.from(resumeAggregateWithUserDto.resumeAggregate()))
                 .build();
     }
 }

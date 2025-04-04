@@ -9,8 +9,6 @@ import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
-import com.inglo.giggle.document.persistence.entity.ContractWorkDayTimeEntity;
-import com.inglo.giggle.document.persistence.entity.StandardLaborContractEntity;
 import jakarta.xml.bind.JAXBElement;
 import lombok.Builder;
 import lombok.Getter;
@@ -88,13 +86,8 @@ public class StandardLaborContract extends Document {
     private String employerSignatureBase64;
     private EEmployerStatus employerStatus;
 
-    /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    private List<ContractWorkDayTime> contractWorkDayTimes;
-
     @Builder
-    public StandardLaborContract(Long id, String wordUrl, List<Reject> rejects,
+    public StandardLaborContract(Long id, String wordUrl, Long userOwnerJobPostingId,
                                  String employeeFirstName, String employeeLastName, String employeePhoneNumber,
                                  String employeeSignatureBase64, EEmployeeStatus employeeStatus, Address employeeAddress,
                                  String companyName, String companyRegistrationNumber, String employerName, String employerPhoneNumber,
@@ -102,11 +95,9 @@ public class StandardLaborContract extends Document {
                                  Set<EDayOfWeek> weeklyRestDays, Integer hourlyRate, Integer bonus, Integer additionalSalary,
                                  Double wageRate, Integer paymentDay, EPaymentMethod paymentMethod, Set<EInsurance> insurances,
                                  String employerSignatureBase64, EEmployerStatus employerStatus,
-                                 List<ContractWorkDayTime> contractWorkDayTimes,
-                                 LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-                                 Long userOwnerJobPostingId
+                                 LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
-        super(id, wordUrl, rejects, createdAt, updatedAt, deletedAt, userOwnerJobPostingId);
+        super(id, wordUrl, userOwnerJobPostingId, createdAt, updatedAt, deletedAt);
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.employeePhoneNumber = employeePhoneNumber;
@@ -131,7 +122,6 @@ public class StandardLaborContract extends Document {
         this.insurances = insurances;
         this.employerSignatureBase64 = employerSignatureBase64;
         this.employerStatus = employerStatus;
-        this.contractWorkDayTimes = contractWorkDayTimes;
     }
 
     public String getEmployeeFullName() {
@@ -168,8 +158,7 @@ public class StandardLaborContract extends Document {
             Integer paymentDay,
             EPaymentMethod paymentMethod,
             Set<EInsurance> insurance,
-            String employerSignatureBase64,
-            List<ContractWorkDayTime> contractWorkDayTimes
+            String employerSignatureBase64
     ) {
         this.companyName = companyName;
         this.companyRegistrationNumber = companyRegistrationNumber;
@@ -188,7 +177,6 @@ public class StandardLaborContract extends Document {
         this.paymentMethod = paymentMethod;
         this.insurances = insurance;
         this.employerSignatureBase64 = employerSignatureBase64;
-        this.contractWorkDayTimes = contractWorkDayTimes;
     }
 
     public void updateByUser(
@@ -243,7 +231,8 @@ public class StandardLaborContract extends Document {
         this.employerStatus = EEmployerStatus.CONFIRMATION;
     }
 
-    public ByteArrayInputStream createStandardLaborContractDocxFile() {
+    // TODO: 애그리게이트로 이동
+    public ByteArrayInputStream createStandardLaborContractDocxFile(List<ContractWorkDayTime> workDayTime) throws Exception {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));
             MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
@@ -259,7 +248,6 @@ public class StandardLaborContract extends Document {
             variables.put(Constants.START_DAY, String.valueOf(startDate.getDayOfMonth()));
             variables.put(Constants.ADDRESS, employerAddress.getFullAddress());
             variables.put(Constants.DESCRIPTION, description);
-            List<ContractWorkDayTime> workDayTime = contractWorkDayTimes;
             workDayTime.sort(Comparator.comparing(
                     dayTime -> dayTime.getDayOfWeek().getOrder()
             ));

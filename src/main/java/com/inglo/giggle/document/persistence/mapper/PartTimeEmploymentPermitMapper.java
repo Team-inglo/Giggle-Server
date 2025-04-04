@@ -11,6 +11,8 @@ public class PartTimeEmploymentPermitMapper {
         }
         return PartTimeEmploymentPermit.builder()
                 .id(entity.getId())
+                .wordUrl(entity.getWordUrl())
+                .userOwnerJobPostingId(entity.getUserOwnerJobPostingId())
                 .employeeFirstName(entity.getEmployeeFirstName())
                 .employeeLastName(entity.getEmployeeLastName())
                 .major(entity.getMajor())
@@ -41,6 +43,9 @@ public class PartTimeEmploymentPermitMapper {
             return null;
         }
         return PartTimeEmploymentPermitEntity.builder()
+                .id(domain.getId())
+                .wordUrl(domain.getWordUrl())
+                .userOwnerJobPostingId(domain.getUserOwnerJobPostingId())
                 .employeeFirstName(domain.getEmployeeFirstName())
                 .employeeLastName(domain.getEmployeeLastName())
                 .major(domain.getMajor())

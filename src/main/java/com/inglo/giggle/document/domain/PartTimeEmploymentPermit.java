@@ -67,17 +67,16 @@ public class PartTimeEmploymentPermit extends Document {
     private Address employerAddress;
 
     @Builder
-    public PartTimeEmploymentPermit(Long id, String wordUrl, List<Reject> rejects,
+    public PartTimeEmploymentPermit(Long id, String wordUrl, Long userOwnerJobPostingId,
                                     String employeeFirstName, String employeeLastName, String major, Integer termOfCompletion,
                                     String employeePhoneNumber, String employeeEmail, EEmployeeStatus employeeStatus,
                                     String companyName, String companyRegistrationNumber, String jobType,
                                     String employerName, String employerPhoneNumber, String employerSignatureBase64,
                                     EWorkPeriod workPeriod, Integer hourlyRate, String workDaysWeekDays, String workDaysWeekends,
                                     EEmployerStatus employerStatus, Address employerAddress,
-                                    LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt,
-                                    Long userOwnerJobPostingId
+                                    LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
-        super(id, wordUrl, rejects, createdAt, updatedAt, deletedAt, userOwnerJobPostingId);
+        super(id, wordUrl, userOwnerJobPostingId, createdAt, updatedAt, deletedAt);
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.major = major;

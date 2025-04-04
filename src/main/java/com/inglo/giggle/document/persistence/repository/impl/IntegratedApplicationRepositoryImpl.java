@@ -7,20 +7,14 @@ import com.inglo.giggle.document.persistence.entity.IntegratedApplicationEntity;
 import com.inglo.giggle.document.persistence.mapper.IntegratedApplicationMapper;
 import com.inglo.giggle.document.persistence.repository.IntegratedApplicationRepository;
 import com.inglo.giggle.document.persistence.repository.mysql.IntegratedApplicationJpaRepository;
-import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.entity.SchoolEntity;
-import com.inglo.giggle.school.persistence.repository.mysql.SchoolJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class IntegratedApplicationRepositoryImpl implements IntegratedApplicationRepository {
 
     private final IntegratedApplicationJpaRepository integratedApplicationJpaRepository;
-    private final SchoolJpaRepository schoolJpaRepository;
 
     @Override
     public IntegratedApplication findByIdOrElseThrow(Long id) {
@@ -42,12 +36,7 @@ public class IntegratedApplicationRepositoryImpl implements IntegratedApplicatio
 
     @Override
     public IntegratedApplication save(IntegratedApplication integratedApplication) {
-        IntegratedApplicationEntity entity = integratedApplicationJpaRepository.save(IntegratedApplicationMapper.toEntity(integratedApplication));
-        Optional<SchoolEntity> schoolEntity = schoolJpaRepository.findById(integratedApplication.getSchoolId());
-        if (schoolEntity.isPresent()) {
-            entity.fetchSchool(schoolEntity.get());
-            integratedApplicationJpaRepository.save(entity);
-        }
-        return IntegratedApplicationMapper.toDomain(entity);
+        IntegratedApplicationEntity entity = IntegratedApplicationMapper.toEntity(integratedApplication);
+        return IntegratedApplicationMapper.toDomain(integratedApplicationJpaRepository.save(entity));
     }
 }

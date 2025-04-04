@@ -3,8 +3,6 @@ package com.inglo.giggle.security.persistence.entity.mysql;
 import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.security.domain.type.ESecurityProvider;
 import com.inglo.giggle.security.domain.type.ESecurityRole;
-import com.inglo.giggle.term.persistence.entity.TermAccountEntity;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -15,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +21,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -78,18 +74,10 @@ public abstract class AccountEntity extends BaseEntity {
     private Boolean notificationAllowed;
 
     /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    @OneToMany(mappedBy = "accountEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TermAccountEntity> termAccountEntities;
-
-    @OneToMany(mappedBy = "accountEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AccountDeviceEntity> accountDeviceEntities;
-
-    /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     public AccountEntity(
+            UUID id,
             ESecurityProvider provider,
             String serialId,
             String password,
@@ -97,9 +85,7 @@ public abstract class AccountEntity extends BaseEntity {
             String profileImgUrl,
             String phoneNumber,
             Boolean marketingAllowed,
-            Boolean notificationAllowed,
-            List<TermAccountEntity> termAccountEntities,
-            List<AccountDeviceEntity> accountDeviceEntities
+            Boolean notificationAllowed
     ) {
         this.provider = provider;
         this.serialId = serialId;
@@ -108,16 +94,6 @@ public abstract class AccountEntity extends BaseEntity {
         this.profileImgUrl = profileImgUrl;
         this.phoneNumber = phoneNumber;
         this.marketingAllowed = marketingAllowed;
-        this.notificationAllowed = notificationAllowed;
-        this.termAccountEntities = termAccountEntities;
-        this.accountDeviceEntities = accountDeviceEntities;
-    }
-
-    public void updatePhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void updateNotificationAllowed(Boolean notificationAllowed) {
         this.notificationAllowed = notificationAllowed;
     }
 

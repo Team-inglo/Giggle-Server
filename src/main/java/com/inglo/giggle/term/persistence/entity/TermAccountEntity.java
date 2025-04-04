@@ -1,15 +1,11 @@
 package com.inglo.giggle.term.persistence.entity;
 
 import com.inglo.giggle.core.dto.BaseEntity;
-import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,7 +14,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -43,30 +39,20 @@ public class TermAccountEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
-    private AccountEntity accountEntity;
+    @Column(name = "account_id", nullable = false)
+    private UUID accountId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "term_id", nullable = false)
-    private TermEntity termEntity;
+    @Column(name = "term_id", nullable = false)
+    private Long termId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public TermAccountEntity(Boolean isAccepted, AccountEntity accountEntity, TermEntity termEntity) {
+    public TermAccountEntity(Long id, Boolean isAccepted, UUID accountId, Long termId) {
+        this.id = id;
         this.isAccepted = isAccepted;
-        this.accountEntity = accountEntity;
-        this.termEntity = termEntity;
+        this.accountId = accountId;
+        this.termId = termId;
     }
-
-    public void fetchAccountEntity(AccountEntity accountEntity) {
-        this.accountEntity = accountEntity;
-    }
-
-    public void fetchTermEntity(TermEntity termEntity) {
-        this.termEntity = termEntity;
-    }
-
 }

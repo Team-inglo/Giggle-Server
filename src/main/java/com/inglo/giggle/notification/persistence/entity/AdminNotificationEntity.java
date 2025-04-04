@@ -54,11 +54,13 @@ public class AdminNotificationEntity extends BaseEntity {
 
     @Builder
     public AdminNotificationEntity(
+            Long id,
             String title,
             String message,
             ESecurityRole role,
             Boolean isAdvertisement
     ) {
+        this.id = id;
         this.title = title;
         this.message = message;
         this.role = role;

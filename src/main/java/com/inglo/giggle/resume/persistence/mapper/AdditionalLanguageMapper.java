@@ -2,9 +2,7 @@ package com.inglo.giggle.resume.persistence.mapper;
 
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
 import com.inglo.giggle.resume.persistence.entity.AdditionalLanguageEntity;
-import org.hibernate.collection.spi.PersistentCollection;
 
-import java.util.Collection;
 import java.util.List;
 
 public class AdditionalLanguageMapper {
@@ -16,7 +14,7 @@ public class AdditionalLanguageMapper {
                 .id(entity.getId())
                 .languageName(entity.getLanguageName())
                 .level(entity.getLevel())
-                .languageSkillId(isInitialized(entity.getLanguageSkillEntity()) ? entity.getLanguageSkillEntity().getResumeId() : null)
+                .languageSkillId(entity.getLanguageSkillsId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .deletedAt(entity.getDeletedAt())
@@ -28,8 +26,10 @@ public class AdditionalLanguageMapper {
             return null;
         }
         return AdditionalLanguageEntity.builder()
+                .id(domain.getId())
                 .languageName(domain.getLanguageName())
                 .level(domain.getLevel())
+                .languageSkillsId(domain.getLanguageSkillId())
                 .build();
     }
 
@@ -43,10 +43,5 @@ public class AdditionalLanguageMapper {
         return domains.stream()
                 .map(AdditionalLanguageMapper::toEntity)
                 .toList();
-    }
-
-    private static boolean isInitialized(Object object) {
-        return object instanceof org.hibernate.collection.spi.PersistentCollection &&
-                ((PersistentCollection<?>) object).wasInitialized();
     }
 }

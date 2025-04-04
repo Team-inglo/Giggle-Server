@@ -62,8 +62,9 @@ public class SchoolEntity extends BaseEntity {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public SchoolEntity(String schoolName, String schoolPhoneNumber, String instituteName,
+    public SchoolEntity(Long id, String schoolName, String schoolPhoneNumber, String instituteName,
                         String coordinatorName, String coordinatorPhoneNumber, AddressEntity addressEntity, Boolean isMetropolitan) {
+        this.id = id;
         this.schoolName = schoolName;
         this.schoolPhoneNumber = schoolPhoneNumber;
         this.instituteName = instituteName;

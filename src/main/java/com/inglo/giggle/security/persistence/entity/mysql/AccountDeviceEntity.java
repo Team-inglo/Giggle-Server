@@ -3,12 +3,9 @@ package com.inglo.giggle.security.persistence.entity.mysql;
 import com.inglo.giggle.core.dto.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -45,29 +42,21 @@ public class AccountDeviceEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
-    private AccountEntity accountEntity;
+    @Column(name = "account_id", nullable = false)
+    private UUID accountId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
     public AccountDeviceEntity(
+            Long id,
             UUID deviceId,
             String deviceToken,
-            AccountEntity accountEntity
+            UUID accountId
     ) {
         this.deviceId = deviceId;
         this.deviceToken = deviceToken;
-        this.accountEntity = accountEntity;
-    }
-
-    public void updateDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
-    }
-
-    public void updateDeviceId(UUID deviceId) {
-        this.deviceId = deviceId;
+        this.accountId = accountId;
     }
 }

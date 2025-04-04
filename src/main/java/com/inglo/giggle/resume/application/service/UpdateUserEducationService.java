@@ -3,57 +3,65 @@ package com.inglo.giggle.resume.application.service;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.resume.application.usecase.UpdateUserEducationUseCase;
 import com.inglo.giggle.resume.domain.Education;
+import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.persistence.repository.EducationRepository;
+import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
 import com.inglo.giggle.resume.presentation.dto.request.UpdateUserEducationRequestDto;
-import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateUserEducationService implements UpdateUserEducationUseCase {
 
-    private final AccountRepository accountRepository;
+    private final ResumeRepository resumeRepository;
     private final EducationRepository educationRepository;
-    private final SchoolRepository schoolRepository;
 
     @Override
     @Transactional
     public void execute(UUID accountId, Long educationId, UpdateUserEducationRequestDto requestDto) {
 
-        // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
-
-        // 계정 타입 유효성 체크
-        account.checkUserValidation();
-
-        // Education 조회
-        Education education = educationRepository.findByIdOrElseThrow(educationId);
+        // ResumeAggregate 생성
+        ResumeAggregate resumeAggregate = getResumeAggregate(accountId);
 
         // Education 유효성 체크
-        education.checkValidation(accountId);
-
-        // School 조회
-        School school = schoolRepository.findByIdOrElseThrow(requestDto.schoolId());
+        resumeAggregate.checkEducationValidation(educationId);
 
         // Education 업데이트
-        education.updateSelf(
+        resumeAggregate.updateEducation(
+                educationId,
                 EEducationLevel.fromString(requestDto.educationLevel()),
-                school.getId(),
                 requestDto.major(),
                 requestDto.gpa(),
                 requestDto.startDate(),
                 requestDto.endDate(),
-                requestDto.grade()
+                requestDto.grade(),
+                requestDto.schoolId()
         );
 
-        educationRepository.save(education);
+        educationRepository.saveAll(resumeAggregate.getEducations());
     }
 
+    /* ---------------------------------------------------------------------------------------------------------------*
+     * -------                                       private method                                            -------*
+     * -------------------------------------------------------------------------------------------------------------- */
+    private ResumeAggregate getResumeAggregate(UUID resumeId) {
+
+        // Resume 조회
+        Resume resume = resumeRepository.findByAccountIdOrElseThrow(resumeId);
+
+        // Education 조회
+        List<Education> educations = educationRepository.findAllByResumeId(resume.getAccountId());
+
+        // ResumeAggregate 생성
+        return ResumeAggregate.builder()
+                .resume(resume)
+                .educations(educations)
+                .build();
+    }
 }

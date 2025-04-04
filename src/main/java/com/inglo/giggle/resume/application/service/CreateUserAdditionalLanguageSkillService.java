@@ -2,13 +2,13 @@ package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.resume.application.usecase.CreateUserAdditionalLanguageSkillUseCase;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
+import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.service.AdditionalLanguageService;
+import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.persistence.repository.AdditionalLanguageRepository;
+import com.inglo.giggle.resume.persistence.repository.LanguageSkillRepository;
 import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
 import com.inglo.giggle.resume.presentation.dto.request.CreateUserAdditionalLanguageSkillRequestDto;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,38 +20,44 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CreateUserAdditionalLanguageSkillService implements CreateUserAdditionalLanguageSkillUseCase {
 
-    private final AccountRepository accountRepository;
     private final AdditionalLanguageRepository additionalLanguageRepository;
     private final ResumeRepository resumeRepository;
-    private final AdditionalLanguageService additionalLanguageService;
+    private final LanguageSkillRepository languageSkillRepository;
 
     @Override
     @Transactional
     public void execute(UUID accountId, CreateUserAdditionalLanguageSkillRequestDto requestDto) {
 
-        // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
-
-        // 계정 타입 유효성 체크
-        account.checkUserValidation();
-
-        // Resume 조회
-        Resume resume = resumeRepository.findWithLanguageSkillByAccountIdOrElseThrow(accountId);
-
-        // LanguageSkill 가져옴
-        List<AdditionalLanguage> additionalLanguages = resume.getLanguageSkill().getAdditionalLanguages();
+        // ResumeAggregate 생성
+        ResumeAggregate resumeAggregate = getResumeAggregate(accountId);
 
         // 이미 존재하는 언어인지 체크
-        additionalLanguageService.checkIsExistAdditionalLanguage(additionalLanguages, requestDto.languageName());
+        resumeAggregate.checkIsExistAdditionalLanguage(requestDto.languageName());
 
-        // AdditionalLanguage 생성
-        AdditionalLanguage additionalLanguage = AdditionalLanguage.builder()
-                .languageName(requestDto.languageName())
-                .level(requestDto.level())
-                .languageSkillId(resume.getLanguageSkill().getResumeId())
-                .build();
+        // AdditionalLanguage 추가
+        resumeAggregate.addAdditionalLanguage(requestDto.languageName(), requestDto.level(), resumeAggregate.getLanguageSkill().getResumeId());
 
-        additionalLanguageRepository.save(additionalLanguage);
+        additionalLanguageRepository.saveAll(resumeAggregate.getAdditionalLanguages());
     }
 
+    /* ---------------------------------------------------------------------------------------------------------------*
+     * -------                                       private method                                            -------*
+     * -------------------------------------------------------------------------------------------------------------- */
+    private ResumeAggregate getResumeAggregate(UUID resumeId) {
+        // Resume 조회
+        Resume resume = resumeRepository.findByAccountIdOrElseThrow(resumeId);
+
+        // LanguageSkill 조회
+        LanguageSkill languageSkill = languageSkillRepository.findByResumeIdOrElseThrow(resume.getAccountId());
+
+        // AdditionalLanguage 조회
+        List<AdditionalLanguage> additionalLanguages = additionalLanguageRepository.findAllByLanguageSkillId(languageSkill.getResumeId());
+
+        // ResumeAggregate 생성
+        return ResumeAggregate.builder()
+                .resume(resume)
+                .languageSkill(languageSkill)
+                .additionalLanguages(additionalLanguages)
+                .build();
+    }
 }

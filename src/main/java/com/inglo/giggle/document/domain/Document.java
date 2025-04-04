@@ -12,23 +12,17 @@ public abstract class Document extends BaseDomain {
     protected String wordUrl;
 
     /* -------------------------------------------- */
-    /* One To One Mapping ------------------------- */
-    /* -------------------------------------------- */
-    protected List<Reject> rejects;
-
-    /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
     protected Long userOwnerJobPostingId;
 
-    protected Document(Long id, String wordUrl, List<Reject> rejects, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt, Long userOwnerJobPostingId) {
+    protected Document(Long id, String wordUrl, Long userOwnerJobPostingId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.wordUrl = wordUrl;
-        this.rejects = rejects;
+        this.userOwnerJobPostingId = userOwnerJobPostingId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
-        this.userOwnerJobPostingId = userOwnerJobPostingId;
     }
 
     public void updateWordUrl(String wordUrl) {

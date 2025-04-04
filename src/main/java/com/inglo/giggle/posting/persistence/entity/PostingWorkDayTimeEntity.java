@@ -6,12 +6,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -53,18 +50,18 @@ public class PostingWorkDayTimeEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_posting_id", nullable = false)
-    private JobPostingEntity jobPostingEntity;
+    @Column(name = "job_posting_id", nullable = false)
+    private Long jobPostingId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public PostingWorkDayTimeEntity(EDayOfWeek dayOfWeek, LocalTime workStartTime, LocalTime workEndTime, JobPostingEntity jobPostingEntity) {
+    public PostingWorkDayTimeEntity(Long id, EDayOfWeek dayOfWeek, LocalTime workStartTime, LocalTime workEndTime, Long jobPostingId) {
+        this.id = id;
         this.dayOfWeek = dayOfWeek;
         this.workStartTime = workStartTime;
         this.workEndTime = workEndTime;
-        this.jobPostingEntity = jobPostingEntity;
+        this.jobPostingId = jobPostingId;
     }
 }

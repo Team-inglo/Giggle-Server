@@ -1,12 +1,11 @@
 package com.inglo.giggle.resume.persistence.repository.mysql;
 
 import com.inglo.giggle.resume.persistence.entity.AdditionalLanguageEntity;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.UUID;
 
 public interface AdditionalLanguageJpaRepository extends JpaRepository<AdditionalLanguageEntity, Long> {
-    @EntityGraph(attributePaths = {"languageSkillEntity"})
-    Optional<AdditionalLanguageEntity> findWithLanguageSkillById(Long additionalLanguageSkillId);
+    List<AdditionalLanguageEntity> findAllByLanguageSkillsId(UUID languageSkillId);
 }

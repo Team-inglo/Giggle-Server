@@ -6,12 +6,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -59,21 +56,21 @@ public class ContractWorkDayTimeEntity extends BaseEntity {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employment_contract_id", nullable = false)
-    private StandardLaborContractEntity standardLaborContractEntity;
+    @Column(name = "employment_contract_id", nullable = false)
+    private Long standardLaborContractId;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public ContractWorkDayTimeEntity(EDayOfWeek dayOfWeek, LocalTime workStartTime, LocalTime workEndTime,
-                                     LocalTime breakStartTime, LocalTime breakEndTime, StandardLaborContractEntity standardLaborContractEntity) {
+    public ContractWorkDayTimeEntity(Long id, EDayOfWeek dayOfWeek, LocalTime workStartTime, LocalTime workEndTime,
+                                     LocalTime breakStartTime, LocalTime breakEndTime, Long standardLaborContractId) {
+        this.id = id;
         this.dayOfWeek = dayOfWeek;
         this.workStartTime = workStartTime;
         this.workEndTime = workEndTime;
         this.breakStartTime = breakStartTime;
         this.breakEndTime = breakEndTime;
-        this.standardLaborContractEntity = standardLaborContractEntity;
+        this.standardLaborContractId = standardLaborContractId;
     }
 }

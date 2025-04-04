@@ -3,7 +3,8 @@ package com.inglo.giggle.resume.presentation.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.utility.DateTimeUtil;
-import com.inglo.giggle.resume.domain.Education;
+import com.inglo.giggle.resume.application.vo.EducationWithSchoolDto;
+import com.inglo.giggle.school.domain.School;
 import lombok.Builder;
 
 public class ReadUserEducationDetailResponseDto extends SelfValidating<ReadUserEducationDetailResponseDto> {
@@ -53,7 +54,7 @@ public class ReadUserEducationDetailResponseDto extends SelfValidating<ReadUserE
             this.name = name;
         }
 
-        public static SchoolDto from(Education.SchoolInfo school) {
+        public static SchoolDto from(School school) {
             return SchoolDto.builder()
                     .id(school.getId())
                     .name(school.getSchoolName())
@@ -61,15 +62,15 @@ public class ReadUserEducationDetailResponseDto extends SelfValidating<ReadUserE
         }
     }
 
-    public static ReadUserEducationDetailResponseDto fromEntity(Education education) {
+    public static ReadUserEducationDetailResponseDto from(EducationWithSchoolDto educationWithSchoolDto) {
         return ReadUserEducationDetailResponseDto.builder()
-                .educationLevel(education.getEducationLevel().toString())
-                .major(education.getMajor())
-                .gpa(education.getGpa())
-                .startDate(DateTimeUtil.convertLocalDateToString(education.getEnrollmentDate()))
-                .endDate(education.getGraduationDate() != null ? DateTimeUtil.convertLocalDateToString(education.getGraduationDate()) : null)
-                .grade(education.getGrade())
-                .schoolDto(SchoolDto.from(education.getSchoolInfo()))
+                .educationLevel(educationWithSchoolDto.education().getEducationLevel().toString())
+                .major(educationWithSchoolDto.education().getMajor())
+                .gpa(educationWithSchoolDto.education().getGpa())
+                .startDate(DateTimeUtil.convertLocalDateToString(educationWithSchoolDto.education().getEnrollmentDate()))
+                .endDate(educationWithSchoolDto.education().getGraduationDate() != null ? DateTimeUtil.convertLocalDateToString(educationWithSchoolDto.education().getGraduationDate()) : null)
+                .grade(educationWithSchoolDto.education().getGrade())
+                .schoolDto(SchoolDto.from(educationWithSchoolDto.school()))
                 .build();
     }
 

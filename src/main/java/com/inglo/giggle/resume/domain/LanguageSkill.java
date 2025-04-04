@@ -17,28 +17,16 @@ public class LanguageSkill extends BaseDomain {
     private Integer sejongInstituteLevel;
 
     /* -------------------------------------------- */
-    /* One To Many Mapping ------------------------ */
-    /* -------------------------------------------- */
-    private List<AdditionalLanguage> additionalLanguages;
-
-    /* -------------------------------------------- */
     /* One To One Child Mapping-------------------- */
     /* -------------------------------------------- */
     private UUID resumeId;
 
     @Builder
-    public LanguageSkill(Integer topikLevel, Integer socialIntegrationLevel, Integer sejongInstituteLevel, List<AdditionalLanguage> additionalLanguages, UUID resumeId) {
+    public LanguageSkill(Integer topikLevel, Integer socialIntegrationLevel, Integer sejongInstituteLevel, UUID resumeId) {
         this.topikLevel = topikLevel;
         this.socialIntegrationLevel = socialIntegrationLevel;
         this.sejongInstituteLevel = sejongInstituteLevel;
-        this.additionalLanguages = additionalLanguages;
         this.resumeId = resumeId;
-    }
-
-    public void checkValidation(UUID accountId) {
-        if (!resumeId.equals(accountId)) {
-            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
-        }
     }
 
     public void updateSejongInstituteLevel(Integer level) {
