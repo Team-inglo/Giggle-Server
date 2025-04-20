@@ -36,17 +36,15 @@ public class ReadUserSummaryService implements ReadUserSummaryUseCase {
 
         // 유저 정보 조회
         User user = userRepository.findByIdOrElseThrow(accountId);
+
         // 이력서 정보 조회
         Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountIdOrElseThrow(accountId);
 
-        // 유저의 비자에 맵핑되는 educationLevel 조회
-        EEducationLevel educationLevel = educationService.getEducationLevelByVisa(user.getVisa());
-
         // 유저의 educationLevel에 맞는 학력 정보 조회
-        List<Education> educations = educationRepository.findEducationByAccountIdAndEducationLevel(accountId, educationLevel);
+        List<Education> educations = educationRepository.findAllByResume(resume);
 
         // 가장 졸업일자가 늦은 학력 정보 조회
-        Education education = educationService.getLatestEducation(educations);
+        Education education = educationService.getLatestEnrollmentEducation(educations);
 
         // ResumeAggregate 생성 및 반환
         ResumeAggregate resumeAggregate = resumeAggregateService.createResumeAggregate(user, resume, education);

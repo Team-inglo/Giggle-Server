@@ -94,4 +94,16 @@ public class EducationService {
                 .max(Comparator.comparing(Education::getGraduationDate))
                 .orElse(null);
     }
+
+    public Education getLatestEnrollmentEducation(List<Education> educations) {
+
+        if (educations.isEmpty())
+            return null;
+
+        return educations.stream()
+                .max(Comparator.comparing(Education::getEnrollmentDate))
+                .orElse(null);
+    }
+
+
 }
