@@ -37,6 +37,20 @@ public class RestClientUtil {
                 .toEntity(JSONObject.class).getBody()));
     }
 
+    public String sendGetMethodString(String url, HttpHeaders headers) {
+        return Objects.requireNonNull(restClient.get()
+                .uri(url)
+                .headers(httpHeaders -> httpHeaders.addAll(headers))
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                    throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+                })
+                .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                    throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
+                })
+                .toEntity(String.class).getBody());
+    }
+
     //TODO: 의존성 분리
     public JSONObject sendGetMethodWithAuthorizationHeader(String url, String token) {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
@@ -93,6 +107,44 @@ public class RestClientUtil {
                     .toEntity(JSONObject.class).getBody()));
         } catch (Exception e) {
             throw new RuntimeException("Error sending POST request", e);
+        }
+    }
+
+    public JSONObject sendPatchMethod(String url, HttpHeaders headers, String body) {
+        try {
+            return new JSONObject(Objects.requireNonNull(restClient.patch()
+                    .uri(url)
+                    .headers(httpHeaders -> httpHeaders.addAll(headers))
+                    .contentType(APPLICATION_JSON)
+                    .body(body)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                        throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+                    })
+                    .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                        throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
+                    })
+                    .toEntity(JSONObject.class).getBody()));
+        } catch (Exception e) {
+            throw new RuntimeException("Error sending PATCH request", e);
+        }
+    }
+
+    public void sendDeleteMethod(String url, HttpHeaders headers) {
+        try {
+            restClient.delete()
+                    .uri(url)
+                    .headers(httpHeaders -> httpHeaders.addAll(headers))
+                    .retrieve()
+                    .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                        throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+                    })
+                    .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                        throw new CommonException(ErrorCode.INTERNAL_SERVER_ERROR);
+                    })
+                    .toBodilessEntity();
+        } catch (Exception e) {
+            log.error("Error occurred while sending DELETE request: {}", e.getMessage());
         }
     }
 

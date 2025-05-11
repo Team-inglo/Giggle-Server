@@ -1,10 +1,11 @@
 package com.inglo.giggle.school.application.service;
 
-import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.school.application.usecase.UpdateAdminSchoolUseCase;
+import com.inglo.giggle.core.domain.Address;
+import com.inglo.giggle.school.application.port.in.command.UpdateAdminSchoolCommand;
+import com.inglo.giggle.school.application.port.in.usecase.UpdateAdminSchoolUseCase;
+import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
+import com.inglo.giggle.school.application.port.out.UpdateSchoolPort;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
-import com.inglo.giggle.school.presentation.dto.request.UpdateAdminSchoolRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,37 +14,38 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UpdateAdminSchoolService implements UpdateAdminSchoolUseCase {
 
-    private final SchoolRepository schoolRepository;
+    private final LoadSchoolPort loadSchoolPort;
+    private final UpdateSchoolPort updateSchoolPort;
 
     @Override
     @Transactional
-    public void execute(Long schoolId, UpdateAdminSchoolRequestDto requestDto) {
+    public void execute(UpdateAdminSchoolCommand command) {
 
-        School school = schoolRepository.findByIdOrElseThrow(schoolId);
+        School school = loadSchoolPort.loadSchool(command.getSchoolId());
 
         // Address 생성
         Address address = Address.builder()
-                .addressName(requestDto.address().addressName())
-                .addressDetail(requestDto.address().addressDetail())
-                .region1DepthName(requestDto.address().region1DepthName())
-                .region2DepthName(requestDto.address().region2DepthName())
-                .region3DepthName(requestDto.address().region3DepthName())
-                .region4DepthName(requestDto.address().region4DepthName())
-                .latitude(requestDto.address().latitude())
-                .longitude(requestDto.address().longitude())
+                .addressName(command.getAddress().addressName())
+                .addressDetail(command.getAddress().addressDetail())
+                .region1DepthName(command.getAddress().region1DepthName())
+                .region2DepthName(command.getAddress().region2DepthName())
+                .region3DepthName(command.getAddress().region3DepthName())
+                .region4DepthName(command.getAddress().region4DepthName())
+                .latitude(command.getAddress().latitude())
+                .longitude(command.getAddress().longitude())
                 .build();
 
         school.updateSelf(
-                requestDto.schoolName(),
-                requestDto.schoolPhoneNumber(),
-                requestDto.instituteName(),
-                requestDto.coordinatorName(),
-                requestDto.coordinatorPhoneNumber(),
+                command.getSchoolName(),
+                command.getSchoolPhoneNumber(),
+                command.getInstituteName(),
+                command.getCoordinatorName(),
+                command.getCoordinatorPhoneNumber(),
                 address,
-                requestDto.isMetropolitan()
+                command.getIsMetropolitan()
         );
 
-        schoolRepository.save(school);
+        updateSchoolPort.updateSchool(school);
     }
 
 }

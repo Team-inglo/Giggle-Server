@@ -6,8 +6,8 @@ import com.inglo.giggle.banner.application.usecase.UpdateAdminBannerUseCase;
 import com.inglo.giggle.banner.persistence.repository.BannerRepository;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.S3Util;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ import java.util.UUID;
 public class UpdateAdminBannerService implements UpdateAdminBannerUseCase {
 
     private final BannerRepository bannerRepository;
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
 
     private final S3Util s3Util;
 
@@ -29,7 +29,7 @@ public class UpdateAdminBannerService implements UpdateAdminBannerUseCase {
     public void execute(Long bannerId, UUID accountId, MultipartFile image, UpdateAdminBannerRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // Banner 조회
         Banner banner = bannerRepository.findByIdOrElseThrow(bannerId);

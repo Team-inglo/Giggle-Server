@@ -6,7 +6,7 @@ import com.inglo.giggle.banner.application.usecase.ReadBannerDetailUseCase;
 import com.inglo.giggle.banner.application.usecase.ReadBannerOverviewUseCase;
 import com.inglo.giggle.core.annotation.security.Role;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

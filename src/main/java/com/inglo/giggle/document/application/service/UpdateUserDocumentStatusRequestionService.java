@@ -18,10 +18,8 @@ import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.domain.AccountDevice;
-import com.inglo.giggle.security.persistence.repository.AccountDeviceRepository;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -35,7 +33,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocumentStatusRequestionUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final DocumentRepository documentRepository;
     private final AccountDeviceRepository accountDeviceRepository;
     private final RejectRepository rejectRepository;
@@ -51,7 +49,7 @@ public class UpdateUserDocumentStatusRequestionService implements UpdateUserDocu
     public void execute(UUID accountId, Long documentId, UpdateDocumentStatusReqeustionRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 체크
         account.checkUserValidation();

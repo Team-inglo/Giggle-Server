@@ -1,10 +1,10 @@
 package com.inglo.giggle.posting.persistence.repository.impl;
 
 
-import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.persistence.mapper.OwnerMapper;
-import com.inglo.giggle.account.persistence.mapper.UserMapper;
+import com.inglo.giggle.owner.domain.Owner;
+import com.inglo.giggle.user.domain.User;
+import com.inglo.giggle.owner.adapter.out.persistence.mapper.OwnerMapper;
+import com.inglo.giggle.user.adapter.out.persistence.mapper.UserMapper;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.domain.Document;

@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.persistence.repository.mysql;
 
-import com.inglo.giggle.account.persistence.entity.UserEntity;
+import com.inglo.giggle.user.adapter.out.persistence.entity.UserEntity;
 import com.inglo.giggle.posting.persistence.entity.BookMarkEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;

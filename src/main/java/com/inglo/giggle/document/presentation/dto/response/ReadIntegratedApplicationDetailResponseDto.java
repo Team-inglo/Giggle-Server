@@ -1,7 +1,7 @@
 package com.inglo.giggle.document.presentation.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.address.dto.response.AddressResponseDto;
+import com.inglo.giggle.core.dto.AddressResponseDto;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.document.domain.IntegratedApplication;

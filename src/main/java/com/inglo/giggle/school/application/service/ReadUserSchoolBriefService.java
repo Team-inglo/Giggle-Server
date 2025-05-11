@@ -1,10 +1,9 @@
 package com.inglo.giggle.school.application.service;
 
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.presentation.dto.response.ReadUserSchoolBriefResponseDto;
-import com.inglo.giggle.school.application.usecase.ReadUserSchoolBriefUseCase;
-import com.inglo.giggle.school.persistence.entity.SchoolEntity;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
+import com.inglo.giggle.school.application.port.in.result.ReadUserSchoolBriefResult;
+import com.inglo.giggle.school.application.port.in.query.ReadUserSchoolBriefQuery;
+import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,24 +15,24 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ReadUserSchoolBriefService implements ReadUserSchoolBriefUseCase {
+public class ReadUserSchoolBriefService implements ReadUserSchoolBriefQuery {
 
-    private final SchoolRepository schoolRepository;
+    private final LoadSchoolPort loadSchoolPort;
 
     @Override
-    public ReadUserSchoolBriefResponseDto execute(String search, Integer page, Integer size) {
+    public ReadUserSchoolBriefResult execute(String search, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<School> schoolsPage = schoolRepository.findBySchoolNameContaining(search, pageable);
+        Page<School> schoolsPage = loadSchoolPort.loadSchool(pageable, search);
 
-        List<ReadUserSchoolBriefResponseDto.SchoolListDto> schoolList = schoolsPage.getContent().stream()
-                .map(school -> ReadUserSchoolBriefResponseDto.SchoolListDto.builder()
+        List<ReadUserSchoolBriefResult.SchoolListDto> schoolList = schoolsPage.getContent().stream()
+                .map(school -> ReadUserSchoolBriefResult.SchoolListDto.builder()
                         .id(school.getId())
                         .name(school.getSchoolName())
                         .phoneNumber(school.getSchoolPhoneNumber())
                         .build())
                 .collect(Collectors.toList());
 
-        return ReadUserSchoolBriefResponseDto.builder()
+        return ReadUserSchoolBriefResult.builder()
                 .schoolList(schoolList)
                 .hasNext(schoolsPage.hasNext())
                 .build();

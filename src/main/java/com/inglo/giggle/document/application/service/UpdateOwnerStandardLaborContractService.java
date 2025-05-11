@@ -1,6 +1,6 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EKafkaStatus;
@@ -19,10 +19,8 @@ import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.domain.AccountDevice;
-import com.inglo.giggle.security.persistence.repository.AccountDeviceRepository;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -37,7 +35,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStandardLaborContractUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final DocumentRepository documentRepository;
     private final AccountDeviceRepository accountDeviceRepository;
     private final StandardLaborContractRepository standardLaborContractRepository;
@@ -52,7 +50,7 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
     public void execute(UUID accountId, Long documentId, UpdateOwnerStandardLaborContractRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 체크
         account.checkOwnerValidation();

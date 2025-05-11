@@ -83,4 +83,16 @@ public class JsonParseUtil {
             throw new RuntimeException("[JsonParseUtil] JSON 변환 오류", e);
         }
     }
+
+    /**
+     * JSONObject를 넘겨받은 클래스로 변환
+     */
+    public static <T> T convertFromJsonToObject(String message, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(message, clazz);
+        } catch (JsonProcessingException e) {
+            log.error("[JsonParseUtil] JSON 변환 오류: message = {}, clazz = {}", message, clazz, e);
+            throw new RuntimeException("[JsonParseUtil] JSON 변환 오류", e);
+        }
+    }
 }

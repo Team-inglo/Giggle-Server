@@ -2,7 +2,6 @@ package com.inglo.giggle.posting.domain;
 
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import com.inglo.giggle.resume.domain.LanguageSkill;
-import com.inglo.giggle.resume.domain.Resume;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

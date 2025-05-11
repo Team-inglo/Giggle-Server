@@ -1,6 +1,6 @@
 package com.inglo.giggle.document.persistence.entity;
 
-import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.core.persistence.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;

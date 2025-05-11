@@ -2,8 +2,8 @@ package com.inglo.giggle.security.config;
 
 import com.inglo.giggle.core.constant.Constants;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
-import com.inglo.giggle.security.application.usecase.AuthenticateJsonWebTokenUseCase;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.application.port.in.usecase.AuthenticateJsonWebTokenUseCase;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import com.inglo.giggle.security.filter.ExceptionFilter;
 import com.inglo.giggle.security.filter.GlobalLoggerFilter;
 import com.inglo.giggle.security.filter.JsonWebTokenAuthenticationFilter;

@@ -16,20 +16,13 @@ public class AdditionalLanguage extends BaseDomain {
     private String languageName;
     private Integer level;
 
-    /* -------------------------------------------- */
-    /* Many To One Mapping ------------------------ */
-    /* -------------------------------------------- */
-    private UUID languageSkillId;
-
-
     @Builder
-    public AdditionalLanguage(Long id, String languageName, Integer level, UUID languageSkillId,
+    public AdditionalLanguage(Long id, String languageName, Integer level,
                               LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt)
     {
         this.id = id;
         this.languageName = languageName;
         this.level = level;
-        this.languageSkillId = languageSkillId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;

@@ -1,25 +1,35 @@
 package com.inglo.giggle.school.application.service;
 
+import com.inglo.giggle.core.dto.AddressResponseDto;
+import com.inglo.giggle.school.application.port.in.query.ReadAdminSchoolDetailQuery;
+import com.inglo.giggle.school.application.port.in.result.ReadAdminSchoolDetailResult;
+import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.presentation.dto.response.ReadAdminSchoolDetailResponseDto;
-import com.inglo.giggle.school.application.usecase.ReadAdminSchoolDetailUseCase;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ReadAdminSchoolDetailService implements ReadAdminSchoolDetailUseCase {
+public class ReadAdminSchoolDetailService implements ReadAdminSchoolDetailQuery {
 
-    private final SchoolRepository schoolRepository;
+    private final LoadSchoolPort loadSchoolPort;
 
     @Override
     @Transactional(readOnly = true)
-    public ReadAdminSchoolDetailResponseDto execute(Long id) {
+    public ReadAdminSchoolDetailResult execute(Long id) {
 
-        School school = schoolRepository.findByIdOrElseThrow(id);
+        School school = loadSchoolPort.loadSchool(id);
 
-        return ReadAdminSchoolDetailResponseDto.of(school);
+        return ReadAdminSchoolDetailResult.of(
+                school.getId(),
+                school.getSchoolName(),
+                school.getSchoolPhoneNumber(),
+                school.getIsMetropolitan(),
+                school.getInstituteName(),
+                school.getCoordinatorName(),
+                school.getCoordinatorPhoneNumber(),
+                AddressResponseDto.from(school.getAddress())
+        );
     }
 }

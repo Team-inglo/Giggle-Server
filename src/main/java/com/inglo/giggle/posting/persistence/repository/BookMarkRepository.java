@@ -1,7 +1,6 @@
 package com.inglo.giggle.posting.persistence.repository;
 
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.persistence.entity.UserEntity;
+import com.inglo.giggle.user.domain.User;
 import com.inglo.giggle.posting.domain.BookMark;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

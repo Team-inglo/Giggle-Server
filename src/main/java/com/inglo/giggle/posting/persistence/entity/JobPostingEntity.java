@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.persistence.entity;
 
-import com.inglo.giggle.address.persistence.entity.AddressEntity;
-import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.core.persistence.AddressEntity;
+import com.inglo.giggle.core.persistence.BaseEntity;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;

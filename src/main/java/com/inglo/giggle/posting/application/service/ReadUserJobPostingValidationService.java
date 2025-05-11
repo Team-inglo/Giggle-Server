@@ -1,32 +1,20 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.address.domain.Address;
-import com.inglo.giggle.core.dto.RouteResponseDto;
 import com.inglo.giggle.core.utility.OSRMUtil;
 import com.inglo.giggle.core.utility.RestClientUtil;
 import com.inglo.giggle.posting.application.usecase.ReadUserJobPostingValidationUseCase;
-import com.inglo.giggle.posting.domain.JobPostAggregate;
-import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.service.JobPostAggregateService;
 import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
 import com.inglo.giggle.posting.presentation.dto.response.ReadUserJobPostingValidationResponseDto;
-import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.persistence.entity.EducationEntity;
-import com.inglo.giggle.resume.persistence.entity.ResumeEntity;
-import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.domain.service.ResumeAggregateService;
-import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
-import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.resume.application.port.out.LoadResumePort;
+import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,10 +25,10 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
     private final JobPostAggregateService jobPostAggregateService;
     private final ResumeAggregateService resumeAggregateService;
 
-    private final AccountRepository accountRepository;
-    private final SchoolRepository schoolRepository;
+    private final LoadAccountPort loadAccountPort;
+    private final LoadSchoolPort loadSchoolPort;
     private final JobPostingRepository jobPostingRepository;
-    private final ResumeRepository resumeRepository;
+    private final LoadResumePort loadResumePort;
 
     private final RestClientUtil restClientUtil;
     private final OSRMUtil osrmUtil;
@@ -55,13 +43,13 @@ public class ReadUserJobPostingValidationService implements ReadUserJobPostingVa
         return ReadUserJobPostingValidationResponseDto.of(true);
 
 //        // Account 조회
-//        Account account = accountRepository.findByIdOrElseThrow(accountId);
+//        Account user = accountRepository.loadUser(accountId);
 //
 //        // 계정 타입 유효성 검사
-//        account.checkUserValidation();
+//        user.checkUserValidation();
 //
 //        // 공고 조회
-//        JobPosting jobPosting = jobPostingRepository.findByIdOrElseThrow(jobPostingId);
+//        JobPosting jobPosting = jobPostingRepository.loadUser(jobPostingId);
 //
 //        // 이력서 정보 조회
 //        Resume resume = resumeRepository.findWithEducationsAndLanguageSkillByAccountIdOrElseThrow(accountId);

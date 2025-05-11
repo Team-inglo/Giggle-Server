@@ -7,9 +7,9 @@ import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,11 +26,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService implements ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
 
     private final JobPostingRepository jobPostingRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-    private final SchoolRepository schoolRepository;
+    private final LoadSchoolPort loadSchoolPort;
 
     private final static String DASH = " - ";
 
@@ -39,7 +39,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
     public ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto execute(UUID accountId, Long jobPostingId, Integer page, Integer size, String sorting, String status) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 검사
         account.checkOwnerValidation();
@@ -92,7 +92,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
                 .toList();
 
         // 학교 정보 조회
-        Map<UUID, String> userSchoolMap = schoolRepository.findUserIdsWithMostRecentSchoolNames(userIds).stream()
+        Map<UUID, String> userSchoolMap = loadSchoolPort.loadUserIdsAndSchools(userIds).stream()
                 .collect(Collectors.toMap(
                         result -> UUID.fromString((String) result[0]),
                         result -> (String) result[1],

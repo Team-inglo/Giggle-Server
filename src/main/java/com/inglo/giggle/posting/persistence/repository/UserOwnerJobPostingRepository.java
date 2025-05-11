@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.persistence.repository;
 
-import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.domain.User;
+import com.inglo.giggle.owner.domain.Owner;
+import com.inglo.giggle.user.domain.User;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;

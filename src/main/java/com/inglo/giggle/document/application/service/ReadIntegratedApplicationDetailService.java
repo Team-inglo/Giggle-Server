@@ -10,8 +10,8 @@ import com.inglo.giggle.document.persistence.repository.IntegratedApplicationRep
 import com.inglo.giggle.document.presentation.dto.response.ReadIntegratedApplicationDetailResponseDto;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import jakarta.persistence.DiscriminatorValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ReadIntegratedApplicationDetailService implements ReadIntegratedApplicationDetailUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final DocumentRepository documentRepository;
     private final IntegratedApplicationRepository integratedApplicationRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
@@ -31,7 +31,7 @@ public class ReadIntegratedApplicationDetailService implements ReadIntegratedApp
     public ReadIntegratedApplicationDetailResponseDto execute(UUID accountId, Long documentId) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // Document 정보 조회
         Document document = documentRepository.findByIdOrElseThrow(documentId);

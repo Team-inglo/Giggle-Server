@@ -4,9 +4,9 @@ import com.inglo.giggle.notification.presentation.dto.ReadNotificationOverviewRe
 import com.inglo.giggle.notification.application.usecase.ReadNotificationOverviewUseCase;
 import com.inglo.giggle.notification.domain.Notification;
 import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ReadNotificationOverviewService implements ReadNotificationOverviewUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final NotificationRepository notificationRepository;
 
     private final static String DESCENDING = "DESC";
@@ -29,7 +29,7 @@ public class ReadNotificationOverviewService implements ReadNotificationOverview
     @Transactional(readOnly = true)
     public ReadNotificationOverviewResponseDto execute(UUID accountId, Integer page, Integer size) {
 
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         Sort sort = Sort.by(Sort.Order.desc("createdAt"));
         Page<Notification> notificationList;

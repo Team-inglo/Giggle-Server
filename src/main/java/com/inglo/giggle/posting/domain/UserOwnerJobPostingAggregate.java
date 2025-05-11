@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.domain;
 
-import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.account.domain.User;
+import com.inglo.giggle.owner.domain.Owner;
+import com.inglo.giggle.user.domain.User;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.Builder;

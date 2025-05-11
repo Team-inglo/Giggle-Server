@@ -3,7 +3,7 @@ package com.inglo.giggle.core.resolver;
 import com.inglo.giggle.core.annotation.security.Role;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import com.inglo.giggle.security.info.CustomUserPrincipal;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,7 +1,7 @@
 package com.inglo.giggle.banner.persistence.entity;
 
-import com.inglo.giggle.core.dto.BaseEntity;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.core.persistence.BaseEntity;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

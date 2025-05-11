@@ -20,13 +20,8 @@ public class WorkExperience extends BaseDomain {
     private LocalDate endDate;
     private String description;
 
-    /* -------------------------------------------- */
-    /* Many To One Mapping ------------------------ */
-    /* -------------------------------------------- */
-    private UUID resumeId;
-
     @Builder
-    public WorkExperience(Long id, String experienceTitle, String workplace, LocalDate startDate, LocalDate endDate, String description, UUID resumeId,
+    public WorkExperience(Long id, String experienceTitle, String workplace, LocalDate startDate, LocalDate endDate, String description,
                           LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
         this.id = id;
@@ -35,16 +30,9 @@ public class WorkExperience extends BaseDomain {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
-        this.resumeId = resumeId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
-    }
-
-    public void checkValidation(UUID accountId) {
-        if (!resumeId.equals(accountId)) {
-            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
-        }
     }
 
     public void updateSelf(

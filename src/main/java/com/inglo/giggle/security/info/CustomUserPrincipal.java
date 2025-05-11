@@ -1,8 +1,7 @@
 package com.inglo.giggle.security.info;
 
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,7 @@ public class CustomUserPrincipal implements UserDetails {
 
     @Getter private final UUID id;
     @Getter private final ESecurityRole role;
+    @Getter private final String accessToken;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
@@ -65,6 +65,16 @@ public class CustomUserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public CustomUserPrincipal updateAccessToken(String accessToken) {
+        return CustomUserPrincipal.builder()
+                .id(this.id)
+                .role(this.role)
+                .accessToken(accessToken)
+                .password(this.password)
+                .authorities(this.authorities)
+                .build();
     }
 }
 

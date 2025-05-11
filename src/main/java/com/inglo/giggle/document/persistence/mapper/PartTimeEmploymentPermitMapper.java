@@ -1,6 +1,6 @@
 package com.inglo.giggle.document.persistence.mapper;
 
-import com.inglo.giggle.address.persistence.mapper.AddressMapper;
+import com.inglo.giggle.core.persistence.AddressMapper;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.persistence.entity.PartTimeEmploymentPermitEntity;
 

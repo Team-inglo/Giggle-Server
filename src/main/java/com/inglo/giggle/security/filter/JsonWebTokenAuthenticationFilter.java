@@ -5,8 +5,8 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.utility.HeaderUtil;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
-import com.inglo.giggle.security.application.usecase.AuthenticateJsonWebTokenUseCase;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.application.port.in.usecase.AuthenticateJsonWebTokenUseCase;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import com.inglo.giggle.security.info.CustomUserPrincipal;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -46,6 +46,7 @@ public class JsonWebTokenAuthenticationFilter extends OncePerRequestFilter {
         ESecurityRole role = ESecurityRole.fromString(claims.get(Constants.ACCOUNT_ROLE_CLAIM_NAME, String.class));
 
         CustomUserPrincipal principal = authenticateJsonWebTokenUseCase.execute(accountId);
+        principal = principal.updateAccessToken(token);
 
         if (!role.equals(principal.getRole())) {
             throw new CommonException(ErrorCode.ACCESS_DENIED);

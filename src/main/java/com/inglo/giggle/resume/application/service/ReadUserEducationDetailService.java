@@ -1,69 +1,59 @@
 package com.inglo.giggle.resume.application.service;
 
-import com.inglo.giggle.resume.application.vo.EducationWithSchoolDto;
-import com.inglo.giggle.resume.application.usecase.ReadUserEducationDetailUseCase;
+import com.inglo.giggle.core.utility.DateTimeUtil;
+import com.inglo.giggle.resume.application.port.in.query.ReadUserEducationDetailQuery;
+import com.inglo.giggle.resume.application.port.in.result.ReadUserEducationDetailResult;
+import com.inglo.giggle.resume.application.port.out.LoadResumePort;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.ResumeAggregate;
-import com.inglo.giggle.resume.persistence.repository.EducationRepository;
-import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
-import com.inglo.giggle.resume.presentation.dto.response.ReadUserEducationDetailResponseDto;
-import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
+import com.inglo.giggle.school.application.port.in.query.ReadUserSchoolBriefByIdsQuery;
+import com.inglo.giggle.school.application.port.in.result.ReadUserSchoolBriefByIdsResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ReadUserEducationDetailService implements ReadUserEducationDetailUseCase {
+public class ReadUserEducationDetailService implements ReadUserEducationDetailQuery {
 
-    private final EducationRepository educationRepository;
-    private final ResumeRepository resumeRepository;
-    private final SchoolRepository schoolRepository;
+    private final LoadResumePort loadResumePort;
+    private final ReadUserSchoolBriefByIdsQuery readUserSchoolBriefByIdsQuery;
 
     @Override
     @Transactional(readOnly = true)
-    public ReadUserEducationDetailResponseDto execute(UUID accountId, Long educationId) {
+    public ReadUserEducationDetailResult execute(UUID accountId, Long educationId) {
 
-        // ResumeAggregate 생성
-        ResumeAggregate resumeAggregate = getResumeAggregate(accountId);
+        // Resume 조회
+        Resume resume = loadResumePort.loadResume(accountId);
 
         // Education 유효성 체크
-        resumeAggregate.checkEducationValidation(educationId);
+        resume.checkEducationValidation(educationId);
 
-        // EducationWithSchoolDto 생성
-        EducationWithSchoolDto educationWithSchoolDto = getEducationWithSchoolDto(resumeAggregate.getEducation(educationId));
+        // Education 조회
+        Education education = resume.getEducation(educationId);
 
-        return ReadUserEducationDetailResponseDto.from(educationWithSchoolDto);
-    }
-
-    /* ---------------------------------------------------------------------------------------------------------------*
-     * -------                                       private method                                            -------*
-     * -------------------------------------------------------------------------------------------------------------- */
-
-    private ResumeAggregate getResumeAggregate(UUID resumeId) {
-        // Resume 조회
-        Resume resume = resumeRepository.findByAccountIdOrElseThrow(resumeId);
-
-        // education 조회
-        List<Education> educations = educationRepository.findAllByResumeId(resume.getAccountId());
-
-        // ResumeAggregate 생성
-        return ResumeAggregate.builder()
-                .resume(resume)
-                .educations(educations)
-                .build();
-    }
-
-    private EducationWithSchoolDto getEducationWithSchoolDto(Education education) {
         // School 조회
-        School school = schoolRepository.findByIdOrElseThrow(education.getSchoolId());
+        ArrayList<Long> schoolIds = new ArrayList<>();
+        schoolIds.add(education.getSchoolId());
+        ReadUserSchoolBriefByIdsResult schoolBriefResult = readUserSchoolBriefByIdsQuery.execute(
+                schoolIds
+        );
 
-        // EducationWithSchoolDto 생성
-        return new EducationWithSchoolDto(education, school);
+        Long schoolId = schoolBriefResult.getSchoolList().get(0).getId();
+        String schoolName = schoolBriefResult.getSchoolList().get(0).getName();
+
+        return ReadUserEducationDetailResult.of(
+                education.getEducationLevel(),
+                education.getMajor(),
+                education.getGpa(),
+                DateTimeUtil.convertLocalDateToString(education.getEnrollmentDate()),
+                education.getGraduationDate() != null ? DateTimeUtil.convertLocalDateToString(education.getGraduationDate()) : null,
+                education.getGrade(),
+                schoolId,
+                schoolName
+        );
     }
 }

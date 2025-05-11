@@ -1,112 +1,125 @@
 package com.inglo.giggle.resume.application.service;
 
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.resume.application.vo.EducationWithSchoolDto;
-import com.inglo.giggle.resume.application.vo.ResumeAggregateWithUserDto;
-import com.inglo.giggle.resume.application.usecase.ReadAdminResumeDetailUseCase;
-import com.inglo.giggle.resume.domain.AdditionalLanguage;
+import com.inglo.giggle.core.type.EGender;
+import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.core.utility.DateTimeUtil;
+import com.inglo.giggle.resume.application.port.in.dto.EducationWithSchoolNameDto;
+import com.inglo.giggle.resume.application.port.in.dto.ResumeDetailDto;
+import com.inglo.giggle.resume.application.port.in.query.ReadAdminResumeDetailQuery;
+import com.inglo.giggle.resume.application.port.in.result.ReadAdminResumeDetailResult;
+import com.inglo.giggle.resume.application.port.out.LoadResumePort;
 import com.inglo.giggle.resume.domain.Education;
-import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.ResumeAggregate;
-import com.inglo.giggle.resume.domain.WorkExperience;
-import com.inglo.giggle.resume.persistence.repository.AdditionalLanguageRepository;
-import com.inglo.giggle.resume.persistence.repository.EducationRepository;
-import com.inglo.giggle.resume.persistence.repository.LanguageSkillRepository;
-import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
-import com.inglo.giggle.resume.persistence.repository.WorkExperienceRepository;
-import com.inglo.giggle.resume.presentation.dto.response.ReadAdminResumeDetailResponseDto;
-import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.school.application.port.in.query.ReadAdminSchoolBriefByIdsQuery;
+import com.inglo.giggle.school.application.port.in.result.ReadAdminSchoolBriefByIdsResult;
+import com.inglo.giggle.user.application.port.in.query.ReadAdminUserDetailQuery;
+import com.inglo.giggle.user.application.port.in.result.ReadAdminUserDetailResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ReadAdminResumeDetailService implements ReadAdminResumeDetailUseCase {
+public class ReadAdminResumeDetailService implements ReadAdminResumeDetailQuery {
 
-    private final AccountRepository accountRepository;
-    private final ResumeRepository resumeRepository;
-    private final EducationRepository educationRepository;
-    private final LanguageSkillRepository languageSkillRepository;
-    private final AdditionalLanguageRepository additionalLanguageRepository;
-    private final SchoolRepository schoolRepository;
-    private final WorkExperienceRepository workExperienceRepository;
+    private final LoadResumePort loadResumePort;
+    private final ReadAdminUserDetailQuery readAdminUserDetailQuery;
+    private final ReadAdminSchoolBriefByIdsQuery readAdminSchoolBriefByIdsQuery;
 
     @Override
     @Transactional(readOnly = true)
-    public ReadAdminResumeDetailResponseDto execute(UUID resumeId) {
+    public ReadAdminResumeDetailResult execute(UUID resumeId) {
 
-        // ResumeAggregate 생성
-        ResumeAggregate resumeAggregate = getResumeAggregate(resumeId);
-
-        // ResumeAggregateWithUserDto 생성
-        ResumeAggregateWithUserDto resumeAggregateWithUserDto = getResumeAggregateWithUserDto(resumeAggregate);
-
-        // EducationWithSchoolDtos 생성
-        List<EducationWithSchoolDto> educationWithSchoolDtos = getEducationWithSchoolDtos(resumeAggregate.getEducations());
-
-        return ReadAdminResumeDetailResponseDto.of(resumeAggregateWithUserDto, educationWithSchoolDtos);
-    }
-
-    /* ---------------------------------------------------------------------------------------------------------------*
-     * -------                                       private method                                            -------*
-     * -------------------------------------------------------------------------------------------------------------- */
-    private ResumeAggregate getResumeAggregate(UUID resumeId) {
         // Resume 조회
-        Resume resume = resumeRepository.findByAccountIdOrElseThrow(resumeId);
+        Resume resume = loadResumePort.loadResume(resumeId);
 
-        // education 조회
-        List<Education> educations = educationRepository.findAllByResumeId(resume.getAccountId());
+        // School 리스트 조회
+        ReadAdminSchoolBriefByIdsResult schoolBriefResult = readAdminSchoolBriefByIdsQuery.execute(
+                resume.getEducations().stream()
+                        .map(Education::getSchoolId)
+                        .collect(Collectors.toList())
+        );
 
-        // LanguageSkill 조회
-        LanguageSkill languageSkill = languageSkillRepository.findByResumeIdOrElseThrow(resume.getAccountId());
+        ReadAdminUserDetailResult readUserDetailResult = readAdminUserDetailQuery.execute(resumeId);
 
-        // WorkExperience 조회
-        List<WorkExperience> workExperiences = workExperienceRepository.findAllByResumeId(resume.getAccountId());
-
-        // AdditionalLanguage 조회
-        List<AdditionalLanguage> additionalLanguages = additionalLanguageRepository.findAllByLanguageSkillId(languageSkill.getResumeId());
-
-        // ResumeAggregate 생성
-        return ResumeAggregate.builder()
-                .resume(resume)
-                .educations(educations)
-                .languageSkill(languageSkill)
-                .workExperiences(workExperiences)
-                .additionalLanguages(additionalLanguages)
-                .build();
-    }
-
-    private List<EducationWithSchoolDto> getEducationWithSchoolDtos(List<Education> educations) {
-        // School 조회
-        List<School> schools = schoolRepository.findAllByIds(educations.stream()
-                .map(Education::getSchoolId)
-                .toList());
-
-        // School Map 생성
-        Map<Long, School> schoolMap = schools.stream()
-                .collect(Collectors.toMap(School::getId, s -> s));
-
-        // EducationWithSchoolDto 생성
-        return educations.stream()
-                .map(education -> new EducationWithSchoolDto(education, schoolMap.get(education.getSchoolId())))
+        // Education 과 School 이름 매핑
+        List<EducationWithSchoolNameDto> educationWithSchoolNameDtos = resume.getEducations().stream()
+                .map(education -> {
+                    String schoolName = schoolBriefResult.getSchoolList().stream()
+                            .filter(school -> school.getId().equals(education.getSchoolId()))
+                            .findFirst()
+                            .map(ReadAdminSchoolBriefByIdsResult.SchoolListDto::getName)
+                            .orElse(null);
+                    return new EducationWithSchoolNameDto(education.getId(), education.getEducationLevel(), education.getMajor(), education.getGpa(), education.getEnrollmentDate(), education.getGraduationDate(), education.getGrade(), schoolName);
+                })
                 .toList();
-    }
 
-    private ResumeAggregateWithUserDto getResumeAggregateWithUserDto(ResumeAggregate resumeAggregate) {
-        // User 조회
-        Account userAccount = accountRepository.findByIdOrElseThrow(resumeAggregate.getResume().getAccountId());
 
-        // ResumeAggregateWithUserDto 생성
-        return new ResumeAggregateWithUserDto(resumeAggregate, (User) userAccount);
+        List<ReadAdminResumeDetailResult.WorkExperienceDto> workExperienceDtos;
+
+        // WorkExperienceDtos 생성
+        if (!resume.getWorkExperiences().isEmpty() ) {
+            workExperienceDtos = resume.getWorkExperiences().stream()
+                    .map(workExperience -> ReadAdminResumeDetailResult.WorkExperienceDto.of(
+                            workExperience.getId(),
+                            workExperience.getExperienceTitle(),
+                            workExperience.getWorkplace(),
+                            workExperience.getDescription(),
+                            workExperience.getStartDate() != null ? DateTimeUtil.convertLocalDateToString(workExperience.getStartDate()) : null,
+                            workExperience.getEndDate() != null ? DateTimeUtil.convertLocalDateToString(workExperience.getEndDate()) : null,
+                            workExperience.getEndDate() != null ?
+                                    (int) ChronoUnit.MONTHS.between(workExperience.getStartDate(), workExperience.getEndDate())
+                                    : (int) ChronoUnit.MONTHS.between(Objects.requireNonNull(workExperience.getStartDate()), LocalDate.now())
+                    )).toList();
+        } else {
+            workExperienceDtos = null;
+        }
+
+        List<ReadAdminResumeDetailResult.LanguageDetailDto> languageDetailDtos;
+
+        // LanguageDetailDtos 생성
+        if (!resume.getLanguageSkill().getAdditionalLanguages().isEmpty()) {
+            languageDetailDtos = resume.getLanguageSkill().getAdditionalLanguages().stream()
+                    .map(language -> ReadAdminResumeDetailResult.LanguageDetailDto.of(
+                            language.getId(),
+                            language.getLanguageName(),
+                            language.getLevel()
+                    )).toList();
+        } else {
+            languageDetailDtos = null;
+        }
+
+        // ResumeDetailVO 생성
+        ResumeDetailDto resumeDetailDto = new ResumeDetailDto(
+                resume.getAccountId(),
+                resume.getIntroduction(),
+                readUserDetailResult.getProfileImgUrl(),
+                readUserDetailResult.getFirstName() + " " + readUserDetailResult.getLastName(),
+                EVisa.fromString(readUserDetailResult.getVisa()),
+                EGender.fromString(readUserDetailResult.getGender()),
+                readUserDetailResult.getNationality(),
+                readUserDetailResult.getBirth(),
+                readUserDetailResult.getAddress().getAddressName(),
+                readUserDetailResult.getAddress().getAddressDetail(),
+                readUserDetailResult.getPhoneNumber(),
+                readUserDetailResult.getEmail(),
+                educationWithSchoolNameDtos
+        );
+
+        return ReadAdminResumeDetailResult.of(
+                resumeDetailDto,
+                workExperienceDtos,
+                resume.getLanguageSkill().getTopikLevel(),
+                resume.getLanguageSkill().getSocialIntegrationLevel(),
+                resume.getLanguageSkill().getSejongInstituteLevel(),
+                languageDetailDtos
+        );
     }
 }

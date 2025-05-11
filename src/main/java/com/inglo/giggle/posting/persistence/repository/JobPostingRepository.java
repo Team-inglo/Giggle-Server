@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.persistence.repository;
 
-import com.inglo.giggle.account.domain.Owner;
+import com.inglo.giggle.owner.domain.Owner;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.JobPosting;

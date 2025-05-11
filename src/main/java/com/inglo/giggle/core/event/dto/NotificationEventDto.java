@@ -1,6 +1,6 @@
 package com.inglo.giggle.core.event.dto;
 
-import com.inglo.giggle.security.domain.AccountDevice;
+import com.inglo.giggle.security.account.domain.AccountDevice;
 import lombok.Builder;
 
 import java.util.List;

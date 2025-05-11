@@ -2,7 +2,7 @@ package com.inglo.giggle.core.utility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inglo.giggle.core.constant.Constants;
-import com.inglo.giggle.security.presentation.dto.response.DefaultJsonWebTokenDto;
+import com.inglo.giggle.core.dto.DefaultJsonWebTokenDto;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

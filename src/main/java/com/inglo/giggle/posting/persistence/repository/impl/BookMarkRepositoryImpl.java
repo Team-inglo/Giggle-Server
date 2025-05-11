@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.persistence.repository.impl;
 
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.persistence.mapper.UserMapper;
+import com.inglo.giggle.user.domain.User;
+import com.inglo.giggle.user.adapter.out.persistence.mapper.UserMapper;
 import com.inglo.giggle.posting.domain.BookMark;
 import com.inglo.giggle.posting.persistence.entity.BookMarkEntity;
 import com.inglo.giggle.posting.persistence.mapper.BookMarkMapper;

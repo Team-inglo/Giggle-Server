@@ -1,67 +1,44 @@
 package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.core.type.EEducationLevel;
-import com.inglo.giggle.resume.application.usecase.UpdateUserEducationUseCase;
-import com.inglo.giggle.resume.domain.Education;
+import com.inglo.giggle.resume.application.port.in.command.UpdateEducationCommand;
+import com.inglo.giggle.resume.application.port.in.usecase.UpdateUserEducationUseCase;
+import com.inglo.giggle.resume.application.port.out.LoadResumePort;
+import com.inglo.giggle.resume.application.port.out.UpdateEducationPort;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.ResumeAggregate;
-import com.inglo.giggle.resume.persistence.repository.EducationRepository;
-import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
-import com.inglo.giggle.resume.presentation.dto.request.UpdateUserEducationRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateUserEducationService implements UpdateUserEducationUseCase {
 
-    private final ResumeRepository resumeRepository;
-    private final EducationRepository educationRepository;
+    private final LoadResumePort loadResumePort;
+    private final UpdateEducationPort updateEducationPort;
 
     @Override
     @Transactional
-    public void execute(UUID accountId, Long educationId, UpdateUserEducationRequestDto requestDto) {
-
-        // ResumeAggregate 생성
-        ResumeAggregate resumeAggregate = getResumeAggregate(accountId);
-
-        // Education 유효성 체크
-        resumeAggregate.checkEducationValidation(educationId);
-
-        // Education 업데이트
-        resumeAggregate.updateEducation(
-                educationId,
-                EEducationLevel.fromString(requestDto.educationLevel()),
-                requestDto.major(),
-                requestDto.gpa(),
-                requestDto.startDate(),
-                requestDto.endDate(),
-                requestDto.grade(),
-                requestDto.schoolId()
-        );
-
-        educationRepository.saveAll(resumeAggregate.getEducations());
-    }
-
-    /* ---------------------------------------------------------------------------------------------------------------*
-     * -------                                       private method                                            -------*
-     * -------------------------------------------------------------------------------------------------------------- */
-    private ResumeAggregate getResumeAggregate(UUID resumeId) {
+    public void execute(UpdateEducationCommand command) {
 
         // Resume 조회
-        Resume resume = resumeRepository.findByAccountIdOrElseThrow(resumeId);
+        Resume resume = loadResumePort.loadResume(command.getAccountId());
 
-        // Education 조회
-        List<Education> educations = educationRepository.findAllByResumeId(resume.getAccountId());
+        // Education 유효성 체크
+        resume.checkEducationValidation(command.getEducationId());
 
-        // ResumeAggregate 생성
-        return ResumeAggregate.builder()
-                .resume(resume)
-                .educations(educations)
-                .build();
+        // Education 업데이트
+        resume.updateEducation(
+                command.getEducationId(),
+                EEducationLevel.fromString(command.getEducationLevel()),
+                command.getMajor(),
+                command.getGpa(),
+                command.getStartDate(),
+                command.getEndDate(),
+                command.getGrade(),
+                command.getSchoolId()
+        );
+
+        updateEducationPort.updateEducations(resume);
     }
 }

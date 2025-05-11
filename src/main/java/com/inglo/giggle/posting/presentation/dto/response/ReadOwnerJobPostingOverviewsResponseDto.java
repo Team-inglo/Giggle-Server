@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.presentation.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.account.domain.Owner;
+import com.inglo.giggle.owner.domain.Owner;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.posting.domain.JobPosting;
 import jakarta.validation.constraints.NotNull;

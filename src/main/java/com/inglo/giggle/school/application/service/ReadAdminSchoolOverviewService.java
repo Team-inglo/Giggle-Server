@@ -2,10 +2,9 @@ package com.inglo.giggle.school.application.service;
 
 import com.inglo.giggle.core.dto.PageInfoDto;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.presentation.dto.response.ReadAdminSchoolOverviewResponseDto;
-import com.inglo.giggle.school.application.usecase.ReadAdminSchoolOverviewUseCase;
-import com.inglo.giggle.school.persistence.entity.SchoolEntity;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
+import com.inglo.giggle.school.application.port.in.result.ReadAdminSchoolOverviewResult;
+import com.inglo.giggle.school.application.port.in.query.ReadAdminSchoolOverviewQuery;
+import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,17 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ReadAdminSchoolOverviewService implements ReadAdminSchoolOverviewUseCase {
+public class ReadAdminSchoolOverviewService implements ReadAdminSchoolOverviewQuery {
 
-    private final SchoolRepository schoolRepository;
+    private final LoadSchoolPort loadSchoolPort;
 
     @Override
     @Transactional(readOnly = true)
-    public ReadAdminSchoolOverviewResponseDto execute(Integer page, Integer size, String search) {
+    public ReadAdminSchoolOverviewResult execute(Integer page, Integer size, String search) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<School> schoolPage = schoolRepository.findAllBySearch(pageable, search);
+        Page<School> schoolPage = loadSchoolPort.loadSchool(pageable, search);
 
         PageInfoDto pageInfo = PageInfoDto.of(
                 schoolPage.getNumber() + 1,
@@ -35,8 +34,18 @@ public class ReadAdminSchoolOverviewService implements ReadAdminSchoolOverviewUs
                 (int) schoolPage.getTotalElements()
         );
 
-        return ReadAdminSchoolOverviewResponseDto.of(
-                schoolPage.getContent(),
+        return ReadAdminSchoolOverviewResult.of(
+                schoolPage.getContent()
+                        .stream()
+                        .map(school -> ReadAdminSchoolOverviewResult.SchoolOverviewDto.of(
+                                school.getId(),
+                                school.getSchoolName(),
+                                school.getSchoolPhoneNumber(),
+                                school.getInstituteName(),
+                                school.getCoordinatorName(),
+                                school.getCoordinatorPhoneNumber(),
+                                school.getAddress().getAddressName()
+                        )).toList(),
                 pageInfo
         );
     }
