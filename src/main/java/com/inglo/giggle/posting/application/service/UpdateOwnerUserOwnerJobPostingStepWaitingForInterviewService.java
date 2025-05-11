@@ -4,7 +4,7 @@ import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
+import com.inglo.giggle.notification.application.port.out.LoadNotificationPort;
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
@@ -25,7 +25,7 @@ public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implem
     private final LoadAccountPort loadAccountPort;
     private final AccountDeviceRepository accountDeviceRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-    private final NotificationRepository notificationRepository;
+    private final LoadNotificationPort loadNotificationPort;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -57,7 +57,7 @@ public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implem
                 .isRead(false)
                 .notificationType(ENotificationType.USER)
                 .build();
-        notificationRepository.save(notification);
+        loadNotificationPort.save(notification);
 
         // NotificationEvent 생성 및 발행
         handlePushAlarm(account, userOwnerJobPosting, notification);

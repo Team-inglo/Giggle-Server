@@ -2,7 +2,6 @@ package com.inglo.giggle.school.application.port.in.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
-import com.inglo.giggle.school.domain.School;
 import lombok.Builder;
 import lombok.Getter;
 

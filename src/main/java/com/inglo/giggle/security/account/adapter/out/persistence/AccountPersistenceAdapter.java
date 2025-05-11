@@ -12,10 +12,8 @@ import com.inglo.giggle.security.account.adapter.out.persistence.mapper.RefreshT
 import com.inglo.giggle.security.account.adapter.out.persistence.repository.mysql.AccountDeviceJpaRepository;
 import com.inglo.giggle.security.account.adapter.out.persistence.repository.mysql.AccountJpaRepository;
 import com.inglo.giggle.security.account.adapter.out.persistence.repository.redis.RefreshTokenRedisRepository;
-import com.inglo.giggle.security.account.application.port.out.CreateAccountDevicePort;
 import com.inglo.giggle.security.account.application.port.out.CreateAccountPort;
 import com.inglo.giggle.security.account.application.port.out.CreateRefreshTokenPort;
-import com.inglo.giggle.security.account.application.port.out.DeleteAccountDevicePort;
 import com.inglo.giggle.security.account.application.port.out.DeleteAccountPort;
 import com.inglo.giggle.security.account.application.port.out.DeleteRefreshTokenPort;
 import com.inglo.giggle.security.account.application.port.out.LoadAccountDevicePort;
@@ -48,17 +46,23 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class AccountPersistenceAdapter implements
         LoadAccountPort, CreateAccountPort, DeleteAccountPort, UpdateAccountPort,
         LoadRefreshTokenPort, CreateRefreshTokenPort, UpdateRefreshTokenPort, DeleteRefreshTokenPort,
-        LoadAccountDevicePort, CreateAccountDevicePort, DeleteAccountDevicePort, UpdateAccountDevicePort {
-
+        LoadAccountDevicePort, UpdateAccountDevicePort
+{
     private final AccountJpaRepository accountJpaRepository;
     private final AccountDeviceJpaRepository accountDeviceJpaRepository;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
@@ -85,6 +89,40 @@ public class AccountPersistenceAdapter implements
     @Override
     public Account loadAccount(String serialId) {
         return accountMapper.toDomain(accountJpaRepository.findBySerialId(serialId).orElse(null));
+    }
+
+    @Override
+    public Account loadAccountWithAccountDevices(UUID accountId) {
+        AccountEntity accountEntity = accountJpaRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+
+        List<AccountDeviceEntity> accountDeviceEntities = accountDeviceJpaRepository.findByAccountEntityId(accountId);
+        List<AccountDevice> accountDevices = accountDeviceEntities.stream()
+                .map(accountDeviceMapper::toDomain)
+                .toList();
+
+        return accountMapper.toDomain(accountEntity, accountDevices);
+    }
+
+    @Override
+    public Account loadAccountWithRefreshTokenAndAccountDevices(UUID accountId) {
+        AccountEntity accountEntity = accountJpaRepository.findById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+
+        List<AccountDeviceEntity> accountDeviceEntities = accountDeviceJpaRepository.findByAccountEntityId(accountId);
+        List<AccountDevice> accountDevices = accountDeviceEntities.stream()
+                .map(accountDeviceMapper::toDomain)
+                .toList();
+
+        Account account = accountMapper.toDomain(accountEntity, accountDevices);
+
+        RefreshToken refreshToken = refreshTokenMapper.toDomain(
+                refreshTokenRedisRepository.findByAccountIdAndValue(account.getId(), account.getRefreshToken().getValue())
+                        .orElse(null)
+        );
+        account.updateRefreshToken(refreshToken);
+
+        return account;
     }
 
     @Override
@@ -278,19 +316,45 @@ public class AccountPersistenceAdapter implements
     }
 
     @Override
-    public void createAccountDevice(AccountDevice accountDevice) {
-        AccountDeviceEntity entity = accountDeviceMapper.toEntity(accountDevice);
-        accountDeviceMapper.toDomain(accountDeviceJpaRepository.save(entity));
-    }
+    public void updateAccountDevice(Account account) {
+        // Mapper 에서 toEntity 를 위해 사용하기 위한 AccountEntity 조회
+        AccountEntity accountEntity = accountMapper.toEntity(account);
 
-    @Override
-    public void deleteAccountDevices(UUID accountId) {
-        accountDeviceJpaRepository.deleteAllByAccountEntityId(accountId);
-    }
+        // 기존에 DB에 저장된 AccountDeviceEntity 조회
+        List<AccountDeviceEntity> existingEntities = accountDeviceJpaRepository.findByAccountEntityId(account.getId());
 
-    @Override
-    public void updateAccountDevice(AccountDevice accountDevice) {
-        AccountDeviceEntity entity = accountDeviceMapper.toEntity(accountDevice);
-        accountDeviceJpaRepository.save(entity);
+        // Map 으로 변환
+        Map<Long, AccountDeviceEntity> existingMap = existingEntities.stream()
+                .collect(Collectors.toMap(AccountDeviceEntity::getId, Function.identity()));
+
+        Set<Long> inputIds = new HashSet<>();
+        List<AccountDeviceEntity> toSave = new ArrayList<>();
+        List<AccountDeviceEntity> toUpdate = new ArrayList<>();
+
+        for (AccountDevice input : account.getAccountDevices()) {
+            if (input.getId() == null) { // 생성의 경우
+                toSave.add(accountDeviceMapper.toEntity(input, accountEntity)); // AccountDeviceEntity 로 변환 후, toSave 리스트에 추가
+            } else { // 수정의 경우
+                inputIds.add(input.getId()); // inputIds 에 추가(이후 삭제 대상인지 판단을 위함)
+                AccountDeviceEntity existing = existingMap.get(input.getId()); // 기존 DB 엔티티로 만든 Map 에서, Application Layer 에서 받은 객체의 id 가 존재하는지 확인
+                if (existing == null) { // 존재하지 않는다면, CommonException 발생(ID 가 존재하므로 생성은 아닌데, DB 에는 존재하지 않음. 정합성 문제)
+                    throw new CommonException(ErrorCode.INVALID_ARGUMENT);
+                }
+                AccountDeviceEntity updated = accountDeviceMapper.toEntity(input, accountEntity);
+                // equals 메서드를 사용하여 기존 엔티티와 업데이트된 엔티티를 비교. 다르다면 업데이트 리스트에 추가
+                if (!existing.equals(updated)) {
+                    toUpdate.add(updated);
+                }
+            }
+        }
+
+        // inputIds 에 포함되지 않는 기존 엔티티는 삭제 대상
+        List<AccountDeviceEntity> toDelete = existingEntities.stream()
+                .filter(e -> !inputIds.contains(e.getId()))
+                .toList();
+
+        if (!toSave.isEmpty()) accountDeviceJpaRepository.saveAll(toSave);
+        if (!toUpdate.isEmpty()) accountDeviceJpaRepository.saveAll(toUpdate);
+        if (!toDelete.isEmpty()) accountDeviceJpaRepository.deleteAll(toDelete);
     }
 }

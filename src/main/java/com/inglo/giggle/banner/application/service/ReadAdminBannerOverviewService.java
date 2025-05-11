@@ -1,10 +1,9 @@
 package com.inglo.giggle.banner.application.service;
 
+import com.inglo.giggle.banner.application.port.in.query.ReadAdminBannerOverviewQuery;
+import com.inglo.giggle.banner.application.port.in.result.ReadAdminBannerOverviewResult;
+import com.inglo.giggle.banner.application.port.out.LoadBannerPort;
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.banner.persistence.entity.BannerEntity;
-import com.inglo.giggle.banner.presentation.dto.response.ReadAdminBannerOverviewResponseDto;
-import com.inglo.giggle.banner.application.usecase.ReadAdminBannerOverviewUseCase;
-import com.inglo.giggle.banner.persistence.repository.BannerRepository;
 import com.inglo.giggle.core.dto.PageInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,13 +17,13 @@ import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
-public class ReadAdminBannerOverviewService implements ReadAdminBannerOverviewUseCase {
+public class ReadAdminBannerOverviewService implements ReadAdminBannerOverviewQuery {
 
-    private final BannerRepository bannerRepository;
+    private final LoadBannerPort loadBannerPort;
 
     @Override
     @Transactional(readOnly = true)
-    public ReadAdminBannerOverviewResponseDto execute(
+    public ReadAdminBannerOverviewResult execute(
             Integer page,
             Integer size,
             String search,
@@ -37,7 +36,7 @@ public class ReadAdminBannerOverviewService implements ReadAdminBannerOverviewUs
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<Banner> bannerPage = bannerRepository.findBannersByFilters(
+        Page<Banner> bannerPage = loadBannerPort.loadBanners(
                 pageable,
                 search,
                 startDate,
@@ -56,7 +55,7 @@ public class ReadAdminBannerOverviewService implements ReadAdminBannerOverviewUs
                 (int) bannerPage.getTotalElements()
         );
 
-        return ReadAdminBannerOverviewResponseDto.of(
+        return ReadAdminBannerOverviewResult.of(
                 bannerPage.getContent(),
                 pageInfo
         );

@@ -3,7 +3,6 @@ package com.inglo.giggle.security.temporaryaccount.application.port.in.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.security.account.domain.type.ESecurityRole;
-import com.inglo.giggle.security.temporaryaccount.domain.TemporaryAccount;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 

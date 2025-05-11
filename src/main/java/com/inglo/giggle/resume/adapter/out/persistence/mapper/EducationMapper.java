@@ -1,13 +1,9 @@
 package com.inglo.giggle.resume.adapter.out.persistence.mapper;
 
+import com.inglo.giggle.resume.adapter.out.persistence.entity.EducationEntity;
 import com.inglo.giggle.resume.adapter.out.persistence.entity.ResumeEntity;
 import com.inglo.giggle.resume.domain.Education;
-import com.inglo.giggle.resume.adapter.out.persistence.entity.EducationEntity;
-import com.inglo.giggle.resume.domain.Resume;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.UUID;
 
 @Component
 public class EducationMapper {

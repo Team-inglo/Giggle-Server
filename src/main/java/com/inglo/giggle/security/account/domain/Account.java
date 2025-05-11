@@ -56,5 +56,9 @@ public class Account extends BaseDomain {
     public void updateAccountDevices(List<AccountDevice> accountDevices) {
         this.accountDevices = accountDevices;
     }
+
+    public void deleteAllAccountDevices() {
+        this.accountDevices.clear();
+    }
 }
 

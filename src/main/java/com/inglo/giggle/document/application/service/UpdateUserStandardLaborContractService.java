@@ -1,78 +1,88 @@
 package com.inglo.giggle.document.application.service;
 
 import com.inglo.giggle.core.domain.Address;
-import com.inglo.giggle.document.application.usecase.UpdateUserStandardLaborContractUseCase;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
+import com.inglo.giggle.document.application.port.in.command.UpdateUserStandardLaborContractCommand;
+import com.inglo.giggle.document.application.port.in.usecase.UpdateUserStandardLaborContractUseCase;
+import com.inglo.giggle.document.application.port.out.LoadDocumentPort;
+import com.inglo.giggle.document.application.port.out.UpdateStandardLaborContractPort;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.persistence.repository.DocumentRepository;
-import com.inglo.giggle.document.persistence.repository.StandardLaborContractRepository;
-import com.inglo.giggle.document.presentation.dto.request.UpdateUserStandardLaborContractRequestDto;
-import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.account.domain.Account;
-import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
+import com.inglo.giggle.security.account.application.port.in.query.ReadAccountRoleQuery;
+import com.inglo.giggle.security.account.application.port.in.result.ReadAccountRoleResult;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateUserStandardLaborContractService implements UpdateUserStandardLaborContractUseCase {
 
-    private final LoadAccountPort loadAccountPort;
-    private final DocumentRepository documentRepository;
-    private final StandardLaborContractRepository standardLaborContractRepository;
-    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
+    private final LoadDocumentPort loadDocumentPort;
+    private final UpdateStandardLaborContractPort updateStandardLaborContractPort;
+
+    private final ReadAccountRoleQuery readAccountRoleQuery;
 
     @Override
     @Transactional
-    public void execute(UUID accountId, Long documentId, UpdateUserStandardLaborContractRequestDto requestDto) {
+    public void execute(UpdateUserStandardLaborContractCommand command) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccount(accountId);
+        ReadAccountRoleResult readAccountRoleResult = readAccountRoleQuery.execute(command.getAccountId());
 
         // 계정 타입 유효성 체크
-        account.checkUserValidation();
+        checkUserValidation(readAccountRoleResult.getRole());
 
         // Document 조회
-        Document document = documentRepository.findByIdOrElseThrow(documentId);
+        Document document = loadDocumentPort.loadDocument(command.getDocumentId());
 
-        // UserOwnerJobPosting 정보 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
-
-        // UserOwnerJobPosting 유저 유효성 체크
-        userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
+        //TODO: UOJP 합치기
+//        // UserOwnerJobPosting 정보 조회
+//        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
+//
+//        // UserOwnerJobPosting 유저 유효성 체크
+//        userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
         // StandardLaborContract 조회
-        StandardLaborContract standardLaborContract = standardLaborContractRepository.findByIdOrElseThrow(documentId);
+        StandardLaborContract standardLaborContract = (StandardLaborContract) document;
 
         // StandardLaborContract 수정 유효성 체크
         standardLaborContract.checkUpdateOrSubmitUserStandardLaborContractValidation();
 
         // Address 생성
         Address address = Address.builder()
-                .addressName(requestDto.address().addressName())
-                .addressDetail(requestDto.address().addressDetail())
-                .region1DepthName(requestDto.address().region1DepthName())
-                .region2DepthName(requestDto.address().region2DepthName())
-                .region3DepthName(requestDto.address().region3DepthName())
-                .region4DepthName(requestDto.address().region4DepthName())
-                .latitude(requestDto.address().latitude())
-                .longitude(requestDto.address().longitude())
+                .addressName(command.getAddress().addressName())
+                .addressDetail(command.getAddress().addressDetail())
+                .region1DepthName(command.getAddress().region1DepthName())
+                .region2DepthName(command.getAddress().region2DepthName())
+                .region3DepthName(command.getAddress().region3DepthName())
+                .region4DepthName(command.getAddress().region4DepthName())
+                .latitude(command.getAddress().latitude())
+                .longitude(command.getAddress().longitude())
                 .build();
 
         // StandardLaborContract 수정
         standardLaborContract.updateByUser(
-                requestDto.firstName(),
-                requestDto.lastName(),
+                command.getFirstName(),
+                command.getLastName(),
                 address,
-                requestDto.phoneNumber(),
-                requestDto.signatureBase64()
+                command.getPhoneNumber(),
+                command.getSignatureBase64()
         );
 
-        standardLaborContractRepository.save(standardLaborContract);
+        updateStandardLaborContractPort.updateStandardLaborContract(standardLaborContract);
+    }
+
+    /* ---------------------------------------------------------------------------------------------------------------*
+     * -------                                       private method                                            -------*
+     * -------------------------------------------------------------------------------------------------------------- */
+    private void checkUserValidation(ESecurityRole role) {
+        // 계정 타입이 USER가 아닐 경우 예외처리
+        if (role != ESecurityRole.USER) {
+            throw new CommonException(ErrorCode.INVALID_ACCOUNT_TYPE);
+        }
     }
 
 }

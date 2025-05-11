@@ -1,12 +1,9 @@
 package com.inglo.giggle.resume.adapter.out.persistence.mapper;
 
 import com.inglo.giggle.resume.adapter.out.persistence.entity.ResumeEntity;
-import com.inglo.giggle.resume.domain.WorkExperience;
 import com.inglo.giggle.resume.adapter.out.persistence.entity.WorkExperienceEntity;
+import com.inglo.giggle.resume.domain.WorkExperience;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.UUID;
 
 @Component
 public class WorkExperienceMapper {

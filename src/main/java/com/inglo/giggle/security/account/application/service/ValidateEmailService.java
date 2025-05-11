@@ -1,9 +1,9 @@
 package com.inglo.giggle.security.account.application.service;
 
-import com.inglo.giggle.security.account.application.port.in.result.ValidationResult;
 import com.inglo.giggle.security.account.application.port.in.query.ValidateEmailQuery;
-import com.inglo.giggle.security.account.domain.type.ESecurityProvider;
+import com.inglo.giggle.security.account.application.port.in.result.ValidationResult;
 import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
+import com.inglo.giggle.security.account.domain.type.ESecurityProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

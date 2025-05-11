@@ -1,7 +1,6 @@
 package com.inglo.giggle.resume.application.port.in.dto;
 
 import com.inglo.giggle.core.type.EEducationLevel;
-import com.inglo.giggle.resume.domain.Education;
 import lombok.Getter;
 
 import java.time.LocalDate;

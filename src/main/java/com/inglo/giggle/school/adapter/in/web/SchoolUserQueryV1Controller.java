@@ -2,9 +2,9 @@ package com.inglo.giggle.school.adapter.in.web;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
+import com.inglo.giggle.school.application.port.in.query.ReadUserSchoolBriefQuery;
 import com.inglo.giggle.school.application.port.in.query.ReadUserSchoolDetailQuery;
 import com.inglo.giggle.school.application.port.in.result.ReadUserSchoolBriefResult;
-import com.inglo.giggle.school.application.port.in.query.ReadUserSchoolBriefQuery;
 import com.inglo.giggle.school.application.port.in.result.ReadUserSchoolDetailResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

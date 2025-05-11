@@ -1,69 +1,52 @@
 package com.inglo.giggle.document.application.service;
 
+import com.inglo.giggle.core.dto.AddressResponseDto;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.document.application.usecase.ReadStandardLaborContractDetailUseCase;
-import com.inglo.giggle.document.domain.ContractWorkDayTime;
-import com.inglo.giggle.document.domain.Document;
+import com.inglo.giggle.core.type.EDayOfWeek;
+import com.inglo.giggle.core.utility.DateTimeUtil;
+import com.inglo.giggle.document.application.port.in.query.ReadStandardLaborContractDetailQuery;
+import com.inglo.giggle.document.application.port.in.result.ReadStandardLaborContractDetailResult;
+import com.inglo.giggle.document.application.port.out.LoadStandardLaborContractPort;
 import com.inglo.giggle.document.domain.StandardLaborContract;
-import com.inglo.giggle.document.persistence.repository.ContractWorkDayTimeRepository;
-import com.inglo.giggle.document.persistence.repository.DocumentRepository;
-import com.inglo.giggle.document.persistence.repository.StandardLaborContractRepository;
-import com.inglo.giggle.document.presentation.dto.response.ReadStandardLaborContractDetailResponseDto;
-import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.account.domain.Account;
-import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
-import jakarta.persistence.DiscriminatorValue;
+import com.inglo.giggle.document.domain.type.EInsurance;
+import com.inglo.giggle.security.account.application.port.in.query.ReadAccountRoleQuery;
+import com.inglo.giggle.security.account.application.port.in.result.ReadAccountRoleResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ReadStandardLaborContractService implements ReadStandardLaborContractDetailUseCase {
+public class ReadStandardLaborContractService implements ReadStandardLaborContractDetailQuery {
 
-    private final LoadAccountPort loadAccountPort;
-    private final DocumentRepository documentRepository;
-    private final StandardLaborContractRepository standardLaborContractRepository;
-    private final ContractWorkDayTimeRepository contractWorkDayTimeRepository;
-    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
+    private final LoadStandardLaborContractPort loadStandardLaborContractPort;
+
+    private final ReadAccountRoleQuery readAccountRoleQuery;
 
     @Override
-    public ReadStandardLaborContractDetailResponseDto execute(UUID accountId, Long documentId) {
+    public ReadStandardLaborContractDetailResult execute(UUID accountId, Long documentId) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccount(accountId);
+        ReadAccountRoleResult readAccountRoleResult = readAccountRoleQuery.execute(accountId);
 
-        // Document 정보 조회
-        Document document = documentRepository.findByIdOrElseThrow(documentId);
-
+        // TODO: UOJP 합치기
         // UserOwnerJobPosting 정보 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
+//        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
 
-        // 계정 타입에 따라 유효성 체크
-        String accountDiscriminatorValue = account.getClass().getAnnotation(DiscriminatorValue.class).value();
-
-        switch (accountDiscriminatorValue) {
-            case "USER":
-
-                // 계정 타입 유효성 체크
-                account.checkUserValidation();
+        switch (readAccountRoleResult.getRole()) {
+            case USER:
 
                 // UserOwnerJobPosting 유저 유효성 체크
-                userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
+//                userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
                 break;
 
-            case "OWNER":
-
-                // 계정 타입 유효성 체크
-                account.checkOwnerValidation();
+            case OWNER:
 
                 // UserOwnerJobPosting 고용주 유효성 체크
-                userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
+//                userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
 
                 break;
 
@@ -71,20 +54,55 @@ public class ReadStandardLaborContractService implements ReadStandardLaborContra
                 throw new CommonException(ErrorCode.NOT_FOUND_RESOURCE);
         }
 
-        // StandardLaborContract 조회 -> null이면 유학생만 작성한 경우 or 아예 없는 경우
-        StandardLaborContract standardLaborContract = standardLaborContractRepository.findWithWeeklyRestDaysAndInsurancesByIdOrElseNull(documentId);
+        // StandardLaborContract 조회
+        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadStandardLaborContract(documentId);
 
-        // StandardLaborContract가 null이면 다시 조회. 예외가 발생하면 아예 없는경우, 아니면 유학생만 작성한 경우
-        if (standardLaborContract == null) {
-            standardLaborContract = standardLaborContractRepository.findByIdOrElseThrow(documentId);
+        ReadStandardLaborContractDetailResult.EmployeeInformationDto employeeInformationDto;
+        ReadStandardLaborContractDetailResult.EmployerInformationDto employerInformationDto;
+
+        employeeInformationDto = ReadStandardLaborContractDetailResult.EmployeeInformationDto.of(
+                standardLaborContract.getEmployeeFirstName(),
+                standardLaborContract.getEmployeeLastName(),
+                AddressResponseDto.from(standardLaborContract.getEmployeeAddress()),
+                standardLaborContract.getEmployeePhoneNumber(),
+                standardLaborContract.getEmployeeSignatureBase64()
+        );
+        if (standardLaborContract.getCompanyName() == null) {
+            employerInformationDto = null;
+        } else {
+            employerInformationDto = ReadStandardLaborContractDetailResult.EmployerInformationDto.of(
+                    standardLaborContract.getCompanyName(),
+                    standardLaborContract.getEmployerPhoneNumber(),
+                    standardLaborContract.getCompanyRegistrationNumber(),
+                    standardLaborContract.getEmployerName(),
+                    DateTimeUtil.convertLocalDateToString(standardLaborContract.getStartDate()),
+                    DateTimeUtil.convertLocalDateToString(standardLaborContract.getEndDate()),
+                    AddressResponseDto.from(standardLaborContract.getEmployerAddress()),
+                    standardLaborContract.getDescription(),
+                    standardLaborContract.getWorkDayTimes().stream().map(workDayTime ->
+                            ReadStandardLaborContractDetailResult.EmployerInformationDto.WorkDayTimeDto.builder()
+                                    .dayOfWeek(workDayTime.getDayOfWeek().toString())
+                                    .workStartTime(DateTimeUtil.convertLocalTimeToString(workDayTime.getWorkStartTime()))
+                                    .workEndTime(DateTimeUtil.convertLocalTimeToString(workDayTime.getWorkEndTime()))
+                                    .breakStartTime(DateTimeUtil.convertLocalTimeToString(workDayTime.getBreakStartTime()))
+                                    .breakEndTime(DateTimeUtil.convertLocalTimeToString(workDayTime.getBreakEndTime()))
+                                    .build()
+                    ).toList(),
+                    standardLaborContract.getWeeklyRestDays().stream().map(EDayOfWeek::toString).toList(),
+                    standardLaborContract.getHourlyRate(),
+                    standardLaborContract.getBonus(),
+                    standardLaborContract.getAdditionalSalary(),
+                    standardLaborContract.getWageRate(),
+                    standardLaborContract.getPaymentDay(),
+                    standardLaborContract.getPaymentMethod().toString(),
+                    standardLaborContract.getInsurances().stream().map(EInsurance::toString).toList(),
+                    standardLaborContract.getEmployerSignatureBase64()
+            );
         }
 
-        // ContractWorkDayTime 조회
-        List<ContractWorkDayTime> contractWorkDayTimes = contractWorkDayTimeRepository.findByStandardLaborContractId(documentId);
-
-        return ReadStandardLaborContractDetailResponseDto.of(
-                standardLaborContract,
-                contractWorkDayTimes
+        return ReadStandardLaborContractDetailResult.of(
+                employeeInformationDto,
+                employerInformationDto
         );
     }
 

@@ -1,14 +1,11 @@
 package com.inglo.giggle.resume.domain;
 
 import com.inglo.giggle.core.dto.BaseDomain;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 public class WorkExperience extends BaseDomain {

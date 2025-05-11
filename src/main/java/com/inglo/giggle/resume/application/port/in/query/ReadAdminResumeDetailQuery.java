@@ -1,7 +1,6 @@
 package com.inglo.giggle.resume.application.port.in.query;
 
 import com.inglo.giggle.resume.application.port.in.result.ReadAdminResumeDetailResult;
-import com.inglo.giggle.security.info.CustomUserPrincipal;
 
 import java.util.UUID;
 

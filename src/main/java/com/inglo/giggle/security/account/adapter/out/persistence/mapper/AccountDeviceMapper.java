@@ -1,6 +1,7 @@
 package com.inglo.giggle.security.account.adapter.out.persistence.mapper;
 
 import com.inglo.giggle.security.account.adapter.out.persistence.entity.mysql.AccountDeviceEntity;
+import com.inglo.giggle.security.account.adapter.out.persistence.entity.mysql.AccountEntity;
 import com.inglo.giggle.security.account.domain.AccountDevice;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,10 @@ public class AccountDeviceMapper {
                 .build();
     }
 
-    public AccountDeviceEntity toEntity(AccountDevice domain) {
+    public AccountDeviceEntity toEntity(
+            AccountDevice domain,
+            AccountEntity accountEntity
+    ) {
         if (domain == null) {
             return null;
         }
@@ -29,6 +33,7 @@ public class AccountDeviceMapper {
                 .id(domain.getId())
                 .deviceId(domain.getDeviceId())
                 .deviceToken(domain.getDeviceToken())
+                .accountEntity(accountEntity)
                 .build();
     }
 }

@@ -1,9 +1,9 @@
 package com.inglo.giggle.owner.application.service;
 
-import com.inglo.giggle.owner.domain.Owner;
-import com.inglo.giggle.owner.application.port.in.result.ReadOwnerBriefResult;
 import com.inglo.giggle.owner.application.port.in.query.ReadOwnerBriefQuery;
+import com.inglo.giggle.owner.application.port.in.result.ReadOwnerBriefResult;
 import com.inglo.giggle.owner.application.port.out.LoadOwnerPort;
+import com.inglo.giggle.owner.domain.Owner;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

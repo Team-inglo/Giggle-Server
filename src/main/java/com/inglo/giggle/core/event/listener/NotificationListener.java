@@ -20,16 +20,12 @@ public class NotificationListener {
     @Async
     @EventListener(classes = {NotificationEventDto.class})
     public void handleNotificationEvent(NotificationEventDto event) {
-        event.accountDevices()
-                .forEach(accountDevice -> {
+        event.deviceTokens()
+                .forEach( deviceToken -> {
                     try {
-                        if (accountDevice.getDeviceToken() == null) {
-                            return;
-                        }
-
                         // FCM 메시지 생성 및 전송
                         Message data = Message.builder()
-                                .setToken(accountDevice.getDeviceToken())
+                                .setToken(deviceToken)
                                 .putData("time", LocalDateTime.now().toString())
                                 .setNotification(
                                         new Notification(

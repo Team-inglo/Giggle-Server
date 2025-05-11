@@ -2,15 +2,12 @@ package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.resume.application.port.in.command.UpdateSejongInstituteCommand;
 import com.inglo.giggle.resume.application.port.in.usecase.UpdateUserSejongInstituteUseCase;
-import com.inglo.giggle.resume.application.port.out.UpdateLanguageSkillPort;
-import com.inglo.giggle.resume.domain.LanguageSkill;
-import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.application.port.out.LoadResumePort;
+import com.inglo.giggle.resume.application.port.out.UpdateLanguageSkillPort;
+import com.inglo.giggle.resume.domain.Resume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

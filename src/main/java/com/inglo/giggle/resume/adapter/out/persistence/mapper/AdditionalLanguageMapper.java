@@ -1,13 +1,9 @@
 package com.inglo.giggle.resume.adapter.out.persistence.mapper;
 
+import com.inglo.giggle.resume.adapter.out.persistence.entity.AdditionalLanguageEntity;
 import com.inglo.giggle.resume.adapter.out.persistence.entity.LanguageSkillEntity;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
-import com.inglo.giggle.resume.adapter.out.persistence.entity.AdditionalLanguageEntity;
-import com.inglo.giggle.resume.domain.LanguageSkill;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.UUID;
 
 @Component
 public class AdditionalLanguageMapper {

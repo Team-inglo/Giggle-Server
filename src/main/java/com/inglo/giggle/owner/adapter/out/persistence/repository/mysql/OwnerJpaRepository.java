@@ -11,8 +11,8 @@ import java.util.UUID;
 public interface OwnerJpaRepository extends JpaRepository<OwnerEntity, UUID>{
 
     @Query("SELECT o FROM OwnerEntity o " +
-            "JOIN UserOwnerJobPostingEntity uojp ON o.id = uojp.ownerEntity.id " +
-            "JOIN DocumentEntity d ON d.userOwnerJobPostingEntity.id = uojp.id " +
+            "JOIN UserOwnerJobPostingEntity uojp ON o.id = uojp.ownerId " +
+            "JOIN DocumentEntity d ON d.userOwnerJobPostingId = uojp.id " +
             "WHERE d.id = :documentId"
     )
     Optional<OwnerEntity> findByDocumentId(@Param("documentId") Long documentId);

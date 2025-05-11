@@ -1,9 +1,9 @@
 package com.inglo.giggle.banner.application.service;
 
+import com.inglo.giggle.banner.application.port.in.query.ReadBannerOverviewQuery;
+import com.inglo.giggle.banner.application.port.in.result.ReadBannerOverviewResult;
+import com.inglo.giggle.banner.application.port.out.LoadBannerPort;
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.banner.presentation.dto.response.ReadBannerOverviewResponseDto;
-import com.inglo.giggle.banner.application.usecase.ReadBannerOverviewUseCase;
-import com.inglo.giggle.banner.persistence.repository.BannerRepository;
 import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,21 +13,21 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ReadBannerOverviewService implements ReadBannerOverviewUseCase {
+public class ReadBannerOverviewService implements ReadBannerOverviewQuery {
 
-    private final BannerRepository bannerRepository;
+    private final LoadBannerPort loadBannerPort;
 
     @Override
     @Transactional(readOnly = true)
-    public ReadBannerOverviewResponseDto execute(ESecurityRole role) {
+    public ReadBannerOverviewResult execute(ESecurityRole role) {
 
         if (role == ESecurityRole.ADMIN) {
-            List<Banner> banners = bannerRepository.findAll();
-            return ReadBannerOverviewResponseDto.from(banners);
+            List<Banner> banners = loadBannerPort.loadBanners();
+            return ReadBannerOverviewResult.from(banners);
         }
 
-        List<Banner> banners = bannerRepository.findByRole(role);
+        List<Banner> banners = loadBannerPort.loadBanners(role);
 
-        return ReadBannerOverviewResponseDto.from(banners);
+        return ReadBannerOverviewResult.from(banners);
     }
 }

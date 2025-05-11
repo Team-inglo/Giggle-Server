@@ -2,34 +2,34 @@ package com.inglo.giggle.security.account.application.service;
 
 import com.inglo.giggle.security.account.application.port.in.command.UpdateDeviceTokenCommand;
 import com.inglo.giggle.security.account.application.port.in.usecase.UpdateDeviceTokenUseCase;
-import com.inglo.giggle.security.account.application.port.out.LoadAccountDevicePort;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import com.inglo.giggle.security.account.application.port.out.UpdateAccountDevicePort;
+import com.inglo.giggle.security.account.domain.Account;
 import com.inglo.giggle.security.account.domain.AccountDevice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
 
-    private final LoadAccountDevicePort loadAccountDevicePort;
+    private final LoadAccountPort loadAccountPort;
     private final UpdateAccountDevicePort updateAccountDevicePort;
 
     @Override
     @Transactional
     public void execute(UpdateDeviceTokenCommand command) {
 
-        List<AccountDevice> accountDevices = loadAccountDevicePort.loadAccountDevices(command.getAccountId());
+        Account account = loadAccountPort.loadAccountWithAccountDevices(command.getAccountId());
         UUID uuidDeviceId = UUID.fromString(command.getDeviceId());
 
         // Device Token 갱신
         // 만약 해당 Account에 해당 DeviceToken이 이미 존재한다면 Device Token을 갱신하고,
         // 존재하지 않는다면 새로운 AccountDevice를 생성한다.
-        AccountDevice accountDevice = accountDevices.stream()
+        AccountDevice accountDevice = account.getAccountDevices().stream()
                 .filter(device -> device.getDeviceId().equals(uuidDeviceId))
                 .findFirst()
                 .orElse(null);
@@ -41,7 +41,8 @@ public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
                     .deviceToken(command.getDeviceToken())
                     .deviceId(uuidDeviceId)
                     .build();
+            account.getAccountDevices().add(accountDevice);
         }
-        updateAccountDevicePort.updateAccountDevice(accountDevice);
+        updateAccountDevicePort.updateAccountDevice(account);
     }
 }

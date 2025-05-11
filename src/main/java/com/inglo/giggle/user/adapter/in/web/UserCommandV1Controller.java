@@ -1,5 +1,7 @@
 package com.inglo.giggle.user.adapter.in.web;
 
+import com.inglo.giggle.core.annotation.security.AccountID;
+import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.user.adapter.in.web.dto.UpdateUserSelfLanguageRequestDto;
 import com.inglo.giggle.user.adapter.in.web.dto.UpdateUserSelfNotificationAllowedRequestDto;
 import com.inglo.giggle.user.adapter.in.web.dto.UpdateUserSelfRequestDto;
@@ -8,8 +10,6 @@ import com.inglo.giggle.user.application.port.in.command.UpdateUserSelfLanguageC
 import com.inglo.giggle.user.application.port.in.command.UpdateUserSelfNotificationAllowedCommand;
 import com.inglo.giggle.user.application.port.in.usecase.UpdateUserSelfLanguageUseCase;
 import com.inglo.giggle.user.application.port.in.usecase.UpdateUserSelfNotificationAllowedUseCase;
-import com.inglo.giggle.core.annotation.security.AccountID;
-import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.user.application.port.in.usecase.UpdateUserSelfUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

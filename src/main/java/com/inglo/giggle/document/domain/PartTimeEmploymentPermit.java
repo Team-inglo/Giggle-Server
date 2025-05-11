@@ -1,12 +1,13 @@
 package com.inglo.giggle.document.domain;
 
-import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.constant.Constants;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
+import jakarta.persistence.DiscriminatorValue;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +41,10 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
+@DiscriminatorValue("PART_TIME_EMPLOYMENT_PERMIT")
 @Slf4j
 public class PartTimeEmploymentPermit extends Document {
+
     @Value("${template.part-time-employment-permit.word.path}")
     private String wordTemplatePath;
 
@@ -67,7 +70,7 @@ public class PartTimeEmploymentPermit extends Document {
     private Address employerAddress;
 
     @Builder
-    public PartTimeEmploymentPermit(Long id, String wordUrl, Long userOwnerJobPostingId,
+    public PartTimeEmploymentPermit(Long id, String wordUrl, Long userOwnerJobPostingId, List<Reject> rejects,
                                     String employeeFirstName, String employeeLastName, String major, Integer termOfCompletion,
                                     String employeePhoneNumber, String employeeEmail, EEmployeeStatus employeeStatus,
                                     String companyName, String companyRegistrationNumber, String jobType,
@@ -76,7 +79,7 @@ public class PartTimeEmploymentPermit extends Document {
                                     EEmployerStatus employerStatus, Address employerAddress,
                                     LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
-        super(id, wordUrl, userOwnerJobPostingId, createdAt, updatedAt, deletedAt);
+        super(id, wordUrl, userOwnerJobPostingId, rejects, createdAt, updatedAt, deletedAt);
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.major = major;

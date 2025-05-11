@@ -35,6 +35,10 @@ public class ReadOwnerDetailResult extends SelfValidating<ReadOwnerDetailResult>
     @JsonProperty("logo_img_url")
     private final String logoImgUrl;
 
+    @NotNull(message = "notification_allowed는 null일 수 없습니다.")
+    @JsonProperty("notification_allowed")
+    private final Boolean notificationAllowed;
+
     @Builder
     public ReadOwnerDetailResult(
             String companyName,
@@ -42,7 +46,8 @@ public class ReadOwnerDetailResult extends SelfValidating<ReadOwnerDetailResult>
             AddressResponseDto address,
             String companyRegistrationNumber,
             String phoneNumber,
-            String logoImgUrl
+            String logoImgUrl,
+            Boolean notificationAllowed
     ) {
         this.companyName = companyName;
         this.ownerName = ownerName;
@@ -50,6 +55,7 @@ public class ReadOwnerDetailResult extends SelfValidating<ReadOwnerDetailResult>
         this.companyRegistrationNumber = companyRegistrationNumber;
         this.phoneNumber = phoneNumber;
         this.logoImgUrl = logoImgUrl;
+        this.notificationAllowed = notificationAllowed;
 
         this.validateSelf();
     }
@@ -60,7 +66,8 @@ public class ReadOwnerDetailResult extends SelfValidating<ReadOwnerDetailResult>
             AddressResponseDto address,
             String companyRegistrationNumber,
             String phoneNumber,
-            String logoImgUrl
+            String logoImgUrl,
+            Boolean notificationAllowed
     ) {
         return ReadOwnerDetailResult.builder()
                 .companyName(companyName)
@@ -69,6 +76,7 @@ public class ReadOwnerDetailResult extends SelfValidating<ReadOwnerDetailResult>
                 .companyRegistrationNumber(companyRegistrationNumber)
                 .phoneNumber(phoneNumber)
                 .logoImgUrl(logoImgUrl)
+                .notificationAllowed(notificationAllowed)
                 .build();
     }
 }

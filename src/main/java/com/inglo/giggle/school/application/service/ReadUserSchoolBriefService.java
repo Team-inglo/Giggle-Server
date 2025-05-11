@@ -1,9 +1,9 @@
 package com.inglo.giggle.school.application.service;
 
-import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.application.port.in.result.ReadUserSchoolBriefResult;
 import com.inglo.giggle.school.application.port.in.query.ReadUserSchoolBriefQuery;
+import com.inglo.giggle.school.application.port.in.result.ReadUserSchoolBriefResult;
 import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
+import com.inglo.giggle.school.domain.School;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

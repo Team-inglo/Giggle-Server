@@ -1,12 +1,12 @@
 package com.inglo.giggle.notification.application.service;
 
-import com.inglo.giggle.notification.presentation.dto.ReadNotificationOverviewResponseDto;
-import com.inglo.giggle.notification.application.usecase.ReadNotificationOverviewUseCase;
+import com.inglo.giggle.notification.application.port.in.query.ReadNotificationOverviewUseCase;
+import com.inglo.giggle.notification.application.port.in.result.ReadNotificationOverviewResponseDto;
+import com.inglo.giggle.notification.application.port.out.LoadNotificationPort;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import com.inglo.giggle.security.account.domain.Account;
 import com.inglo.giggle.security.account.domain.type.ESecurityRole;
-import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class ReadNotificationOverviewService implements ReadNotificationOverviewUseCase {
 
     private final LoadAccountPort loadAccountPort;
-    private final NotificationRepository notificationRepository;
+    private final LoadNotificationPort loadNotificationPort;
 
     private final static String DESCENDING = "DESC";
 
@@ -34,9 +34,11 @@ public class ReadNotificationOverviewService implements ReadNotificationOverview
         Sort sort = Sort.by(Sort.Order.desc("createdAt"));
         Page<Notification> notificationList;
         if (account.getRole().equals(ESecurityRole.USER)) {
-            notificationList = notificationRepository.findByUserOwnerJobPostingUserId(accountId, PageRequest.of(page - 1, size, sort));
+            notificationList = loadNotificationPort.loadNotificationByUserId(accountId, PageRequest.of(page - 1, size, sort));
+            // TODO: JobPosting 불러와서 title 넣어주기
         } else {
-            notificationList = notificationRepository.findByUserOwnerJobPostingOwnerId(accountId, PageRequest.of(page - 1, size, sort));
+            notificationList = loadNotificationPort.loadNotificationByOwnerId(accountId, PageRequest.of(page - 1, size, sort));
+            // TODO: JobPosting 불러와서 title 넣어주기
         }
 
         return ReadNotificationOverviewResponseDto.fromPages(notificationList);

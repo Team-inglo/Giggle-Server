@@ -1,6 +1,5 @@
 package com.inglo.giggle.resume.domain;
 
-import com.inglo.giggle.user.domain.User;
 import com.inglo.giggle.core.dto.BaseDomain;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;

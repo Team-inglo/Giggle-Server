@@ -8,7 +8,7 @@ import com.inglo.giggle.user.adapter.out.persistence.mapper.UserMapper;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.domain.Document;
-import com.inglo.giggle.document.persistence.mapper.DocumentMapper;
+import com.inglo.giggle.document.adapter.out.persistence.mapper.DocumentMapper;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;

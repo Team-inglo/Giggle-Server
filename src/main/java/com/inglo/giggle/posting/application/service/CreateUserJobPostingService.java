@@ -7,7 +7,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
+import com.inglo.giggle.notification.application.port.out.LoadNotificationPort;
 import com.inglo.giggle.posting.application.usecase.CreateUserJobPostingUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
@@ -34,7 +34,7 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
     private final JobPostingRepository jobPostingRepository;
     private final AccountDeviceRepository accountDeviceRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
-    private final NotificationRepository notificationRepository;
+    private final LoadNotificationPort loadNotificationPort;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -77,7 +77,7 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
                 .isRead(false)
                 .notificationType(ENotificationType.OWNER)
                 .build();
-        notificationRepository.save(notification);
+        loadNotificationPort.save(notification);
 
         // NotificationEvent 발행
         handlePushAlarm(account, savedUserOwnerJobPosting, notification);

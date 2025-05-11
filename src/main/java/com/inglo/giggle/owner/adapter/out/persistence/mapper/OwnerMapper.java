@@ -1,8 +1,8 @@
 package com.inglo.giggle.owner.adapter.out.persistence.mapper;
 
-import com.inglo.giggle.owner.domain.Owner;
 import com.inglo.giggle.core.persistence.AddressMapper;
 import com.inglo.giggle.owner.adapter.out.persistence.entity.OwnerEntity;
+import com.inglo.giggle.owner.domain.Owner;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -2,7 +2,6 @@ package com.inglo.giggle.owner.adapter.out.persistence;
 
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.owner.adapter.out.persistence.entity.OwnerEntity;
 import com.inglo.giggle.owner.adapter.out.persistence.mapper.OwnerMapper;
 import com.inglo.giggle.owner.adapter.out.persistence.repository.mysql.OwnerJpaRepository;
 import com.inglo.giggle.owner.application.port.out.CreateOwnerPort;

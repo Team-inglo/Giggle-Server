@@ -4,6 +4,7 @@ import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.resume.adapter.in.web.dto.CreateUserAdditionalLanguageSkillRequestDto;
 import com.inglo.giggle.resume.adapter.in.web.dto.CreateUserEducationRequestDto;
+import com.inglo.giggle.resume.adapter.in.web.dto.CreateUserWorkExperienceRequestDto;
 import com.inglo.giggle.resume.adapter.in.web.dto.UpdateUserAdditionalLanguageSkillRequestDto;
 import com.inglo.giggle.resume.adapter.in.web.dto.UpdateUserEducationRequestDto;
 import com.inglo.giggle.resume.adapter.in.web.dto.UpdateUserIntroductionRequestDto;
@@ -28,7 +29,6 @@ import com.inglo.giggle.resume.application.port.in.command.UpdateWorkExperienceC
 import com.inglo.giggle.resume.application.port.in.usecase.CreateUserAdditionalLanguageUseCase;
 import com.inglo.giggle.resume.application.port.in.usecase.CreateUserEducationUseCase;
 import com.inglo.giggle.resume.application.port.in.usecase.CreateUserWorkExperienceUseCase;
-import com.inglo.giggle.resume.adapter.in.web.dto.CreateUserWorkExperienceRequestDto;
 import com.inglo.giggle.resume.application.port.in.usecase.DeleteUserAdditionalLanguageUseCase;
 import com.inglo.giggle.resume.application.port.in.usecase.DeleteUserEducationUseCase;
 import com.inglo.giggle.resume.application.port.in.usecase.DeleteUserIntroductionUseCase;

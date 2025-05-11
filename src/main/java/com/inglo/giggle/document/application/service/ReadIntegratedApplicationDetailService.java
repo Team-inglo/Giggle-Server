@@ -1,18 +1,17 @@
 package com.inglo.giggle.document.application.service;
 
+import com.inglo.giggle.core.dto.AddressResponseDto;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.document.application.usecase.ReadIntegratedApplicationDetailUseCase;
-import com.inglo.giggle.document.domain.Document;
+import com.inglo.giggle.core.utility.DateTimeUtil;
+import com.inglo.giggle.document.application.port.in.query.ReadIntegratedApplicationDetailQuery;
+import com.inglo.giggle.document.application.port.in.result.ReadIntegratedApplicationDetailResult;
+import com.inglo.giggle.document.application.port.out.LoadIntegratedApplicationPort;
 import com.inglo.giggle.document.domain.IntegratedApplication;
-import com.inglo.giggle.document.persistence.repository.DocumentRepository;
-import com.inglo.giggle.document.persistence.repository.IntegratedApplicationRepository;
-import com.inglo.giggle.document.presentation.dto.response.ReadIntegratedApplicationDetailResponseDto;
-import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
-import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.account.domain.Account;
-import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
-import jakarta.persistence.DiscriminatorValue;
+import com.inglo.giggle.school.application.port.in.query.ReadSchoolBySchoolIdQuery;
+import com.inglo.giggle.school.application.port.in.result.ReadSchoolBySchoolIdResult;
+import com.inglo.giggle.security.account.application.port.in.query.ReadAccountRoleQuery;
+import com.inglo.giggle.security.account.application.port.in.result.ReadAccountRoleResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,46 +19,35 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ReadIntegratedApplicationDetailService implements ReadIntegratedApplicationDetailUseCase {
+public class ReadIntegratedApplicationDetailService implements ReadIntegratedApplicationDetailQuery {
 
-    private final LoadAccountPort loadAccountPort;
-    private final DocumentRepository documentRepository;
-    private final IntegratedApplicationRepository integratedApplicationRepository;
-    private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
+    private final LoadIntegratedApplicationPort loadIntegratedApplicationPort;
+
+    private final ReadAccountRoleQuery readAccountRoleQuery;
+    private final ReadSchoolBySchoolIdQuery readSchoolBySchoolIdQuery;
 
     @Override
-    public ReadIntegratedApplicationDetailResponseDto execute(UUID accountId, Long documentId) {
+    public ReadIntegratedApplicationDetailResult execute(UUID accountId, Long documentId) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccount(accountId);
+        ReadAccountRoleResult readAccountRoleResult = readAccountRoleQuery.execute(accountId);
 
-        // Document 정보 조회
-        Document document = documentRepository.findByIdOrElseThrow(documentId);
+        //TODO: UOJP 합치기
+//        UserOwnerJobPosting 정보 조회
+//        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
 
-        // UserOwnerJobPosting 정보 조회
-        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
+        switch (readAccountRoleResult.getRole()) {
+            case USER:
 
-        // 계정 타입에 따라 유효성 체크
-        String accountDiscriminatorValue = account.getClass().getAnnotation(DiscriminatorValue.class).value();
-
-        switch (accountDiscriminatorValue) {
-            case "USER":
-
-                // 계정 타입 유효성 체크
-                account.checkUserValidation();
-
-                // UserOwnerJobPosting 유저 유효성 체크
-                userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
+//                // UserOwnerJobPosting 유저 유효성 체크
+//                userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
                 break;
 
-            case "OWNER":
+            case OWNER:
 
-                // 계정 타입 유효성 체크
-                account.checkUserValidation();
-
-                // UserOwnerJobPosting 고용주 유효성 체크
-                userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
+//                // UserOwnerJobPosting 고용주 유효성 체크
+//                userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
 
                 break;
 
@@ -68,10 +56,28 @@ public class ReadIntegratedApplicationDetailService implements ReadIntegratedApp
         }
 
         // IntegratedApplication 조회
-        IntegratedApplication integratedApplication = integratedApplicationRepository.findWithSchoolByIdOrElseThrow(documentId);
+        IntegratedApplication integratedApplication = loadIntegratedApplicationPort.loadIntegratedApplication(documentId);
+        ReadSchoolBySchoolIdResult readSchoolBySchoolIdResult = readSchoolBySchoolIdQuery.execute(integratedApplication.getSchoolId());
 
-        return ReadIntegratedApplicationDetailResponseDto.from(integratedApplication);
+        return ReadIntegratedApplicationDetailResult.of(
+                integratedApplication.getFirstName(),
+                integratedApplication.getLastName(),
+                DateTimeUtil.convertLocalDateToString(integratedApplication.getBirth()),
+                integratedApplication.getGender().name(),
+                integratedApplication.getNationality(),
+                integratedApplication.getTelePhoneNumber(),
+                integratedApplication.getCellPhoneNumber(),
+                integratedApplication.getIsAccredited(),
+                readSchoolBySchoolIdResult.getSchoolName(),
+                readSchoolBySchoolIdResult.getSchoolPhoneNumber(),
+                integratedApplication.getNewWorkPlaceName(),
+                integratedApplication.getNewWorkPlaceRegistrationNumber(),
+                integratedApplication.getNewWorkPlacePhoneNumber(),
+                integratedApplication.getAnnualIncomeAmount(),
+                integratedApplication.getOccupation(),
+                integratedApplication.getEmail(),
+                integratedApplication.getEmployeeSignatureBase64(),
+                AddressResponseDto.from(integratedApplication.getEmployeeAddress())
+        );
     }
-
-
 }

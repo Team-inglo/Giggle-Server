@@ -1,28 +1,29 @@
 package com.inglo.giggle.notification.application.service;
 
-import com.inglo.giggle.notification.application.usecase.UpdateNotificationIsReadUseCase;
+import com.inglo.giggle.notification.application.port.in.command.UpdateNotificationIsReadCommand;
+import com.inglo.giggle.notification.application.port.in.usecase.UpdateNotificationIsReadUseCase;
+import com.inglo.giggle.notification.application.port.out.LoadNotificationPort;
+import com.inglo.giggle.notification.application.port.out.UpdateNotificationPort;
 import com.inglo.giggle.notification.domain.Notification;
-import com.inglo.giggle.notification.persistence.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UpdateNotificationIsReadService implements UpdateNotificationIsReadUseCase {
 
-    private final NotificationRepository notificationRepository;
+    private final LoadNotificationPort loadNotificationPort;
+    private final UpdateNotificationPort updateNotificationPort;
 
     @Override
     @Transactional
-    public void execute(UUID accountId, Long notificationId) {
+    public void execute(UpdateNotificationIsReadCommand command) {
 
-        Notification notification = notificationRepository.findByIdOrElseThrow(notificationId);
+        Notification notification = loadNotificationPort.loadNotification(command.getNotificationId());
 
         notification.updateIsRead();
 
-        notificationRepository.save(notification);
+        updateNotificationPort.updateNotification(notification);
     }
 }

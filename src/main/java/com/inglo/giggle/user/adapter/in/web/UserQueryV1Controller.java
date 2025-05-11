@@ -1,12 +1,12 @@
 package com.inglo.giggle.user.adapter.in.web;
 
+import com.inglo.giggle.core.annotation.security.AccountID;
+import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.security.info.CustomUserPrincipal;
 import com.inglo.giggle.user.application.port.in.query.ReadUserSelfDetailQuery;
 import com.inglo.giggle.user.application.port.in.query.ReadUserSelfSummaryQuery;
 import com.inglo.giggle.user.application.port.in.result.ReadUserSelfDetailResult;
 import com.inglo.giggle.user.application.port.in.result.ReadUserSelfSummaryResult;
-import com.inglo.giggle.core.annotation.security.AccountID;
-import com.inglo.giggle.core.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

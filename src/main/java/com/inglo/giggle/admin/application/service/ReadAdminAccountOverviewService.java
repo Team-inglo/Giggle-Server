@@ -1,22 +1,12 @@
 package com.inglo.giggle.admin.application.service;
 
-import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountOverviewResponseDto;
-import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountOverviewUseCase;
-import com.inglo.giggle.core.dto.PageInfoDto;
-import com.inglo.giggle.security.account.domain.Account;
-import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
+import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountOverviewQuery;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
-public class ReadAdminAccountOverviewService implements ReadAdminAccountOverviewUseCase {
+public class ReadAdminAccountOverviewService implements ReadAdminAccountOverviewQuery {
 // TODO: 어케해야하노
 
 //    private final LoadAccountPort loadAccountPort;

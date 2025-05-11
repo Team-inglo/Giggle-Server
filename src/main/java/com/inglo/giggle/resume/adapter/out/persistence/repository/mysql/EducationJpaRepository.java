@@ -18,6 +18,6 @@ public interface EducationJpaRepository extends JpaRepository<EducationEntity, L
     )
     List<EducationEntity> findEducationByAccountIdAndEducationLevel(@Param("userId") UUID userId, @Param("educationLevel") EEducationLevel educationLevel);
 
-    List<EducationEntity> findAllByResumeId(UUID resumeId);
+    List<EducationEntity> findAllByResumeEntityAccountId(UUID resumeId);
 
 }

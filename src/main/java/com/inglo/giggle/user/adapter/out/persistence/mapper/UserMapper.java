@@ -1,8 +1,8 @@
 package com.inglo.giggle.user.adapter.out.persistence.mapper;
 
-import com.inglo.giggle.user.domain.User;
-import com.inglo.giggle.user.adapter.out.persistence.entity.UserEntity;
 import com.inglo.giggle.core.persistence.AddressMapper;
+import com.inglo.giggle.user.adapter.out.persistence.entity.UserEntity;
+import com.inglo.giggle.user.domain.User;
 import org.springframework.stereotype.Component;
 
 @Component

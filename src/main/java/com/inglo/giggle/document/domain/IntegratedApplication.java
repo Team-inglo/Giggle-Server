@@ -1,12 +1,12 @@
 package com.inglo.giggle.document.domain;
 
-import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.constant.Constants;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
-import com.inglo.giggle.school.domain.School;
+import jakarta.persistence.DiscriminatorValue;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +41,10 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
+@DiscriminatorValue("INTEGRATED_APPLICATION")
 @Slf4j
 public class IntegratedApplication extends Document {
+
     @Value("${template.integrated-application.word.path}")
     private String wordTemplatePath;
 
@@ -70,7 +72,7 @@ public class IntegratedApplication extends Document {
     private Long schoolId;
 
     @Builder
-    public IntegratedApplication(Long id, String wordUrl, Long userOwnerJobPostingId,
+    public IntegratedApplication(Long id, String wordUrl, Long userOwnerJobPostingId, List<Reject> rejects,
                                  String firstName, String lastName, LocalDate birth, EGender gender, String nationality,
                                  String telePhoneNumber, String cellPhoneNumber, Boolean isAccredited,
                                  String newWorkPlaceName, String newWorkPlaceRegistrationNumber, String newWorkPlacePhoneNumber,
@@ -79,7 +81,7 @@ public class IntegratedApplication extends Document {
                                  Address employeeAddress, Long schoolId,
                                  LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
-        super(id, wordUrl, userOwnerJobPostingId, createdAt, updatedAt, deletedAt);
+        super(id, wordUrl, userOwnerJobPostingId, rejects, createdAt, updatedAt, deletedAt);
         this.firstName = firstName;
         this.lastName = lastName;
         this.birth = birth;
@@ -152,13 +154,13 @@ public class IntegratedApplication extends Document {
         this.employeeStatus = EEmployeeStatus.CONFIRMATION;
     }
 
-    public ByteArrayInputStream createIntegratedApplicationDocxFile(School school) {
+    public ByteArrayInputStream createIntegratedApplicationDocxFile(String schoolName, String schoolPhoneNumber) {
         try (FileInputStream fis = new FileInputStream(wordTemplatePath);
              XWPFDocument template = new XWPFDocument(fis);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
             // 텍스트 치환
-            Map<String, String> variables = prepareVariables(school);
+            Map<String, String> variables = prepareVariables(schoolName, schoolPhoneNumber);
             replacePlaceholders(template, variables);
 
             // 서명 이미지 삽입
@@ -224,7 +226,7 @@ public class IntegratedApplication extends Document {
         }
     }
 
-    private Map<String, String> prepareVariables(School school) {
+    private Map<String, String> prepareVariables(String schoolName, String schoolPhoneNumber) {
         Map<String, String> variables = new HashMap<>();
         variables.put(Constants.SURNAME, lastName);
         variables.put(Constants.GIVEN_NAME, firstName);
@@ -242,8 +244,8 @@ public class IntegratedApplication extends Document {
         variables.put(Constants.ADDR, employeeAddress.getFullAddress());
         variables.put(Constants.TELENUM, telePhoneNumber);
         variables.put(Constants.CELLNUM, cellPhoneNumber);
-        variables.put(Constants.SCHOOLNAME, school.getSchoolName());
-        variables.put(Constants.SCHOOLPHONE, school.getSchoolPhoneNumber());
+        variables.put(Constants.SCHOOLNAME, schoolName);
+        variables.put(Constants.SCHOOLPHONE, schoolPhoneNumber);
         if (isAccredited) {
             variables.put(Constants.KYESACC, Constants.V);
             variables.put(Constants.YESACC, Constants.V);

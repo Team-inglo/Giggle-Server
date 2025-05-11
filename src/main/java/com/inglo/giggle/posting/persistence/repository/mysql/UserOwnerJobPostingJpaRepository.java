@@ -2,7 +2,7 @@ package com.inglo.giggle.posting.persistence.repository.mysql;
 
 import com.inglo.giggle.owner.adapter.out.persistence.entity.OwnerEntity;
 import com.inglo.giggle.user.adapter.out.persistence.entity.UserEntity;
-import com.inglo.giggle.document.persistence.entity.DocumentEntity;
+import com.inglo.giggle.document.adapter.out.persistence.entity.DocumentEntity;
 import com.inglo.giggle.posting.persistence.entity.JobPostingEntity;
 import com.inglo.giggle.posting.persistence.entity.UserOwnerJobPostingEntity;
 import com.inglo.giggle.posting.domain.type.EApplicationStep;

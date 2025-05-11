@@ -1,7 +1,6 @@
 package com.inglo.giggle.user.application.port.in.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.user.domain.User;
 import com.inglo.giggle.core.dto.AddressResponseDto;
 import com.inglo.giggle.core.dto.SelfValidating;
 import jakarta.validation.constraints.NotBlank;

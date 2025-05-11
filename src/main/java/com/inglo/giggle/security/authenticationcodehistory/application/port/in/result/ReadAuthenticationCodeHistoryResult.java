@@ -2,7 +2,6 @@ package com.inglo.giggle.security.authenticationcodehistory.application.port.in.
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
-import com.inglo.giggle.security.authenticationcodehistory.domain.AuthenticationCodeHistory;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

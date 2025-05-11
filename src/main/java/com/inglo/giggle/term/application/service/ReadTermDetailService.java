@@ -1,10 +1,10 @@
 package com.inglo.giggle.term.application.service;
 
-import com.inglo.giggle.term.application.port.in.result.ReadTermDetailResult;
 import com.inglo.giggle.term.application.port.in.query.ReadTermDetailQuery;
+import com.inglo.giggle.term.application.port.in.result.ReadTermDetailResult;
+import com.inglo.giggle.term.application.port.out.LoadTermPort;
 import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.type.ETermType;
-import com.inglo.giggle.term.application.port.out.LoadTermPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

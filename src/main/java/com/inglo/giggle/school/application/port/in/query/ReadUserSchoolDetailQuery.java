@@ -1,7 +1,6 @@
 package com.inglo.giggle.school.application.port.in.query;
 
 import com.inglo.giggle.school.application.port.in.result.ReadUserSchoolDetailResult;
-import com.inglo.giggle.security.info.CustomUserPrincipal;
 
 import java.util.UUID;
 

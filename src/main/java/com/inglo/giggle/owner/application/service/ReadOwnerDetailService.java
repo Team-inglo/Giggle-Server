@@ -28,7 +28,8 @@ public class ReadOwnerDetailService implements ReadOwnerDetailQuery {
                 AddressResponseDto.from(owner.getAddress()),
                 owner.getCompanyRegistrationNumber(),
                 owner.getPhoneNumber(),
-                owner.getProfileImgUrl()
+                owner.getProfileImgUrl(),
+                owner.getNotificationAllowed()
         );
     }
 

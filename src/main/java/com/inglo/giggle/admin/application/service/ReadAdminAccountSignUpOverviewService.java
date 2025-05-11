@@ -1,7 +1,7 @@
 package com.inglo.giggle.admin.application.service;
 
-import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountSignUpOverviewUseCase;
-import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountSignUpOverviewResponseDto;
+import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountSignUpOverviewQuery;
+import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountSignUpOverviewResult;
 import com.inglo.giggle.core.dto.CountInfoDto;
 import com.inglo.giggle.security.account.application.port.in.query.ReadAccumulatedAccountQuery;
 import com.inglo.giggle.security.account.application.port.in.result.ReadAccumulatedAccountResult;
@@ -14,12 +14,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ReadAdminAccountSignUpOverviewService implements ReadAdminAccountSignUpOverviewUseCase {
+public class ReadAdminAccountSignUpOverviewService implements ReadAdminAccountSignUpOverviewQuery {
 
     private final ReadAccumulatedAccountQuery readAccumulatedAccountQuery;
 
     @Override
-    public ReadAdminAccountSignUpOverviewResponseDto execute(LocalDate startDate, LocalDate endDate) {
+    public ReadAdminAccountSignUpOverviewResult execute(LocalDate startDate, LocalDate endDate) {
 
         int duration = startDate.until(endDate).getDays();
 
@@ -73,7 +73,7 @@ public class ReadAdminAccountSignUpOverviewService implements ReadAdminAccountSi
         CountInfoDto ownerSignUpInfo = CountInfoDto.of(newOwners.size(), priorOwners.size(), calculatePercentage(newOwners.size(), priorOwners.size()));
         CountInfoDto accumulatedOwnerSignUpInfo = CountInfoDto.of(accumulatedOwners.size(), priorAccumulatedOwners.size(), calculatePercentage(accumulatedOwners.size(), priorAccumulatedOwners.size()));
 
-        return ReadAdminAccountSignUpOverviewResponseDto.of(userSignUpInfo, accumulatedUserSignUpInfo, ownerSignUpInfo, accumulatedOwnerSignUpInfo);
+        return ReadAdminAccountSignUpOverviewResult.of(userSignUpInfo, accumulatedUserSignUpInfo, ownerSignUpInfo, accumulatedOwnerSignUpInfo);
     }
 
     private double calculatePercentage(int current, int prior) {

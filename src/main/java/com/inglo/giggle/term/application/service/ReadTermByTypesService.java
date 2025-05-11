@@ -1,11 +1,8 @@
 package com.inglo.giggle.term.application.service;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.term.application.port.in.query.ReadTermsByTypesQuery;
 import com.inglo.giggle.term.application.port.in.result.ReadTermsByTypesResult;
 import com.inglo.giggle.term.application.port.out.LoadTermPort;
-import com.inglo.giggle.term.domain.Term;
 import com.inglo.giggle.term.domain.type.ETermType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

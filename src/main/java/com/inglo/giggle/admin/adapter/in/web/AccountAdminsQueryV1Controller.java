@@ -1,13 +1,12 @@
 package com.inglo.giggle.admin.adapter.in.web;
 
-import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountSignUpOverviewResponseDto;
-import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountWithdrawalOverviewResponseDto;
-import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountOverviewUseCase;
-import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountSignUpOverviewUseCase;
-import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountWithdrawalOverviewUseCase;
+import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountOverviewQuery;
+import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountSignUpOverviewQuery;
+import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountWithdrawalOverviewQuery;
+import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountSignUpOverviewResult;
+import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountWithdrawalOverviewResult;
 import com.inglo.giggle.core.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,30 +19,30 @@ import java.time.LocalDate;
 @RequestMapping("/v1/admins/accounts")
 public class AccountAdminsQueryV1Controller {
 
-    private final ReadAdminAccountSignUpOverviewUseCase readAdminAccountSignUpOverviewUseCase;
-    private final ReadAdminAccountWithdrawalOverviewUseCase readAdminAccountWithdrawalOverviewUseCase;
-    private final ReadAdminAccountOverviewUseCase readAdminAccountOverviewUseCase;
+    private final ReadAdminAccountSignUpOverviewQuery readAdminAccountSignUpOverviewQuery;
+    private final ReadAdminAccountWithdrawalOverviewQuery readAdminAccountWithdrawalOverviewQuery;
+    private final ReadAdminAccountOverviewQuery readAdminAccountOverviewQuery;
 
     /**
      * 3.9 (어드민) 가입 회원 통계 조회하기
      */
     @GetMapping("/sign-up/summaries")
-    public ResponseDto<ReadAdminAccountSignUpOverviewResponseDto> readAdminAccountSignUpOverview(
+    public ResponseDto<ReadAdminAccountSignUpOverviewResult> readAdminAccountSignUpOverview(
             @RequestParam("start_date") LocalDate startDate,
             @RequestParam("end_date") LocalDate endDate
     ) {
-        return ResponseDto.ok(readAdminAccountSignUpOverviewUseCase.execute(startDate, endDate));
+        return ResponseDto.ok(readAdminAccountSignUpOverviewQuery.execute(startDate, endDate));
     }
 
     /**
      * 3.10 (어드민) 탈퇴 회원 통계 조회하기
      */
     @GetMapping("/withdrawal/summaries")
-    public ResponseDto<ReadAdminAccountWithdrawalOverviewResponseDto> readAdminAccountWithdrawalOverview(
+    public ResponseDto<ReadAdminAccountWithdrawalOverviewResult> readAdminAccountWithdrawalOverview(
             @RequestParam("start_date") LocalDate startDate,
             @RequestParam("end_date") LocalDate endDate
     ) {
-        return ResponseDto.ok(readAdminAccountWithdrawalOverviewUseCase.execute(startDate, endDate));
+        return ResponseDto.ok(readAdminAccountWithdrawalOverviewQuery.execute(startDate, endDate));
     }
 
 //    /**

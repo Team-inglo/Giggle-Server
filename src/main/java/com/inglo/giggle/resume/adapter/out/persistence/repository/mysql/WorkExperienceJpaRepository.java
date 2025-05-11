@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface WorkExperienceJpaRepository extends JpaRepository<WorkExperienceEntity, Long>{
 
-    List<WorkExperienceEntity> findAllByResumeId(UUID resumeId);
+    List<WorkExperienceEntity> findAllByResumeEntityAccountId(UUID resumeId);
 }

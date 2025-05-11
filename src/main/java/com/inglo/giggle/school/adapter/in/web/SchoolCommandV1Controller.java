@@ -1,12 +1,12 @@
 package com.inglo.giggle.school.adapter.in.web;
 
 import com.inglo.giggle.core.dto.ResponseDto;
+import com.inglo.giggle.school.adapter.in.web.dto.CreateAdminSchoolRequestDto;
 import com.inglo.giggle.school.adapter.in.web.dto.UpdateAdminSchoolRequestDto;
 import com.inglo.giggle.school.application.port.in.command.CreateAdminSchoolCommand;
 import com.inglo.giggle.school.application.port.in.command.DeleteAdminSchoolCommand;
 import com.inglo.giggle.school.application.port.in.command.UpdateAdminSchoolCommand;
 import com.inglo.giggle.school.application.port.in.usecase.CreateAdminSchoolUseCase;
-import com.inglo.giggle.school.adapter.in.web.dto.CreateAdminSchoolRequestDto;
 import com.inglo.giggle.school.application.port.in.usecase.DeleteAdminSchoolUseCase;
 import com.inglo.giggle.school.application.port.in.usecase.UpdateAdminSchoolUseCase;
 import jakarta.validation.Valid;

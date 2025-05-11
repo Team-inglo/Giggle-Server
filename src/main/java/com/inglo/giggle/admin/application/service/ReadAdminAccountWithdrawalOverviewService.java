@@ -1,7 +1,7 @@
 package com.inglo.giggle.admin.application.service;
 
-import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountWithdrawalOverviewUseCase;
-import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountWithdrawalOverviewResponseDto;
+import com.inglo.giggle.admin.application.port.in.query.ReadAdminAccountWithdrawalOverviewQuery;
+import com.inglo.giggle.admin.application.port.in.result.ReadAdminAccountWithdrawalOverviewResult;
 import com.inglo.giggle.core.dto.CountInfoDto;
 import com.inglo.giggle.security.account.application.port.in.query.ReadAccumulatedAccountWithDeletedQuery;
 import com.inglo.giggle.security.account.application.port.in.result.ReadAccumulatedAccountWithDeletedResult;
@@ -14,12 +14,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccountWithdrawalOverviewUseCase {
+public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccountWithdrawalOverviewQuery {
 
     private final ReadAccumulatedAccountWithDeletedQuery readAccumulatedAccountWithDeletedQuery;
 
     @Override
-    public ReadAdminAccountWithdrawalOverviewResponseDto execute(LocalDate startDate, LocalDate endDate) {
+    public ReadAdminAccountWithdrawalOverviewResult execute(LocalDate startDate, LocalDate endDate) {
 
         int duration = startDate.until(endDate).getDays();
 
@@ -75,7 +75,7 @@ public class ReadAdminAccountWithdrawalOverviewService implements ReadAdminAccou
         CountInfoDto ownerSignUpInfo = CountInfoDto.of(newOwners.size(), priorOwners.size(), calculatePercentage(newOwners.size(), priorOwners.size()));
         CountInfoDto accumulatedOwnerSignUpInfo = CountInfoDto.of(deletedAccumulatedOwners.size(), priorAccumulatedOwners.size(), calculatePercentage(deletedAccumulatedOwners.size(), priorAccumulatedOwners.size()));
 
-        return ReadAdminAccountWithdrawalOverviewResponseDto.of(userSignUpInfo, accumulatedUserSignUpInfo, ownerSignUpInfo, accumulatedOwnerSignUpInfo);
+        return ReadAdminAccountWithdrawalOverviewResult.of(userSignUpInfo, accumulatedUserSignUpInfo, ownerSignUpInfo, accumulatedOwnerSignUpInfo);
     }
 
     private double calculatePercentage(int current, int prior) {

@@ -1,7 +1,7 @@
 package com.inglo.giggle.term.adapter.out.persistence.repository.mysql;
 
-import com.inglo.giggle.term.domain.type.ETermType;
 import com.inglo.giggle.term.adapter.out.persistence.entity.TermEntity;
+import com.inglo.giggle.term.domain.type.ETermType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -17,6 +17,10 @@ public interface LoadAccountPort {
 
     Account loadAccount(String serialId);
 
+    Account loadAccountWithAccountDevices(UUID accountId);
+
+    Account loadAccountWithRefreshTokenAndAccountDevices(UUID accountId);
+
     Account loadAccountOrElseThrowUserNameNotFoundException(String serialId, ESecurityProvider provider);
 
     Account loadAccount(String serialId, ESecurityProvider provider);

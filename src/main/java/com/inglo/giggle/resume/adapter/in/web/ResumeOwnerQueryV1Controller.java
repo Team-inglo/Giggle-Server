@@ -2,8 +2,8 @@ package com.inglo.giggle.resume.adapter.in.web;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.resume.application.port.in.result.ReadOwnerResumeDetailResult;
 import com.inglo.giggle.resume.application.port.in.query.ReadOwnerResumeDetailQuery;
+import com.inglo.giggle.resume.application.port.in.result.ReadOwnerResumeDetailResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

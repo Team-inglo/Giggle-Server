@@ -8,19 +8,14 @@ import java.time.LocalDateTime;
 
 @Getter
 public class Reject extends BaseDomain {
+
     private Long id;
     private String reason;
 
-    /* -------------------------------------------- */
-    /* Many To One Mapping ------------------------ */
-    /* -------------------------------------------- */
-    private Long documentId;
-
     @Builder
-    public Reject(Long id, String reason, Long documentId, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+    public Reject(Long id, String reason, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.id = id;
         this.reason = reason;
-        this.documentId = documentId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;

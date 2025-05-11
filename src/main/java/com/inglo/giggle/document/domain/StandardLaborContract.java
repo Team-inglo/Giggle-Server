@@ -1,7 +1,7 @@
 package com.inglo.giggle.document.domain;
 
-import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.constant.Constants;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
@@ -9,6 +9,7 @@ import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.document.domain.type.EInsurance;
 import com.inglo.giggle.document.domain.type.EPaymentMethod;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.xml.bind.JAXBElement;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,7 +56,9 @@ import java.util.Map;
 import java.util.Set;
 
 @Getter
+@DiscriminatorValue("STANDARD_LABOR_CONTRACT")
 public class StandardLaborContract extends Document {
+
     @Value("${template.standard-labor-contract.word.path}")
     private String wordTemplatePath;
 
@@ -86,18 +89,20 @@ public class StandardLaborContract extends Document {
     private String employerSignatureBase64;
     private EEmployerStatus employerStatus;
 
+    private List<ContractWorkDayTime> workDayTimes;
+
     @Builder
-    public StandardLaborContract(Long id, String wordUrl, Long userOwnerJobPostingId,
+    public StandardLaborContract(Long id, String wordUrl, Long userOwnerJobPostingId, List<Reject> rejects,
                                  String employeeFirstName, String employeeLastName, String employeePhoneNumber,
                                  String employeeSignatureBase64, EEmployeeStatus employeeStatus, Address employeeAddress,
                                  String companyName, String companyRegistrationNumber, String employerName, String employerPhoneNumber,
                                  LocalDate startDate, LocalDate endDate, Address employerAddress, String description,
                                  Set<EDayOfWeek> weeklyRestDays, Integer hourlyRate, Integer bonus, Integer additionalSalary,
                                  Double wageRate, Integer paymentDay, EPaymentMethod paymentMethod, Set<EInsurance> insurances,
-                                 String employerSignatureBase64, EEmployerStatus employerStatus,
+                                 String employerSignatureBase64, EEmployerStatus employerStatus, List<ContractWorkDayTime> workDayTimes,
                                  LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt
     ) {
-        super(id, wordUrl, userOwnerJobPostingId, createdAt, updatedAt, deletedAt);
+        super(id, wordUrl, userOwnerJobPostingId, rejects, createdAt, updatedAt, deletedAt);
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.employeePhoneNumber = employeePhoneNumber;
@@ -122,6 +127,7 @@ public class StandardLaborContract extends Document {
         this.insurances = insurances;
         this.employerSignatureBase64 = employerSignatureBase64;
         this.employerStatus = employerStatus;
+        this.workDayTimes = workDayTimes;
     }
 
     public String getEmployeeFullName() {
@@ -231,8 +237,11 @@ public class StandardLaborContract extends Document {
         this.employerStatus = EEmployerStatus.CONFIRMATION;
     }
 
-    // TODO: 애그리게이트로 이동
-    public ByteArrayInputStream createStandardLaborContractDocxFile(List<ContractWorkDayTime> workDayTime) throws Exception {
+    public void deleteAllContractWorkDayTime() {
+        this.workDayTimes.clear();
+    }
+
+    public ByteArrayInputStream createStandardLaborContractDocxFile() {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(new File(wordTemplatePath));
             MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
@@ -248,13 +257,13 @@ public class StandardLaborContract extends Document {
             variables.put(Constants.START_DAY, String.valueOf(startDate.getDayOfMonth()));
             variables.put(Constants.ADDRESS, employerAddress.getFullAddress());
             variables.put(Constants.DESCRIPTION, description);
-            workDayTime.sort(Comparator.comparing(
+            this.workDayTimes.sort(Comparator.comparing(
                     dayTime -> dayTime.getDayOfWeek().getOrder()
             ));
-            int dayCount = Math.min(workDayTime.size(), 6);  // 최대 6일만 처리
+            int dayCount = Math.min(this.workDayTimes.size(), 6);  // 최대 6일만 처리
 
             for (int i = 0; i < dayCount; i++) {
-                ContractWorkDayTime dayTime = workDayTime.get(i);
+                ContractWorkDayTime dayTime = this.workDayTimes.get(i);
                 String dayKey = (i + 1) + Constants.DAY_PREFIX;
                 String startHourKey = (i + 1) + Constants.START_HOUR_PREFIX;
                 String startMinuteKey = (i + 1) + Constants.START_MINUTE_PREFIX;

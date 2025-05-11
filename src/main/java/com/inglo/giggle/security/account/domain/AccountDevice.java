@@ -27,5 +27,6 @@ public class AccountDevice extends BaseDomain {
         this.deviceId = deviceId;
         this.deviceToken = deviceToken;
     }
+
 }
 

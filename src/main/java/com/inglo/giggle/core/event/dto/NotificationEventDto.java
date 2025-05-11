@@ -1,6 +1,5 @@
 package com.inglo.giggle.core.event.dto;
 
-import com.inglo.giggle.security.account.domain.AccountDevice;
 import lombok.Builder;
 
 import java.util.List;
@@ -12,17 +11,17 @@ public record NotificationEventDto(
 
         String description,
 
-        List<AccountDevice> accountDevices
+        List<String> deviceTokens
 ) {
     public static NotificationEventDto of(
             String title,
             String description,
-            List<AccountDevice> accountDevices
+            List<String> deviceTokens
     ){
         return NotificationEventDto.builder()
                 .title(title)
                 .description(description)
-                .accountDevices(accountDevices)
+                .deviceTokens(deviceTokens)
                 .build();
     }
 }

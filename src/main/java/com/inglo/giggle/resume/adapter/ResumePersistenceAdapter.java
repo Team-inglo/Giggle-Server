@@ -65,13 +65,13 @@ public class ResumePersistenceAdapter implements
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
 
         // 매퍼를 이용하여 자식인 WorkExperience 의 도메인 리스트를 가져옴 (부모를 도메인으로 변환하기 위해선 자식 도메인 그 자체의 리스트가 필요)
-        List<WorkExperience> workExperiences = workExperienceJpaRepository.findAllByResumeId(id)
+        List<WorkExperience> workExperiences = workExperienceJpaRepository.findAllByResumeEntityAccountId(id)
                 .stream()
                 .map(workExperienceMapper::toDomain)
                 .toList();
 
         // 매퍼를 이용하여 자식인 Education 의 도메인 리스트를 가져옴 (부모를 도메인으로 변환하기 위해선 자식 도메인 그 자체의 리스트가 필요)
-        List<Education> educations = educationJpaRepository.findAllByResumeId(id)
+        List<Education> educations = educationJpaRepository.findAllByResumeEntityAccountId(id)
                 .stream()
                 .map(educationMapper::toDomain)
                 .toList();
@@ -118,8 +118,7 @@ public class ResumePersistenceAdapter implements
         UUID resumeId = resume.getAccountId();
 
         // Mapper 에서 toEntity 를 위해 사용하기 위한 LanguageSkillEntity 조회
-        LanguageSkillEntity languageSkillEntity = languageSkillJpaRepository.findById(resumeId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_LANGUAGE_SKILL));
+        LanguageSkillEntity languageSkillEntity = languageSkillMapper.toEntity(resume.getLanguageSkill());
 
         // 기존에 DB 에 저장된 AdditionalLanguageEntity 조회
         List<AdditionalLanguageEntity> existingEntities = additionalLanguageJpaRepository.findAllByLanguageSkillsId(resumeId);
@@ -161,12 +160,11 @@ public class ResumePersistenceAdapter implements
 
     @Override
     public void updateEducations(Resume resume) {
-        // Mapper 에서 toEntity 를 위해 사용하기 위한 ResumeEntity 조회
-        ResumeEntity resumeEntity = resumeJpaRepository.findById(resume.getAccountId())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+
+        ResumeEntity resumeEntity = resumeMapper.toEntity(resume);
 
         // 기존에 DB 에 저장된 EducationEntity 조회
-        List<EducationEntity> existingEntities = educationJpaRepository.findAllByResumeId(resume.getAccountId());
+        List<EducationEntity> existingEntities = educationJpaRepository.findAllByResumeEntityAccountId(resume.getAccountId());
 
         // Map 으로 변환
         Map<Long, EducationEntity> existingMap = existingEntities.stream()
@@ -205,11 +203,10 @@ public class ResumePersistenceAdapter implements
     @Override
     public void updateWorkExperiences(Resume resume) {
         // Mapper 에서 toEntity 를 위해 사용하기 위한 ResumeEntity 조회
-        ResumeEntity resumeEntity = resumeJpaRepository.findById(resume.getAccountId())
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+        ResumeEntity resumeEntity = resumeMapper.toEntity(resume);
 
         // 기존에 DB 에 저장된 WorkExperienceEntity 조회
-        List<WorkExperienceEntity> existingEntities = workExperienceJpaRepository.findAllByResumeId(resume.getAccountId());
+        List<WorkExperienceEntity> existingEntities = workExperienceJpaRepository.findAllByResumeEntityAccountId(resume.getAccountId());
 
         // Map 으로 변환
         Map<Long, WorkExperienceEntity> existingMap = existingEntities.stream()

@@ -1,8 +1,8 @@
 package com.inglo.giggle.term.adapter.in.web;
 
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.term.application.port.in.result.ReadTermDetailResult;
 import com.inglo.giggle.term.application.port.in.query.ReadTermDetailQuery;
+import com.inglo.giggle.term.application.port.in.result.ReadTermDetailResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
