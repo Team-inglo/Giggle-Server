@@ -12,21 +12,31 @@ import java.util.UUID;
 @Getter
 public class LanguageSkill extends BaseDomain {
 
+    private UUID id;
     private Integer topikLevel;
     private Integer socialIntegrationLevel;
     private Integer sejongInstituteLevel;
-
-    /* -------------------------------------------- */
-    /* One To One Child Mapping-------------------- */
-    /* -------------------------------------------- */
-    private UUID resumeId;
+    private List<AdditionalLanguage> additionalLanguages;
 
     @Builder
-    public LanguageSkill(Integer topikLevel, Integer socialIntegrationLevel, Integer sejongInstituteLevel, UUID resumeId) {
+    public LanguageSkill(UUID id, Integer topikLevel, Integer socialIntegrationLevel, Integer sejongInstituteLevel,
+                         List<AdditionalLanguage> additionalLanguages) {
+        this.id = id;
         this.topikLevel = topikLevel;
         this.socialIntegrationLevel = socialIntegrationLevel;
         this.sejongInstituteLevel = sejongInstituteLevel;
-        this.resumeId = resumeId;
+        this.additionalLanguages = additionalLanguages;
+    }
+
+    /* ---------------------------------------------------------------------------------------------------------------*
+     * -------                                        add                                                      -------*
+     * -------------------------------------------------------------------------------------------------------------- */
+    public void addAdditionalLanguage(String languageName, Integer level) {
+        AdditionalLanguage additionalLanguage = AdditionalLanguage.builder()
+                .languageName(languageName)
+                .level(level)
+                .build();
+        this.additionalLanguages.add(additionalLanguage);
     }
 
     public void updateSejongInstituteLevel(Integer level) {

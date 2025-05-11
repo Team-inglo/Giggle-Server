@@ -1,54 +1,35 @@
 package com.inglo.giggle.resume.application.service;
 
-import com.inglo.giggle.resume.application.usecase.DeleteUserEducationUseCase;
-import com.inglo.giggle.resume.domain.Education;
+import com.inglo.giggle.resume.application.port.in.command.DeleteEducationCommand;
+import com.inglo.giggle.resume.application.port.in.usecase.DeleteUserEducationUseCase;
+import com.inglo.giggle.resume.application.port.out.LoadResumePort;
+import com.inglo.giggle.resume.application.port.out.UpdateEducationPort;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.ResumeAggregate;
-import com.inglo.giggle.resume.persistence.repository.EducationRepository;
-import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class DeleteUserEducationService implements DeleteUserEducationUseCase {
 
-    private final ResumeRepository resumeRepository;
-    private final EducationRepository educationRepository;
+    private final LoadResumePort loadResumePort;
+    private final UpdateEducationPort updateEducationPort;
 
     @Override
     @Transactional
-    public void execute(UUID accountId, Long educationId) {
-
-        // ResumeAggregate 생성
-        ResumeAggregate resumeAggregate = getResumeAggregate(accountId);
-
-        // Education 유효성 체크
-        resumeAggregate.checkEducationValidation(educationId);
-
-        // Education 삭제
-        educationRepository.delete(resumeAggregate.getEducation(educationId));
-    }
-
-    /* ---------------------------------------------------------------------------------------------------------------*
-     * -------                                       private method                                            -------*
-     * -------------------------------------------------------------------------------------------------------------- */
-    private ResumeAggregate getResumeAggregate(UUID resumeId) {
+    public void execute(DeleteEducationCommand command) {
 
         // Resume 조회
-        Resume resume = resumeRepository.findByAccountIdOrElseThrow(resumeId);
+        Resume resume = loadResumePort.loadResume(command.getAccountId());
 
-        // Education 조회
-        List<Education> educations = educationRepository.findAllByResumeId(resume.getAccountId());
+        // Education 유효성 체크
+        resume.checkEducationValidation(command.getEducationId());
 
-        // ResumeAggregate 생성
-        return ResumeAggregate.builder()
-                .resume(resume)
-                .educations(educations)
-                .build();
+        // Education 삭제
+        resume.deleteEducation(command.getEducationId());
+
+        // Education 업데이트
+        updateEducationPort.updateEducations(resume);
     }
 }

@@ -1,10 +1,11 @@
 package com.inglo.giggle.security.handler.login;
 
+import com.inglo.giggle.core.dto.DefaultJsonWebTokenDto;
 import com.inglo.giggle.core.utility.HttpServletUtil;
 import com.inglo.giggle.core.utility.JsonWebTokenUtil;
-import com.inglo.giggle.security.presentation.dto.response.DefaultJsonWebTokenDto;
-import com.inglo.giggle.security.application.usecase.LoginByDefaultUseCase;
 import com.inglo.giggle.security.info.CustomUserPrincipal;
+import com.inglo.giggle.security.account.application.port.in.command.LoginDefaultCommand;
+import com.inglo.giggle.security.account.application.port.in.usecase.LoginDefaultUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class DefaultLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final LoginByDefaultUseCase loginByDefaultUseCase;
+    private final LoginDefaultUseCase loginDefaultUseCase;
 
     private final JsonWebTokenUtil jwtUtil;
     private final HttpServletUtil httpServletUtil;
@@ -36,7 +37,12 @@ public class DefaultLoginSuccessHandler implements AuthenticationSuccessHandler 
                 principal.getRole()
         );
 
-        loginByDefaultUseCase.execute(principal, jsonWebTokenDto);
+        LoginDefaultCommand command = new LoginDefaultCommand(
+                principal,
+                jsonWebTokenDto
+        );
+
+        loginDefaultUseCase.execute(command);
 
         httpServletUtil.onSuccessBodyResponseWithJWTBody(response, jsonWebTokenDto);
     }

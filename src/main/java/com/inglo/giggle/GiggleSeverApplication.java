@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import java.util.TimeZone;
 
 @EnableAsync
-@EnableJpaRepositories(basePackages = "com.inglo.giggle.*.persistence.repository.mysql")
-@EnableRedisRepositories(basePackages = "com.inglo.giggle.*.persistence.repository.redis")
+@EnableJpaRepositories(basePackages = "com.inglo.giggle.*.adapter.out.persistence.repository.mysql")
+@EnableRedisRepositories(basePackages = "com.inglo.giggle.security.*.adapter.out.persistence.repository.redis")
 @SpringBootApplication
 public class GiggleSeverApplication {
 

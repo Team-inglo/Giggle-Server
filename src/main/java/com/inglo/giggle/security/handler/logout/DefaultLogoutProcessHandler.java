@@ -1,6 +1,6 @@
 package com.inglo.giggle.security.handler.logout;
 
-import com.inglo.giggle.security.application.usecase.LogoutUseCase;
+import com.inglo.giggle.security.account.application.port.in.usecase.LogoutUseCase;
 import com.inglo.giggle.security.info.CustomUserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

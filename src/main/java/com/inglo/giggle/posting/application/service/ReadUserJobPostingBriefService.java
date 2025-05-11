@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.user.domain.User;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.dto.RouteResponseDto;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.type.EEducationLevel;
@@ -15,15 +15,13 @@ import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
 import com.inglo.giggle.posting.presentation.dto.response.ReadUserJobPostingBriefResponseDto;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.ResumeAggregate;
 import com.inglo.giggle.resume.domain.service.EducationService;
 import com.inglo.giggle.resume.domain.service.ResumeAggregateService;
-import com.inglo.giggle.resume.persistence.repository.EducationRepository;
-import com.inglo.giggle.resume.persistence.repository.ResumeRepository;
+import com.inglo.giggle.resume.application.port.out.LoadResumePort;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
@@ -40,15 +38,15 @@ import java.util.UUID;
 @Slf4j
 public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
 
     private final JobPostingRepository jobPostingRepository;
-    private final ResumeRepository resumeRepository;
+    private final LoadResumePort loadResumePort;
     private final EducationRepository educationRepository;
     private final EducationService educationService;
     private final ResumeAggregateService resumeAggregateService;
     private final JobPostAggregateService jobPostAggregateService;
-    private final SchoolRepository schoolRepository;
+    private final LoadSchoolPort loadSchoolPort;
     private final RestClientUtil restClientUtil;
     private final OSRMUtil osrmUtil;
 
@@ -60,7 +58,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
     public ReadUserJobPostingBriefResponseDto execute(UUID accountId) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 검사
         account.checkUserValidation();
@@ -70,7 +68,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
                 .filter(jobPosting -> {
 
                     // Resume 조회 및 null 체크
-                    Optional<Resume> optionalResume = resumeRepository.findWithEducationsAndLanguageSkillByAccountIdOptional(accountId);
+                    Optional<Resume> optionalResume = loadResumePort.findWithEducationsAndLanguageSkillByAccountIdOptional(accountId);
                     if (optionalResume.isEmpty()) {
                         return false;
                     }
@@ -113,7 +111,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
 
     private Boolean validateUserIsApplicableFromEducationAndResume(Account account, Resume resume, Education education, JobPosting jobPosting) {
         User user = (User) account;
-        ResumeAggregate resumeAggregate = ResumeAggregate.builder()
+        Resume resumeAggregate = Resume.builder()
                 .user(user)
                 .education(education)
                 .resume(resume)
@@ -132,7 +130,7 @@ public class ReadUserJobPostingBriefService implements ReadUserJobPostingBriefUs
 
 
     private Boolean validateUserIsApplicableFromSchoolDistance(Account account, JobPosting jobPosting) throws Exception {
-        Optional<School> school = schoolRepository.findTopByUserIdOrderByGraduationDateDescOptional(account.getId());
+        Optional<School> school = loadSchoolPort.loadSchoolOptional(account.getId());
         if (school.isEmpty()) {
             return false;
         }

@@ -1,6 +1,6 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.core.type.EKafkaStatus;
 import com.inglo.giggle.core.type.ENotificationType;
@@ -15,10 +15,8 @@ import com.inglo.giggle.notification.persistence.repository.NotificationReposito
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.domain.AccountDevice;
-import com.inglo.giggle.security.persistence.repository.AccountDeviceRepository;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPartTimeEmploymentPermitUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final DocumentRepository documentRepository;
     private final NotificationRepository notificationRepository;
     private final AccountDeviceRepository accountDeviceRepository;
@@ -45,7 +43,7 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
     public void execute(UUID accountId, Long documentId, UpdateOwnerPartTimeEmploymentPermitRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 체크
         account.checkOwnerValidation();

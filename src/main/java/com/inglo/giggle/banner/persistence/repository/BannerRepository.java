@@ -1,7 +1,7 @@
 package com.inglo.giggle.banner.persistence.repository;
 
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

@@ -1,12 +1,12 @@
 package com.inglo.giggle.core.utility;
 
 import com.inglo.giggle.core.constant.Constants;
+import com.inglo.giggle.core.dto.DefaultJsonWebTokenDto;
+import com.inglo.giggle.core.dto.TemporaryJsonWebTokenDto;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.exception.type.HttpSecurityException;
-import com.inglo.giggle.security.presentation.dto.response.DefaultJsonWebTokenDto;
-import com.inglo.giggle.security.presentation.dto.response.TemporaryJsonWebTokenDto;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Header;

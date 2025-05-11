@@ -1,10 +1,7 @@
 package com.inglo.giggle.posting.domain;
 
-import com.inglo.giggle.account.domain.Owner;
-import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.dto.BaseDomain;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;

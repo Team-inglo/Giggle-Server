@@ -1,8 +1,6 @@
 package com.inglo.giggle.resume.domain;
 
 import com.inglo.giggle.core.dto.BaseDomain;
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EVisa;
 import lombok.Builder;
@@ -24,7 +22,6 @@ public class Education extends BaseDomain {
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
-    private UUID resumeId;
     private Long schoolId;
 
     @Builder
@@ -36,7 +33,6 @@ public class Education extends BaseDomain {
             LocalDate enrollmentDate,
             LocalDate graduationDate,
             Integer grade,
-            UUID resumeId,
             Long schoolId,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
@@ -49,7 +45,6 @@ public class Education extends BaseDomain {
         this.enrollmentDate = enrollmentDate;
         this.graduationDate = graduationDate;
         this.grade = grade;
-        this.resumeId = resumeId;
         this.schoolId = schoolId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -73,12 +68,6 @@ public class Education extends BaseDomain {
             default -> {
                 return EEducationLevel.HIGHSCHOOL;
             }
-        }
-    }
-
-    public void checkValidation(UUID accountId) {
-        if (!resumeId.equals(accountId)) {
-            throw new CommonException(ErrorCode.INVALID_ARGUMENT);
         }
     }
 

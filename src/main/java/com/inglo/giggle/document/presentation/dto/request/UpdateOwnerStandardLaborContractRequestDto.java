@@ -1,7 +1,7 @@
 package com.inglo.giggle.document.presentation.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.address.dto.request.AddressRequestDto;
+import com.inglo.giggle.core.dto.AddressRequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

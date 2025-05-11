@@ -1,7 +1,7 @@
 package com.inglo.giggle.posting.presentation.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.inglo.giggle.address.dto.request.AddressRequestDto;
+import com.inglo.giggle.core.dto.AddressRequestDto;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EEducationLevel;
 import com.inglo.giggle.core.type.EGender;

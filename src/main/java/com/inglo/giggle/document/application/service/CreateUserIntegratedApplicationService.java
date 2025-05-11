@@ -1,6 +1,6 @@
 package com.inglo.giggle.document.application.service;
 
-import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EGender;
@@ -12,9 +12,9 @@ import com.inglo.giggle.document.presentation.dto.request.CreateUserIntegratedAp
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.school.domain.School;
-import com.inglo.giggle.school.persistence.repository.SchoolRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.school.application.port.out.LoadSchoolPort;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +26,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CreateUserIntegratedApplicationService implements CreateUserIntegratedApplicationUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final IntegratedApplicationRepository integratedApplicationRepository;
-    private final SchoolRepository schoolRepository;
+    private final LoadSchoolPort loadSchoolPort;
     private final S3Util s3Util;
 
     @Override
@@ -37,7 +37,7 @@ public class CreateUserIntegratedApplicationService implements CreateUserIntegra
     public void execute(UUID accountId, Long userOwnerJobPostingId, CreateUserIntegratedApplicationRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 체크
         account.checkUserValidation();
@@ -66,7 +66,7 @@ public class CreateUserIntegratedApplicationService implements CreateUserIntegra
                 .build();
 
         // School 조회
-        School school = schoolRepository.findBySchoolNameOrElseThrow(requestDto.schoolName());
+        School school = loadSchoolPort.loadSchool(requestDto.schoolName());
 
         // IntegratedApplication 생성
         IntegratedApplication integratedApplication = IntegratedApplication.builder()

@@ -4,7 +4,7 @@ import com.inglo.giggle.banner.domain.Banner;
 import com.inglo.giggle.banner.presentation.dto.response.ReadBannerOverviewResponseDto;
 import com.inglo.giggle.banner.application.usecase.ReadBannerOverviewUseCase;
 import com.inglo.giggle.banner.persistence.repository.BannerRepository;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

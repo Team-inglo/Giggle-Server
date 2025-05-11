@@ -8,10 +8,8 @@ import com.inglo.giggle.notification.persistence.repository.NotificationReposito
 import com.inglo.giggle.posting.application.usecase.UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.domain.AccountDevice;
-import com.inglo.giggle.security.persistence.repository.AccountDeviceRepository;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implements UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final AccountDeviceRepository accountDeviceRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final NotificationRepository notificationRepository;
@@ -36,7 +34,7 @@ public class UpdateOwnerUserOwnerJobPostingStepWaitingForInterviewService implem
     public void execute(UUID accountId, Long userOwnerJobPostingId) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 검사
         account.checkOwnerValidation();

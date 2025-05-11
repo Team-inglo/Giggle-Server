@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.account.domain.User;
+import com.inglo.giggle.user.domain.User;
 import com.inglo.giggle.core.event.dto.NotificationEventDto;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
@@ -15,10 +15,8 @@ import com.inglo.giggle.posting.domain.type.EApplicationStep;
 import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
 import com.inglo.giggle.posting.presentation.dto.response.CreateUserJobPostingResponseDto;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.domain.AccountDevice;
-import com.inglo.giggle.security.persistence.repository.AccountDeviceRepository;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CreateUserJobPostingService implements CreateUserJobPostingUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final JobPostingRepository jobPostingRepository;
     private final AccountDeviceRepository accountDeviceRepository;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
@@ -45,7 +43,7 @@ public class CreateUserJobPostingService implements CreateUserJobPostingUseCase 
     public CreateUserJobPostingResponseDto execute(UUID accountId, Long jobPostingId) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 검사
         account.checkUserValidation();

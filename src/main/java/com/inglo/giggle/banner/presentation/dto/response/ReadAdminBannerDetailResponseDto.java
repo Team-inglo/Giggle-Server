@@ -2,9 +2,8 @@ package com.inglo.giggle.banner.presentation.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.banner.domain.Banner;
-import com.inglo.giggle.banner.persistence.entity.BannerEntity;
 import com.inglo.giggle.core.dto.SelfValidating;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.Builder;
 import lombok.Getter;
 

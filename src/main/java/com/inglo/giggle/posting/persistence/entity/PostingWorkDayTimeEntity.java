@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.persistence.entity;
 
-import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.core.persistence.BaseEntity;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

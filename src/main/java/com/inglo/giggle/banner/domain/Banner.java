@@ -1,7 +1,7 @@
 package com.inglo.giggle.banner.domain;
 
 import com.inglo.giggle.core.dto.BaseDomain;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.Builder;
 import lombok.Getter;
 

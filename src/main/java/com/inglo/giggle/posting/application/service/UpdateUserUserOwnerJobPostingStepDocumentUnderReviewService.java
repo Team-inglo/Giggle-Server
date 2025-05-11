@@ -3,8 +3,8 @@ package com.inglo.giggle.posting.application.service;
 import com.inglo.giggle.posting.application.usecase.UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.persistence.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UpdateUserUserOwnerJobPostingStepDocumentUnderReviewService implements UpdateUserUserOwnerJobPostingStepDocumentUnderReviewUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
 
     @Override
@@ -23,7 +23,7 @@ public class UpdateUserUserOwnerJobPostingStepDocumentUnderReviewService impleme
     public void execute(UUID accountId, Long userOwnerJobPostingId) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 검사
         account.checkUserValidation();

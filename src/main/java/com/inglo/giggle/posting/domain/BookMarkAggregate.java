@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.domain;
 
-import com.inglo.giggle.security.domain.Account;
+import com.inglo.giggle.security.account.domain.Account;
 
 public class BookMarkAggregate {
 

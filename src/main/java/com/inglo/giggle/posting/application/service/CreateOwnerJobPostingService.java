@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.type.EImageType;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import com.inglo.giggle.core.utility.S3Util;
@@ -11,8 +11,8 @@ import com.inglo.giggle.posting.domain.PostingWorkDayTime;
 import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
 import com.inglo.giggle.posting.presentation.dto.request.CreateOwnerJobPostingRequestDto;
 import com.inglo.giggle.posting.presentation.dto.response.CreateOwnerJobPostingResponseDto;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final JobPostingRepository jobPostingRepository;
 
     private final S3Util s3Util;
@@ -35,7 +35,7 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
     public CreateOwnerJobPostingResponseDto execute(UUID accountId, List<MultipartFile> image, CreateOwnerJobPostingRequestDto requestDto) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 검사
         account.checkOwnerValidation();

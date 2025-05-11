@@ -1,6 +1,6 @@
 package com.inglo.giggle.document.persistence.entity;
 
-import com.inglo.giggle.address.persistence.entity.AddressEntity;
+import com.inglo.giggle.core.persistence.AddressEntity;
 import com.inglo.giggle.document.domain.type.EEmployeeStatus;
 import com.inglo.giggle.document.domain.type.EEmployerStatus;
 import com.inglo.giggle.posting.domain.type.EWorkPeriod;

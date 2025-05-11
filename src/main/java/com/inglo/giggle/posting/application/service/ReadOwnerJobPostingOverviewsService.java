@@ -1,12 +1,12 @@
 package com.inglo.giggle.posting.application.service;
 
-import com.inglo.giggle.account.domain.Owner;
+import com.inglo.giggle.owner.domain.Owner;
 import com.inglo.giggle.posting.application.usecase.ReadOwnerJobPostingOverviewsUseCase;
 import com.inglo.giggle.posting.domain.JobPosting;
 import com.inglo.giggle.posting.persistence.repository.JobPostingRepository;
 import com.inglo.giggle.posting.presentation.dto.response.ReadOwnerJobPostingOverviewsResponseDto;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 public class ReadOwnerJobPostingOverviewsService implements ReadOwnerJobPostingOverviewsUseCase {
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final JobPostingRepository jobPostingRepository;
 
     private final static String DESCENDING = "DESCENDING";
@@ -32,7 +32,7 @@ public class ReadOwnerJobPostingOverviewsService implements ReadOwnerJobPostingO
     public ReadOwnerJobPostingOverviewsResponseDto execute(UUID accountId, Integer page, Integer size, String sorting) {
 
         // Account 조회
-        Account account = accountRepository.findByIdOrElseThrow(accountId);
+        Account account = loadAccountPort.loadAccount(accountId);
 
         // 계정 타입 유효성 검사
         account.checkOwnerValidation();

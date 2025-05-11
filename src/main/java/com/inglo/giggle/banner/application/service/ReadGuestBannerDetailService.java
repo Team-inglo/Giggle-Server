@@ -6,7 +6,7 @@ import com.inglo.giggle.banner.application.usecase.ReadGuestBannerDetailUseCase;
 import com.inglo.giggle.banner.persistence.repository.BannerRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

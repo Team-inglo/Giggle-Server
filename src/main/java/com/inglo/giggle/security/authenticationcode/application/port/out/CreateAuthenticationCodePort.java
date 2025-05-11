@@ -1,0 +1,9 @@
+package com.inglo.giggle.security.authenticationcode.application.port.out;
+
+import com.inglo.giggle.security.authenticationcode.domain.AuthenticationCode;
+
+public interface CreateAuthenticationCodePort {
+
+    void createAuthenticationCode(AuthenticationCode authenticationCode);
+
+}

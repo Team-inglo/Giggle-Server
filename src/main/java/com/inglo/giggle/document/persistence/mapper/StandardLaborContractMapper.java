@@ -1,6 +1,6 @@
 package com.inglo.giggle.document.persistence.mapper;
 
-import com.inglo.giggle.address.persistence.mapper.AddressMapper;
+import com.inglo.giggle.core.persistence.AddressMapper;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.document.domain.type.EInsurance;

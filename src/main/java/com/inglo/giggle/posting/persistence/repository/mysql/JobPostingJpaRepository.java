@@ -1,6 +1,6 @@
 package com.inglo.giggle.posting.persistence.repository.mysql;
 
-import com.inglo.giggle.account.persistence.entity.OwnerEntity;
+import com.inglo.giggle.owner.adapter.out.persistence.entity.OwnerEntity;
 import com.inglo.giggle.core.type.EDayOfWeek;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.persistence.entity.JobPostingEntity;

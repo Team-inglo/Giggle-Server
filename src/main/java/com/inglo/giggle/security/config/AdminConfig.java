@@ -1,11 +1,9 @@
 package com.inglo.giggle.security.config;
 
-import com.inglo.giggle.account.domain.Admin;
-import com.inglo.giggle.account.persistence.entity.AdminEntity;
-import com.inglo.giggle.security.domain.Account;
-import com.inglo.giggle.security.persistence.entity.mysql.AccountEntity;
-import com.inglo.giggle.security.domain.type.ESecurityProvider;
-import com.inglo.giggle.security.persistence.repository.AccountRepository;
+import com.inglo.giggle.admin.domain.Admin;
+import com.inglo.giggle.security.account.domain.Account;
+import com.inglo.giggle.security.account.domain.type.ESecurityProvider;
+import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,14 +23,14 @@ public class AdminConfig {
     @Value("${admin.password}")
     private String superUserPassword;
 
-    private final AccountRepository accountRepository;
+    private final LoadAccountPort loadAccountPort;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Bean
     public ApplicationRunner createSuperUser() {
         return args -> {
 
-            Account accountEntity = accountRepository.findBySerialIdOrElseNull(superUserSerialId);
+            Account accountEntity = loadAccountPort.loadAccount(superUserSerialId);
 
             if (accountEntity != null) {
                 log.info("관리자가 이미 생성되어 있습니다.");
@@ -44,7 +42,7 @@ public class AdminConfig {
                     .password(passwordEncoder.encode(superUserPassword))
                     .email("")
                     .build();
-            accountRepository.save(superUser);
+            loadAccountPort.save(superUser);
             log.info("관리자가 생성되었습니다.");
         };
     }

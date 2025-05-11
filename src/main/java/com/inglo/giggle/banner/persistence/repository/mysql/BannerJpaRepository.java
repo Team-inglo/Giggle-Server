@@ -1,7 +1,7 @@
 package com.inglo.giggle.banner.persistence.repository.mysql;
 
 import com.inglo.giggle.banner.persistence.entity.BannerEntity;
-import com.inglo.giggle.security.domain.type.ESecurityRole;
+import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

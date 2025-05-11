@@ -1,0 +1,10 @@
+package com.inglo.giggle.security.authenticationcodehistory.application.port.out;
+
+import com.inglo.giggle.security.authenticationcodehistory.domain.AuthenticationCodeHistory;
+
+public interface LoadAuthenticationCodeHistoryPort {
+
+    AuthenticationCodeHistory loadAuthenticationCodeHistoryOrElseNull(String id);
+
+    AuthenticationCodeHistory loadAuthenticationCodeHistoryOrElseThrow(String id);
+}

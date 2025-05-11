@@ -1,6 +1,6 @@
 package com.inglo.giggle.school.domain;
 
-import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.core.domain.Address;
 import com.inglo.giggle.core.dto.BaseDomain;
 import lombok.Builder;
 import lombok.Getter;
