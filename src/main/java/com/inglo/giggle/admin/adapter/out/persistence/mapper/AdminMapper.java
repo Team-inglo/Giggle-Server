@@ -2,9 +2,11 @@ package com.inglo.giggle.admin.adapter.out.persistence.mapper;
 
 import com.inglo.giggle.admin.adapter.out.persistence.entity.AdminEntity;
 import com.inglo.giggle.admin.domain.Admin;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AdminMapper {
-    public static Admin toDomain(AdminEntity entity) {
+    public Admin toDomain(AdminEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -13,7 +15,7 @@ public class AdminMapper {
                 .build();
     }
 
-    public static AdminEntity toEntity(Admin domain) {
+    public AdminEntity toEntity(Admin domain) {
         if (domain == null) {
             return null;
         }
