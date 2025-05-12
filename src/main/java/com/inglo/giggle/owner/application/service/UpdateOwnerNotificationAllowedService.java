@@ -21,7 +21,7 @@ public class UpdateOwnerNotificationAllowedService implements UpdateOwnerNotific
     public void execute(UpdateOwnerNotificationAllowedCommand command) {
 
         // 계정 정보 조회
-        Owner owner = loadOwnerPort.loadOwner(command.getAccountId());
+        Owner owner = loadOwnerPort.loadOwnerOrElseThrow(command.getAccountId());
 
         // 알림 허용 여부 업데이트
         owner.updateNotificationAllowed(command.getIsNotificationAllowed());

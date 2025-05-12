@@ -13,17 +13,15 @@ import java.util.UUID;
 
 public interface LoadAccountPort {
 
-    Account loadAccount(UUID accountId);
+    Account loadAllAccountOrElseThrow(UUID accountId);
 
-    Account loadAccount(String serialId);
+    Account loadAccountWithRefreshTokenOrElseThrow(UUID accountId);
 
-    Account loadAccountWithAccountDevices(UUID accountId);
-
-    Account loadAccountWithRefreshTokenAndAccountDevices(UUID accountId);
+    Account loadAccountWithAccountDevicesOrElseThrow(UUID accountId);
 
     Account loadAccountOrElseThrowUserNameNotFoundException(String serialId, ESecurityProvider provider);
 
-    Account loadAccount(String serialId, ESecurityProvider provider);
+    Account loadAccountOrElseThrow(String serialId, ESecurityProvider provider);
 
     List<Account> loadAccounts(LocalDateTime endDate);
 

@@ -22,7 +22,7 @@ public class UserPersistenceAdapter implements LoadUserPort, CreateUserPort, Upd
     private final UserMapper userMapper;
 
     @Override
-    public User loadUser(UUID accountId) {
+    public User loadUserOrElseThrow(UUID accountId) {
         return userMapper.toDomain(userJpaRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER)));
     }

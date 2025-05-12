@@ -20,7 +20,7 @@ public class AuthenticationCodePersistenceAdapter implements LoadAuthenticationC
     private final AuthenticationCodeMapper authenticationCodeMapper;
 
     @Override
-    public AuthenticationCode loadAuthenticationCode(String id) {
+    public AuthenticationCode loadAuthenticationCodeOrElseThrow(String id) {
         return authenticationCodeMapper.toDomain(authenticationCodeRedisRepository.findById(id)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_AUTHENTICATION_CODE)));
     }

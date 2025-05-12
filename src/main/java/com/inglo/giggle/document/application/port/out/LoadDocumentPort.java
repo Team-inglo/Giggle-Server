@@ -4,5 +4,5 @@ import com.inglo.giggle.document.domain.Document;
 
 public interface LoadDocumentPort {
 
-    Document loadDocument(Long id);
+    Document loadAllDocumentOrElseThrow(Long id);
 }

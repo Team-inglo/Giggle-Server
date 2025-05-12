@@ -56,7 +56,7 @@ public class UpdateUserDocumentStatusRequestService implements UpdateUserDocumen
         checkUserValidation(readAccountDetailResult.getRole());
 
         // Document 정보 조회
-        Document document = loadDocumentPort.loadDocument(command.getDocumentId());
+        Document document = loadDocumentPort.loadAllDocumentOrElseThrow(command.getDocumentId());
 
         // TODO: UOJP 합치기
         // UserOwnerJobPosting 정보 조회

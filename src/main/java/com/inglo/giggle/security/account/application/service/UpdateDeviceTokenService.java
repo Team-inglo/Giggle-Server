@@ -23,7 +23,7 @@ public class UpdateDeviceTokenService implements UpdateDeviceTokenUseCase {
     @Transactional
     public void execute(UpdateDeviceTokenCommand command) {
 
-        Account account = loadAccountPort.loadAccountWithAccountDevices(command.getAccountId());
+        Account account = loadAccountPort.loadAccountWithAccountDevicesOrElseThrow(command.getAccountId());
         UUID uuidDeviceId = UUID.fromString(command.getDeviceId());
 
         // Device Token 갱신

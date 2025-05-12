@@ -18,11 +18,11 @@ public class ReadAccountDetailService implements ReadAccountDetailQuery {
     @Override
     public ReadAccountDetailResult execute(UUID accountId) {
         return new ReadAccountDetailResult(
-                loadAccountPort.loadAccount(accountId).getId(),
-                loadAccountPort.loadAccount(accountId).getProvider(),
-                loadAccountPort.loadAccount(accountId).getRole(),
-                loadAccountPort.loadAccount(accountId).getSerialId(),
-                loadAccountPort.loadAccount(accountId).getAccountDevices().stream()
+                loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId).getId(),
+                loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId).getProvider(),
+                loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId).getRole(),
+                loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId).getSerialId(),
+                loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId).getAccountDevices().stream()
                         .map(AccountDevice::getDeviceToken)
                         .toList()
         );

@@ -12,16 +12,14 @@ import java.util.UUID;
 public interface NotificationJpaRepository extends JpaRepository<NotificationEntity, Long> {
 
     @Query("SELECT n FROM NotificationEntity n " +
-            "JOIN FETCH UserOwnerJobPostingEntity uojp ON uojp.id = n.userOwnerJobPostingId " +
-            "JOIN FETCH UserEntity u ON u.id = uojp.userId " +
-//            "JOIN FETCH JobPostingEntity j ON j.id = uojp.jobPostingId " +
+            "JOIN UserOwnerJobPostingEntity uojp ON uojp.id = n.userOwnerJobPostingId " +
+            "JOIN UserEntity u ON u.id = uojp.userId " +
             "WHERE u.id = :userId And n.notificationType = 'USER'")
     Page<NotificationEntity> findByUserOwnerJobPostingUserId(@Param("userId") UUID userId, Pageable pageable);
 
     @Query("SELECT n FROM NotificationEntity n " +
-            "JOIN FETCH UserOwnerJobPostingEntity uojp ON uojp.id = n.userOwnerJobPostingId " +
-            "JOIN FETCH OwnerEntity o ON o.id = uojp.ownerId " +
-//            "JOIN FETCH JobPostingEntity j ON j.id = uojp.jobPostingId " +
+            "JOIN UserOwnerJobPostingEntity uojp ON uojp.id = n.userOwnerJobPostingId " +
+            "JOIN OwnerEntity o ON o.id = uojp.ownerId " +
             "WHERE o.id = :ownerId And n.notificationType = 'OWNER'")
     Page<NotificationEntity> findByUserOwnerJobPostingOwnerId(@Param("ownerId") UUID ownerId, Pageable pageable);
 

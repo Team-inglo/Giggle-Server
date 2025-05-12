@@ -20,7 +20,7 @@ public class DeleteAdminBannerService implements DeleteAdminBannerUseCase {
     @Transactional
     public void execute(DeleteAdminBannerCommand command) {
 
-        Banner banner = loadBannerPort.loadBanner(command.getBannerId());
+        Banner banner = loadBannerPort.loadBannerOrElseThrow(command.getBannerId());
         deleteBannerPort.deleteBanner(banner);
     }
 }

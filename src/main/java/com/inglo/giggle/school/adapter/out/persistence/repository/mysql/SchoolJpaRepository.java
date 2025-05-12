@@ -2,8 +2,6 @@ package com.inglo.giggle.school.adapter.out.persistence.repository.mysql;
 
 import com.inglo.giggle.school.adapter.out.persistence.entity.SchoolEntity;
 import io.lettuce.core.dynamic.annotation.Param;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -35,7 +33,4 @@ public interface SchoolJpaRepository extends JpaRepository<SchoolEntity, Long> {
 
 
     Optional<SchoolEntity> findBySchoolName(String schoolName);
-
-    @Query("SELECT s FROM SchoolEntity s WHERE s.schoolName LIKE %:search%")
-    Page<SchoolEntity> findBySchoolNameContaining(@Param("search") String search, Pageable pageable);
 }

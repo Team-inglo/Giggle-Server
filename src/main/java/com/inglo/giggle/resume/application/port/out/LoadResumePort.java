@@ -6,5 +6,17 @@ import java.util.UUID;
 
 public interface LoadResumePort {
 
-    Resume loadResume(UUID id);
+    Resume loadAllResumeOrElseThrow(UUID id);
+
+    Resume loadResumeOrElseThrow(UUID id);
+
+    Resume loadResumeWithEducationsOrElseThrow(UUID id);
+
+    Resume loadResumeWithWorkExperiencesOrElseThrow(UUID id);
+
+    Resume loadResumeWithLanguageSkillOrElseThrow(UUID id);
+
+    Resume loadResumeWithLanguageSkillAndAdditionalLanguageOrElseThrow(UUID id);
+
+    Resume loadResumeWithLanguageSkillAndEducationsOrElseThrow(UUID id);
 }

@@ -24,7 +24,7 @@ public class ValidateEmailService implements ValidateEmailQuery {
      * @return 중복된 이메일인지 여부
      */
     private Boolean isValidateEmail(String email) {
-        return loadAccountPort.loadAccount(email, ESecurityProvider.DEFAULT) == null;
+        return loadAccountPort.loadAccountOrElseThrow(email, ESecurityProvider.DEFAULT) == null;
     }
 
 }

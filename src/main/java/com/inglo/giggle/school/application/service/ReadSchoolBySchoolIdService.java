@@ -15,7 +15,7 @@ public class ReadSchoolBySchoolIdService implements ReadSchoolBySchoolIdQuery {
 
     @Override
     public ReadSchoolBySchoolIdResult execute(Long schoolId) {
-        School school = loadSchoolPort.loadSchool(schoolId);
+        School school = loadSchoolPort.loadSchoolOrElseThrow(schoolId);
         return new ReadSchoolBySchoolIdResult(
                 school.getId(),
                 school.getSchoolName(),

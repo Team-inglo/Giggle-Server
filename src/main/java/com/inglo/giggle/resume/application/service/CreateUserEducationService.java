@@ -22,7 +22,7 @@ public class CreateUserEducationService implements CreateUserEducationUseCase {
     public void execute(CreateEducationCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithEducationsOrElseThrow(command.getAccountId());
 
         // Education 추가
         resume.addEducation(

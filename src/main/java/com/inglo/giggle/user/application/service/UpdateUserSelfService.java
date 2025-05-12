@@ -27,7 +27,7 @@ public class UpdateUserSelfService implements UpdateUserSelfUseCase {
     public void execute(UpdateUserSelfCommand command) {
 
         // 유저 정보 조회
-        User user = loadUserPort.loadUser(command.getAccountId());
+        User user = loadUserPort.loadUserOrElseThrow(command.getAccountId());
 
         // 프로필 이미지가 변경됐다면
         if (command.getIsProfileImgChanged() && command.getImage() != null) {

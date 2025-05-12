@@ -53,7 +53,7 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
         ReadOwnerDetailResult readOwnerDetailResult = readOwnerDetailQuery.execute(command.getAccountId());
 
         // Document 조회
-        Document document = loadDocumentPort.loadDocument(command.getDocumentId());
+        Document document = loadDocumentPort.loadAllDocumentOrElseThrow(command.getDocumentId());
 
         // TODO: UOJP 합치기
         // UserOwnerJobPosting 정보 조회
@@ -63,7 +63,7 @@ public class UpdateOwnerPartTimeEmploymentPermitService implements UpdateOwnerPa
 //        userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
 
         // PartTimeEmploymentPermit 조회
-        PartTimeEmploymentPermit partTimeEmploymentPermit = loadPartTimeEmploymentPermitPort.loadPartTimeEmploymentPermit(command.getDocumentId());
+        PartTimeEmploymentPermit partTimeEmploymentPermit = loadPartTimeEmploymentPermitPort.loadPartTimeEmploymentPermitOrElseThrow(command.getDocumentId());
 
         // PartTimeEmploymentPermit 수정 유효성 체크
         partTimeEmploymentPermit.checkUpdateOrSubmitOwnerPartTimeEmploymentPermitValidation();

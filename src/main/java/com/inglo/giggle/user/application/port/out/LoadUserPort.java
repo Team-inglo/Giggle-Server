@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface LoadUserPort {
 
-    User loadUser(UUID accountId);
+    User loadUserOrElseThrow(UUID accountId);
 
     User loadUserOrElseNull(UUID accountId);
 }

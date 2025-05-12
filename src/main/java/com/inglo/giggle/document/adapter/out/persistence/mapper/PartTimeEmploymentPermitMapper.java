@@ -44,6 +44,39 @@ public class PartTimeEmploymentPermitMapper {
                 .build();
     }
 
+    public PartTimeEmploymentPermit toDomainAlone(PartTimeEmploymentPermitEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        return PartTimeEmploymentPermit.builder()
+                .id(entity.getId())
+                .wordUrl(entity.getWordUrl())
+                .userOwnerJobPostingId(entity.getUserOwnerJobPostingId())
+                .employeeFirstName(entity.getEmployeeFirstName())
+                .employeeLastName(entity.getEmployeeLastName())
+                .major(entity.getMajor())
+                .termOfCompletion(entity.getTermOfCompletion())
+                .employeePhoneNumber(entity.getEmployeePhoneNumber())
+                .employeeEmail(entity.getEmployeeEmail())
+                .employeeStatus(entity.getEmployeeStatus())
+                .companyName(entity.getCompanyName())
+                .companyRegistrationNumber(entity.getCompanyRegistrationNumber())
+                .jobType(entity.getJobType())
+                .employerName(entity.getEmployerName())
+                .employerPhoneNumber(entity.getEmployerPhoneNumber())
+                .employerSignatureBase64(entity.getEmployerSignatureBase64())
+                .workPeriod(entity.getWorkPeriod())
+                .hourlyRate(entity.getHourlyRate())
+                .workDaysWeekDays(entity.getWorkDaysWeekDays())
+                .workDaysWeekends(entity.getWorkDaysWeekends())
+                .employerStatus(entity.getEmployerStatus())
+                .employerAddress(AddressMapper.toDomain(entity.getEmployerAddressEntity()))
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deletedAt(entity.getDeletedAt())
+                .build();
+    }
+
     public PartTimeEmploymentPermitEntity toEntity(PartTimeEmploymentPermit domain) {
         if (domain == null) {
             return null;

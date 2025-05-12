@@ -32,7 +32,7 @@ public class UpdateAdminBannerService implements UpdateAdminBannerUseCase {
         ReadAccountDetailResult readAccountDetailResult = readAccountDetailQuery.execute(command.getAccountId());
 
         // Banner 조회
-        Banner banner = loadBannerPort.loadBanner(command.getBannerId());
+        Banner banner = loadBannerPort.loadBannerOrElseThrow(command.getBannerId());
 
         if (command.getImage() != null) {
             String imgUrl = s3Util.uploadImageFile(command.getImage(), readAccountDetailResult.getSerialId(), EImageType.BANNER_IMG);

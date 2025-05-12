@@ -15,7 +15,7 @@ public class ReadTemporaryAccountService implements ReadTemporaryAccountQuery {
 
     @Override
     public ReadTemporaryAccountResult execute(String email) {
-        TemporaryAccount temporaryAccount = loadTemporaryAccountPort.loadTemporaryAccount(email);
+        TemporaryAccount temporaryAccount = loadTemporaryAccountPort.loadTemporaryAccountOrElseThrow(email);
         return ReadTemporaryAccountResult.of(temporaryAccount.getEmail(), temporaryAccount.getPassword(), temporaryAccount.getAccountType());
     }
 }

@@ -16,6 +16,6 @@ public class ReadAccountRoleService implements ReadAccountRoleQuery {
 
     @Override
     public ReadAccountRoleResult execute(UUID accountId) {
-        return new ReadAccountRoleResult(loadAccountPort.loadAccount(accountId).getRole());
+        return new ReadAccountRoleResult(loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId).getRole());
     }
 }

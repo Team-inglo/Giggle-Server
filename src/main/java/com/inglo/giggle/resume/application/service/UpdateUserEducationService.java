@@ -22,7 +22,7 @@ public class UpdateUserEducationService implements UpdateUserEducationUseCase {
     public void execute(UpdateEducationCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithEducationsOrElseThrow(command.getAccountId());
 
         // Education 유효성 체크
         resume.checkEducationValidation(command.getEducationId());

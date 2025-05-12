@@ -18,7 +18,7 @@ public class ReadAdminBannerDetailService implements ReadAdminBannerDetailQuery 
     @Transactional(readOnly = true)
     public ReadAdminBannerDetailResult execute(Long bannerId) {
 
-        Banner banner = loadBannerPort.loadBanner(bannerId);
+        Banner banner = loadBannerPort.loadBannerOrElseThrow(bannerId);
 
         return ReadAdminBannerDetailResult.from(banner);
     }

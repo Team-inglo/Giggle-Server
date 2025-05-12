@@ -38,7 +38,7 @@ public class ReadAdminResumeDetailService implements ReadAdminResumeDetailQuery 
     public ReadAdminResumeDetailResult execute(UUID resumeId) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(resumeId);
+        Resume resume = loadResumePort.loadAllResumeOrElseThrow(resumeId);
 
         // School 리스트 조회
         ReadAdminSchoolBriefByIdsResult schoolBriefResult = readAdminSchoolBriefByIdsQuery.execute(

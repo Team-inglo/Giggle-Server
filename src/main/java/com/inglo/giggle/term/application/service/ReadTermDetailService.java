@@ -21,7 +21,7 @@ public class ReadTermDetailService implements ReadTermDetailQuery {
         ETermType eTermType = ETermType.fromString(termType);
 
         // 약관 상세정보 조회
-        Term term = loadTermPort.loadTerm(eTermType);
+        Term term = loadTermPort.loadTermOrElseThrow(eTermType);
 
         return ReadTermDetailResult.of(term.getContent());
     }

@@ -19,7 +19,7 @@ public class TemporaryTokenPersistenceAdapter implements LoadTemporaryTokenPort,
     private final TemporaryTokenMapper temporaryTokenMapper;
 
     @Override
-    public TemporaryToken loadTemporaryToken(String value) {
+    public TemporaryToken loadTemporaryTokenOrElseThrow(String value) {
         return temporaryTokenMapper.toDomain(temporaryTokenRedisRepository.findByValue(value).orElseThrow(() -> new CommonException(ErrorCode.INVALID_TOKEN_ERROR)));
     }
 

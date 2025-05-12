@@ -18,7 +18,7 @@ public class AuthenticateJsonWebTokenService implements AuthenticateJsonWebToken
     @Override
     public CustomUserPrincipal execute(UUID accountId) {
 
-        Account account = loadAccountPort.loadAccount(accountId);
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId);
 
         return CustomUserPrincipal.create(account);
     }

@@ -32,7 +32,7 @@ public class SchoolPersistenceAdapter implements LoadSchoolPort, CreateSchoolPor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public School loadSchool(Long id) {
+    public School loadSchoolOrElseThrow(Long id) {
         return schoolMapper.toDomain(schoolJpaRepository.findById(id)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_SCHOOL)));
     }
@@ -57,13 +57,13 @@ public class SchoolPersistenceAdapter implements LoadSchoolPort, CreateSchoolPor
     }
 
     @Override
-    public School loadSchool(String schoolName) {
+    public School loadSchoolOrElseThrow(String schoolName) {
         return schoolMapper.toDomain(schoolJpaRepository.findBySchoolName(schoolName)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_SCHOOL)));
     }
 
     @Override
-    public Page<School> loadSchool(Pageable pageable, String search) {
+    public Page<School> loadSchools(Pageable pageable, String search) {
 
         QSchoolEntity school = QSchoolEntity.schoolEntity;
 

@@ -4,7 +4,11 @@ import com.inglo.giggle.document.domain.StandardLaborContract;
 
 public interface LoadStandardLaborContractPort {
 
-    StandardLaborContract loadStandardLaborContract(Long id);
+    StandardLaborContract loadAllStandardLaborContractOrElseThrow(Long id);
+
+    StandardLaborContract loadStandardLaborContractWithContractWorkDayTimesOrElseThrow(Long id);
+
+    StandardLaborContract loadStandardLaborContractWithRejectsByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId);
 
     StandardLaborContract loadStandardLaborContractByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId);
 }

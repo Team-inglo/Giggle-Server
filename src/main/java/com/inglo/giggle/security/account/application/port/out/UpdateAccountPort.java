@@ -4,5 +4,5 @@ import com.inglo.giggle.security.account.domain.Account;
 
 public interface UpdateAccountPort {
 
-    Account updateAccount(Account account);
+    void updateAccount(Account account);
 }

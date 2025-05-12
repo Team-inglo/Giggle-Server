@@ -23,7 +23,7 @@ public class ValidatePasswordService implements ValidatePasswordQuery {
     public ValidatePasswordResponseDto execute(UUID accountId, ValidatePasswordRequestDto requestDto) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccount(accountId);
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId);
 
         return ValidatePasswordResponseDto.of(
                 bCryptPasswordEncoder.matches(

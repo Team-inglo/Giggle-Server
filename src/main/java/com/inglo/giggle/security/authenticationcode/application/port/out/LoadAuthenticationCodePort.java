@@ -4,5 +4,5 @@ import com.inglo.giggle.security.authenticationcode.domain.AuthenticationCode;
 
 public interface LoadAuthenticationCodePort {
 
-    AuthenticationCode loadAuthenticationCode(String id);
+    AuthenticationCode loadAuthenticationCodeOrElseThrow(String id);
 }

@@ -38,7 +38,7 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailQuery {
     public ReadUserResumeDetailResult execute(UUID accountId) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(accountId);
+        Resume resume = loadResumePort.loadAllResumeOrElseThrow(accountId);
 
         ReadUserSchoolBriefByIdsResult schoolBriefResult = readUserSchoolBriefByIdsQuery.execute(resume.getEducations().stream()
                 .map(Education::getSchoolId)

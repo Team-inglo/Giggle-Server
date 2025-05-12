@@ -21,7 +21,7 @@ public class UpdateUserWorkExperienceService implements UpdateUserWorkExperience
     public void execute(UpdateWorkExperienceCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithWorkExperiencesOrElseThrow(command.getAccountId());
 
         // WorkExperience 업데이트
         resume.updateWorkExperience(

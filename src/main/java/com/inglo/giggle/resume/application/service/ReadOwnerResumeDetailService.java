@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-//TODO : 합칠때 변경
 public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailQuery {
 
     private final LoadResumePort loadResumePort;
@@ -19,7 +18,7 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailQuery 
     @Override
     @Transactional(readOnly = true)
     public ReadOwnerResumeDetailResult execute(UUID accountId, Long userOwnerJobPostingId) {
-
+        //TODO : JobPosting 합칠때 변경
 //        // UserOwnerJobPostingAggregate 생성
 //        UserOwnerJobPostingAggregate userOwnerJobPostingAggregate = getUserOwnerJobPostingAggregate(accountId, userOwnerJobPostingId);
 //

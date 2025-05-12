@@ -58,7 +58,7 @@ public class ResumePersistenceAdapter implements
     private final AdditionalLanguageMapper additionalLanguageMapper;
 
     @Override
-    public Resume loadResume(UUID id) {
+    public Resume loadAllResumeOrElseThrow(UUID id) {
 
         // 애그리거트 루트인 Resume 의 엔티티를 조회
         ResumeEntity resumeEntity = resumeJpaRepository.findById(id)
@@ -81,7 +81,7 @@ public class ResumePersistenceAdapter implements
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_LANGUAGE_SKILL));
 
         // 매퍼를 이용하여 LanguageSkill 의 자식인 AdditionalLanguage 의 도메인 리스트를 가져옴 (부모를 도메인으로 변환하기 위해선 자식 도메인 그 자체의 리스트가 필요)
-        List<AdditionalLanguage> additionalLanguages = additionalLanguageJpaRepository.findAllByLanguageSkillsId(id)
+        List<AdditionalLanguage> additionalLanguages = additionalLanguageJpaRepository.findAllByLanguageSkillEntityResumeId(id)
                 .stream()
                 .map(additionalLanguageMapper::toDomain)
                 .toList();
@@ -91,6 +91,72 @@ public class ResumePersistenceAdapter implements
 
         // ResumeEntity 를 Resume 도메인으로 변환
         return resumeMapper.toDomain(resumeEntity, workExperiences, educations, languageSkill);
+    }
+
+    @Override
+    public Resume loadResumeOrElseThrow(UUID id) {
+
+        ResumeEntity entity = resumeJpaRepository.findById(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+
+        return resumeMapper.toDomainAlone(entity);
+    }
+
+    @Override
+    public Resume loadResumeWithEducationsOrElseThrow(UUID id) {
+
+        ResumeEntity entity = resumeJpaRepository.findWithEducationsByAccountId(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+
+        return resumeMapper.toDomainWithEducations(entity, entity.getEducationEntities()
+                .stream()
+                .map(educationMapper::toDomain)
+                .toList());
+    }
+
+    @Override
+    public Resume loadResumeWithWorkExperiencesOrElseThrow(UUID id) {
+
+        ResumeEntity entity = resumeJpaRepository.findWithWorkExperiencesByAccountId(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+
+        return resumeMapper.toDomainWithWorkExperiences(entity, entity.getWorkExperienceEntities()
+                .stream()
+                .map(workExperienceMapper::toDomain)
+                .toList());
+    }
+
+    @Override
+    public Resume loadResumeWithLanguageSkillOrElseThrow(UUID id) {
+
+        ResumeEntity entity = resumeJpaRepository.findWithLanguageSkillByAccountId(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+
+        return resumeMapper.toDomainWithLanguageSkill(entity, languageSkillMapper.toDomainAlone(entity.getLanguageSkillEntity()));
+    }
+
+    @Override
+    public Resume loadResumeWithLanguageSkillAndAdditionalLanguageOrElseThrow(UUID id) {
+
+        ResumeEntity entity = resumeJpaRepository.findWithLanguageSkillAndAdditionalLanguageByAccountId(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+
+        return resumeMapper.toDomainWithLanguageSkill(entity, languageSkillMapper.toDomain(entity.getLanguageSkillEntity(), entity.getLanguageSkillEntity().getAdditionalLanguageEntities()
+                .stream()
+                .map(additionalLanguageMapper::toDomain)
+                .toList()));
+    }
+
+    @Override
+    public Resume loadResumeWithLanguageSkillAndEducationsOrElseThrow(UUID id) {
+
+        ResumeEntity entity = resumeJpaRepository.findWithLanguageSkillAndEducationsByAccountId(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+
+        return resumeMapper.toDomainWithLanguageSkillAndEducations(entity, languageSkillMapper.toDomainAlone(entity.getLanguageSkillEntity()), entity.getEducationEntities()
+                .stream()
+                .map(educationMapper::toDomain)
+                .toList());
     }
 
     @Override
@@ -121,7 +187,7 @@ public class ResumePersistenceAdapter implements
         LanguageSkillEntity languageSkillEntity = languageSkillMapper.toEntity(resume.getLanguageSkill());
 
         // 기존에 DB 에 저장된 AdditionalLanguageEntity 조회
-        List<AdditionalLanguageEntity> existingEntities = additionalLanguageJpaRepository.findAllByLanguageSkillsId(resumeId);
+        List<AdditionalLanguageEntity> existingEntities = additionalLanguageJpaRepository.findAllByLanguageSkillEntityResumeId(resumeId);
 
         // Map 으로 변환
         Map<Long, AdditionalLanguageEntity> existingMap = existingEntities.stream()

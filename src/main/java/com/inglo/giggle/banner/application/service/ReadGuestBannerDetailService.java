@@ -21,7 +21,7 @@ public class ReadGuestBannerDetailService implements ReadGuestBannerDetailQuery 
     public ReadGuestBannerDetailResult execute(Long bannerId) {
 
         // Banner 조회
-        Banner banner = loadBannerPort.loadBanner(bannerId);
+        Banner banner = loadBannerPort.loadBannerOrElseThrow(bannerId);
 
         // Banner 권한 확인
         if (!banner.getRole().equals(ESecurityRole.USER) && !banner.getRole().equals(ESecurityRole.GUEST)) {

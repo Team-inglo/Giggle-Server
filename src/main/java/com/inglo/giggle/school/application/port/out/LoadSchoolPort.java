@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface LoadSchoolPort {
 
-    School loadSchool(Long id);
+    School loadSchoolOrElseThrow(Long id);
 
     List<School> loadSchools(List<Long> ids);
 
@@ -18,7 +18,7 @@ public interface LoadSchoolPort {
 
     List<Object[]> loadUserIdsAndSchools(List<UUID> userIds);
 
-    School loadSchool(String schoolName);
+    School loadSchoolOrElseThrow(String schoolName);
 
-    Page<School> loadSchool(Pageable pageable, String search);
+    Page<School> loadSchools(Pageable pageable, String search);
 }

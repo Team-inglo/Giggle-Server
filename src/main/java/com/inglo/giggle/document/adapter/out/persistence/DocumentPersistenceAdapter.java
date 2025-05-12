@@ -23,11 +23,9 @@ import com.inglo.giggle.document.adapter.out.persistence.repository.mysql.Standa
 import com.inglo.giggle.document.application.port.out.CreateIntegratedApplicationPort;
 import com.inglo.giggle.document.application.port.out.CreatePartTimeEmploymentPermitPort;
 import com.inglo.giggle.document.application.port.out.CreateStandardLaborContractPort;
-import com.inglo.giggle.document.application.port.out.LoadContractWorkDayTimePort;
 import com.inglo.giggle.document.application.port.out.LoadDocumentPort;
 import com.inglo.giggle.document.application.port.out.LoadIntegratedApplicationPort;
 import com.inglo.giggle.document.application.port.out.LoadPartTimeEmploymentPermitPort;
-import com.inglo.giggle.document.application.port.out.LoadRejectPort;
 import com.inglo.giggle.document.application.port.out.LoadStandardLaborContractPort;
 import com.inglo.giggle.document.application.port.out.UpdateContractWorkDayTimePort;
 import com.inglo.giggle.document.application.port.out.UpdateIntegratedApplicationPort;
@@ -41,6 +39,7 @@ import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.Reject;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -56,10 +55,10 @@ import java.util.stream.Collectors;
 public class DocumentPersistenceAdapter implements
         LoadDocumentPort,
         LoadStandardLaborContractPort, CreateStandardLaborContractPort, UpdateStandardLaborContractPort,
-        LoadContractWorkDayTimePort, UpdateContractWorkDayTimePort,
+        UpdateContractWorkDayTimePort,
         LoadIntegratedApplicationPort, CreateIntegratedApplicationPort, UpdateIntegratedApplicationPort,
         LoadPartTimeEmploymentPermitPort, CreatePartTimeEmploymentPermitPort, UpdatePartTimeEmploymentPermitPort,
-        LoadRejectPort, UpdateRejectPort
+        UpdateRejectPort
 {
 
     private final DocumentJpaRepository documentJpaRepository;
@@ -76,7 +75,7 @@ public class DocumentPersistenceAdapter implements
     private final RejectMapper rejectMapper;
 
     @Override
-    public Document loadDocument(Long id) {
+    public Document loadAllDocumentOrElseThrow(Long id) {
 
         List<Reject> rejects = rejectJpaRepository.findAllByDocumentEntityId(id)
                 .stream()
@@ -86,18 +85,23 @@ public class DocumentPersistenceAdapter implements
         DocumentEntity documentEntity = documentJpaRepository.findById(id)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_DOCUMENT));
 
-        if (documentEntity instanceof StandardLaborContractEntity) {
+        if (documentEntity instanceof StandardLaborContractEntity standardLaborContractEntity) {
 
             List<ContractWorkDayTime> workDayTimes = contractWorkDayTimeJpaRepository.findByStandardLaborContractEntityId(id)
                     .stream()
                     .map(contractWorkDayTimeMapper::toDomain)
                     .toList();
-            return documentMapper.toDomain(documentEntity, workDayTimes, rejects);
 
-        } else if (documentEntity instanceof IntegratedApplicationEntity) {
-            return documentMapper.toDomain(documentEntity);
-        } else if (documentEntity instanceof PartTimeEmploymentPermitEntity) {
-            return documentMapper.toDomain(documentEntity, rejects);
+            // Lazy Loading 걸려있는 필드들 초기화
+            Hibernate.initialize(standardLaborContractEntity.getInsurances());
+            Hibernate.initialize(standardLaborContractEntity.getWeeklyRestDays());
+
+            return documentMapper.toDomain(standardLaborContractEntity, workDayTimes, rejects);
+
+        } else if (documentEntity instanceof IntegratedApplicationEntity integratedApplicationEntity) {
+            return documentMapper.toDomain(integratedApplicationEntity);
+        } else if (documentEntity instanceof PartTimeEmploymentPermitEntity partTimeEmploymentPermitEntity) {
+            return documentMapper.toDomain(partTimeEmploymentPermitEntity, rejects);
         }
         else {
             throw new CommonException(ErrorCode.INVALID_DOCUMENT_TYPE);
@@ -105,7 +109,7 @@ public class DocumentPersistenceAdapter implements
     }
 
     @Override
-    public StandardLaborContract loadStandardLaborContract(Long id) {
+    public StandardLaborContract loadAllStandardLaborContractOrElseThrow(Long id) {
 
         List<Reject> rejects = rejectJpaRepository.findAllByDocumentEntityId(id)
                 .stream()
@@ -117,13 +121,24 @@ public class DocumentPersistenceAdapter implements
                 .map(contractWorkDayTimeMapper::toDomain)
                 .toList();
 
-        return standardLaborContractMapper.toDomain(standardLaborContractJpaRepository.findById(id)
+        return standardLaborContractMapper.toDomain(standardLaborContractJpaRepository.findWithWeeklyRestDaysAndInsurancesById(id)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_STANDARD_LABOR_CONTRACT)), workDayTimes, rejects);
     }
 
     @Override
-    public StandardLaborContract loadStandardLaborContractByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId) {
+    public StandardLaborContract loadStandardLaborContractWithContractWorkDayTimesOrElseThrow(Long id) {
 
+        List<ContractWorkDayTime> workDayTimes = contractWorkDayTimeJpaRepository.findByStandardLaborContractEntityId(id)
+                .stream()
+                .map(contractWorkDayTimeMapper::toDomain)
+                .toList();
+
+        return standardLaborContractMapper.toDomainWithContractWorkDayTimes(standardLaborContractJpaRepository.findWithWeeklyRestDaysAndInsurancesById(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_STANDARD_LABOR_CONTRACT)), workDayTimes);
+    }
+
+    @Override
+    public StandardLaborContract loadStandardLaborContractWithRejectsByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId) {
 
         StandardLaborContractEntity standardLaborContractEntity = standardLaborContractJpaRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
                 .orElse(null);
@@ -137,13 +152,14 @@ public class DocumentPersistenceAdapter implements
                     .map(rejectMapper::toDomain)
                     .toList();
 
-            List<ContractWorkDayTime> workDayTimes = contractWorkDayTimeJpaRepository.findByStandardLaborContractEntityId(standardLaborContractEntity.getId())
-                    .stream()
-                    .map(contractWorkDayTimeMapper::toDomain)
-                    .toList();
-
-            return standardLaborContractMapper.toDomain(standardLaborContractEntity, workDayTimes, rejects);
+            return standardLaborContractMapper.toDomainWithRejects(standardLaborContractEntity, rejects);
         }
+    }
+
+    @Override
+    public StandardLaborContract loadStandardLaborContractByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId) {
+        return standardLaborContractMapper.toDomainAlone(standardLaborContractJpaRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId)
+                .orElse(null));
     }
 
     @Override
@@ -154,14 +170,6 @@ public class DocumentPersistenceAdapter implements
     @Override
     public void updateStandardLaborContract(StandardLaborContract standardLaborContract) {
         standardLaborContractJpaRepository.save(standardLaborContractMapper.toEntity(standardLaborContract));
-    }
-
-    @Override
-    public List<ContractWorkDayTime> loadContractWorkDayTime(Long standardLaborContractId) {
-        return contractWorkDayTimeJpaRepository.findByStandardLaborContractEntityId(standardLaborContractId)
-                .stream()
-                .map(contractWorkDayTimeMapper::toDomain)
-                .toList();
     }
 
     @Override
@@ -208,7 +216,7 @@ public class DocumentPersistenceAdapter implements
     }
 
     @Override
-    public IntegratedApplication loadIntegratedApplication(Long id) {
+    public IntegratedApplication loadIntegratedApplicationOrElseThrow(Long id) {
         return integratedApplicationMapper.toDomain(integratedApplicationJpaRepository.findById(id)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_INTEGRATED_APPLICATION)));
     }
@@ -230,19 +238,14 @@ public class DocumentPersistenceAdapter implements
     }
 
     @Override
-    public PartTimeEmploymentPermit loadPartTimeEmploymentPermit(Long id) {
+    public PartTimeEmploymentPermit loadPartTimeEmploymentPermitOrElseThrow(Long id) {
 
-        List<Reject> rejects = rejectJpaRepository.findAllByDocumentEntityId(id)
-                .stream()
-                .map(rejectMapper::toDomain)
-                .toList();
-
-        return partTimeEmploymentPermitMapper.toDomain(partTimeEmploymentPermitJpaRepository.findById(id)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_PART_TIME_EMPLOYMENT_PERMIT)), rejects);
+        return partTimeEmploymentPermitMapper.toDomainAlone(partTimeEmploymentPermitJpaRepository.findById(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_PART_TIME_EMPLOYMENT_PERMIT)));
     }
 
     @Override
-    public PartTimeEmploymentPermit loadPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId) {
+    public PartTimeEmploymentPermit loadAllPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId) {
 
         PartTimeEmploymentPermitEntity partTimeEmploymentPermitEntity = partTimeEmploymentPermitJpaRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId).
                 orElse(null);
@@ -259,6 +262,18 @@ public class DocumentPersistenceAdapter implements
     }
 
     @Override
+    public PartTimeEmploymentPermit loadPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId) {
+
+        PartTimeEmploymentPermitEntity partTimeEmploymentPermitEntity = partTimeEmploymentPermitJpaRepository.findByUserOwnerJobPostingId(userOwnerJobPostingId).
+                orElse(null);
+        if (partTimeEmploymentPermitEntity == null) {
+            return null;
+        } else {
+            return partTimeEmploymentPermitMapper.toDomainAlone(partTimeEmploymentPermitEntity);
+        }
+    }
+
+    @Override
     public void createPartTimeEmploymentPermit(PartTimeEmploymentPermit partTimeEmploymentPermit) {
         partTimeEmploymentPermitJpaRepository.save(partTimeEmploymentPermitMapper.toEntity(partTimeEmploymentPermit));
     }
@@ -266,20 +281,6 @@ public class DocumentPersistenceAdapter implements
     @Override
     public void updatePartTimeEmploymentPermit(PartTimeEmploymentPermit partTimeEmploymentPermit) {
         partTimeEmploymentPermitJpaRepository.save(partTimeEmploymentPermitMapper.toEntity(partTimeEmploymentPermit));
-    }
-
-    @Override
-    public Reject loadRejectOrElseNull(Long id) {
-        return rejectMapper.toDomain(rejectJpaRepository.findTopByDocumentEntityIdOrderByCreatedAtDesc(id)
-                .orElse(null));
-    }
-
-    @Override
-    public List<Reject> loadRejects(Long id) {
-        return rejectJpaRepository.findAllByDocumentEntityId(id)
-                .stream()
-                .map(rejectMapper::toDomain)
-                .toList();
     }
 
     @Override

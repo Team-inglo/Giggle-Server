@@ -19,7 +19,7 @@ public class TemporaryAccountPersistenceAdapter implements LoadTemporaryAccountP
     private final TemporaryAccountMapper temporaryAccountMapper;
 
     @Override
-    public TemporaryAccount loadTemporaryAccount(String id) {
+    public TemporaryAccount loadTemporaryAccountOrElseThrow(String id) {
         return temporaryAccountMapper.toDomain(temporaryAccountRedisRepository.findById(id).orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TEMPORARY_ACCOUNT)));
     }
 

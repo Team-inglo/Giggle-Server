@@ -27,6 +27,20 @@ public class LanguageSkillMapper {
                 .build();
     }
 
+    public LanguageSkill toDomainAlone(
+            LanguageSkillEntity languageSkillEntity
+    ) {
+        if (languageSkillEntity == null) {
+            return null;
+        }
+        return LanguageSkill.builder()
+                .id(languageSkillEntity.getResumeId())
+                .topikLevel(languageSkillEntity.getTopikLevel())
+                .socialIntegrationLevel(languageSkillEntity.getSocialIntegrationLevel())
+                .sejongInstituteLevel(languageSkillEntity.getSejongInstituteLevel())
+                .build();
+    }
+
     public LanguageSkillEntity toEntity(
             LanguageSkill domain,
             List<AdditionalLanguageEntity> additionalLanguageEntities,

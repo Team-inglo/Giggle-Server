@@ -21,7 +21,7 @@ public class UpdateUserTopikService implements UpdateUserTopikUseCase {
     public void execute(UpdateTopikCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithLanguageSkillOrElseThrow(command.getAccountId());
 
         // TopikLevel 업데이트
         resume.updateLanguageSkillTopikLevel(command.getLevel());

@@ -56,7 +56,7 @@ public class ReadIntegratedApplicationDetailService implements ReadIntegratedApp
         }
 
         // IntegratedApplication 조회
-        IntegratedApplication integratedApplication = loadIntegratedApplicationPort.loadIntegratedApplication(documentId);
+        IntegratedApplication integratedApplication = loadIntegratedApplicationPort.loadIntegratedApplicationOrElseThrow(documentId);
         ReadSchoolBySchoolIdResult readSchoolBySchoolIdResult = readSchoolBySchoolIdQuery.execute(integratedApplication.getSchoolId());
 
         return ReadIntegratedApplicationDetailResult.of(

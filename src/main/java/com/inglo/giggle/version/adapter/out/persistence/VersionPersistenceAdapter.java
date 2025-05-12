@@ -18,7 +18,7 @@ public class VersionPersistenceAdapter implements LoadVersionPort {
     private final VersionMapper versionMapper;
 
     @Override
-    public Version loadVersion(EOsType osType) {
+    public Version loadVersionOrElseThrow(EOsType osType) {
         return versionMapper.toDomain(versionJpaRepository.findByOsType(osType)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_VERSION)));
     }

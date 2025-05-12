@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface LoadBannerPort {
 
-    Banner loadBanner(Long bannerId);
+    Banner loadBannerOrElseThrow(Long bannerId);
 
     List<Banner> loadBanners(ESecurityRole role);
 

@@ -22,7 +22,7 @@ public class ReadBannerDetailService implements ReadBannerDetailQuery {
     public ReadBannerDetailResult execute(ESecurityRole role, Long bannerId) {
 
         // Banner 조회
-        Banner banner = loadBannerPort.loadBanner(bannerId);
+        Banner banner = loadBannerPort.loadBannerOrElseThrow(bannerId);
 
         // 관리자인지 확인
         if (role == ESecurityRole.ADMIN) {

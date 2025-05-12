@@ -36,7 +36,7 @@ public class ValidateAuthenticationCodeService implements ValidateAuthentication
     public ValidateAuthenticationCodeResult execute(ValidateAuthenticationCodeCommand command) {
 
         // 해당 이메일로 발급된 인증코드 조회
-        AuthenticationCode authenticationCode = loadAuthenticationCodePort.loadAuthenticationCode(command.getEmail());
+        AuthenticationCode authenticationCode = loadAuthenticationCodePort.loadAuthenticationCodeOrElseThrow(command.getEmail());
 
         // 인증코드 일치 여부 확인
         if (!bCryptPasswordEncoder.matches(command.getAuthenticationCode(), authenticationCode.getValue())) {

@@ -22,7 +22,7 @@ public class ReadUserResumeSummaryService implements ReadUserResumeSummaryQuery 
     @Override
     public ReadUserResumeSummaryResult execute(UUID resumeId) {
         // 이력서 요약 정보 조회
-        Resume resume = loadResumePort.loadResume(resumeId);
+        Resume resume = loadResumePort.loadResumeWithLanguageSkillAndEducationsOrElseThrow(resumeId);
 
         // 가장 최근의 학력 정보를 가져옴
         Education latestEducation = getLatestEnrollmentEducation(resume.getEducations());

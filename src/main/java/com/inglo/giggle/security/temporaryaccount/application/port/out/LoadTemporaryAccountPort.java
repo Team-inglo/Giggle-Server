@@ -4,6 +4,6 @@ import com.inglo.giggle.security.temporaryaccount.domain.TemporaryAccount;
 
 public interface LoadTemporaryAccountPort {
 
-    TemporaryAccount loadTemporaryAccount(String id);
+    TemporaryAccount loadTemporaryAccountOrElseThrow(String id);
 
 }

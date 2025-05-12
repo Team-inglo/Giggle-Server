@@ -39,7 +39,7 @@ public class UpdateUserDocumentStatusSubmissionService implements UpdateUserDocu
         checkUserValidation(readAccountRoleResult.getRole());
 
         // Document 조회
-        Document document = loadDocumentPort.loadDocument(command.getDocumentId());
+        Document document = loadDocumentPort.loadAllDocumentOrElseThrow(command.getDocumentId());
 
         // UserOwnerJobPosting 정보 조회
 //        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);

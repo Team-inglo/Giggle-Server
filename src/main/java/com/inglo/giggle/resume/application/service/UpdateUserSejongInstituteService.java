@@ -21,7 +21,7 @@ public class UpdateUserSejongInstituteService implements UpdateUserSejongInstitu
     public void execute(UpdateSejongInstituteCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithLanguageSkillOrElseThrow(command.getAccountId());
 
         // SejongInstitute 업데이트
         resume.updateLanguageSkillSejongInstituteLevel(command.getLevel());

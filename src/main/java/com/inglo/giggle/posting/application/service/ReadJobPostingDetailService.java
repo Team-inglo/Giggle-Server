@@ -32,7 +32,7 @@ public class ReadJobPostingDetailService implements ReadJobPostingDetailUseCase 
     public ReadJobPostingDetailResponseDto execute(UUID accountId, Long jobPostingId) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccount(accountId);
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId);
 
         // 공고조회
         JobPosting jobPosting = jobPostingRepository.findWithOwnerByIdOrElseThrow(jobPostingId);

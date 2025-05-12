@@ -24,7 +24,7 @@ public class ReadUserUserOwnerJobPostingDetailService implements ReadUserUserOwn
     public ReadUserUserOwnerJobPostingDetailResponseDto execute(UUID accountId, Long userOwnerJobPostingsId) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccount(accountId);
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
         account.checkUserValidation();

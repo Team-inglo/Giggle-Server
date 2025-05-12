@@ -21,7 +21,7 @@ public class UpdateAdminSchoolService implements UpdateAdminSchoolUseCase {
     @Transactional
     public void execute(UpdateAdminSchoolCommand command) {
 
-        School school = loadSchoolPort.loadSchool(command.getSchoolId());
+        School school = loadSchoolPort.loadSchoolOrElseThrow(command.getSchoolId());
 
         // Address 생성
         Address address = Address.builder()

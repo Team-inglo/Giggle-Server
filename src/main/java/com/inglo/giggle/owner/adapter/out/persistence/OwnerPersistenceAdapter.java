@@ -22,7 +22,7 @@ public class OwnerPersistenceAdapter implements LoadOwnerPort, UpdateOwnerPort, 
     private final OwnerMapper ownerMapper;
 
     @Override
-    public Owner loadOwner(UUID ownerId) {
+    public Owner loadOwnerOrElseThrow(UUID ownerId) {
         return ownerMapper.toDomain(ownerJpaRepository.findById(ownerId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_OWNER)));
     }

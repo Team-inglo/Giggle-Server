@@ -27,7 +27,7 @@ public class ReadUserEducationDetailService implements ReadUserEducationDetailQu
     public ReadUserEducationDetailResult execute(UUID accountId, Long educationId) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(accountId);
+        Resume resume = loadResumePort.loadResumeWithEducationsOrElseThrow(accountId);
 
         // Education 유효성 체크
         resume.checkEducationValidation(educationId);

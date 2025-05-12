@@ -22,7 +22,7 @@ public class ReadUserSchoolBriefService implements ReadUserSchoolBriefQuery {
     @Override
     public ReadUserSchoolBriefResult execute(String search, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<School> schoolsPage = loadSchoolPort.loadSchool(pageable, search);
+        Page<School> schoolsPage = loadSchoolPort.loadSchools(pageable, search);
 
         List<ReadUserSchoolBriefResult.SchoolListDto> schoolList = schoolsPage.getContent().stream()
                 .map(school -> ReadUserSchoolBriefResult.SchoolListDto.builder()

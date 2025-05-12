@@ -8,8 +8,6 @@ import com.inglo.giggle.security.account.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class DeleteAccountService implements DeleteAccountUseCase {
@@ -19,7 +17,7 @@ public class DeleteAccountService implements DeleteAccountUseCase {
 
     @Override
     public void execute(DeleteAccountCommand command) {
-        Account account = loadAccountPort.loadAccount(command.getAccountId());
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(command.getAccountId());
         deleteAccountPort.deleteAccount(account);
     }
 }

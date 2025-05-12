@@ -55,7 +55,7 @@ public class ReadStandardLaborContractService implements ReadStandardLaborContra
         }
 
         // StandardLaborContract 조회
-        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadStandardLaborContract(documentId);
+        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadStandardLaborContractWithContractWorkDayTimesOrElseThrow(documentId);
 
         ReadStandardLaborContractDetailResult.EmployeeInformationDto employeeInformationDto;
         ReadStandardLaborContractDetailResult.EmployerInformationDto employerInformationDto;

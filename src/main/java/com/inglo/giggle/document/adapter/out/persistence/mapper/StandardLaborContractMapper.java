@@ -59,6 +59,128 @@ public class StandardLaborContractMapper {
                 .build();
     }
 
+    // insurance 랑 weeklyRestDays (EnumSet Lazy Loading) 를 제외한 나머지 필드만 매핑
+    public StandardLaborContract toDomainAlone(
+            StandardLaborContractEntity entity
+    ) {
+        if (entity == null) {
+            return null;
+        }
+        return StandardLaborContract.builder()
+                .id(entity.getId())
+                .wordUrl(entity.getWordUrl())
+                .userOwnerJobPostingId(entity.getUserOwnerJobPostingId())
+                .employeeFirstName(entity.getEmployeeFirstName())
+                .employeeLastName(entity.getEmployeeLastName())
+                .employeePhoneNumber(entity.getEmployeePhoneNumber())
+                .employeeSignatureBase64(entity.getEmployeeSignatureBase64())
+                .employeeStatus(entity.getEmployeeStatus())
+                .employeeAddress(AddressMapper.toDomain(entity.getEmployeeAddressEntity()))
+                .companyName(entity.getCompanyName())
+                .companyRegistrationNumber(entity.getCompanyRegistrationNumber())
+                .employerName(entity.getEmployerName())
+                .employerPhoneNumber(entity.getEmployerPhoneNumber())
+                .startDate(entity.getStartDate())
+                .endDate(entity.getEndDate())
+                .employerAddress(AddressMapper.toDomain(entity.getEmployerAddressEntity()))
+                .description(entity.getDescription())
+                .hourlyRate(entity.getHourlyRate())
+                .bonus(entity.getBonus())
+                .additionalSalary(entity.getAdditionalSalary())
+                .wageRate(entity.getWageRate())
+                .paymentDay(entity.getPaymentDay())
+                .paymentMethod(entity.getPaymentMethod())
+                .employerSignatureBase64(entity.getEmployerSignatureBase64())
+                .employerStatus(entity.getEmployerStatus())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deletedAt(entity.getDeletedAt())
+                .build();
+    }
+
+    public StandardLaborContract toDomainWithContractWorkDayTimes(
+            StandardLaborContractEntity entity,
+            List<ContractWorkDayTime> workDayTimes
+    ) {
+        if (entity == null) {
+            return null;
+        }
+        return StandardLaborContract.builder()
+                .id(entity.getId())
+                .wordUrl(entity.getWordUrl())
+                .userOwnerJobPostingId(entity.getUserOwnerJobPostingId())
+                .employeeFirstName(entity.getEmployeeFirstName())
+                .employeeLastName(entity.getEmployeeLastName())
+                .employeePhoneNumber(entity.getEmployeePhoneNumber())
+                .employeeSignatureBase64(entity.getEmployeeSignatureBase64())
+                .employeeStatus(entity.getEmployeeStatus())
+                .employeeAddress(AddressMapper.toDomain(entity.getEmployeeAddressEntity()))
+                .companyName(entity.getCompanyName())
+                .companyRegistrationNumber(entity.getCompanyRegistrationNumber())
+                .employerName(entity.getEmployerName())
+                .employerPhoneNumber(entity.getEmployerPhoneNumber())
+                .startDate(entity.getStartDate())
+                .endDate(entity.getEndDate())
+                .employerAddress(AddressMapper.toDomain(entity.getEmployerAddressEntity()))
+                .description(entity.getDescription())
+                .weeklyRestDays(entity.getWeeklyRestDays())
+                .hourlyRate(entity.getHourlyRate())
+                .bonus(entity.getBonus())
+                .additionalSalary(entity.getAdditionalSalary())
+                .wageRate(entity.getWageRate())
+                .paymentDay(entity.getPaymentDay())
+                .paymentMethod(entity.getPaymentMethod())
+                .insurances(entity.getInsurances())
+                .employerSignatureBase64(entity.getEmployerSignatureBase64())
+                .employerStatus(entity.getEmployerStatus())
+                .workDayTimes(workDayTimes)
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deletedAt(entity.getDeletedAt())
+                .build();
+    }
+
+    // insurance 랑 weeklyRestDays (EnumSet Lazy Loading) 를 제외한 나머지 필드만 매핑
+    public StandardLaborContract toDomainWithRejects(
+            StandardLaborContractEntity entity,
+            List<Reject> rejects
+    ) {
+        if (entity == null) {
+            return null;
+        }
+        return StandardLaborContract.builder()
+                .id(entity.getId())
+                .wordUrl(entity.getWordUrl())
+                .userOwnerJobPostingId(entity.getUserOwnerJobPostingId())
+                .rejects(rejects)
+                .employeeFirstName(entity.getEmployeeFirstName())
+                .employeeLastName(entity.getEmployeeLastName())
+                .employeePhoneNumber(entity.getEmployeePhoneNumber())
+                .employeeSignatureBase64(entity.getEmployeeSignatureBase64())
+                .employeeStatus(entity.getEmployeeStatus())
+                .employeeAddress(AddressMapper.toDomain(entity.getEmployeeAddressEntity()))
+                .companyName(entity.getCompanyName())
+                .companyRegistrationNumber(entity.getCompanyRegistrationNumber())
+                .employerName(entity.getEmployerName())
+                .employerPhoneNumber(entity.getEmployerPhoneNumber())
+                .startDate(entity.getStartDate())
+                .endDate(entity.getEndDate())
+                .employerAddress(AddressMapper.toDomain(entity.getEmployerAddressEntity()))
+                .description(entity.getDescription())
+                .hourlyRate(entity.getHourlyRate())
+                .bonus(entity.getBonus())
+                .additionalSalary(entity.getAdditionalSalary())
+                .wageRate(entity.getWageRate())
+                .paymentDay(entity.getPaymentDay())
+                .paymentMethod(entity.getPaymentMethod())
+                .employerSignatureBase64(entity.getEmployerSignatureBase64())
+                .employerStatus(entity.getEmployerStatus())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deletedAt(entity.getDeletedAt())
+                .build();
+    }
+
     public StandardLaborContractEntity toEntity(StandardLaborContract domain) {
         if (domain == null) {
             return null;

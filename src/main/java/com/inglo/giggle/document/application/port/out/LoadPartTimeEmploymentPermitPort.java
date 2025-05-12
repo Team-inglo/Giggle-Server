@@ -4,8 +4,9 @@ import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 
 public interface LoadPartTimeEmploymentPermitPort {
 
-    PartTimeEmploymentPermit loadPartTimeEmploymentPermit(Long id);
+    PartTimeEmploymentPermit loadPartTimeEmploymentPermitOrElseThrow(Long id);
+
+    PartTimeEmploymentPermit loadAllPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId);
 
     PartTimeEmploymentPermit loadPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId);
-
 }

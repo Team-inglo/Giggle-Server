@@ -46,7 +46,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
         checkUserValidation(readAccountRoleResult.getRole());
 
         // Document 조회
-        Document document = loadDocumentPort.loadDocument(command.getDocumentId());
+        Document document = loadDocumentPort.loadAllDocumentOrElseThrow(command.getDocumentId());
 
         //TODO: UOJP 합치기
 //        // UserOwnerJobPosting 정보 조회
@@ -56,7 +56,7 @@ public class UpdateUserIntegratedApplicationService implements UpdateUserIntegra
 //        userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
         // IntegratedApplication 조회
-        IntegratedApplication integratedApplication = loadIntegratedApplicationPort.loadIntegratedApplication(command.getDocumentId());
+        IntegratedApplication integratedApplication = loadIntegratedApplicationPort.loadIntegratedApplicationOrElseThrow(command.getDocumentId());
 
         // IntegratedApplication 수정 유효성 체크
         integratedApplication.checkUpdateOrSubmitUserIntegratedApplicationValidation();

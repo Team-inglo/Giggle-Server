@@ -22,7 +22,7 @@ public class UpdateUserSelfLanguageService implements UpdateUserSelfLanguageUseC
     public void execute(UpdateUserSelfLanguageCommand command) {
 
         // 유저 정보 조회
-        User user = loadUserPort.loadUser(command.getAccountId());
+        User user = loadUserPort.loadUserOrElseThrow(command.getAccountId());
 
         // 언어 업데이트
         user.updateLanguage(ELanguage.fromString(command.getLanguage()));

@@ -22,7 +22,7 @@ public class ReadUserLanguageSummaryService implements ReadUserLanguageSummaryQu
     public ReadUserLanguageSummaryResult execute(UUID accountId) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(accountId);
+        Resume resume = loadResumePort.loadResumeWithLanguageSkillAndAdditionalLanguageOrElseThrow(accountId);
 
         List<ReadUserLanguageSummaryResult.AdditionalLanguageDto> languageDetailDtos;
 

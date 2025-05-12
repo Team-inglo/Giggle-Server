@@ -4,5 +4,5 @@ import com.inglo.giggle.security.temporarytoken.domain.TemporaryToken;
 
 public interface LoadTemporaryTokenPort {
 
-    TemporaryToken loadTemporaryToken(String value);
+    TemporaryToken loadTemporaryTokenOrElseThrow(String value);
 }

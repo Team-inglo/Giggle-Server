@@ -15,7 +15,7 @@ public class ReadTemporaryTokenService implements ReadTemporaryTokenQuery {
 
     @Override
     public ReadTemporaryTokenResult execute(String value) {
-        TemporaryToken temporaryToken = loadTemporaryTokenPort.loadTemporaryToken(value);
+        TemporaryToken temporaryToken = loadTemporaryTokenPort.loadTemporaryTokenOrElseThrow(value);
         return new ReadTemporaryTokenResult(
                 temporaryToken.getEmail(),
                 temporaryToken.getValue()

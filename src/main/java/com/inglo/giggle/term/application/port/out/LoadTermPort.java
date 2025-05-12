@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface LoadTermPort {
 
-    Term loadTerm(ETermType termType);
+    Term loadTermOrElseThrow(ETermType termType);
 
     List<Term> loadTerms(List<ETermType> termTypes);
 }

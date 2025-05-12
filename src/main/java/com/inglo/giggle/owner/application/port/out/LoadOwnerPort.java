@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface LoadOwnerPort {
 
-    Owner loadOwner(UUID ownerId);
+    Owner loadOwnerOrElseThrow(UUID ownerId);
 
     Owner loadOwnerOrElseNull(UUID ownerId);
 }

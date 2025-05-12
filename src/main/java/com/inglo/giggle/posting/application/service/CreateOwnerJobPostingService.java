@@ -35,7 +35,7 @@ public class CreateOwnerJobPostingService implements CreateOwnerJobPostingUseCas
     public CreateOwnerJobPostingResponseDto execute(UUID accountId, List<MultipartFile> image, CreateOwnerJobPostingRequestDto requestDto) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccount(accountId);
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
         account.checkOwnerValidation();

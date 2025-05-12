@@ -5,5 +5,5 @@ import com.inglo.giggle.version.domain.type.EOsType;
 
 public interface LoadVersionPort {
 
-    Version loadVersion(EOsType osType);
+    Version loadVersionOrElseThrow(EOsType osType);
 }

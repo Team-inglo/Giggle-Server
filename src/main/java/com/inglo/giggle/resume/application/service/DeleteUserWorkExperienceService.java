@@ -21,7 +21,7 @@ public class DeleteUserWorkExperienceService implements DeleteUserWorkExperience
     public void execute(DeleteWorkExperienceCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithWorkExperiencesOrElseThrow(command.getAccountId());
 
         // WorkExperience 유효성 체크
         resume.checkWorkExperienceValidation(command.getWorkExperienceId());

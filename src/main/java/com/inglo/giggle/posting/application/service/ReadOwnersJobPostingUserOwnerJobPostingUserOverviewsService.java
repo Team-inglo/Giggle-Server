@@ -39,7 +39,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsService impleme
     public ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto execute(UUID accountId, Long jobPostingId, Integer page, Integer size, String sorting, String status) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccount(accountId);
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId);
 
         // 계정 타입 유효성 검사
         account.checkOwnerValidation();

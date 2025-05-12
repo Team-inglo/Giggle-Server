@@ -24,7 +24,7 @@ public class ChangePasswordService implements ChangePasswordUseCase {
     @Transactional
     public void execute(ChangePasswordCommand command) {
         // Account 조회
-        Account account = loadAccountPort.loadAccount(command.getAccountId());
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(command.getAccountId());
 
         // 현재 비밀번호 확인
         if (!(bCryptPasswordEncoder.matches(command.getCurrentPassword(), account.getPassword()))) {

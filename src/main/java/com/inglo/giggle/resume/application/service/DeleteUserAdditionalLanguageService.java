@@ -21,7 +21,7 @@ public class DeleteUserAdditionalLanguageService implements DeleteUserAdditional
     public void execute(DeleteAdditionalLanguageCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithLanguageSkillAndAdditionalLanguageOrElseThrow(command.getAccountId());
 
         // AdditionalLanguage 유효성 체크
         resume.checkAdditionalLanguageValidation(command.getAdditionalLanguageSkillId());

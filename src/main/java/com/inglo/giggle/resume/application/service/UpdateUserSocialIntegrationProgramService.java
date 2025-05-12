@@ -21,7 +21,7 @@ public class UpdateUserSocialIntegrationProgramService implements UpdateUserSoci
     public void execute(UpdateSocialIntegrationProgramCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithLanguageSkillOrElseThrow(command.getAccountId());
 
         // SocialIntegrationLevel 업데이트
         resume.updateLanguageSkillSocialIntegrationLevel(command.getLevel());

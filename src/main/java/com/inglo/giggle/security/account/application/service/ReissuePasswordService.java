@@ -37,7 +37,7 @@ public class ReissuePasswordService implements ReissuePasswordUseCase {
         String email = readTemporaryTokenResult.getEmail();
 
         // 계정 조회
-        Account account = loadAccountPort.loadAccount(email, ESecurityProvider.DEFAULT);
+        Account account = loadAccountPort.loadAccountOrElseThrow(email, ESecurityProvider.DEFAULT);
 
         // 임시 비밀번호 생성 및 저장
         String temporaryPassword = PasswordUtil.generatePassword(8);

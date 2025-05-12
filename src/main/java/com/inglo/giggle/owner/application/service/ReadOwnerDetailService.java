@@ -20,7 +20,7 @@ public class ReadOwnerDetailService implements ReadOwnerDetailQuery {
     @Transactional(readOnly = true)
     public ReadOwnerDetailResult execute(UUID accountId) {
         // 고용주 정보 조회
-        Owner owner = loadOwnerPort.loadOwner(accountId);
+        Owner owner = loadOwnerPort.loadOwnerOrElseThrow(accountId);
 
         return ReadOwnerDetailResult.of(
                 owner.getCompanyName(),

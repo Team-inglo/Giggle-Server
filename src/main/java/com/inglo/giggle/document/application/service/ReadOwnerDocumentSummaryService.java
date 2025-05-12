@@ -1,11 +1,11 @@
 package com.inglo.giggle.document.application.service;
 
+import com.inglo.giggle.core.dto.BaseDomain;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.document.application.port.in.query.ReadOwnerDocumentSummaryQuery;
 import com.inglo.giggle.document.application.port.in.result.ReadOwnerDocumentSummaryResult;
 import com.inglo.giggle.document.application.port.out.LoadPartTimeEmploymentPermitPort;
-import com.inglo.giggle.document.application.port.out.LoadRejectPort;
 import com.inglo.giggle.document.application.port.out.LoadStandardLaborContractPort;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
 import com.inglo.giggle.document.domain.Reject;
@@ -18,6 +18,7 @@ import com.inglo.giggle.security.account.domain.type.ESecurityRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.UUID;
 
 @Service
@@ -27,7 +28,6 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
     private final UserOwnerJobPostingRepository userOwnerJobPostingRepository;
     private final LoadPartTimeEmploymentPermitPort loadPartTimeEmploymentPermitPort;
     private final LoadStandardLaborContractPort loadStandardLaborContractPort;
-    private final LoadRejectPort loadRejectPort;
 
     private final ReadAccountRoleQuery readAccountRoleQuery;
 
@@ -48,21 +48,26 @@ public class ReadOwnerDocumentSummaryService implements ReadOwnerDocumentSummary
 //        userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
 
         // 시간제 취업 허가서 조회
-        PartTimeEmploymentPermit partTimeEmploymentPermit = loadPartTimeEmploymentPermitPort.loadPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
+        PartTimeEmploymentPermit partTimeEmploymentPermit = loadPartTimeEmploymentPermitPort.loadAllPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         // 표준 근로 계약서 조회
-        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadStandardLaborContractByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
+        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadStandardLaborContractWithRejectsByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         // 거절 사유 조회
         Reject partTimeEmploymentPermitReject= null;
         Reject standardLaborContractReject = null;
 
         if (partTimeEmploymentPermit != null) {
-            partTimeEmploymentPermitReject = loadRejectPort.loadRejectOrElseNull(partTimeEmploymentPermit.getId());
+            // 생성 일자가 가장 최근의 것을 가져옴
+            partTimeEmploymentPermitReject = partTimeEmploymentPermit.getRejects().stream()
+                    .max(Comparator.comparing(BaseDomain::getCreatedAt))
+                    .orElse(null);
         }
 
         if (standardLaborContract != null) {
-            standardLaborContractReject = loadRejectPort.loadRejectOrElseNull(standardLaborContract.getId());
+            standardLaborContractReject = standardLaborContract.getRejects().stream()
+                    .max(Comparator.comparing(BaseDomain::getCreatedAt))
+                    .orElse(null);
         }
 
         ReadOwnerDocumentSummaryResult.DocumentDetailDto partTimeEmploymentPermitDetailDto;

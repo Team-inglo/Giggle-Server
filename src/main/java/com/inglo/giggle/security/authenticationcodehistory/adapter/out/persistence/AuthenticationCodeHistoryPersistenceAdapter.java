@@ -1,7 +1,5 @@
 package com.inglo.giggle.security.authenticationcodehistory.adapter.out.persistence;
 
-import com.inglo.giggle.core.exception.error.ErrorCode;
-import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.security.authenticationcodehistory.adapter.out.persistence.mapper.AuthenticationCodeHistoryMapper;
 import com.inglo.giggle.security.authenticationcodehistory.adapter.out.persistence.repository.redis.AuthenticationCodeHistoryRedisRepository;
 import com.inglo.giggle.security.authenticationcodehistory.application.port.out.CreateAuthenticationCodeHistoryPort;
@@ -22,12 +20,6 @@ public class AuthenticationCodeHistoryPersistenceAdapter implements LoadAuthenti
     @Override
     public AuthenticationCodeHistory loadAuthenticationCodeHistoryOrElseNull(String id) {
         return authenticationCodeHistoryMapper.toDomain(authenticationCodeHistoryRedisRepository.findById(id).orElse(null));
-    }
-
-    @Override
-    public AuthenticationCodeHistory loadAuthenticationCodeHistoryOrElseThrow(String id) {
-        return authenticationCodeHistoryMapper.toDomain(authenticationCodeHistoryRedisRepository.findById(id)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_AUTHENTICATION_CODE_HISTORY)));
     }
 
     @Override

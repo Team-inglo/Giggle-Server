@@ -30,7 +30,7 @@ public class AccountMapper {
                 .build();
     }
 
-    public Account toDomain(AccountEntity entity) {
+    public Account toDomainAlone(AccountEntity entity) {
         if (entity == null) {
             return null;
         }

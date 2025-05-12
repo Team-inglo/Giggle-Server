@@ -24,7 +24,7 @@ public class ReadAdminSchoolOverviewService implements ReadAdminSchoolOverviewQu
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<School> schoolPage = loadSchoolPort.loadSchool(pageable, search);
+        Page<School> schoolPage = loadSchoolPort.loadSchools(pageable, search);
 
         PageInfoDto pageInfo = PageInfoDto.of(
                 schoolPage.getNumber() + 1,

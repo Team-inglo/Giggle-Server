@@ -27,7 +27,7 @@ public class ReadUserSchoolDetailService implements ReadUserSchoolDetailQuery {
         ReadUserResumeSummaryResult resumeSummaryResult = readUserResumeSummaryQuery.execute(accountId);
 
         // 유저의 학력 정보 조회
-        School school = loadSchoolPort.loadSchool(resumeSummaryResult.getSchoolId());
+        School school = loadSchoolPort.loadSchoolOrElseThrow(resumeSummaryResult.getSchoolId());
 
         return ReadUserSchoolDetailResult.of(
                 school.getSchoolName(),

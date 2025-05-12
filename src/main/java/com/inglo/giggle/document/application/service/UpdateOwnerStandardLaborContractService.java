@@ -62,7 +62,7 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
         ReadOwnerDetailResult readOwnerDetailResult = readOwnerDetailQuery.execute(command.getAccountId());
 
         // Document 조회
-        Document document = loadDocumentPort.loadDocument(command.getDocumentId());
+        Document document = loadDocumentPort.loadAllDocumentOrElseThrow(command.getDocumentId());
 
         // TODO: UOJP 합치기
         // UserOwnerJobPosting 정보 조회
@@ -72,7 +72,7 @@ public class UpdateOwnerStandardLaborContractService implements UpdateOwnerStand
 //        userOwnerJobPosting.checkOwnerUserOwnerJobPostingValidation(accountId);
 
         // StandardLaborContract 조회
-        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadStandardLaborContract(command.getDocumentId());
+        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadAllStandardLaborContractOrElseThrow(command.getDocumentId());
 
         // StandardLaborContract 수정 유효성 체크
         standardLaborContract.checkUpdateOrSubmitOwnerStandardLaborContractValidation();

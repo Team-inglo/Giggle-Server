@@ -3,6 +3,7 @@ package com.inglo.giggle.security.account.adapter.out.persistence.repository.mys
 import com.inglo.giggle.security.account.adapter.out.persistence.entity.mysql.AccountEntity;
 import com.inglo.giggle.security.account.domain.type.ESecurityProvider;
 import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,7 +14,8 @@ import java.util.UUID;
 
 public interface AccountJpaRepository extends JpaRepository<AccountEntity, UUID> {
 
-    Optional<AccountEntity> findBySerialId(String serialId);
+    @EntityGraph(attributePaths = {"accountDevices"})
+    Optional<AccountEntity> findWithAccountDevicesById(UUID id);
 
     Optional<AccountEntity> findBySerialIdAndProvider(String serialId, ESecurityProvider provider);
 

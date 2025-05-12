@@ -21,7 +21,7 @@ public class CreateUserWorkExperienceService implements CreateUserWorkExperience
     public void execute(CreateWorkExperienceCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithWorkExperiencesOrElseThrow(command.getAccountId());
 
         // WorkExperience 추가
         resume.addWorkExperience(

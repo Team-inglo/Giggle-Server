@@ -25,7 +25,7 @@ public class ReadAccountBriefService implements ReadAccountBriefQuery {
 
     @Override
     public ReadAccountBriefResult execute(UUID accountId) {
-        Account account = loadAccountPort.loadAccount(accountId);
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId);
         ReadUserNameResult readUserNameResult = readUserNameQuery.execute(accountId);
         ReadOwnerNameResult readOwnerNameResult = readOwnerNameQuery.execute(accountId);
 

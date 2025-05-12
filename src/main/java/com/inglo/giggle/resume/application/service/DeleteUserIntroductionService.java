@@ -21,7 +21,7 @@ public class DeleteUserIntroductionService implements DeleteUserIntroductionUseC
     public void execute(DeleteIntroductionCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeOrElseThrow(command.getAccountId());
 
         // Introduction null 로 업데이트
         resume.clearIntroduction();

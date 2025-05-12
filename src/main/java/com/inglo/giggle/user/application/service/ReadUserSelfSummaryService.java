@@ -31,7 +31,7 @@ public class ReadUserSelfSummaryService implements ReadUserSelfSummaryQuery {
     public ReadUserSelfSummaryResult execute(CustomUserPrincipal principal, UUID accountId) {
 
         // 유저 정보 조회
-        User user = loadUserPort.loadUser(accountId);
+        User user = loadUserPort.loadUserOrElseThrow(accountId);
 
         // 이력서 정보 조회
         ReadUserResumeSummaryResult resumeSummaryResult = readUserResumeSummaryQuery.execute(accountId);

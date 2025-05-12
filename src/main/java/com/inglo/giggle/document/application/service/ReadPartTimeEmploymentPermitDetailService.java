@@ -52,7 +52,7 @@ public class ReadPartTimeEmploymentPermitDetailService implements ReadPartTimeEm
         }
 
         // PartTimeEmploymentPermit 조회
-        PartTimeEmploymentPermit partTimeEmploymentPermit = loadPartTimeEmploymentPermitPort.loadPartTimeEmploymentPermit(documentId);
+        PartTimeEmploymentPermit partTimeEmploymentPermit = loadPartTimeEmploymentPermitPort.loadPartTimeEmploymentPermitOrElseThrow(documentId);
 
         ReadPartTimeEmploymentPermitDetailResult.EmployeeInformationDto employeeInformationDto;
         ReadPartTimeEmploymentPermitDetailResult.EmployerInformationDto employerInformationDto;

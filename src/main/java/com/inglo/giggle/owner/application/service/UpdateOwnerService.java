@@ -26,7 +26,7 @@ public class UpdateOwnerService implements UpdateOwnerUseCase {
     public void execute(UpdateOwnerCommand command) {
 
         // 고용주 조회
-        Owner owner = loadOwnerPort.loadOwner(command.getAccountId());
+        Owner owner = loadOwnerPort.loadOwnerOrElseThrow(command.getAccountId());
 
         // 아이콘 이미지가 변경됐다면
         if (command.getIsIconImgChanged() && command.getImage()!= null) {

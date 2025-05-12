@@ -21,7 +21,7 @@ public class UpdateUserIntroductionService implements UpdateUserIntroductionUseC
     public void execute(UpdateIntroductionCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeOrElseThrow(command.getAccountId());
 
         // Introduction 업데이트
         resume.updateIntroduction(command.getIntroduction());

@@ -32,6 +32,77 @@ public class ResumeMapper {
                 .build();
     }
 
+    public Resume toDomainAlone(
+            ResumeEntity resumeEntity
+    ) {
+        if (resumeEntity == null) {
+            return null;
+        }
+        return Resume.builder()
+                .accountId(resumeEntity.getAccountId())
+                .introduction(resumeEntity.getIntroduction())
+                .build();
+    }
+
+    public Resume toDomainWithWorkExperiences(
+            ResumeEntity resumeEntity,
+            List<WorkExperience> workExperiences
+    ) {
+        if (resumeEntity == null) {
+            return null;
+        }
+        return Resume.builder()
+                .accountId(resumeEntity.getAccountId())
+                .introduction(resumeEntity.getIntroduction())
+                .workExperiences(workExperiences)
+                .build();
+    }
+
+    public Resume toDomainWithEducations(
+            ResumeEntity resumeEntity,
+            List<Education> educations
+    ) {
+        if (resumeEntity == null) {
+            return null;
+        }
+        return Resume.builder()
+                .accountId(resumeEntity.getAccountId())
+                .introduction(resumeEntity.getIntroduction())
+                .educations(educations)
+                .build();
+    }
+
+    public Resume toDomainWithLanguageSkill(
+            ResumeEntity resumeEntity,
+            LanguageSkill languageSkill
+    ) {
+        if (resumeEntity == null) {
+            return null;
+        }
+        return Resume.builder()
+                .accountId(resumeEntity.getAccountId())
+                .introduction(resumeEntity.getIntroduction())
+                .languageSkill(languageSkill)
+                .build();
+    }
+
+    public Resume toDomainWithLanguageSkillAndEducations(
+            ResumeEntity resumeEntity,
+            LanguageSkill languageSkill,
+            List<Education> educations
+    ) {
+        if (resumeEntity == null) {
+            return null;
+        }
+        return Resume.builder()
+                .accountId(resumeEntity.getAccountId())
+                .introduction(resumeEntity.getIntroduction())
+                .languageSkill(languageSkill)
+                .educations(educations)
+                .build();
+    }
+
+
     public ResumeEntity toEntity(
             Resume resume,
             List<WorkExperienceEntity> workExperienceEntities,

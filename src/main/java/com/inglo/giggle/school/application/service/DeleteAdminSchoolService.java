@@ -19,7 +19,7 @@ public class DeleteAdminSchoolService implements DeleteAdminSchoolUseCase {
     @Override
     @Transactional
     public void execute(DeleteAdminSchoolCommand command) {
-        School school = loadSchoolPort.loadSchool(command.getSchoolId());
+        School school = loadSchoolPort.loadSchoolOrElseThrow(command.getSchoolId());
 
         // 학교 삭제
         deleteSchoolPort.deleteSchool(school);

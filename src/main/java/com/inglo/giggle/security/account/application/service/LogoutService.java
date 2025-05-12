@@ -23,7 +23,7 @@ public class LogoutService implements LogoutUseCase {
     public void execute(CustomUserPrincipal principal) {
 
         // Account 조회
-        Account account = loadAccountPort.loadAccountWithRefreshTokenAndAccountDevices(principal.getId());
+        Account account = loadAccountPort.loadAllAccountOrElseThrow(principal.getId());
 
         // Refresh Token 삭제
         deleteRefreshTokenPort.deleteRefreshToken(account.getRefreshToken());

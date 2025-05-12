@@ -47,10 +47,10 @@ public class ReadUserDocumentSummaryService implements ReadUserDocumentSummaryQu
 //        userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
         // 시간제 취업 허가서 조회
-        PartTimeEmploymentPermit partTimeEmploymentPermit = loadPartTimeEmploymentPermitPort.loadPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
+        PartTimeEmploymentPermit partTimeEmploymentPermit = loadPartTimeEmploymentPermitPort.loadAllPartTimeEmploymentPermitByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         // 표준 근로 계약서 조회
-        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadStandardLaborContractByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
+        StandardLaborContract standardLaborContract = loadStandardLaborContractPort.loadStandardLaborContractWithRejectsByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);
 
         // 통합 신청서 조회
         IntegratedApplication integratedApplication = loadIntegratedApplicationPort.loadIntegratedApplicationByUserOwnerJobPostingIdOrElseNull(userOwnerJobPostingId);

@@ -29,7 +29,7 @@ public class ReadNotificationOverviewService implements ReadNotificationOverview
     @Transactional(readOnly = true)
     public ReadNotificationOverviewResponseDto execute(UUID accountId, Integer page, Integer size) {
 
-        Account account = loadAccountPort.loadAccount(accountId);
+        Account account = loadAccountPort.loadAccountWithRefreshTokenOrElseThrow(accountId);
 
         Sort sort = Sort.by(Sort.Order.desc("createdAt"));
         Page<Notification> notificationList;

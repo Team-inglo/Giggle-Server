@@ -21,7 +21,7 @@ public class DeleteUserEducationService implements DeleteUserEducationUseCase {
     public void execute(DeleteEducationCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithEducationsOrElseThrow(command.getAccountId());
 
         // Education 유효성 체크
         resume.checkEducationValidation(command.getEducationId());

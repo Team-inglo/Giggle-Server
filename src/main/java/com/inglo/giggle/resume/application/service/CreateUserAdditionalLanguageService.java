@@ -21,7 +21,7 @@ public class CreateUserAdditionalLanguageService implements CreateUserAdditional
     public void execute(CreateAdditionalLanguageCommand command) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(command.getAccountId());
+        Resume resume = loadResumePort.loadResumeWithLanguageSkillAndAdditionalLanguageOrElseThrow(command.getAccountId());
 
         // 이미 존재하는 언어인지 체크
         resume.checkIsExistAdditionalLanguage(command.getLanguageName());

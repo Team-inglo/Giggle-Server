@@ -16,7 +16,7 @@ public class ReadRecentVersionService implements ReadRecentVersionQuery {
 
     @Override
     public ReadRecentVersionResult execute(EOsType osType) {
-        Version version = loadVersionPort.loadVersion(osType);
+        Version version = loadVersionPort.loadVersionOrElseThrow(osType);
 
         return ReadRecentVersionResult.from(version);
     }

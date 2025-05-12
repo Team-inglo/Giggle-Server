@@ -21,7 +21,7 @@ public class UpdateUserSelfNotificationAllowedService implements UpdateUserSelfN
     public void execute(UpdateUserSelfNotificationAllowedCommand command) {
 
         // 계정 정보 조회
-        User user = loadUserPort.loadUser(command.getAccountId());
+        User user = loadUserPort.loadUserOrElseThrow(command.getAccountId());
 
         // 알림 허용 여부 업데이트
         user.updateNotificationAllowed(command.getIsNotificationAllowed());

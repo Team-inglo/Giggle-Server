@@ -19,7 +19,7 @@ public class ReadAdminSchoolDetailService implements ReadAdminSchoolDetailQuery 
     @Transactional(readOnly = true)
     public ReadAdminSchoolDetailResult execute(Long id) {
 
-        School school = loadSchoolPort.loadSchool(id);
+        School school = loadSchoolPort.loadSchoolOrElseThrow(id);
 
         return ReadAdminSchoolDetailResult.of(
                 school.getId(),

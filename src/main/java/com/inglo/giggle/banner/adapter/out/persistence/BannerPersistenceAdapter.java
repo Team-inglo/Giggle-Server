@@ -37,7 +37,7 @@ public class BannerPersistenceAdapter implements LoadBannerPort, CreateBannerPor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Banner loadBanner(Long bannerId) {
+    public Banner loadBannerOrElseThrow(Long bannerId) {
         return bannerMapper.toDomain(bannerJpaRepository.findById(bannerId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_BANNER)));
     }

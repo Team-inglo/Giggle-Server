@@ -6,13 +6,11 @@ import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.document.application.port.in.command.ConfirmUserDocumentCommand;
 import com.inglo.giggle.document.application.port.in.usecase.ConfirmUserDocumentUseCase;
 import com.inglo.giggle.document.application.port.out.LoadDocumentPort;
-import com.inglo.giggle.document.application.port.out.LoadRejectPort;
 import com.inglo.giggle.document.application.port.out.UpdatePartTimeEmploymentPermitPort;
 import com.inglo.giggle.document.application.port.out.UpdateRejectPort;
 import com.inglo.giggle.document.application.port.out.UpdateStandardLaborContractPort;
 import com.inglo.giggle.document.domain.Document;
 import com.inglo.giggle.document.domain.PartTimeEmploymentPermit;
-import com.inglo.giggle.document.domain.Reject;
 import com.inglo.giggle.document.domain.StandardLaborContract;
 import com.inglo.giggle.security.account.application.port.in.query.ReadAccountRoleQuery;
 import com.inglo.giggle.security.account.application.port.in.result.ReadAccountRoleResult;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +29,6 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
     private final LoadDocumentPort loadDocumentPort;
     private final UpdatePartTimeEmploymentPermitPort updatePartTimeEmploymentPermitPort;
     private final UpdateStandardLaborContractPort updateStandardLaborContractPort;
-    private final LoadRejectPort loadRejectPort;
     private final UpdateRejectPort updateRejectPort;
 
     private final ReadAccountRoleQuery readAccountRoleQuery;
@@ -50,7 +46,7 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
         checkUserValidation(readAccountRoleResult.getRole());
 
         // Document 정보 조회
-        Document document = loadDocumentPort.loadDocument(command.getDocumentId());
+        Document document = loadDocumentPort.loadAllDocumentOrElseThrow(command.getDocumentId());
 
         //TODO: UOJP 합치기
 //        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findByDocumentOrElseThrow(document);
@@ -58,11 +54,8 @@ public class ConfirmUserDocumentService implements ConfirmUserDocumentUseCase {
 //        // UserOwnerJobPosting 유저 유효성 체크
 //        userOwnerJobPosting.checkUserUserOwnerJobPostingValidation(accountId);
 
-        // Reject 정보 조회
-        List<Reject> rejects = loadRejectPort.loadRejects(command.getDocumentId());
-
         // Reject 이 있을 경우 Reject 정보 삭제
-        if (!rejects.isEmpty()) {
+        if (!document.getRejects().isEmpty()) {
             document.deleteAllRejects();
             updateRejectPort.updateReject(document);
         }

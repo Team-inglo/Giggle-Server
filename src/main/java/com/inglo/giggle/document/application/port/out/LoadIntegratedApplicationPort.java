@@ -4,7 +4,7 @@ import com.inglo.giggle.document.domain.IntegratedApplication;
 
 public interface LoadIntegratedApplicationPort {
 
-    IntegratedApplication loadIntegratedApplication(Long id);
+    IntegratedApplication loadIntegratedApplicationOrElseThrow(Long id);
 
     IntegratedApplication loadIntegratedApplicationByUserOwnerJobPostingIdOrElseNull(Long userOwnerJobPostingId);
 }

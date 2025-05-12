@@ -23,7 +23,7 @@ public class ReadUserWorkExperienceDetailService implements ReadUserWorkExperien
     public ReadUserWorkExperienceDetailResult execute(UUID accountId, Long workExperienceId) {
 
         // Resume 조회
-        Resume resume = loadResumePort.loadResume(accountId);
+        Resume resume = loadResumePort.loadResumeWithEducationsOrElseThrow(accountId);
         WorkExperience workExperience = resume.getWorkExperience(workExperienceId);
         
         return ReadUserWorkExperienceDetailResult.of(

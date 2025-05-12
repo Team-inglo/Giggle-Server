@@ -5,6 +5,4 @@ import com.inglo.giggle.security.authenticationcodehistory.domain.Authentication
 public interface LoadAuthenticationCodeHistoryPort {
 
     AuthenticationCodeHistory loadAuthenticationCodeHistoryOrElseNull(String id);
-
-    AuthenticationCodeHistory loadAuthenticationCodeHistoryOrElseThrow(String id);
 }

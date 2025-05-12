@@ -16,12 +16,10 @@ import com.inglo.giggle.security.account.application.port.out.CreateAccountPort;
 import com.inglo.giggle.security.account.application.port.out.CreateRefreshTokenPort;
 import com.inglo.giggle.security.account.application.port.out.DeleteAccountPort;
 import com.inglo.giggle.security.account.application.port.out.DeleteRefreshTokenPort;
-import com.inglo.giggle.security.account.application.port.out.LoadAccountDevicePort;
 import com.inglo.giggle.security.account.application.port.out.LoadAccountPort;
 import com.inglo.giggle.security.account.application.port.out.LoadRefreshTokenPort;
 import com.inglo.giggle.security.account.application.port.out.UpdateAccountDevicePort;
 import com.inglo.giggle.security.account.application.port.out.UpdateAccountPort;
-import com.inglo.giggle.security.account.application.port.out.UpdateRefreshTokenPort;
 import com.inglo.giggle.security.account.domain.Account;
 import com.inglo.giggle.security.account.domain.AccountDevice;
 import com.inglo.giggle.security.account.domain.RefreshToken;
@@ -60,8 +58,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AccountPersistenceAdapter implements
         LoadAccountPort, CreateAccountPort, DeleteAccountPort, UpdateAccountPort,
-        LoadRefreshTokenPort, CreateRefreshTokenPort, UpdateRefreshTokenPort, DeleteRefreshTokenPort,
-        LoadAccountDevicePort, UpdateAccountDevicePort
+        LoadRefreshTokenPort, CreateRefreshTokenPort, DeleteRefreshTokenPort,
+        UpdateAccountDevicePort
 {
     private final AccountJpaRepository accountJpaRepository;
     private final AccountDeviceJpaRepository accountDeviceJpaRepository;
@@ -72,50 +70,37 @@ public class AccountPersistenceAdapter implements
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Account loadAccount(UUID accountId) {
-        Account account = accountMapper.toDomain(accountJpaRepository.findById(accountId)
+    public Account loadAllAccountOrElseThrow(UUID accountId) {
+
+        // AccountDeviceEntity 를 포함하여 AccountEntity 를 조회
+        AccountEntity accountEntity = accountJpaRepository.findWithAccountDevicesById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+
+        // AccountEntity 를 AccountDeviceEntity 리스트와 함께 Account 로 변환
+        Account account = accountMapper.toDomain(accountEntity, accountEntity.getAccountDeviceEntities()
+                .stream()
+                .map(accountDeviceMapper::toDomain)
+                .toList()
+        );
+
+        // Redis 에서 RefreshToken 을 조회하여 Account 에 초기화
+        RefreshToken refreshToken = refreshTokenMapper.toDomain(
+                refreshTokenRedisRepository.findByAccountIdAndValue(account.getId(), account.getRefreshToken().getValue())
+                        .orElse(null)
+        );
+        account.updateRefreshToken(refreshToken);
+
+        return account;
+    }
+
+    @Override
+    public Account loadAccountWithRefreshTokenOrElseThrow(UUID accountId) {
+
+        // AccountDeviceEntity 를 포함하지 않고 AccountEntity 만 조회
+        Account account = accountMapper.toDomainAlone(accountJpaRepository.findById(accountId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT)));
 
-        RefreshToken refreshToken = refreshTokenMapper.toDomain(
-                refreshTokenRedisRepository.findByAccountIdAndValue(account.getId(), account.getRefreshToken().getValue())
-                        .orElse(null)
-        );
-
-        account.updateRefreshToken(refreshToken);
-
-        return account;
-    }
-
-    @Override
-    public Account loadAccount(String serialId) {
-        return accountMapper.toDomain(accountJpaRepository.findBySerialId(serialId).orElse(null));
-    }
-
-    @Override
-    public Account loadAccountWithAccountDevices(UUID accountId) {
-        AccountEntity accountEntity = accountJpaRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
-
-        List<AccountDeviceEntity> accountDeviceEntities = accountDeviceJpaRepository.findByAccountEntityId(accountId);
-        List<AccountDevice> accountDevices = accountDeviceEntities.stream()
-                .map(accountDeviceMapper::toDomain)
-                .toList();
-
-        return accountMapper.toDomain(accountEntity, accountDevices);
-    }
-
-    @Override
-    public Account loadAccountWithRefreshTokenAndAccountDevices(UUID accountId) {
-        AccountEntity accountEntity = accountJpaRepository.findById(accountId)
-                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
-
-        List<AccountDeviceEntity> accountDeviceEntities = accountDeviceJpaRepository.findByAccountEntityId(accountId);
-        List<AccountDevice> accountDevices = accountDeviceEntities.stream()
-                .map(accountDeviceMapper::toDomain)
-                .toList();
-
-        Account account = accountMapper.toDomain(accountEntity, accountDevices);
-
+        // Redis 에서 RefreshToken 을 조회하여 Account 에 초기화
         RefreshToken refreshToken = refreshTokenMapper.toDomain(
                 refreshTokenRedisRepository.findByAccountIdAndValue(account.getId(), account.getRefreshToken().getValue())
                         .orElse(null)
@@ -123,44 +108,58 @@ public class AccountPersistenceAdapter implements
         account.updateRefreshToken(refreshToken);
 
         return account;
+    }
+
+    @Override
+    public Account loadAccountWithAccountDevicesOrElseThrow(UUID accountId) {
+
+        // AccountDeviceEntity 를 포함하여 AccountEntity 를 조회
+        AccountEntity accountEntity = accountJpaRepository.findWithAccountDevicesById(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT));
+
+        // AccountEntity 를 AccountDeviceEntity 리스트와 함께 Account 로 변환
+        return accountMapper.toDomain(accountEntity, accountEntity.getAccountDeviceEntities()
+                .stream()
+                .map(accountDeviceMapper::toDomain)
+                .toList()
+        );
     }
 
     @Override
     public Account loadAccountOrElseThrowUserNameNotFoundException(String serialId, ESecurityProvider provider) {
-        return accountMapper.toDomain(accountJpaRepository.findBySerialIdAndProvider(serialId, provider)
+        return accountMapper.toDomainAlone(accountJpaRepository.findBySerialIdAndProvider(serialId, provider)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with serialId: " + serialId)));
     }
 
     @Override
-    public Account loadAccount(String serialId, ESecurityProvider provider) {
-        return accountMapper.toDomain(accountJpaRepository.findBySerialIdAndProvider(serialId, provider)
+    public Account loadAccountOrElseThrow(String serialId, ESecurityProvider provider) {
+        return accountMapper.toDomainAlone(accountJpaRepository.findBySerialIdAndProvider(serialId, provider)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_ACCOUNT)));
     }
 
     @Override
     public List<Account> loadAccounts(LocalDateTime endDate) {
         return accountJpaRepository.findAllBeforeEndDate(endDate).stream()
-                .map(accountMapper::toDomain)
+                .map(accountMapper::toDomainAlone)
                 .toList();
     }
 
     @Override
     public List<Account> loadAccountsWithDeleted(LocalDateTime endDate) {
         return accountJpaRepository.findAllBeforeEndDateWithDeleted(endDate).stream()
-                .map(accountMapper::toDomain)
+                .map(accountMapper::toDomainAlone)
                 .toList();
     }
 
     @Override
     public Account createAccount(Account account) {
         AccountEntity entity = accountJpaRepository.save(accountMapper.toEntity(account));
-        return accountMapper.toDomain(entity);
+        return accountMapper.toDomainAlone(entity);
     }
 
     @Override
-    public Account updateAccount(Account account) {
-        AccountEntity entity = accountJpaRepository.save(accountMapper.toEntity(account));
-        return accountMapper.toDomain(entity);
+    public void updateAccount(Account account) {
+        accountJpaRepository.save(accountMapper.toEntity(account));
     }
 
     @Override
@@ -280,7 +279,7 @@ public class AccountPersistenceAdapter implements
                 .limit(pageable.getPageSize())
                 .fetch()
                 .stream()
-                .map(accountMapper::toDomain)
+                .map(accountMapper::toDomainAlone)
                 .toList();
 
         return new PageImpl<>(content, pageable, total);
@@ -298,21 +297,8 @@ public class AccountPersistenceAdapter implements
     }
 
     @Override
-    public void updateRefreshToken(RefreshToken refreshToken) {
-        refreshTokenRedisRepository.save(refreshTokenMapper.toEntity(refreshToken));
-    }
-
-    @Override
     public void deleteRefreshToken(RefreshToken refreshToken) {
         refreshTokenRedisRepository.delete(refreshTokenMapper.toEntity(refreshToken));
-    }
-
-    @Override
-    public List<AccountDevice> loadAccountDevices(UUID accountId) {
-        List<AccountDeviceEntity> accountDeviceEntities = accountDeviceJpaRepository.findByAccountEntityId(accountId);
-        return accountDeviceEntities.stream()
-                .map(accountDeviceMapper::toDomain)
-                .toList();
     }
 
     @Override

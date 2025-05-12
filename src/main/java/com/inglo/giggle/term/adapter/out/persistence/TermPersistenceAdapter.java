@@ -21,7 +21,7 @@ public class TermPersistenceAdapter implements LoadTermPort, CreateTermPort {
     private final TermMapper termMapper;
 
     @Override
-    public Term loadTerm(ETermType termType) {
+    public Term loadTermOrElseThrow(ETermType termType) {
         return termMapper.toDomain(termJpaRepository.findTopByTermTypeOrderByCreatedAtDesc(termType)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_TERM)));
     }
