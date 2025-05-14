@@ -91,4 +91,4 @@ jobs:
             docker stop api-server
             docker rm api-server
             docker image rm ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }}
-            docker run -d -p 8080:8080 --name api-server --network ${{secrets.DOCKER_NETWORKNAME}} -v /home/ubuntu/template:/app/template ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }}
+            docker run -d -p 8080:8080 --name api-server --network ${{secrets.DOCKER_NETWORKNAME}} -v /home/ubuntu/template:/app/template -v /home/ubuntu/firebase-key.json:/app/firebase-key.json ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPONAME }}
