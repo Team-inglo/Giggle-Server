@@ -23,6 +23,6 @@ spring:
 spring:
   config:
     activate:
-      on-profile: krampoline
+      on-profile: prod
 
 ---
