@@ -21,8 +21,6 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "book_marks")
-@SQLDelete(sql = "UPDATE book_marks SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
 public class BookMark extends BaseEntity {
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
