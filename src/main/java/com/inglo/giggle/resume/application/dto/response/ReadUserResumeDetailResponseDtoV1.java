@@ -19,7 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Getter
-public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerResumeDetailResponseDto> {
+public class ReadUserResumeDetailResponseDtoV1 extends SelfValidating<ReadUserResumeDetailResponseDtoV1> {
 
     @JsonProperty("profile_img_url")
     private final String profileImgUrl;
@@ -46,7 +46,7 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
     private final LanguagesDto languages;
 
     @Builder
-    public ReadOwnerResumeDetailResponseDto(
+    public ReadUserResumeDetailResponseDtoV1(
             String profileImgUrl,
             String name,
             VisaDto visa,
@@ -302,16 +302,16 @@ public class ReadOwnerResumeDetailResponseDto extends SelfValidating<ReadOwnerRe
         }
     }
 
-    public static ReadOwnerResumeDetailResponseDto of(Resume resume, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill, User user) {
-        return ReadOwnerResumeDetailResponseDto.builder()
+    public static ReadUserResumeDetailResponseDtoV1 of(Resume resume, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill, User user) {
+        return ReadUserResumeDetailResponseDtoV1.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
-                .visa(ReadOwnerResumeDetailResponseDto.VisaDto.fromEntity(user.getVisa()))
-                .personalInformation(ReadOwnerResumeDetailResponseDto.PersonalInformationDto.fromEntity(user))
+                .visa(VisaDto.fromEntity(user.getVisa()))
+                .personalInformation(PersonalInformationDto.fromEntity(user))
                 .introduction(resume.getIntroduction())
-                .workExperience(!workExperiences.isEmpty() ? workExperiences.stream().map(ReadOwnerResumeDetailResponseDto.WorkExperienceDto::fromEntity).toList() : null)
-                .education(!educations.isEmpty() ? educations.stream().map(ReadOwnerResumeDetailResponseDto.EducationDto::fromEntity).toList() : null)
-                .languages(ReadOwnerResumeDetailResponseDto.LanguagesDto.fromEntity(languageSkill))
+                .workExperience(!workExperiences.isEmpty() ? workExperiences.stream().map(WorkExperienceDto::fromEntity).toList() : null)
+                .education(!educations.isEmpty() ? educations.stream().map(EducationDto::fromEntity).toList() : null)
+                .languages(LanguagesDto.fromEntity(languageSkill))
                 .build();
     }
 }

@@ -19,7 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Getter
-public class ReadAdminResumeDetailResponseDto extends SelfValidating<ReadAdminResumeDetailResponseDto> {
+public class ReadUserResumeDetailResponseDtoV2 extends SelfValidating<ReadUserResumeDetailResponseDtoV2> {
 
     @JsonProperty("profile_img_url")
     private final String profileImgUrl;
@@ -32,6 +32,9 @@ public class ReadAdminResumeDetailResponseDto extends SelfValidating<ReadAdminRe
 
     @JsonProperty("personal_information")
     private final PersonalInformationDto personalInformation;
+
+    @JsonProperty("title")
+    private final String title;
 
     @JsonProperty("introduction")
     private final String introduction;
@@ -46,11 +49,12 @@ public class ReadAdminResumeDetailResponseDto extends SelfValidating<ReadAdminRe
     private final LanguagesDto languages;
 
     @Builder
-    public ReadAdminResumeDetailResponseDto(
+    public ReadUserResumeDetailResponseDtoV2(
             String profileImgUrl,
             String name,
             VisaDto visa,
             PersonalInformationDto personalInformation,
+            String title,
             String introduction,
             List<WorkExperienceDto> workExperience,
             List<EducationDto> education,
@@ -60,6 +64,7 @@ public class ReadAdminResumeDetailResponseDto extends SelfValidating<ReadAdminRe
         this.name = name;
         this.visa = visa;
         this.personalInformation = personalInformation;
+        this.title = title;
         this.introduction = introduction;
         this.workExperience = workExperience;
         this.education = education;
@@ -302,16 +307,17 @@ public class ReadAdminResumeDetailResponseDto extends SelfValidating<ReadAdminRe
         }
     }
 
-    public static ReadAdminResumeDetailResponseDto of(Resume resume, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill, User user) {
-        return ReadAdminResumeDetailResponseDto.builder()
+    public static ReadUserResumeDetailResponseDtoV2 of(Resume resume, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill, User user) {
+        return ReadUserResumeDetailResponseDtoV2.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
-                .visa(ReadAdminResumeDetailResponseDto.VisaDto.fromEntity(user.getVisa()))
-                .personalInformation(ReadAdminResumeDetailResponseDto.PersonalInformationDto.fromEntity(user))
+                .visa(VisaDto.fromEntity(user.getVisa()))
+                .personalInformation(PersonalInformationDto.fromEntity(user))
+                .title(resume.getTitle())
                 .introduction(resume.getIntroduction())
-                .workExperience(!workExperiences.isEmpty() ? workExperiences.stream().map(ReadAdminResumeDetailResponseDto.WorkExperienceDto::fromEntity).toList() : null)
-                .education(!educations.isEmpty() ? educations.stream().map(ReadAdminResumeDetailResponseDto.EducationDto::fromEntity).toList() : null)
-                .languages(ReadAdminResumeDetailResponseDto.LanguagesDto.fromEntity(languageSkill))
+                .workExperience(!workExperiences.isEmpty() ? workExperiences.stream().map(WorkExperienceDto::fromEntity).toList() : null)
+                .education(!educations.isEmpty() ? educations.stream().map(EducationDto::fromEntity).toList() : null)
+                .languages(LanguagesDto.fromEntity(languageSkill))
                 .build();
     }
 }

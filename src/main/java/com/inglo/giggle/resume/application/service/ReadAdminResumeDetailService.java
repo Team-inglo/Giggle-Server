@@ -1,6 +1,7 @@
 package com.inglo.giggle.resume.application.service;
 
-import com.inglo.giggle.resume.application.dto.response.ReadAdminResumeDetailResponseDto;
+import com.inglo.giggle.resume.application.dto.response.ReadAdminResumeDetailResponseDtoV1;
+import com.inglo.giggle.resume.application.dto.response.ReadAdminResumeDetailResponseDtoV2;
 import com.inglo.giggle.resume.application.usecase.ReadAdminResumeDetailUseCase;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
@@ -28,7 +29,7 @@ public class ReadAdminResumeDetailService implements ReadAdminResumeDetailUseCas
 
     @Override
     @Transactional(readOnly = true)
-    public ReadAdminResumeDetailResponseDto execute(UUID resumeId) {
+    public ReadAdminResumeDetailResponseDtoV1 execute(UUID resumeId) {
         // Resume 조회
         Resume resume = resumeRepository.findByIdOrElseThrow(resumeId);
 
@@ -41,6 +42,24 @@ public class ReadAdminResumeDetailService implements ReadAdminResumeDetailUseCas
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
-        return ReadAdminResumeDetailResponseDto.of(resume, workExperiences, educations, languageSkill, resume.getUser());
+        return ReadAdminResumeDetailResponseDtoV1.of(resume, workExperiences, educations, languageSkill, resume.getUser());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReadAdminResumeDetailResponseDtoV2 executeV2(UUID resumeId) {
+        // Resume 조회
+        Resume resume = resumeRepository.findByIdOrElseThrow(resumeId);
+
+        // education 조회
+        List<Education> educations = educationRepository.findAllByResume(resume);
+
+        // LanguageSkill 조회
+        LanguageSkill languageSkill = languageSkillRepository.findByResumeOrElseThrow(resume);
+
+        // WorkExperience 조회
+        List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
+
+        return ReadAdminResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, resume.getUser());
     }
 }

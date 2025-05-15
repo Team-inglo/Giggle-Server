@@ -7,7 +7,7 @@ import com.inglo.giggle.resume.application.dto.request.CreateUserEducationReques
 import com.inglo.giggle.resume.application.dto.request.CreateUserWorkExperienceRequestDto;
 import com.inglo.giggle.resume.application.dto.request.UpdateUserAdditionalLanguageSkillRequestDto;
 import com.inglo.giggle.resume.application.dto.request.UpdateUserEducationRequestDto;
-import com.inglo.giggle.resume.application.dto.request.UpdateUserIntroductionRequestDto;
+import com.inglo.giggle.resume.application.dto.request.UpdateUserResumeRequestDtoV1;
 import com.inglo.giggle.resume.application.dto.request.UpdateUserSejongInstituteReqeustDto;
 import com.inglo.giggle.resume.application.dto.request.UpdateUserSocialIntegrationProgramReqeustDto;
 import com.inglo.giggle.resume.application.dto.request.UpdateUserTopikReqeustDto;
@@ -21,7 +21,7 @@ import com.inglo.giggle.resume.application.usecase.DeleteUserIntroductionUseCase
 import com.inglo.giggle.resume.application.usecase.DeleteUserWorkExperienceUseCase;
 import com.inglo.giggle.resume.application.usecase.UpdateUserAdditionalLanguageSkillUseCase;
 import com.inglo.giggle.resume.application.usecase.UpdateUserEducationUseCase;
-import com.inglo.giggle.resume.application.usecase.UpdateUserIntroductionUseCase;
+import com.inglo.giggle.resume.application.usecase.UpdateUserResumeUseCase;
 import com.inglo.giggle.resume.application.usecase.UpdateUserSejongInstituteUseCase;
 import com.inglo.giggle.resume.application.usecase.UpdateUserSocialIntegrationProgramUseCase;
 import com.inglo.giggle.resume.application.usecase.UpdateUserTopikUseCase;
@@ -45,7 +45,7 @@ public class ResumeUsersCommandV1Controller {
     private final CreateUserWorkExperienceUseCase createUserWorkExperienceUseCase;
     private final CreateUserEducationUseCase createUserEducationUseCase;
     private final CreateUserAdditionalLanguageSkillUseCase createUserAdditionalLanguageSkillUseCase;
-    private final UpdateUserIntroductionUseCase updateUserIntroductionUseCase;
+    private final UpdateUserResumeUseCase updateUserResumeUseCase;
     private final UpdateUserWorkExperienceUseCase updateUserWorkExperienceUseCase;
     private final UpdateUserEducationUseCase updateUserEducationUseCase;
     private final UpdateUserTopikUseCase updateUserTopikUseCase;
@@ -105,9 +105,9 @@ public class ResumeUsersCommandV1Controller {
     @PatchMapping("/introduction")
     public ResponseDto<Void> updateUserIntroduction(
             @AccountID UUID accountId,
-            @RequestBody @Valid UpdateUserIntroductionRequestDto requestDto
+            @RequestBody @Valid UpdateUserResumeRequestDtoV1 requestDto
     ) {
-        updateUserIntroductionUseCase.execute(accountId, requestDto);
+        updateUserResumeUseCase.execute(accountId, requestDto);
         return ResponseDto.ok(null);
     }
 

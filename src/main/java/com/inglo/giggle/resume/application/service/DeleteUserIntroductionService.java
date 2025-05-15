@@ -2,7 +2,6 @@ package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.resume.application.usecase.DeleteUserIntroductionUseCase;
 import com.inglo.giggle.resume.domain.Resume;
-import com.inglo.giggle.resume.domain.service.ResumeService;
 import com.inglo.giggle.resume.repository.ResumeRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -20,7 +19,6 @@ public class DeleteUserIntroductionService implements DeleteUserIntroductionUseC
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final ResumeRepository resumeRepository;
-    private final ResumeService resumeService;
 
     @Override
     @Transactional
@@ -36,7 +34,7 @@ public class DeleteUserIntroductionService implements DeleteUserIntroductionUseC
         Resume resume = resumeRepository.findByIdOrElseThrow(accountId);
 
         // Introduction null로 업데이트
-        resume = resumeService.updateIntroduction(resume, null);
+        resume.updateResume(null, null);
         resumeRepository.save(resume);
     }
 
