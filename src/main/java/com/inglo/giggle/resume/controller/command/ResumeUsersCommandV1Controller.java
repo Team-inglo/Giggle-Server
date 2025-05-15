@@ -5,6 +5,7 @@ import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.resume.application.dto.request.CreateUserAdditionalLanguageSkillRequestDto;
 import com.inglo.giggle.resume.application.dto.request.CreateUserEducationRequestDto;
 import com.inglo.giggle.resume.application.dto.request.CreateUserWorkExperienceRequestDto;
+import com.inglo.giggle.resume.application.dto.request.CreateUserWorkPreferenceRequestDto;
 import com.inglo.giggle.resume.application.dto.request.UpdateUserAdditionalLanguageSkillRequestDto;
 import com.inglo.giggle.resume.application.dto.request.UpdateUserEducationRequestDto;
 import com.inglo.giggle.resume.application.dto.request.UpdateUserResumeRequestDtoV1;
@@ -15,6 +16,7 @@ import com.inglo.giggle.resume.application.dto.request.UpdateUserWorkExperienceR
 import com.inglo.giggle.resume.application.usecase.CreateUserAdditionalLanguageSkillUseCase;
 import com.inglo.giggle.resume.application.usecase.CreateUserEducationUseCase;
 import com.inglo.giggle.resume.application.usecase.CreateUserWorkExperienceUseCase;
+import com.inglo.giggle.resume.application.usecase.CreateUserWorkPreferenceUseCase;
 import com.inglo.giggle.resume.application.usecase.DeleteUserAdditionalLanguageUseCase;
 import com.inglo.giggle.resume.application.usecase.DeleteUserEducationUseCase;
 import com.inglo.giggle.resume.application.usecase.DeleteUserIntroductionUseCase;
@@ -56,6 +58,7 @@ public class ResumeUsersCommandV1Controller {
     private final DeleteUserEducationUseCase deleteUserEducationUseCase;
     private final DeleteUserAdditionalLanguageUseCase deleteUserAdditionalLanguageUseCase;
     private final DeleteUserWorkExperienceUseCase deleteUserWorkExperienceUseCase;
+    private final CreateUserWorkPreferenceUseCase createUserWorkPreferenceUseCase;
 
     /**
      * 7.5 (유학생) 경력 생성하기
@@ -239,5 +242,17 @@ public class ResumeUsersCommandV1Controller {
     ) {
         deleteUserAdditionalLanguageUseCase.execute(accountId, id);
         return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.22 (유학생) 희망 근로 조건 생성하기
+     */
+    @PostMapping("/work-preferences")
+    public ResponseDto<Void> createUserWorkPreference(
+            @AccountID UUID accountId,
+            @RequestBody @Valid CreateUserWorkPreferenceRequestDto requestDto
+    ) {
+        createUserWorkPreferenceUseCase.execute(accountId, requestDto);
+        return ResponseDto.created(null);
     }
 }
