@@ -2,6 +2,7 @@ package com.inglo.giggle.account.domain;
 
 import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.address.domain.Address;
+import com.inglo.giggle.career.domain.BookMarkCareer;
 import com.inglo.giggle.core.type.EGender;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.BookMark;
@@ -88,6 +89,9 @@ public class User extends Account {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Resume resume;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookMarkCareer> bookMarkCareers = new ArrayList<>();
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */

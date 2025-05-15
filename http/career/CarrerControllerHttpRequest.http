@@ -1,0 +1,79 @@
+### 14.1 (게스트) 커리어 리스트 조회
+//@no-log
+GET http://localhost:8080/v1/guests/careers/overviews?
+    page=1&
+    size=10&
+    sorting=TRENDING
+Content-Type: application/json
+
+
+
+### 14.2 (게스트) 커리어 디테일 조회
+//@no-log
+GET http://localhost:8080/v1/guests/careers/1/details
+
+
+
+### 14.3 (유학생) 커리어 리스트 조회
+//@no-log
+GET http://localhost:8080/v1/users/careers/overviews?
+    page=1&
+    size=10&
+    is-book-marked=TRUE
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 14.4 (유학생) 커리어 디테일 조회
+//@no-log
+GET http://localhost:8080/v1/users/careers/1/details
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 14.5 (어드민) 커리어 추가하기
+###
+POST http://localhost:8080/v1/admins/careers
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{access_token}}
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image.png
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "title": "은지랑 은서의 디자인 여행",
+  "career_category": "PROGRAM",
+  "host_name": "한국글로벌협회",
+  "organizer_name": "서울청년센터",
+  "address": "서울 강남구",
+  "recruitment_start_date": "2025-06-01",
+  "recruitment_end_date": "2025-06-30",
+  "reward": 500000,
+  "visa": ["D_2_2", "D_4_1", "F_2"],
+  "recruitment_number": 10,
+  "education": "BACHELOR",
+  "preferred_conditions": "외국어 능통자 우대",
+  "details": "해외 파견 인턴십 프로그램으로, 글로벌 기업에서 실무 경험을 쌓을 수 있는 기회입니다.",
+  "application_url": "https://apply.globalinternship.kr"
+}
+
+--boundary
+
+
+
+
+
+### 14.6 (유학생) 커리어 북마크 추가/삭제
+PUT http://localhost:8080/v1/users/careers/2/book-mark-careers
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+

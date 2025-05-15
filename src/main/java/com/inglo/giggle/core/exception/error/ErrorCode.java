@@ -47,6 +47,7 @@ public enum ErrorCode {
     NOT_FOUND_TERM_ACCOUNT(40431, HttpStatus.NOT_FOUND, "존재하지 않는 약관에 동의한 사용자입니다."),
     NOT_FOUND_VERSION(40432, HttpStatus.NOT_FOUND, "존재하지 않는 버전입니다."),
     NOT_FOUND_WORK_PREFERENCE(40433, HttpStatus.NOT_FOUND, "존재하지 않는 희망 근로입니다."),
+    NOT_FOUND_CAREER(40434, HttpStatus.NOT_FOUND, "존재하지 않는 커리어입니다."),
 
     // Invalid Argument Error
     MISSING_REQUEST_PARAMETER(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),
@@ -65,7 +66,7 @@ public enum ErrorCode {
     EXPIRED_JOB_POSTING(40013, HttpStatus.BAD_REQUEST, "지원 기간이 지난 공고입니다."),
     INVALID_DATE_RANGE(40014, HttpStatus.BAD_REQUEST, "종료기간이 시작기간보다 빠를 수 없습니다."),
     INVALID_PROPRIETOR(40015, HttpStatus.BAD_REQUEST, "소유자가 아닙니다."),
-  
+
     // SIGN UP Error
     ALREADY_EXIST_ID(40200, HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다."),
     ALREADY_EXIST_EMAIL(40201, HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
