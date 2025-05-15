@@ -22,6 +22,7 @@ import com.inglo.giggle.resume.application.usecase.DeleteUserAdditionalLanguageU
 import com.inglo.giggle.resume.application.usecase.DeleteUserEducationUseCase;
 import com.inglo.giggle.resume.application.usecase.DeleteUserIntroductionUseCase;
 import com.inglo.giggle.resume.application.usecase.DeleteUserWorkExperienceUseCase;
+import com.inglo.giggle.resume.application.usecase.DeleteUserWorkPreferenceUseCase;
 import com.inglo.giggle.resume.application.usecase.UpdateUserAdditionalLanguageSkillUseCase;
 import com.inglo.giggle.resume.application.usecase.UpdateUserEducationUseCase;
 import com.inglo.giggle.resume.application.usecase.UpdateUserResumeUseCase;
@@ -63,6 +64,7 @@ public class ResumeUsersCommandV1Controller {
     private final DeleteUserWorkExperienceUseCase deleteUserWorkExperienceUseCase;
     private final CreateUserWorkPreferenceUseCase createUserWorkPreferenceUseCase;
     private final UpdateUserWorkPreferenceUseCase updateUserWorkPreferenceUseCase;
+    private final DeleteUserWorkPreferenceUseCase deleteUserWorkPreferenceUseCase;
 
     /**
      * 7.5 (유학생) 경력 생성하기
@@ -269,6 +271,18 @@ public class ResumeUsersCommandV1Controller {
             @RequestBody @Valid UpdateUserWorkPreferenceRequestDto requestDto
     ) {
         updateUserWorkPreferenceUseCase.execute(id, requestDto);
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 7.24 (유학생) 희망 근로 조건 삭제하기
+     */
+    @DeleteMapping("/work-preferences/{id}")
+    public ResponseDto<Void> deleteUserWorkPreference(
+            @AccountID UUID accountId,
+            @PathVariable Long id
+    ) {
+        deleteUserWorkPreferenceUseCase.execute(accountId, id);
         return ResponseDto.ok(null);
     }
 }

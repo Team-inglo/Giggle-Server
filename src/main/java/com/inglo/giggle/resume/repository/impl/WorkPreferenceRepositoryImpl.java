@@ -34,7 +34,7 @@ public class WorkPreferenceRepositoryImpl implements WorkPreferenceRepository {
     }
 
     @Override
-    public void delete(Long workPreferenceId) {
+    public void deleteById(Long workPreferenceId) {
         workPreferenceJpaRepository.deleteById(workPreferenceId);
     }
 }

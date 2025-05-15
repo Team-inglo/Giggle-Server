@@ -1,6 +1,8 @@
 package com.inglo.giggle.resume.domain;
 
 import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.core.exception.error.ErrorCode;
+import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.domain.type.EEmploymentType;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
 import jakarta.persistence.Column;
@@ -20,6 +22,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -102,5 +106,11 @@ public class WorkPreference extends BaseEntity {
         this.region2DepthName = region2DepthName;
         this.region3DepthName = region3DepthName;
         this.region4DepthName = region4DepthName;
+    }
+
+    public void checkUserValidation(UUID accountId) {
+        if (!this.resume.getAccountId().equals(accountId)) {
+            throw new CommonException(ErrorCode.INVALID_PROPRIETOR);
+        }
     }
 }

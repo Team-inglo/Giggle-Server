@@ -13,5 +13,5 @@ public interface WorkPreferenceRepository {
 
     void save(WorkPreference workPreference);
 
-    void delete(Long workPreferenceId);
+    void deleteById(Long workPreferenceId);
 }
