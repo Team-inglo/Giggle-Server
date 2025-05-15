@@ -1,15 +1,7 @@
-package com.inglo.giggle.posting.domain;
+package com.inglo.giggle.career.domain;
 
-import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,8 +12,11 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "book_marks")
-public class BookMark extends BaseEntity {
+@Table(name = "career_images")
+@SQLDelete(sql = "UPDATE career_images SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+public class CareerImage extends BaseEntity {
+
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
     /* -------------------------------------------- */
@@ -30,22 +25,25 @@ public class BookMark extends BaseEntity {
     private Long id;
 
     /* -------------------------------------------- */
+    /* Information Column ------------------------- */
+    /* -------------------------------------------- */
+    @Lob
+    @Column(name = "img_url", nullable = false)
+    private String imgUrl;
+
+    /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_posting_id", nullable = false)
-    private JobPosting jobPosting;
+    @JoinColumn(name = "career_id", nullable = false)
+    private Career career;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public BookMark(User user, JobPosting jobPosting) {
-        this.user = user;
-        this.jobPosting = jobPosting;
+    public CareerImage(String imgUrl, Career career) {
+        this.imgUrl = imgUrl;
+        this.career = career;
     }
 }

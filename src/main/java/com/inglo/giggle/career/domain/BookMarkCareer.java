@@ -1,27 +1,18 @@
-package com.inglo.giggle.posting.domain;
+package com.inglo.giggle.career.domain;
 
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "book_marks")
-public class BookMark extends BaseEntity {
+@Table(name = "book_mark_careers")
+public class BookMarkCareer extends BaseEntity {
     /* -------------------------------------------- */
     /* Default Column ----------------------------- */
     /* -------------------------------------------- */
@@ -37,15 +28,15 @@ public class BookMark extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_posting_id", nullable = false)
-    private JobPosting jobPosting;
+    @JoinColumn(name = "career_id", nullable = false)
+    private Career career;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public BookMark(User user, JobPosting jobPosting) {
+    public BookMarkCareer(User user, Career career) {
         this.user = user;
-        this.jobPosting = jobPosting;
+        this.career = career;
     }
 }
