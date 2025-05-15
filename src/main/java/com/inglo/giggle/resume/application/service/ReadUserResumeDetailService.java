@@ -8,11 +8,13 @@ import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.WorkExperience;
+import com.inglo.giggle.resume.domain.WorkPreference;
 import com.inglo.giggle.resume.domain.service.ResumeService;
 import com.inglo.giggle.resume.repository.EducationRepository;
 import com.inglo.giggle.resume.repository.LanguageSkillRepository;
 import com.inglo.giggle.resume.repository.ResumeRepository;
 import com.inglo.giggle.resume.repository.WorkExperienceRepository;
+import com.inglo.giggle.resume.repository.WorkPreferenceRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
 import com.inglo.giggle.security.repository.AccountRepository;
@@ -34,6 +36,7 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
     private final EducationRepository educationRepository;
     private final LanguageSkillRepository languageSkillRepository;
     private final WorkExperienceRepository workExperienceRepository;
+    private final WorkPreferenceRepository workPreferenceRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -95,7 +98,10 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
-        return ReadUserResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, user);
+        // WorkPreference 조회
+        List<WorkPreference> workPreferences = workPreferenceRepository.findAllByResumeId(resume.getAccountId());
+
+        return ReadUserResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, user, workPreferences);
     }
 
 }

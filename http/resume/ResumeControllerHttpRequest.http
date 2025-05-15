@@ -169,3 +169,39 @@ Authorization: Bearer {{access_token}}
 // @no-log
 GET {{host_url}}/v1/admins/resumes/eb4f7157-397f-4315-91b5-fea7a5c27c80
 Authorization: Bearer {{access_token}}
+
+### 7.21 (유학생) 희망 근로 조건 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/users/resumes/work-preferences/1/details
+Authorization: Bearer {{access_token}}
+
+### 7.22 (유학생) 희망 근로 조건 생성하기
+// @no-log
+POST {{host_url}}/v1/users/resumes/work-preferences
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "job_category" : "BUSINESS_MANAGEMENT",
+  "employment_type" : "PARTTIME",
+  "region_1depth_name" : "서울특별시"
+}
+
+### 7.23 (유학생) 희망 근로 조건 수정하기
+// @no-log
+PUT {{host_url}}/v1/users/resumes/work-preferences/1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "job_category" : "SECURITY_CLEANING",
+  "employment_type" : "INTERNSHIP",
+  "region_1depth_name" : "경기도",
+  "region_2depth_name" : "수원시",
+  "region_3depth_name" : "영통구"
+}
+
+### 7.24 (유학생) 희망 근로 조건 삭제하기
+// @no-log
+DELETE {{host_url}}/v1/users/resumes/work-preferences/1
+Authorization: Bearer {{access_token}}

@@ -6,10 +6,12 @@ import com.inglo.giggle.resume.application.dto.response.ReadUserEducationDetailR
 import com.inglo.giggle.resume.application.dto.response.ReadUserLanguageSummaryResponseDto;
 import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDtoV1;
 import com.inglo.giggle.resume.application.dto.response.ReadUserWorkExperienceDetailResponseDto;
+import com.inglo.giggle.resume.application.dto.response.ReadUserWorkPreferenceDetailResponseDto;
 import com.inglo.giggle.resume.application.usecase.ReadUserEducationDetailUseCase;
 import com.inglo.giggle.resume.application.usecase.ReadUserLanguageSummaryUseCase;
 import com.inglo.giggle.resume.application.usecase.ReadUserResumeDetailUseCase;
 import com.inglo.giggle.resume.application.usecase.ReadUserWorkExperienceDetailUseCase;
+import com.inglo.giggle.resume.application.usecase.ReadUserWorkPreferenceDetailUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,7 @@ public class ResumeUsersQueryV1Controller {
     private final ReadUserWorkExperienceDetailUseCase readUserWorkExperienceDetailUseCase;
     private final ReadUserEducationDetailUseCase readUserEducationDetailUseCase;
     private final ReadUserLanguageSummaryUseCase readUserLanguageSummaryUseCase;
+    private final ReadUserWorkPreferenceDetailUseCase readUserWorkPreferenceDetailUseCase;
 
     /** 
      * 7.1 (유학생) 이력서 조회하기
@@ -69,4 +72,13 @@ public class ResumeUsersQueryV1Controller {
         return ResponseDto.ok(readUserLanguageSummaryUseCase.execute(accountId));
     }
 
+    /**
+     * 7.21 (유학생) 희망 근로 조건 상세 조회하기
+     */
+    @GetMapping("/work-preferences/{id}/details")
+    public ResponseDto<ReadUserWorkPreferenceDetailResponseDto> readUserWorkPreferenceDetail(
+            @PathVariable Long id
+    ) {
+        return ResponseDto.ok(readUserWorkPreferenceDetailUseCase.execute(id));
+    }
 }

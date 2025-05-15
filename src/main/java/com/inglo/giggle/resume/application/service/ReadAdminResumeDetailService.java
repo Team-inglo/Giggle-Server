@@ -7,10 +7,12 @@ import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.WorkExperience;
+import com.inglo.giggle.resume.domain.WorkPreference;
 import com.inglo.giggle.resume.repository.EducationRepository;
 import com.inglo.giggle.resume.repository.LanguageSkillRepository;
 import com.inglo.giggle.resume.repository.ResumeRepository;
 import com.inglo.giggle.resume.repository.WorkExperienceRepository;
+import com.inglo.giggle.resume.repository.WorkPreferenceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class ReadAdminResumeDetailService implements ReadAdminResumeDetailUseCas
     private final EducationRepository educationRepository;
     private final LanguageSkillRepository languageSkillRepository;
     private final WorkExperienceRepository workExperienceRepository;
+    private final WorkPreferenceRepository workPreferenceRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -60,6 +63,9 @@ public class ReadAdminResumeDetailService implements ReadAdminResumeDetailUseCas
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
-        return ReadAdminResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, resume.getUser());
+        // WorkPreference 조회
+        List<WorkPreference> workPreferences = workPreferenceRepository.findAllByResumeId(resume.getAccountId());
+
+        return ReadAdminResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, resume.getUser(), workPreferences);
     }
 }
