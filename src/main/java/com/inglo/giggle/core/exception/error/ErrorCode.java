@@ -46,6 +46,7 @@ public enum ErrorCode {
     NOT_FOUND_TERM(40430, HttpStatus.NOT_FOUND, "존재하지 않는 약관입니다."),
     NOT_FOUND_TERM_ACCOUNT(40431, HttpStatus.NOT_FOUND, "존재하지 않는 약관에 동의한 사용자입니다."),
     NOT_FOUND_VERSION(40432, HttpStatus.NOT_FOUND, "존재하지 않는 버전입니다."),
+    NOT_FOUND_WORK_PREFERENCE(40433, HttpStatus.NOT_FOUND, "존재하지 않는 희망 근로입니다."),
 
     // Invalid Argument Error
     MISSING_REQUEST_PARAMETER(40000, HttpStatus.BAD_REQUEST, "필수 요청 파라미터가 누락되었습니다."),

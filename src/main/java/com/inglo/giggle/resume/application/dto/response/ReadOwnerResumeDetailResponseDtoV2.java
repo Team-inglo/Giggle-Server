@@ -11,6 +11,7 @@ import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.WorkExperience;
+import com.inglo.giggle.resume.domain.WorkPreference;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -48,6 +49,9 @@ public class ReadOwnerResumeDetailResponseDtoV2 extends SelfValidating<ReadOwner
     @JsonProperty("languages")
     private final LanguagesDto languages;
 
+    @JsonProperty("work_preferences")
+    private final List<WorkPreferenceDto> workPreferences;
+
     @Builder
     public ReadOwnerResumeDetailResponseDtoV2(
             String profileImgUrl,
@@ -58,7 +62,8 @@ public class ReadOwnerResumeDetailResponseDtoV2 extends SelfValidating<ReadOwner
             String introduction,
             List<WorkExperienceDto> workExperience,
             List<EducationDto> education,
-            LanguagesDto languages
+            LanguagesDto languages,
+            List<WorkPreferenceDto> workPreferences
     ) {
         this.profileImgUrl = profileImgUrl;
         this.name = name;
@@ -69,6 +74,7 @@ public class ReadOwnerResumeDetailResponseDtoV2 extends SelfValidating<ReadOwner
         this.workExperience = workExperience;
         this.education = education;
         this.languages = languages;
+        this.workPreferences = workPreferences;
 
         this.validateSelf();
     }
@@ -307,7 +313,55 @@ public class ReadOwnerResumeDetailResponseDtoV2 extends SelfValidating<ReadOwner
         }
     }
 
-    public static ReadOwnerResumeDetailResponseDtoV2 of(Resume resume, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill, User user) {
+    @Getter
+    public static class WorkPreferenceDto {
+
+        @JsonProperty("id")
+        private final Long id;
+
+        @JsonProperty("job_category")
+        private final String jobCategory;
+
+        @JsonProperty("employment_type")
+        private final String employmentType;
+
+        @JsonProperty("region_1depth_name")
+        private final String region1DepthName;
+
+        @JsonProperty("region_2depth_name")
+        private final String region2DepthName;
+
+        @JsonProperty("region_3depth_name")
+        private final String region3DepthName;
+
+        @JsonProperty("region_4depth_name")
+        private final String region4DepthName;
+
+        @Builder
+        public WorkPreferenceDto(Long id, String jobCategory, String employmentType, String region1DepthName, String region2DepthName, String region3DepthName, String region4DepthName) {
+            this.id = id;
+            this.jobCategory = jobCategory;
+            this.employmentType = employmentType;
+            this.region1DepthName = region1DepthName;
+            this.region2DepthName = region2DepthName;
+            this.region3DepthName = region3DepthName;
+            this.region4DepthName = region4DepthName;
+        }
+
+        public static WorkPreferenceDto fromEntity(WorkPreference workPreference) {
+            return WorkPreferenceDto.builder()
+                    .id(workPreference.getId())
+                    .jobCategory(workPreference.getJobCategory().toString())
+                    .employmentType(workPreference.getEmploymentType().toString())
+                    .region1DepthName(workPreference.getRegion1DepthName())
+                    .region2DepthName(workPreference.getRegion2DepthName())
+                    .region3DepthName(workPreference.getRegion3DepthName())
+                    .region4DepthName(workPreference.getRegion4DepthName())
+                    .build();
+        }
+    }
+
+    public static ReadOwnerResumeDetailResponseDtoV2 of(Resume resume, List<WorkExperience> workExperiences, List<Education> educations, LanguageSkill languageSkill, User user, List<WorkPreference> workPreferences) {
         return ReadOwnerResumeDetailResponseDtoV2.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
@@ -318,6 +372,7 @@ public class ReadOwnerResumeDetailResponseDtoV2 extends SelfValidating<ReadOwner
                 .workExperience(!workExperiences.isEmpty() ? workExperiences.stream().map(ReadOwnerResumeDetailResponseDtoV2.WorkExperienceDto::fromEntity).toList() : null)
                 .education(!educations.isEmpty() ? educations.stream().map(ReadOwnerResumeDetailResponseDtoV2.EducationDto::fromEntity).toList() : null)
                 .languages(ReadOwnerResumeDetailResponseDtoV2.LanguagesDto.fromEntity(languageSkill))
+                .workPreferences(!workPreferences.isEmpty() ? workPreferences.stream().map(WorkPreferenceDto::fromEntity).toList() : null)
                 .build();
     }
 }
