@@ -41,6 +41,9 @@ public class Resume extends BaseEntity {
     /* -------------------------------------------- */
     /* Information Column ------------------------- */
     /* -------------------------------------------- */
+    @Column(name = "title", length = 50)
+    private String title;
+
     @Column(name = "introduction", length = 200)
     private String introduction;
 
@@ -68,12 +71,19 @@ public class Resume extends BaseEntity {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public Resume(User user, String introduction) {
+    public Resume(User user, String title, String introduction) {
         this.user = user;
+        this.accountId = user.getId();
+        this.title = title;
         this.introduction = introduction;
     }
 
     public void updateIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public void updateResume(String title, String introduction) {
+        this.title = title;
         this.introduction = introduction;
     }
 

@@ -1,8 +1,8 @@
 package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.account.domain.User;
-import com.inglo.giggle.account.repository.UserRepository;
-import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDto;
+import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDtoV1;
+import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDtoV2;
 import com.inglo.giggle.resume.application.usecase.ReadUserResumeDetailUseCase;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
@@ -29,7 +29,6 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
 
     private final AccountRepository accountRepository;
     private final AccountService accountService;
-    private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
     private final ResumeService resumeService;
     private final EducationRepository educationRepository;
@@ -38,7 +37,7 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
 
     @Override
     @Transactional(readOnly = true)
-    public ReadUserResumeDetailResponseDto execute(UUID accountId) {
+    public ReadUserResumeDetailResponseDtoV1 execute(UUID accountId) {
 
         // Account 조회
         Account account = accountRepository.findByIdOrElseThrow(accountId);
@@ -64,7 +63,39 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
-        return ReadUserResumeDetailResponseDto.of(resume, workExperiences, educations, languageSkill, user);
+        return ReadUserResumeDetailResponseDtoV1.of(resume, workExperiences, educations, languageSkill, user);
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReadUserResumeDetailResponseDtoV2 executeV2(UUID accountId) {
+
+        // Account 조회
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
+
+        // 계정 타입 유효성 체크
+        accountService.checkUserValidation(account);
+
+        // User 형변환
+        User user = (User) account;
+
+        // Resume 조회
+        Resume resume = resumeRepository.findWithWorkExperiencesAndLanguageSkillByAccountIdOrElseThrow(accountId);
+
+        // Resume 유효성 체크
+        resumeService.checkResumeValidation(resume, accountId);
+
+        // education 조회
+        List<Education> educations = educationRepository.findAllByResume(resume);
+
+        // LanguageSkill 조회
+        LanguageSkill languageSkill = languageSkillRepository.findByResumeOrElseThrow(resume);
+
+        // WorkExperience 조회
+        List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
+
+        return ReadUserResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, user);
     }
 
 }

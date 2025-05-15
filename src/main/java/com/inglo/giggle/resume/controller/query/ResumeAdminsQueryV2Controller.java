@@ -1,7 +1,7 @@
 package com.inglo.giggle.resume.controller.query;
 
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.resume.application.dto.response.ReadAdminResumeDetailResponseDtoV1;
+import com.inglo.giggle.resume.application.dto.response.ReadAdminResumeDetailResponseDtoV2;
 import com.inglo.giggle.resume.application.usecase.ReadAdminResumeDetailUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +13,15 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/admins/resumes")
-public class ResumeAdminsQueryV1Controller {
+@RequestMapping("/v2/admins/resumes")
+public class ResumeAdminsQueryV2Controller {
 
     private final ReadAdminResumeDetailUseCase readAdminResumeDetailUseCase;
 
     @GetMapping("/{resumeId}")
-    public ResponseDto<ReadAdminResumeDetailResponseDtoV1> readAdminResumeDetail(
+    public ResponseDto<ReadAdminResumeDetailResponseDtoV2> readAdminResumeDetail(
             @PathVariable("resumeId") UUID resumeId
     ) {
-        return ResponseDto.ok(readAdminResumeDetailUseCase.execute(resumeId));
+        return ResponseDto.ok(readAdminResumeDetailUseCase.executeV2(resumeId));
     }
 }

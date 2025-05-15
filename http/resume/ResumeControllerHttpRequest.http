@@ -1,6 +1,6 @@
 ### 7.1 (유학생) 이력서 조회하기
 // @no-log
-GET {{host_url}}/v1/users/resumes/details
+GET {{host_url}}/v2/users/resumes/details
 Authorization: Bearer {{access_token}}
 
 ### 7.2 (유학생) 경력 상세 조회하기
@@ -60,11 +60,12 @@ Content-Type: application/json
 }
 
 ### 7.8 (유학생) 자기소개 수정하기
-PATCH {{host_url}}/v1/users/resumes/introduction
+PATCH {{host_url}}/v2/users/resumes/introduction
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
+  "title" : "안녕하세요 저는 김철수입니다.",
   "introduction": "{{resume.API_7_8.introduction}}"
 }
 
@@ -161,7 +162,7 @@ Authorization: Bearer {{access_token}}
 
 ### 7.19 (고용주) 이력서 조회하기
 // @no-log
-GET {{host_url}}/v1/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details
+GET {{host_url}}/v2/owners/user-owner-job-postings/{{resume.API_7_19.id}}/users/resumes/details
 Authorization: Bearer {{access_token}}
 
 ### 7.20 (어드민) 이력서 조회하기

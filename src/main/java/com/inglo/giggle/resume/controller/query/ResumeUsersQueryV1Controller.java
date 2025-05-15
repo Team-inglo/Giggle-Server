@@ -4,7 +4,7 @@ import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
 import com.inglo.giggle.resume.application.dto.response.ReadUserEducationDetailResponseDto;
 import com.inglo.giggle.resume.application.dto.response.ReadUserLanguageSummaryResponseDto;
-import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDto;
+import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDtoV1;
 import com.inglo.giggle.resume.application.dto.response.ReadUserWorkExperienceDetailResponseDto;
 import com.inglo.giggle.resume.application.usecase.ReadUserEducationDetailUseCase;
 import com.inglo.giggle.resume.application.usecase.ReadUserLanguageSummaryUseCase;
@@ -31,7 +31,7 @@ public class ResumeUsersQueryV1Controller {
      * 7.1 (유학생) 이력서 조회하기
      */
     @GetMapping("/details")
-    public ResponseDto<ReadUserResumeDetailResponseDto> readUserResumeDetail(
+    public ResponseDto<ReadUserResumeDetailResponseDtoV1> readUserResumeDetail(
             @AccountID UUID accountId
     ) {
         return ResponseDto.ok(readUserResumeDetailUseCase.execute(accountId));

@@ -5,7 +5,8 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
-import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDto;
+import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDtoV1;
+import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDtoV2;
 import com.inglo.giggle.resume.application.usecase.ReadOwnerResumeDetailUseCase;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.LanguageSkill;
@@ -40,7 +41,7 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
 
     @Override
     @Transactional(readOnly = true)
-    public ReadOwnerResumeDetailResponseDto execute(UUID accountId, Long userOwnerJobPostingId) {
+    public ReadOwnerResumeDetailResponseDtoV1 execute(UUID accountId, Long userOwnerJobPostingId) {
 
         // Account 조회
         Account account = accountRepository.findByIdOrElseThrow(accountId);
@@ -67,7 +68,39 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
         // WorkExperience 조회
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
-        return ReadOwnerResumeDetailResponseDto.of(resume, workExperiences, educations, languageSkill, userOwnerJobPosting.getUser());
+        return ReadOwnerResumeDetailResponseDtoV1.of(resume, workExperiences, educations, languageSkill, userOwnerJobPosting.getUser());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReadOwnerResumeDetailResponseDtoV2 executeV2(UUID accountId, Long userOwnerJobPostingId) {
+
+        // Account 조회
+        Account account = accountRepository.findByIdOrElseThrow(accountId);
+
+        // 계정 타입 유효성 체크
+        accountService.checkOwnerValidation(account);
+
+        // UserOwnerJobPosting 조회
+        UserOwnerJobPosting userOwnerJobPosting = userOwnerJobPostingRepository.findWithUserById(userOwnerJobPostingId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESOURCE));
+
+        // UserOwnerJobPosting 유효성 체크
+        userOwnerJobPostingService.checkOwnerUserOwnerJobPostingValidation(userOwnerJobPosting, accountId);
+
+        // Resume 조회
+        Resume resume = resumeRepository.findWithEducationsByAccountIdOrElseThrow(userOwnerJobPosting.getUser().getId());
+
+        // education 조회
+        List<Education> educations = educationRepository.findAllByResume(resume);
+
+        // LanguageSkill 조회
+        LanguageSkill languageSkill = languageSkillRepository.findByResumeOrElseThrow(resume);
+
+        // WorkExperience 조회
+        List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
+
+        return ReadOwnerResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, userOwnerJobPosting.getUser());
     }
 
 }

@@ -17,11 +17,6 @@ public class ResumeService {
                 .build();
     }
 
-    public Resume updateIntroduction(Resume resume, String introduction) {
-        resume.updateIntroduction(introduction);
-        return resume;
-    }
-
     public void checkResumeValidation(Resume resume, UUID accountId) {
         if (!resume.getUser().getId().equals(accountId)) {
             throw new CommonException(ErrorCode.INVALID_ARGUMENT);
