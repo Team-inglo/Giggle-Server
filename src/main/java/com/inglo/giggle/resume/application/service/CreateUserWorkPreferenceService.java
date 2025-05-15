@@ -8,6 +8,7 @@ import com.inglo.giggle.resume.repository.ResumeRepository;
 import com.inglo.giggle.resume.repository.WorkPreferenceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ public class CreateUserWorkPreferenceService implements CreateUserWorkPreference
     private final WorkPreferenceRepository workPreferenceRepository;
 
     @Override
+    @Transactional
     public void execute(UUID accountId, CreateUserWorkPreferenceRequestDto requestDto) {
 
         // Resume 조회
