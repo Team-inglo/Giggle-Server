@@ -75,10 +75,10 @@ public class ResumeUsersQueryV1Controller {
     /**
      * 7.21 (유학생) 희망 근로 조건 상세 조회하기
      */
-    @GetMapping("/work-preferences/{id}/details")
+    @GetMapping("/work-preferences/details")
     public ResponseDto<ReadUserWorkPreferenceDetailResponseDto> readUserWorkPreferenceDetail(
-            @PathVariable Long id
+            @AccountID UUID accountId
     ) {
-        return ResponseDto.ok(readUserWorkPreferenceDetailUseCase.execute(id));
+        return ResponseDto.ok(readUserWorkPreferenceDetailUseCase.execute(accountId));
     }
 }

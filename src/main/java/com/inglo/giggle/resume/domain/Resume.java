@@ -56,9 +56,6 @@ public class Resume extends BaseEntity {
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Education> educations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkPreference> workPreferences = new ArrayList<>();
-
     /* -------------------------------------------- */
     /* One To One Mapping ------------------------- */
     /* -------------------------------------------- */
@@ -69,6 +66,9 @@ public class Resume extends BaseEntity {
 
     @OneToOne(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     private LanguageSkill languageSkill;
+
+    @OneToOne(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
+    private WorkPreference workPreference;
 
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */

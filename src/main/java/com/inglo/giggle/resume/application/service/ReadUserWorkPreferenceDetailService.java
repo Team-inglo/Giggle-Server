@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class ReadUserWorkPreferenceDetailService implements ReadUserWorkPreferenceDetailUseCase {
@@ -16,9 +18,9 @@ public class ReadUserWorkPreferenceDetailService implements ReadUserWorkPreferen
 
     @Override
     @Transactional(readOnly = true)
-    public ReadUserWorkPreferenceDetailResponseDto execute(Long workPreferenceId) {
+    public ReadUserWorkPreferenceDetailResponseDto execute(UUID accountId) {
         // WorkPreference 조회
-        WorkPreference workPreference = workPreferenceRepository.findByIdOrElseThrow(workPreferenceId);
+        WorkPreference workPreference = workPreferenceRepository.findByResumeIdOrElseThrow(accountId);
 
         return ReadUserWorkPreferenceDetailResponseDto.fromEntity(workPreference);
     }

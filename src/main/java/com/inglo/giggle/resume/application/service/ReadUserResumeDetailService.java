@@ -99,9 +99,9 @@ public class ReadUserResumeDetailService implements ReadUserResumeDetailUseCase 
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
         // WorkPreference 조회
-        List<WorkPreference> workPreferences = workPreferenceRepository.findAllByResumeId(resume.getAccountId());
+        WorkPreference workPreference = workPreferenceRepository.findByResumeIdOrElseThrow(resume.getAccountId());
 
-        return ReadUserResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, user, workPreferences);
+        return ReadUserResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, user, workPreference);
     }
 
 }

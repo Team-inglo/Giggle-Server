@@ -8,7 +8,6 @@ import com.inglo.giggle.resume.repository.mysql.WorkPreferenceJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -18,14 +17,9 @@ public class WorkPreferenceRepositoryImpl implements WorkPreferenceRepository {
     private final WorkPreferenceJpaRepository workPreferenceJpaRepository;
 
     @Override
-    public WorkPreference findByIdOrElseThrow(Long id) {
-        return workPreferenceJpaRepository.findById(id)
+    public WorkPreference findByResumeIdOrElseThrow(UUID resumeId) {
+        return workPreferenceJpaRepository.findByResumeAccountId(resumeId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_WORK_PREFERENCE));
-    }
-
-    @Override
-    public List<WorkPreference> findAllByResumeId(UUID resumeId) {
-        return workPreferenceJpaRepository.findAllByResumeAccountId(resumeId);
     }
 
     @Override

@@ -11,8 +11,6 @@ password={{auth.API_1_1_USER.password}}
     client.global.set("refresh_token", response.body.data.refresh_token);
 %}
 
-
-
 ### 1.1 사용자 로그인 - 고용주
 // @no-log
 POST {{host_url}}/v1/auth/login
@@ -78,7 +76,7 @@ Authorization: Bearer {{access_token}}
 
 ### 2.4 기본 임시 회원가입 - 유학생
 // @no-log
-@email_user = "hsw0106@gmail.com"
+@email_user = "jangelliot0404@dgu.ac.kr"
 POST {{host_url}}/v1/auth/sign-up
 Content-Type: application/json
 
@@ -175,7 +173,7 @@ Content-Type: application/json
 
 ### 2.7 이메일 인증코드 검증 - 유학생
 // @no-log
-@authentication_code_user = "437513"
+@authentication_code_user = "501230"
 PATCH {{host_url}}/v1/auth/validations/authentication-code
 Content-Type: application/json
 

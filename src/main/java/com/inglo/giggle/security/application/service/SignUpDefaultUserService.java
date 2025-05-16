@@ -8,9 +8,11 @@ import com.inglo.giggle.core.utility.JsonWebTokenUtil;
 import com.inglo.giggle.core.utility.S3Util;
 import com.inglo.giggle.resume.domain.LanguageSkill;
 import com.inglo.giggle.resume.domain.Resume;
+import com.inglo.giggle.resume.domain.WorkPreference;
 import com.inglo.giggle.resume.domain.service.LanguageSkillService;
 import com.inglo.giggle.resume.domain.service.ResumeService;
 import com.inglo.giggle.resume.repository.LanguageSkillRepository;
+import com.inglo.giggle.resume.repository.WorkPreferenceRepository;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultUserRequestDto;
 import com.inglo.giggle.security.application.dto.response.DefaultJsonWebTokenDto;
 import com.inglo.giggle.security.application.usecase.SignUpDefaultUserUseCase;
@@ -56,6 +58,7 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
     private final ResumeService resumeService;
     private final LanguageSkillService languageSkillService;
     private final LanguageSkillRepository languageSkillRepository;
+    private final WorkPreferenceRepository workPreferenceRepository;
 
     @Override
     @Transactional
@@ -91,10 +94,14 @@ public class SignUpDefaultUserService implements SignUpDefaultUserUseCase {
 
         User savedUser = (User) accountRepository.saveAndReturn(user);
 
-        // Resume, LanguageSkill 생성 및 저장
+        // Resume, LanguageSkill, WorkPreference 생성 및 저장
         Resume savedResume = resumeService.createResume(savedUser);
         LanguageSkill savedLanguageSkill = languageSkillService.createLanguageSkill(savedResume);
         languageSkillRepository.save(savedLanguageSkill);
+        WorkPreference workPreference = WorkPreference.builder()
+                .resume(savedResume)
+                .build();
+        workPreferenceRepository.save(workPreference);
 
         // temporary Token 삭제
         temporaryTokenRepository.deleteById(temporaryToken.getEmail());

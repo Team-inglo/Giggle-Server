@@ -104,9 +104,9 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
         List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
 
         // WorkPreference 조회
-        List<WorkPreference> workPreferences = workPreferenceRepository.findAllByResumeId(resume.getAccountId());
+        WorkPreference workPreference = workPreferenceRepository.findByResumeIdOrElseThrow(resume.getAccountId());
 
-        return ReadOwnerResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, userOwnerJobPosting.getUser(), workPreferences);
+        return ReadOwnerResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, userOwnerJobPosting.getUser(), workPreference);
     }
 
 }
