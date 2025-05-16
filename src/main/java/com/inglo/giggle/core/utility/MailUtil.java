@@ -3,7 +3,6 @@ package com.inglo.giggle.core.utility;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -11,9 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MailUtil {
-
-    @Value("${spring.mail.username}")
-    private String senderAddress;
 
     private static final String AUTHENTICATION_CODE_TEMPLATE = """
             <!doctype html>
@@ -111,7 +107,7 @@ public class MailUtil {
 
         // 위 HTML을 이용하여 이메일을 작성하고 전송하는 코드
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom(senderAddress);
+        mimeMessageHelper.setFrom("Giggle");
         mimeMessageHelper.setTo(receiverAddress);
         // UTF-8로 인코딩
         mimeMessageHelper.setText(AUTHENTICATION_CODE_TEMPLATE.replace("${AuthenticationCode}", authenticationCode), true);
@@ -128,7 +124,7 @@ public class MailUtil {
 
         // 위 HTML을 이용하여 이메일을 작성하고 전송하는 코드
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom(senderAddress);
+        mimeMessageHelper.setFrom("Giggle");
         mimeMessageHelper.setTo(receiverAddress);
 
         // UTF-8로 인코딩
