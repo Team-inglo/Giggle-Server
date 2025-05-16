@@ -1,15 +1,11 @@
 package com.inglo.giggle.core.event.listener;
 
 import com.inglo.giggle.core.utility.MailUtil;
-import com.inglo.giggle.core.utility.RestClientUtil;
 import com.inglo.giggle.security.event.ChangePasswordBySystemEvent;
 import com.inglo.giggle.security.event.CompleteEmailValidationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +15,6 @@ import org.springframework.stereotype.Component;
 public class EmailListener {
 
     private final MailUtil mailUtil;
-    private final RestClientUtil restClientUtil;
-
-    @Value("${spring.mail.host}")
-    private String requestUrl;
 
     @Async
     @EventListener(classes = {CompleteEmailValidationEvent.class})
@@ -35,16 +27,10 @@ public class EmailListener {
 
         try {
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            String body = mailUtil.getSendAuthenticationCodeRequestBody(
+            mailUtil.sendAuthenticationCode(
                     event.receiverAddress(),
                     event.authenticationCode()
             );
-
-            restClientUtil.sendPostMethod(requestUrl, headers, body);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,17 +46,10 @@ public class EmailListener {
         );
 
         try {
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            String body = mailUtil.getSendTemporaryPasswordRequestBody(
+            mailUtil.sendTemporaryPassword(
                     event.receiverAddress(),
                     event.temporaryPassword()
             );
-
-            restClientUtil.sendPostMethod(requestUrl, headers, body);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
