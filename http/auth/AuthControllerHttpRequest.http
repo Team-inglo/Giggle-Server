@@ -78,7 +78,7 @@ Authorization: Bearer {{access_token}}
 
 ### 2.4 기본 임시 회원가입 - 유학생
 // @no-log
-@email_user = "kangseung1110@gmail.com"
+@email_user = "hsw0106@gmail.com"
 POST {{host_url}}/v1/auth/sign-up
 Content-Type: application/json
 
