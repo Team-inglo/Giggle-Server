@@ -26,7 +26,7 @@ import java.util.UUID;
 public class ReadUserCareersOverviewsService implements ReadUsersCareersOverviewsUseCase {
 
     // 북마크 많은 순
-    private static final String TRENDING = "TRENDING";
+    private static final String TRENDING = "POPULAR";
 
     // 최신순
     private static final String RECENT = "RECENT";
