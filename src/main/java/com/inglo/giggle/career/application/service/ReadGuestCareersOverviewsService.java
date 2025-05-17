@@ -24,7 +24,7 @@ import java.util.List;
 public class ReadGuestCareersOverviewsService implements ReadGuestCareersOverviewsUseCase {
 
     // 북마크 많은 순
-    private static final String TRENDING = "TRENDING";
+    private static final String TRENDING = "POPULAR";
 
     // 최신순
     private static final String RECENT = "RECENT";

@@ -172,7 +172,7 @@ Authorization: Bearer {{access_token}}
 
 ### 7.21 (유학생) 희망 근로 조건 상세 조회하기
 // @no-log
-GET {{host_url}}/v1/users/resumes/work-preferences/1/details
+GET {{host_url}}/v1/users/resumes/work-preferences/details
 Authorization: Bearer {{access_token}}
 
 ### 7.22 (유학생) 희망 근로 조건 수정하기
