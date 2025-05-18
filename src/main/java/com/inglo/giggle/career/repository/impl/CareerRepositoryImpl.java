@@ -8,7 +8,6 @@ import com.inglo.giggle.career.repository.CareerRepository;
 import com.inglo.giggle.career.repository.mysql.CareerJpaRepository;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +43,6 @@ public class CareerRepositoryImpl implements CareerRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        fetchVisasForCareers(results);
-
         long total = Optional.ofNullable(
                 queryFactory
                         .select(career.count())
@@ -68,8 +65,6 @@ public class CareerRepositoryImpl implements CareerRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
-        fetchVisasForCareers(results);
 
         long total = Optional.ofNullable(
                 queryFactory
@@ -96,8 +91,6 @@ public class CareerRepositoryImpl implements CareerRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        fetchVisasForCareers(content);
-
         Long total = Optional.ofNullable(
                 queryFactory
                         .select(bookmark.count())
@@ -111,11 +104,8 @@ public class CareerRepositoryImpl implements CareerRepository {
 
     @Override
     public Career findByIdOrElseThrow(Long careerId) {
-        Career career = careerJpaRepository.findById(careerId)
+        return careerJpaRepository.findById(careerId)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_CAREER));
-        fetchVisasForCareers(List.of(career));
-
-        return career;
     }
 
     @Override
@@ -136,27 +126,4 @@ public class CareerRepositoryImpl implements CareerRepository {
 
         return predicate;
     }
-
-    /**
-     * ============================= PRIVATE METHODS =============================
-     */
-    private void fetchVisasForCareers(List<Career> careers) {
-        if (careers.isEmpty()) return;
-
-        QCareer career = QCareer.career;
-
-        List<Long> ids = careers.stream()
-                .map(Career::getId)
-                .toList();
-
-        List<Tuple> fetch = queryFactory
-                .select(career.id, career.visa)
-                .from(career)
-                .where(career.id.in(ids))
-                .fetch();
-
-        // fallback – 일반 Hibernate lazy loading으로 해결
-        careers.forEach(c -> c.getVisa().size()); // 강제 초기화
-    }
-
 }

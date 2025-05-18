@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +48,7 @@ public class ReadUsersCareersDetailsService implements ReadUsersCareersDetailsUs
                 .recruitmentStartDate(DateTimeUtil.convertLocalDateToString(career.getStartDate()))
                 .recruitmentEndDate(DateTimeUtil.convertLocalDateToString(career.getEndDate()))
                 .reward(career.getReward())
-                .visa(career.getVisa())
+                .visa(new HashSet<>(career.getVisa()))
                 .recruitmentNumber(career.getRecruitmentNumber())
                 .education(career.getEducationLevel())
                 .preferredConditions(career.getPreferredConditions())

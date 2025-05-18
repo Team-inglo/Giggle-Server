@@ -8,13 +8,18 @@ import com.inglo.giggle.career.domain.CareerImage;
 import com.inglo.giggle.career.repository.BookMarkCareerRepository;
 import com.inglo.giggle.career.repository.CareerImageRepository;
 import com.inglo.giggle.career.repository.CareerRepository;
+import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.core.utility.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReadGuestsCareersDetailsService implements ReadGuestsCareersDetailsUseCase {
@@ -32,6 +37,7 @@ public class ReadGuestsCareersDetailsService implements ReadGuestsCareersDetails
         ).toList();
 
         Career career = careerRepository.findByIdOrElseThrow(careerId);
+//        Set<EVisa> visa = career.getVisa();
 
         return ReadGuestsCareersDetailsResponseDto.builder()
                 .imgUrls(imageUrls)
@@ -42,7 +48,7 @@ public class ReadGuestsCareersDetailsService implements ReadGuestsCareersDetails
                 .recruitmentStartDate(DateTimeUtil.convertLocalDateToString(career.getStartDate()))
                 .recruitmentEndDate(DateTimeUtil.convertLocalDateToString(career.getEndDate()))
                 .reward(career.getReward())
-                .visa(career.getVisa())
+                .visa(new HashSet<>(career.getVisa()))
                 .recruitmentNumber(career.getRecruitmentNumber())
                 .education(career.getEducationLevel())
                 .preferredConditions(career.getPreferredConditions())
