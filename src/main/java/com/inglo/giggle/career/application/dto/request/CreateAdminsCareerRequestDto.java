@@ -11,7 +11,7 @@ import java.util.Set;
 
 public record CreateAdminsCareerRequestDto(
 
-        @NotBlank
+        @NotBlank(message = "title은 필수 입력 값입니다.")
         @JsonProperty("title")
         String title,
 
