@@ -47,6 +47,9 @@ public class Resume extends BaseEntity {
     @Column(name = "introduction", length = 200)
     private String introduction;
 
+    @Column(name = "is_public", nullable = false)
+    private boolean isPublic;
+
     /* -------------------------------------------- */
     /* One To Many Mapping ------------------------ */
     /* -------------------------------------------- */
@@ -79,6 +82,7 @@ public class Resume extends BaseEntity {
         this.accountId = user.getId();
         this.title = title;
         this.introduction = introduction;
+        this.isPublic = true;
     }
 
     public void updateIntroduction(String introduction) {
@@ -90,4 +94,7 @@ public class Resume extends BaseEntity {
         this.introduction = introduction;
     }
 
+    public void updatePublicStatus(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
 }
