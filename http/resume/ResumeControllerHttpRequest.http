@@ -208,3 +208,10 @@ Content-Type: application/json
 {
   "is_public": true
 }
+
+
+### 15.1 (고용주) 인재 스크랩 추가/삭제
+// @no-log
+PUT {{host_url}}/v1/owners/resumes/64130f6d-a2e5-4229-9f1f-41c3c5a5b7ac/book-mark-resumes
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
