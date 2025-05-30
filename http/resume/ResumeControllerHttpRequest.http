@@ -197,3 +197,14 @@ Content-Type: application/json
     }
   ]
 }
+
+
+### 7.23 (유학생) 이력서 공개/비공개 변경하기
+// @no-log
+PATCH {{host_url}}/v1/users/resumes/is-public
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "is_public": true
+}
