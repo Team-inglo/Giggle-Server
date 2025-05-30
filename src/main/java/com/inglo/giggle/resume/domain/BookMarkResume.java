@@ -3,6 +3,7 @@ package com.inglo.giggle.resume.domain;
 import com.inglo.giggle.account.domain.Owner;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,4 +39,9 @@ public class BookMarkResume {
     /* -------------------------------------------- */
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
+    @Builder
+    public BookMarkResume(Resume resume, Owner owner) {
+        this.resume = resume;
+        this.owner = owner;
+    }
 }

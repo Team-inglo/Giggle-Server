@@ -27,6 +27,9 @@ public class ReadUserResumeDetailResponseDtoV1 extends SelfValidating<ReadUserRe
     @JsonProperty("name")
     private final String name;
 
+    @JsonProperty("is_public")
+    private final boolean isPublic;
+
     @JsonProperty("visa")
     private final VisaDto visa;
 
@@ -49,6 +52,7 @@ public class ReadUserResumeDetailResponseDtoV1 extends SelfValidating<ReadUserRe
     public ReadUserResumeDetailResponseDtoV1(
             String profileImgUrl,
             String name,
+            boolean isPublic,
             VisaDto visa,
             PersonalInformationDto personalInformation,
             String introduction,
@@ -58,6 +62,7 @@ public class ReadUserResumeDetailResponseDtoV1 extends SelfValidating<ReadUserRe
     ) {
         this.profileImgUrl = profileImgUrl;
         this.name = name;
+        this.isPublic = isPublic;
         this.visa = visa;
         this.personalInformation = personalInformation;
         this.introduction = introduction;
@@ -306,6 +311,7 @@ public class ReadUserResumeDetailResponseDtoV1 extends SelfValidating<ReadUserRe
         return ReadUserResumeDetailResponseDtoV1.builder()
                 .profileImgUrl(user.getProfileImgUrl())
                 .name(user.getName())
+                .isPublic(resume.isPublic())
                 .visa(VisaDto.fromEntity(user.getVisa()))
                 .personalInformation(PersonalInformationDto.fromEntity(user))
                 .introduction(resume.getIntroduction())
