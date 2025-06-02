@@ -93,7 +93,7 @@ public class ReadOwnerUserOwnerJobPostingDetailResponseDto extends SelfValidatin
         return ReadOwnerUserOwnerJobPostingDetailResponseDto.builder()
                 .profileImgUrl(userOwnerJobPosting.getUser().getProfileImgUrl())
                 .name(userOwnerJobPosting.getUser().getName())
-                .nationality(userOwnerJobPosting.getUser().getNationality() != null ? userOwnerJobPosting.getUser().getNationality() : null)
+                .nationality(userOwnerJobPosting.getUser().getNationality() != null ? userOwnerJobPosting.getUser().getNationality().getEnName() : null)
                 .gender(userOwnerJobPosting.getUser().getGender().toString())
                 .visa(userOwnerJobPosting.getUser().getVisa().toString())
                 .schoolName(schoolName)

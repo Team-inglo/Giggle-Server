@@ -4,6 +4,7 @@ import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.career.domain.BookMarkCareer;
 import com.inglo.giggle.core.type.EGender;
+import com.inglo.giggle.core.type.ENationality;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.BookMark;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
@@ -61,8 +62,9 @@ public class User extends Account {
     @Column(name = "gender", nullable = false)
     private EGender gender;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "nationality", length = 56)
-    private String nationality;
+    private ENationality nationality;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "language")
@@ -107,7 +109,7 @@ public class User extends Account {
             String firstName,
             String lastName,
             EGender gender,
-            String nationality,
+            ENationality nationality,
             ELanguage language,
             LocalDate birth,
             EVisa visa,
@@ -147,7 +149,7 @@ public class User extends Account {
         this.gender = gender;
     }
 
-    public void updateNationality(String nationality) {
+    public void updateNationality(ENationality nationality) {
         this.nationality = nationality;
     }
 

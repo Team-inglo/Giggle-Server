@@ -1,5 +1,6 @@
 package com.inglo.giggle.resume.application.service;
 
+import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
@@ -107,6 +108,30 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
         WorkPreference workPreference = workPreferenceRepository.findByResumeIdOrElseThrow(resume.getAccountId());
 
         return ReadOwnerResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, userOwnerJobPosting.getUser(), workPreference);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReadOwnerResumeDetailResponseDtoV2 execute(UUID resumeId) {
+
+        // Account 조회
+        Account account = accountRepository.findByIdOrElseThrow(resumeId);
+
+        // Resume 조회
+        Resume resume = resumeRepository.findWithEducationsByAccountIdOrElseThrow(resumeId);
+        // education 조회
+        List<Education> educations = educationRepository.findAllByResume(resume);
+
+        // LanguageSkill 조회
+        LanguageSkill languageSkill = languageSkillRepository.findByResumeOrElseThrow(resume);
+
+        // WorkExperience 조회
+        List<WorkExperience> workExperiences = workExperienceRepository.findAllByResume(resume);
+
+        // WorkPreference 조회
+        WorkPreference workPreference = workPreferenceRepository.findByResumeIdOrElseThrow(resumeId);
+
+        return ReadOwnerResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, (User) account, workPreference);
     }
 
 }

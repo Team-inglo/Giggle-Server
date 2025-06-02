@@ -7,6 +7,7 @@ import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EGender;
+import com.inglo.giggle.core.type.ENationality;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.mysql.QAccount;
@@ -170,7 +171,8 @@ public class AccountRepositoryImpl implements AccountRepository {
                 }
 
                 case "nationality" -> {
-                    baseQuery.where(user.nationality.eq(filter));
+                    ENationality nationality = ENationality.fromString(filter);
+                    baseQuery.where(user.nationality.eq(nationality));
                 }
 
                 case "visa" -> {

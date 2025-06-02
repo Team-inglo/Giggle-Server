@@ -1,0 +1,506 @@
+package com.inglo.giggle.core.type;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum ENationality {
+
+    GHANA("가나", "Ghana"),
+    GABON("가봉", "Gabon"),
+    GUYANA("가이아나", "Guyana"),
+    GAMBIA("감비아", "Gambia"),
+    GUATEMALA("과테말라", "Guatemala"),
+    GUAM("괌", "Guam"),
+    GRENADA("그레나다", "Grenada"),
+    GREECE("그리스", "Greece"),
+    GREENLAND("그린란드", "Greenland"),
+    GUINEA("기니", "Guinea"),
+    GUINEA_BISSAU("기니비사우", "Guinea-Bissau"),
+    NAMIBIA("나미비아", "Namibia"),
+    NAURU("나우루", "Nauru"),
+    NIGERIA("나이지리아", "Nigeria"),
+    ANTARCTICA("남극", "Antarctica"),
+    REPUBLIC_OF_SOUTH_SUDAN("남수단", "Republic of South Sudan"),
+    SOUTH_AFRICA("남아프리카 공화국", "South Africa"),
+    NETHERLANDS("네덜란드", "Netherlands"),
+    NETHERLANDS_ANTILLES("네덜란드령 안틸레스", "Netherlands Antilles"),
+    NEPAL("네팔", "Nepal"),
+    NORWAY("노르웨이", "Norway"),
+    NORFOLK_ISLAND("노퍽섬", "Norfolk Island"),
+    NEW_CALEDONIA("뉴칼레도니아", "New Caledonia"),
+    NEW_ZEALAND("뉴질랜드", "New Zealand"),
+    NIUE("니우에", "Niue"),
+    NIGER("니제르", "Niger"),
+    NICARAGUA("니카라과", "Nicaragua"),
+    REPUBLIC_OF_KOREA("대한민국", "Republic of Korea"),
+    DENMARK("덴마크", "Denmark"),
+    DOMINICAN_REPUBLIC("도미니카 공화국", "Dominican Republic"),
+    DOMINICA("도미니카 연방", "Dominica"),
+    GERMANY("독일", "Germany"),
+    EAST_TIMOR("동티모르", "East Timor"),
+    LAO_PEOPLES_DEMOCRATIC_REPUBLIC("라오스 인민 민주 공화국", "Lao People's Democratic Republic"),
+    LIBERIA("라이베리아", "Liberia"),
+    LATVIA("라트비아", "Latvia"),
+    RUSSIAN_FEDERATION("러시아 연방", "Russian Federation"),
+    LEBANON("레바논", "Lebanon"),
+    LESOTHO("레소토", "Lesotho"),
+    REUNION("레위니옹", "Reunion"),
+    ROMANIA("루마니아", "Romania"),
+    LUXEMBOURG("룩셈부르크", "Luxembourg"),
+    RWANDA("르완다", "Rwanda"),
+    LIBYAN_ARAB_JAMAHIRIYA("리비아 아랍 자마히리야", "Libyan Arab Jamahiriya"),
+    LITHUANIA("리투아니아", "Lithuania"),
+    LIECHTENSTEIN("리히텐슈타인", "Liechtenstein"),
+    MADAGASCAR("마다가스카르", "Madagascar"),
+    MARTINIQUE("마르티니크", "Martinique"),
+    MARSHALL_ISLANDS("마셜 제도", "Marshall Islands"),
+    MAYOTTE("마요트", "Mayotte"),
+    MACAU("마카오", "Macau"),
+    REPUBLIC_OF_MACEDONIA("마케도니아 공화국", "Republic of Macedonia"),
+    MALAWI("말라위", "Malawi"),
+    MALAYSIA("말레이시아", "Malaysia"),
+    MALI("말리", "Mali"),
+    ISLE_OF_MAN("맨섬", "Isle of Man"),
+    MEXICO("멕시코", "Mexico"),
+    MONACO("모나코", "Monaco"),
+    MOROCCO("모로코", "Morocco"),
+    MAURITIUS("모리셔스", "Mauritius"),
+    MAURITANIA("모리타니", "Mauritania"),
+    MOZAMBIQUE("모잠비크", "Mozambique"),
+    MONTENEGRO("몬테네그로", "Montenegro"),
+    MONTSERRAT("몬트세라트", "Montserrat"),
+    MOLDOVA_REPUBLIC_OF("몰도바 공화국", "Moldova, Republic of"),
+    MALDIVES("몰디브", "Maldives"),
+    MALTA("몰타", "Malta"),
+    MONGOLIA("몽골", "Mongolia"),
+    UNITED_STATES("미국", "United States"),
+    UNITED_STATES_MINOR_OUTLYING_ISLANDS("미국령 군소 제도", "United States Minor Outlying Islands"),
+    VIRGIN_ISLANDS_US("미국령 버진아일랜드", "Virgin Islands, U.S."),
+    MYANMAR("미얀마", "Myanmar"),
+    MICRONESIA("미크로네시아 연방", "Micronesia"),
+    VANUATU("바누아투", "Vanuatu"),
+    BAHRAIN("바레인", "Bahrain"),
+    BARBADOS("바베이도스", "Barbados"),
+    VATICAN_CITY_STATE("바티칸 시국", "Vatican City State"),
+    BAHAMAS("바하마", "Bahamas"),
+    BANGLADESH("방글라데시", "Bangladesh"),
+    BERMUDA("버뮤다", "Bermuda"),
+    BENIN("베냉", "Benin"),
+    VENEZUELA("베네수엘라", "Venezuela"),
+    VIET_NAM("베트남", "Viet Nam"),
+    BELGIUM("벨기에", "Belgium"),
+    BELARUS("벨라루스", "Belarus"),
+    BELIZE("벨리즈", "Belize"),
+    BOSNIA_HERZEGOVINA("보스니아 헤르체고비나", "Bosnia Herzegovina"),
+    BOTSWANA("보츠와나", "Botswana"),
+    BOLIVIA("볼리비아", "Bolivia"),
+    BURUNDI("부룬디", "Burundi"),
+    BURKINA_FASO("부르키나파소", "Burkina Faso"),
+    BOUVET_ISLAND("부베 섬", "Bouvet Island"),
+    BHUTAN("부탄", "Bhutan"),
+    NORTHERN_MARIANA_ISLANDS("북마리아나 제도", "Northern Mariana Islands"),
+    BULGARIA("불가리아", "Bulgaria"),
+    BRAZIL("브라질", "Brazil"),
+    BRUNEI_DARUSSALAM("브루나이 다루살람", "Brunei Darussalam"),
+    SAMOA("사모아", "Samoa"),
+    SAUDI_ARABIA("사우디아라비아", "Saudi Arabia"),
+    SOUTH_GEORGIA_AND_THE_SOUTH_SANDWICH_ISLANDS("사우스조지아 사우스샌드위치 제도", "South Georgia and the South Sandwich Islands"),
+    SAN_MARINO("산마리노", "San Marino"),
+    SAO_TOME_AND_PRINCIPE("상투메 프린시페", "Sao Tome and Principe"),
+    ST_PIERRE_AND_MIQUELON("생피에르 미클롱", "St. Pierre and Miquelon"),
+    WESTERN_SAHARA("서사하라", "Western Sahara"),
+    SENEGAL("세네갈", "Senegal"),
+    SERBIA("세르비아", "Serbia"),
+    SEYCHELLES("세이셸", "Seychelles"),
+    SAINT_LUCIA("세인트루시아", "Saint Lucia"),
+    SAINT_VINCENT_AND_THE_GRENADINES("세인트빈센트 그레나딘", "Saint Vincent and the Grenadines"),
+    SAINT_KITTS_AND_NEVIS("세인트키츠 네비스", "Saint Kitts and Nevis"),
+    ST_HELENA("세인트헬레나", "St. Helena"),
+    SOMALIA("소말리아", "Somalia"),
+    SOLOMON_ISLANDS("솔로몬 제도", "Solomon Islands"),
+    SUDAN("수단", "Sudan"),
+    SURINAME("수리남", "Suriname"),
+    SRI_LANKA("스리랑카", "Sri Lanka"),
+    SVALBARD_AND_JAN_MAYEN_ISLANDS("스발바르 얀마옌 제도", "Svalbard and Jan Mayen Islands"),
+    SWAZILAND("스와질란드", "Swaziland"),
+    SWEDEN("스웨덴", "Sweden"),
+    SWITZERLAND("스위스", "Switzerland"),
+    SPAIN("스페인", "Spain"),
+    SLOVAKIA("슬로바키아", "Slovakia"),
+    SLOVENIA("슬로베니아", "Slovenia"),
+    SYRIAN_ARAB_REPUBLIC("시리아 아랍 공화국", "Syrian Arab Republic"),
+    SIERRA_LEONE("시에라리온", "Sierra Leone"),
+    SINGAPORE("싱가포르", "Singapore"),
+    UNITED_ARAB_EMIRATES("아랍에미리트", "United Arab Emirates"),
+    ARUBA("아루바", "Aruba"),
+    ARMENIA("아르메니아", "Armenia"),
+    ARGENTINA("아르헨티나", "Argentina"),
+    AMERICAN_SAMOA("아메리칸 사모아", "American Samoa"),
+    ICELAND("아이슬란드", "Iceland"),
+    HAITI("아이티", "Haiti"),
+    IRELAND("아일랜드", "Ireland"),
+    AZERBAIJAN("아제르바이잔", "Azerbaijan"),
+    AFGHANISTAN("아프가니스탄", "Afghanistan"),
+    ANDORRA("안도라", "Andorra"),
+    ALBANIA("알바니아", "Albania"),
+    ALGERIA("알제리", "Algeria"),
+    ANGOLA("앙골라", "Angola"),
+    ANTIGUA_AND_BARBUDA("앤티가 바부다", "Antigua and Barbuda"),
+    ANGUILLA("앵귈라", "Anguilla"),
+    ERITREA("에리트레아", "Eritrea"),
+    ESTONIA("에스토니아", "Estonia"),
+    ECUADOR("에콰도르", "Ecuador"),
+    ETHIOPIA("에티오피아", "Ethiopia"),
+    EL_SALVADOR("엘살바도르", "El Salvador"),
+    UNITED_KINGDOM("영국", "United Kingdom"),
+    VIRGIN_ISLANDS_BRITISH("영국령 버진아일랜드", "Virgin Islands, British"),
+    BRITISH_INDIAN_OCEAN_TERRITORY("영국령 인도양 지역", "British Indian Ocean Territory"),
+    YEMEN_REPUBLIC_OF("예멘", "Yemen Republic of"),
+    OMAN("오만", "Oman"),
+    AUSTRALIA("오스트레일리아", "Australia"),
+    AUSTRIA("오스트리아", "Austria"),
+    HONDURAS("온두라스", "Honduras"),
+    ALAND_ISLANDS("올란드 제도", "Aland Islands"),
+    WALLIS_AND_FUTUNA_ISLANDS("왈리스 푸투나 제도", "Wallis and Futuna Islands"),
+    JORDAN("요르단", "Jordan"),
+    UGANDA("우간다", "Uganda"),
+    URUGUAY("우루과이", "Uruguay"),
+    UZBEKISTAN("우즈베키스탄", "Uzbekistan"),
+    UKRAINE("우크라이나", "Ukraine"),
+    IRAQ("이라크", "Iraq"),
+    IRAN("이란", "Iran"),
+    ISRAEL("이스라엘", "Israel"),
+    EGYPT("이집트", "Egypt"),
+    ITALY("이탈리아", "Italy"),
+    INDIA("인도", "India"),
+    INDONESIA("인도네시아", "Indonesia"),
+    JAPAN("일본", "Japan"),
+    JAMAICA("자메이카", "Jamaica"),
+    ZAMBIA("잠비아", "Zambia"),
+    JERSEY("저지", "Jersey"),
+    EQUATORIAL_GUINEA("적도 기니", "Equatorial Guinea"),
+    KOREA_DEMOCRATIC_PEOPLES_REPUBLIC_OF("조선민주주의인민공화국", "Korea, Democratic People's Republic of"),
+    GEORGIA("조지아", "Georgia"),
+    CENTRAL_AFRICAN_REPUBLIC("중앙아프리카 공화국", "Central African Republic"),
+    TAIWAN_PROVINCE_OF_CHINA("중화민국", "Taiwan, Province of China"),
+    CHINA("중화인민공화국", "China"),
+    DJIBOUTI("지부티", "Djibouti"),
+    GIBRALTAR("지브롤터", "Gibraltar"),
+    ZIMBABWE("짐바브웨", "Zimbabwe"),
+    CHAD("차드", "Chad"),
+    CZECH_REPUBLIC("체코", "Czech Republic"),
+    CHILE("칠레", "Chile"),
+    CAMEROON("카메룬", "Cameroon"),
+    CAPE_VERDE("카보베르데", "Cape Verde"),
+    KAZAKHSTAN("카자흐스탄", "Kazakhstan"),
+    QATAR("카타르", "Qatar"),
+    CAMBODIA("캄보디아", "Cambodia"),
+    CANADA("캐나다", "Canada"),
+    KENYA("케냐", "Kenya"),
+    CAYMAN_ISLANDS("케이맨 제도", "Cayman Islands"),
+    COMOROS("코모로", "Comoros"),
+    COSTA_RICA("코스타리카", "Costa Rica"),
+    COCOS_ISLANDS("코코스 제도", "Cocos Islands"),
+    COTE_DIVOIRE("코트디부아르", "Cote d'Ivoire"),
+    COLOMBIA("콜롬비아", "Colombia"),
+    CONGO("콩고", "Congo"),
+    DEMOCRATIC_REPUBLIC_OF_THE_CONGO("콩고 민주 공화국", "Democratic Republic of the Congo"),
+    CUBA("쿠바", "Cuba"),
+    KUWAIT("쿠웨이트", "Kuwait"),
+    COOK_ISLANDS("쿡 제도", "Cook Islands"),
+    CROATIA("크로아티아", "Croatia"),
+    CHRISTMAS_ISLAND("크리스마스 섬", "Christmas Island"),
+    KYRGYZSTAN("키르기스스탄", "Kyrgyzstan"),
+    KIRIBATI("키리바시", "Kiribati"),
+    CYPRUS("키프로스", "Cyprus"),
+    THAILAND("태국", "Thailand"),
+    TAJIKISTAN("타지키스탄", "Tajikistan"),
+    TANZANIA_UNITED_REPUBLIC_OF("탄자니아 연합 공화국", "Tanzania, United Republic of"),
+    TURKS_AND_CAICOS_ISLANDS("터크스 케이커스 제도", "Turks and Caicos Islands"),
+    TURKEY("터키", "Turkey"),
+    TOGO("토고", "Togo"),
+    TOKELAU("토켈라우", "Tokelau"),
+    TONGA("통가", "Tonga"),
+    TURKMENISTAN("투르크메니스탄", "Turkmenistan"),
+    TUVALU("투발루", "Tuvalu"),
+    TUNISIA("튀니지", "Tunisia"),
+    TRINIDAD_AND_TOBAGO("트리니다드 토바고", "Trinidad and Tobago"),
+    PANAMA("파나마", "Panama"),
+    PARAGUAY("파라과이", "Paraguay"),
+    PAKISTAN("파키스탄", "Pakistan"),
+    PAPUA_NEW_GUINEA("파푸아뉴기니", "Papua New Guinea"),
+    PALAU("팔라우", "Palau"),
+    PALESTINE("팔레스타인", "Palestine"),
+    FAROE_ISLANDS("페로 제도", "Faroe Islands"),
+    PERU("페루", "Peru"),
+    PORTUGAL("포르투갈", "Portugal"),
+    FALKLAND_ISLANDS("포클랜드 제도", "Falkland Islands"),
+    POLAND("폴란드", "Poland"),
+    FRANCE("프랑스", "France"),
+    FRENCH_GUIANA("프랑스령 기아나", "French Guiana"),
+    FRENCH_SOUTHERN_TERRITORIES("프랑스령 남방 및 남극 지역", "French Southern Territories"),
+    FRENCH_POLYNESIA("프랑스령 폴리네시아", "French Polynesia"),
+    FIJI("피지", "Fiji"),
+    FINLAND("핀란드", "Finland"),
+    PHILIPPINES("필리핀", "Philippines"),
+    PITCAIRN("핏케언 제도", "Pitcairn"),
+    HEARD_AND_MCDONALD_ISLANDS("허드 맥도널드 제도", "Heard and McDonald Islands"),
+    HUNGARY("헝가리", "Hungary"),
+    HONG_KONG("홍콩", "Hong Kong"),
+    BLANK("없음", "");
+    ;
+
+    private final String krName;
+    private final String enName;
+
+    public static ENationality fromString(String value) {
+        return switch (value) {
+            case "Ghana" -> GHANA;
+            case "Gabon" -> GABON;
+            case "Guyana" -> GUYANA;
+            case "Gambia" -> GAMBIA;
+            case "Guatemala" -> GUATEMALA;
+            case "Guam" -> GUAM;
+            case "Grenada" -> GRENADA;
+            case "Greece" -> GREECE;
+            case "Greenland" -> GREENLAND;
+            case "Guinea" -> GUINEA;
+            case "Guinea-Bissau" -> GUINEA_BISSAU;
+            case "Namibia" -> NAMIBIA;
+            case "Nauru" -> NAURU;
+            case "Nigeria" -> NIGERIA;
+            case "Antarctica" -> ANTARCTICA;
+            case "Republic of South Sudan" -> REPUBLIC_OF_SOUTH_SUDAN;
+            case "South Africa" -> SOUTH_AFRICA;
+            case "Netherlands" -> NETHERLANDS;
+            case "Netherlands Antilles" -> NETHERLANDS_ANTILLES;
+            case "Nepal" -> NEPAL;
+            case "Norway" -> NORWAY;
+            case "Norfolk Island" -> NORFOLK_ISLAND;
+            case "New Caledonia" -> NEW_CALEDONIA;
+            case "New Zealand" -> NEW_ZEALAND;
+            case "Niue" -> NIUE;
+            case "Niger" -> NIGER;
+            case "Nicaragua" -> NICARAGUA;
+            case "Republic of Korea" -> REPUBLIC_OF_KOREA;
+            case "Denmark" -> DENMARK;
+            case "Dominican Republic" -> DOMINICAN_REPUBLIC;
+            case "Dominica" -> DOMINICA;
+            case "Germany" -> GERMANY;
+            case "East Timor" -> EAST_TIMOR;
+            case "Lao People's Democratic Republic" -> LAO_PEOPLES_DEMOCRATIC_REPUBLIC;
+            case "Liberia" -> LIBERIA;
+            case "Latvia" -> LATVIA;
+            case "Russian Federation" -> RUSSIAN_FEDERATION;
+            case "Lebanon" -> LEBANON;
+            case "Lesotho" -> LESOTHO;
+            case "Reunion" -> REUNION;
+            case "Romania" -> ROMANIA;
+            case "Luxembourg" -> LUXEMBOURG;
+            case "Rwanda" -> RWANDA;
+            case "Libyan Arab Jamahiriya" -> LIBYAN_ARAB_JAMAHIRIYA;
+            case "Lithuania" -> LITHUANIA;
+            case "Liechtenstein" -> LIECHTENSTEIN;
+            case "Madagascar" -> MADAGASCAR;
+            case "Martinique" -> MARTINIQUE;
+            case "Marshall Islands" -> MARSHALL_ISLANDS;
+            case "Mayotte" -> MAYOTTE;
+            case "Macau" -> MACAU;
+            case "Republic of Macedonia" -> REPUBLIC_OF_MACEDONIA;
+            case "Malawi" -> MALAWI;
+            case "Malaysia" -> MALAYSIA;
+            case "Mali" -> MALI;
+            case "Isle of Man" -> ISLE_OF_MAN;
+            case "Mexico" -> MEXICO;
+            case "Monaco" -> MONACO;
+            case "Morocco" -> MOROCCO;
+            case "Mauritius" -> MAURITIUS;
+            case "Mauritania" -> MAURITANIA;
+            case "Mozambique" -> MOZAMBIQUE;
+            case "Montenegro" -> MONTENEGRO;
+            case "Montserrat" -> MONTSERRAT;
+            case "Moldova, Republic of" -> MOLDOVA_REPUBLIC_OF;
+            case "Maldives" -> MALDIVES;
+            case "Malta" -> MALTA;
+            case "Mongolia" -> MONGOLIA;
+            case "United States" -> UNITED_STATES;
+            case "United States Minor Outlying Islands" -> UNITED_STATES_MINOR_OUTLYING_ISLANDS;
+            case "Virgin Islands, U.S." -> VIRGIN_ISLANDS_US;
+            case "Myanmar" -> MYANMAR;
+            case "Micronesia" -> MICRONESIA;
+            case "Vanuatu" -> VANUATU;
+            case "Bahrain" -> BAHRAIN;
+            case "Barbados" -> BARBADOS;
+            case "Vatican City State" -> VATICAN_CITY_STATE;
+            case "Bahamas" -> BAHAMAS;
+            case "Bangladesh" -> BANGLADESH;
+            case "Bermuda" -> BERMUDA;
+            case "Benin" -> BENIN;
+            case "Venezuela" -> VENEZUELA;
+            case "Viet Nam" -> VIET_NAM;
+            case "Belgium" -> BELGIUM;
+            case "Belarus" -> BELARUS;
+            case "Belize" -> BELIZE;
+            case "Bosnia Herzegovina" -> BOSNIA_HERZEGOVINA;
+            case "Botswana" -> BOTSWANA;
+            case "Bolivia" -> BOLIVIA;
+            case "Burundi" -> BURUNDI;
+            case "Burkina Faso" -> BURKINA_FASO;
+            case "Bouvet Island" -> BOUVET_ISLAND;
+            case "Bhutan" -> BHUTAN;
+            case "Northern Mariana Islands" -> NORTHERN_MARIANA_ISLANDS;
+            case "Bulgaria" -> BULGARIA;
+            case "Brazil" -> BRAZIL;
+            case "Brunei Darussalam" -> BRUNEI_DARUSSALAM;
+            case "Samoa" -> SAMOA;
+            case "Saudi Arabia" -> SAUDI_ARABIA;
+            case "South Georgia and the South Sandwich Islands" -> SOUTH_GEORGIA_AND_THE_SOUTH_SANDWICH_ISLANDS;
+            case "San Marino" -> SAN_MARINO;
+            case "Sao Tome and Principe" -> SAO_TOME_AND_PRINCIPE;
+            case "St. Pierre and Miquelon" -> ST_PIERRE_AND_MIQUELON;
+            case "Western Sahara" -> WESTERN_SAHARA;
+            case "Senegal" -> SENEGAL;
+            case "Serbia" -> SERBIA;
+            case "Seychelles" -> SEYCHELLES;
+            case "Saint Lucia" -> SAINT_LUCIA;
+            case "Saint Vincent and the Grenadines" -> SAINT_VINCENT_AND_THE_GRENADINES;
+            case "Saint Kitts and Nevis" -> SAINT_KITTS_AND_NEVIS;
+            case "St. Helena" -> ST_HELENA;
+            case "Somalia" -> SOMALIA;
+            case "Solomon Islands" -> SOLOMON_ISLANDS;
+            case "Sudan" -> SUDAN;
+            case "Suriname" -> SURINAME;
+            case "Sri Lanka" -> SRI_LANKA;
+            case "Svalbard and Jan Mayen Islands" -> SVALBARD_AND_JAN_MAYEN_ISLANDS;
+            case "Swaziland" -> SWAZILAND;
+            case "Sweden" -> SWEDEN;
+            case "Switzerland" -> SWITZERLAND;
+            case "Spain" -> SPAIN;
+            case "Slovakia" -> SLOVAKIA;
+            case "Slovenia" -> SLOVENIA;
+            case "Syrian Arab Republic" -> SYRIAN_ARAB_REPUBLIC;
+            case "Sierra Leone" -> SIERRA_LEONE;
+            case "Singapore" -> SINGAPORE;
+            case "United Arab Emirates" -> UNITED_ARAB_EMIRATES;
+            case "Aruba" -> ARUBA;
+            case "Armenia" -> ARMENIA;
+            case "Argentina" -> ARGENTINA;
+            case "American Samoa" -> AMERICAN_SAMOA;
+            case "Iceland" -> ICELAND;
+            case "Haiti" -> HAITI;
+            case "Ireland" -> IRELAND;
+            case "Azerbaijan" -> AZERBAIJAN;
+            case "Afghanistan" -> AFGHANISTAN;
+            case "Andorra" -> ANDORRA;
+            case "Albania" -> ALBANIA;
+            case "Algeria" -> ALGERIA;
+            case "Angola" -> ANGOLA;
+            case "Antigua and Barbuda" -> ANTIGUA_AND_BARBUDA;
+            case "Anguilla" -> ANGUILLA;
+            case "Eritrea" -> ERITREA;
+            case "Estonia" -> ESTONIA;
+            case "Ecuador" -> ECUADOR;
+            case "Ethiopia" -> ETHIOPIA;
+            case "El Salvador" -> EL_SALVADOR;
+            case "United Kingdom" -> UNITED_KINGDOM;
+            case "Virgin Islands, British" -> VIRGIN_ISLANDS_BRITISH;
+            case "British Indian Ocean Territory" -> BRITISH_INDIAN_OCEAN_TERRITORY;
+            case "Yemen" -> YEMEN_REPUBLIC_OF;
+            case "Oman" -> OMAN;
+            case "Australia" -> AUSTRALIA;
+            case "Austria" -> AUSTRIA;
+            case "Honduras" -> HONDURAS;
+            case "Aland Islands" -> ALAND_ISLANDS;
+            case "Wallis and Futuna Islands" -> WALLIS_AND_FUTUNA_ISLANDS;
+            case "Jordan" -> JORDAN;
+            case "Uganda" -> UGANDA;
+            case "Uruguay" -> URUGUAY;
+            case "Uzbekistan" -> UZBEKISTAN;
+            case "Ukraine" -> UKRAINE;
+            case "Iraq" -> IRAQ;
+            case "Iran" -> IRAN;
+            case "Israel" -> ISRAEL;
+            case "Egypt" -> EGYPT;
+            case "Italy" -> ITALY;
+            case "India" -> INDIA;
+            case "Indonesia" -> INDONESIA;
+            case "Japan" -> JAPAN;
+            case "Jamaica" -> JAMAICA;
+            case "Zambia" -> ZAMBIA;
+            case "Jersey" -> JERSEY;
+            case "Equatorial Guinea" -> EQUATORIAL_GUINEA;
+            case "Korea, Democratic People's Republic of" -> KOREA_DEMOCRATIC_PEOPLES_REPUBLIC_OF;
+            case "Georgia" -> GEORGIA;
+            case "Central African Republic" -> CENTRAL_AFRICAN_REPUBLIC;
+            case "Taiwan, Province of China" -> TAIWAN_PROVINCE_OF_CHINA;
+            case "China" -> CHINA;
+            case "Djibouti" -> DJIBOUTI;
+            case "Gibraltar" -> GIBRALTAR;
+            case "Zimbabwe" -> ZIMBABWE;
+            case "Chad" -> CHAD;
+            case "Czech Republic" -> CZECH_REPUBLIC;
+            case "Chile" -> CHILE;
+            case "Cameroon" -> CAMEROON;
+            case "Cape Verde" -> CAPE_VERDE;
+            case "Kazakhstan" -> KAZAKHSTAN;
+            case "Qatar" -> QATAR;
+            case "Cambodia" -> CAMBODIA;
+            case "Canada" -> CANADA;
+            case "Kenya" -> KENYA;
+            case "Cayman Islands" -> CAYMAN_ISLANDS;
+            case "Comoros" -> COMOROS;
+            case "Costa Rica" -> COSTA_RICA;
+            case "Cocos Islands" -> COCOS_ISLANDS;
+            case "Cote d'Ivoire" -> COTE_DIVOIRE;
+            case "Colombia" -> COLOMBIA;
+            case "Congo" -> CONGO;
+            case "Democratic Republic of the Congo" -> DEMOCRATIC_REPUBLIC_OF_THE_CONGO;
+            case "Cuba" -> CUBA;
+            case "Kuwait" -> KUWAIT;
+            case "Cook Islands" -> COOK_ISLANDS;
+            case "Croatia" -> CROATIA;
+            case "Christmas Island" -> CHRISTMAS_ISLAND;
+            case "Kyrgyzstan" -> KYRGYZSTAN;
+            case "Kiribati" -> KIRIBATI;
+            case "Cyprus" -> CYPRUS;
+            case "Thailand" -> THAILAND;
+            case "Tajikistan" -> TAJIKISTAN;
+            case "Tanzania, United Republic of" -> TANZANIA_UNITED_REPUBLIC_OF;
+            case "Turks and Caicos Islands" -> TURKS_AND_CAICOS_ISLANDS;
+            case "Turkey" -> TURKEY;
+            case "Togo" -> TOGO;
+            case "Tokelau" -> TOKELAU;
+            case "Tonga" -> TONGA;
+            case "Turkmenistan" -> TURKMENISTAN;
+            case "Tuvalu" -> TUVALU;
+            case "Tunisia" -> TUNISIA;
+            case "Trinidad and Tobago" -> TRINIDAD_AND_TOBAGO;
+            case "Panama" -> PANAMA;
+            case "Paraguay" -> PARAGUAY;
+            case "Pakistan" -> PAKISTAN;
+            case "Papua New Guinea" -> PAPUA_NEW_GUINEA;
+            case "Palau" -> PALAU;
+            case "Palestine" -> PALESTINE;
+            case "Faroe Islands" -> FAROE_ISLANDS;
+            case "Peru" -> PERU;
+            case "Portugal" -> PORTUGAL;
+            case "Falkland Islands" -> FALKLAND_ISLANDS;
+            case "Poland" -> POLAND;
+            case "France" -> FRANCE;
+            case "French Guiana" -> FRENCH_GUIANA;
+            case "French Southern Territories" -> FRENCH_SOUTHERN_TERRITORIES;
+            case "French Polynesia" -> FRENCH_POLYNESIA;
+            case "Fiji" -> FIJI;
+            case "Finland" -> FINLAND;
+            case "Philippines" -> PHILIPPINES;
+            case "Pitcairn" -> PITCAIRN;
+            case "Heard and McDonald Islands" -> HEARD_AND_MCDONALD_ISLANDS;
+            case "Hungary" -> HUNGARY;
+            case "Hong Kong" -> HONG_KONG;
+            case "" -> BLANK;
+            default -> throw new IllegalArgumentException("학력이 잘못되었습니다.");
+        };
+    }
+}

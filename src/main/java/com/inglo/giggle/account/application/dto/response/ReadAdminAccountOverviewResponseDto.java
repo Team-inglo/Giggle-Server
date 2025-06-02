@@ -101,7 +101,7 @@ public class ReadAdminAccountOverviewResponseDto extends SelfValidating<ReadAdmi
                     .name(account.getName())
                     .birth(account instanceof User && ((User) account).getBirth() != null ? ((User) account).getBirth().toString() : null)
                     .gender(account instanceof User ? ((User) account).getGender() : null)
-                    .nationality(account instanceof User ? ((User) account).getNationality() : null)
+                    .nationality(account instanceof User ? ((User) account).getNationality().getEnName() : null)
                     .address(account instanceof User && ((User) account).getAddress() != null ? ((User) account).getAddress().getFullAddress() : null)
                     .visa(account instanceof User ? ((User) account).getVisa() : null)
                     .phoneNumber(account.getPhoneNumber())
