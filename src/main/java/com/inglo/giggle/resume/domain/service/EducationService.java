@@ -3,6 +3,7 @@ package com.inglo.giggle.resume.domain.service;
 import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.core.type.EEducationLevel;
+import com.inglo.giggle.core.type.EMajor;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.resume.domain.Education;
 import com.inglo.giggle.resume.domain.Resume;
@@ -20,7 +21,7 @@ public class EducationService {
     public Education createEducation(
             EEducationLevel educationLevel,
             School school,
-            String major,
+            EMajor major,
             Double gpa,
             LocalDate startDate,
             LocalDate endDate,
@@ -43,7 +44,7 @@ public class EducationService {
             Education education,
             EEducationLevel educationLevel,
             School school,
-            String major,
+            EMajor major,
             Double gpa,
             LocalDate startDate,
             LocalDate endDate,

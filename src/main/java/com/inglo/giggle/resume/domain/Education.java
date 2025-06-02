@@ -2,6 +2,7 @@ package com.inglo.giggle.resume.domain;
 
 import com.inglo.giggle.core.dto.BaseEntity;
 import com.inglo.giggle.core.type.EEducationLevel;
+import com.inglo.giggle.core.type.EMajor;
 import com.inglo.giggle.school.domain.School;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,8 +46,9 @@ public class Education extends BaseEntity {
     @Column(name = "education_level", nullable = false) // BACHELOR(4년제), ASSOCIATE(2년제), HIGHSCHOOL(고졸)
     private EEducationLevel educationLevel;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "major", length = 30, nullable = false)
-    private String major;
+    private EMajor major;
 
     @Column(name = "gpa", nullable = false)
     private Double gpa;
@@ -75,7 +77,7 @@ public class Education extends BaseEntity {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public Education(EEducationLevel educationLevel, String major, Double gpa, LocalDate enrollmentDate,
+    public Education(EEducationLevel educationLevel, EMajor major, Double gpa, LocalDate enrollmentDate,
                      LocalDate graduationDate, Integer grade, School school, Resume resume) {
         this.educationLevel = educationLevel;
         this.major = major;
@@ -91,7 +93,7 @@ public class Education extends BaseEntity {
         this.educationLevel = educationLevel;
     }
 
-    public void updateMajor(String major) {
+    public void updateMajor(EMajor major) {
         this.major = major;
     }
 

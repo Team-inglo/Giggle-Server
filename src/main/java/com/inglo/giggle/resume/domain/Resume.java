@@ -2,6 +2,7 @@ package com.inglo.giggle.resume.domain;
 
 import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.core.dto.BaseEntity;
+import com.inglo.giggle.posting.domain.type.EJobCategory;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,6 +60,9 @@ public class Resume extends BaseEntity {
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Education> educations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookMarkResume> bookMarks = new ArrayList<>();
+
     /* -------------------------------------------- */
     /* One To One Mapping ------------------------- */
     /* -------------------------------------------- */
@@ -83,6 +87,21 @@ public class Resume extends BaseEntity {
         this.title = title;
         this.introduction = introduction;
         this.isPublic = true;
+    }
+
+    public String getWorkPreferenceJobCategoriesName() {
+        if (this.workPreference == null || this.workPreference.getJobCategories().isEmpty()) {
+            return " - ";
+        }
+        var jobCategories = this.workPreference.getJobCategories();
+        // 첫 번째 직종만 가져오고 나머지 개수 카운트
+        EJobCategory first = jobCategories.iterator().next();
+        int count = jobCategories.size();
+        if (count == 1) {
+            return first.getKrName();
+        } else {
+            return first.getKrName() + " 외 " + (count - 1) + "개";
+        }
     }
 
     public void updateIntroduction(String introduction) {

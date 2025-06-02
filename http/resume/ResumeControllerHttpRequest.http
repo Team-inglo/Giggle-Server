@@ -209,9 +209,19 @@ Content-Type: application/json
   "is_public": true
 }
 
+### 7.24 (고용주) 이력서 리스트 조회하기
+// @no-log
+GET {{host_url}}/v1/owners/resumes/overviews?page=2&size=10&sorting=POPULAR
+Authorization: Bearer {{access_token}}
+
+### 7.25 (고용주) 이력서 상세 조회하기
+// @no-log
+GET {{host_url}}/v1/owners/resumes/79efbfbd-32ef-bfbd-efbf-bdefbfbd4306/details
+Authorization: Bearer {{access_token}}
+
 
 ### 15.1 (고용주) 인재 스크랩 추가/삭제
 // @no-log
-PUT {{host_url}}/v1/owners/resumes/64130f6d-a2e5-4229-9f1f-41c3c5a5b7ac/book-mark-resumes
+PUT {{host_url}}/v1/owners/resumes/{id}/book-mark-resumes
 Authorization: Bearer {{access_token}}
 Content-Type: application/json

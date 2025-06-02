@@ -5,6 +5,7 @@ import com.inglo.giggle.account.domain.User;
 import com.inglo.giggle.account.domain.type.ELanguage;
 import com.inglo.giggle.address.domain.Address;
 import com.inglo.giggle.core.type.EGender;
+import com.inglo.giggle.core.type.ENationality;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.security.application.dto.request.SignUpDefaultUserRequestDto;
 import com.inglo.giggle.security.domain.redis.TemporaryAccount;
@@ -30,7 +31,7 @@ public class UserService {
                 .firstName(signUpDefaultUserRequestDto.signUpDefaultUserUserInfo().firstName())
                 .lastName(signUpDefaultUserRequestDto.signUpDefaultUserUserInfo().lastName())
                 .gender(EGender.fromString(signUpDefaultUserRequestDto.signUpDefaultUserUserInfo().gender()))
-                .nationality(signUpDefaultUserRequestDto.signUpDefaultUserUserInfo().nationality())
+                .nationality(ENationality.fromString(signUpDefaultUserRequestDto.signUpDefaultUserUserInfo().nationality()))
                 .language(ELanguage.fromString(signUpDefaultUserRequestDto.language()))
                 .birth(signUpDefaultUserRequestDto.signUpDefaultUserUserInfo().birth())
                 .visa(EVisa.fromString(signUpDefaultUserRequestDto.signUpDefaultUserUserInfo().visa()))
@@ -44,7 +45,7 @@ public class UserService {
         user.updateFirstName(requestDto.firstName());
         user.updateLastName(requestDto.lastName());
         user.updateGender(EGender.fromString(requestDto.gender()));
-        user.updateNationality(requestDto.nationality());
+        user.updateNationality(ENationality.fromString(requestDto.nationality()));
         user.updateVisa(EVisa.fromString(requestDto.visa()));
         user.updateBirth(requestDto.birth());
         user.updateAddress(requestDto.address() != null ? requestDto.address().toEntity() : null);

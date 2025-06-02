@@ -117,7 +117,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto ext
                     .id(userOwnerJobPosting.getId())
                     .profileImgUrl(user.getProfileImgUrl())
                     .name(user.getName())
-                    .nationality(user.getNationality() != null ? user.getNationality() : null)
+                    .nationality(user.getNationality() != null ? user.getNationality().getEnName() : null)
                     .gender(user.getGender().toString())
                     .visa(user.getVisa().toString())
                     .schoolName(schoolName)

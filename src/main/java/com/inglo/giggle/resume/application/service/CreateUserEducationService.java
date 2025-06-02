@@ -1,6 +1,7 @@
 package com.inglo.giggle.resume.application.service;
 
 import com.inglo.giggle.core.type.EEducationLevel;
+import com.inglo.giggle.core.type.EMajor;
 import com.inglo.giggle.resume.application.dto.request.CreateUserEducationRequestDto;
 import com.inglo.giggle.resume.application.usecase.CreateUserEducationUseCase;
 import com.inglo.giggle.resume.domain.Education;
@@ -50,7 +51,7 @@ public class CreateUserEducationService implements CreateUserEducationUseCase {
         Education education = educationService.createEducation(
                 EEducationLevel.fromString(requestDto.educationLevel()),
                 school,
-                requestDto.major(),
+                EMajor.fromString(requestDto.major()),
                 requestDto.gpa(),
                 requestDto.startDate(),
                 requestDto.endDate(),

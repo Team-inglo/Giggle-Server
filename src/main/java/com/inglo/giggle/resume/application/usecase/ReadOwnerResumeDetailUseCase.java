@@ -18,4 +18,6 @@ public interface ReadOwnerResumeDetailUseCase {
     ReadOwnerResumeDetailResponseDtoV1 execute(UUID accountId, Long userOwnerJobPostingId);
 
     ReadOwnerResumeDetailResponseDtoV2 executeV2(UUID accountId, Long userOwnerJobPostingId);
+
+    ReadOwnerResumeDetailResponseDtoV2 execute(UUID resumeId);
 }

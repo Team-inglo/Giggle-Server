@@ -134,7 +134,7 @@ public class ReadUserResumeDetailResponseDtoV1 extends SelfValidating<ReadUserRe
         public static PersonalInformationDto fromEntity(User user) {
             return PersonalInformationDto.builder()
                     .gender(user.getGender())
-                    .nationality(user.getNationality() != null ? user.getNationality() : null)
+                    .nationality(user.getNationality() != null ? user.getNationality().getEnName() : null)
                     .birth(user.getBirth() != null ? DateTimeUtil.convertLocalDateToDARTString(user.getBirth()) : null)
                     .mainAddress(user.getAddress() != null ? user.getAddress().getAddressName() : null)
                     .detailedAddress(user.getAddress() != null ? user.getAddress().getAddressDetail() : null)
@@ -234,7 +234,7 @@ public class ReadUserResumeDetailResponseDtoV1 extends SelfValidating<ReadUserRe
                     .id(education.getId())
                     .educationLevel(education.getEducationLevel().name())
                     .schoolName(education.getSchool().getSchoolName())
-                    .major(education.getMajor())
+                    .major(education.getMajor().getEnName())
                     .startDate(DateTimeUtil.convertLocalDateToString(education.getEnrollmentDate()))
                     .endDate(DateTimeUtil.convertLocalDateToString(education.getGraduationDate()))
                     .grade(education.getGrade())
