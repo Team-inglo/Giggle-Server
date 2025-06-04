@@ -21,4 +21,7 @@ public interface ResumeJpaRepository extends JpaRepository<Resume, UUID>{
 
     @EntityGraph(attributePaths = {"educations"})
     Optional<Resume> findWithEducationsByAccountId(UUID accountId);
+
+    @EntityGraph(attributePaths = {"educations", "bookmarks"})
+    Optional<Resume> findWithEducationsAndBookmarksByAccountId(UUID accountId);
 }

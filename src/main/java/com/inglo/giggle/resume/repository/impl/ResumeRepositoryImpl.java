@@ -6,8 +6,8 @@ import com.inglo.giggle.core.type.EMajor;
 import com.inglo.giggle.core.type.ENationality;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
-import com.inglo.giggle.resume.domain.QBookMarkResume;
 import com.inglo.giggle.resume.domain.QResume;
+import com.inglo.giggle.resume.domain.QWorkPreference;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.type.EKorean;
 import com.inglo.giggle.resume.repository.ResumeRepository;
@@ -69,6 +69,12 @@ public class ResumeRepositoryImpl implements ResumeRepository {
     }
 
     @Override
+    public Resume findWithEducationsAndBookmarksByAccountIdOrElseThrow(UUID accountId) {
+        return resumeJpaRepository.findWithEducationsAndBookmarksByAccountId(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+    }
+
+    @Override
     public void save(Resume resume) {
         resumeJpaRepository.save(resume);
     }
@@ -84,16 +90,20 @@ public class ResumeRepositoryImpl implements ResumeRepository {
             Pageable pageable
     ) {
         QResume resume = QResume.resume;
+        QWorkPreference workPreference = QWorkPreference.workPreference;
 
         List<Resume> results = queryFactory
                 .select(resume)
                 .from(resume)
                 .leftJoin(resume.user).fetchJoin()
                 .leftJoin(resume.bookMarks).fetchJoin()
+                .leftJoin(resume.workPreference, workPreference).fetchJoin()
+                .leftJoin(workPreference.jobCategories).fetchJoin()
                 .where(applyFilters(resume, visa, korean, major, nationality, industry))
                 .orderBy(resume.bookMarks.size().desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .distinct()
                 .fetch();
         long total = Optional.ofNullable(
                 queryFactory
@@ -117,16 +127,21 @@ public class ResumeRepositoryImpl implements ResumeRepository {
             Pageable pageable
     ) {
         QResume resume = QResume.resume;
+        QWorkPreference workPreference = QWorkPreference.workPreference;
 
         List<Resume> results = queryFactory
                 .selectFrom(resume)
                 .where(applyFilters(resume, visa, korean, major, nationality, industry))
                 .leftJoin(resume.user).fetchJoin()
                 .leftJoin(resume.bookMarks).fetchJoin()
+                .leftJoin(resume.workPreference, workPreference).fetchJoin()
+                .leftJoin(workPreference.jobCategories).fetchJoin()
                 .orderBy(resume.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .distinct()
                 .fetch();
+
         long total = Optional.ofNullable(
                 queryFactory
                         .select(resume.count())

@@ -27,6 +27,8 @@ public interface ResumeRepository {
 
     Resume findWithEducationsByAccountIdOrElseThrow(UUID accountId);
 
+    Resume findWithEducationsAndBookmarksByAccountIdOrElseThrow(UUID accountId);
+
     void save(Resume resume);
 
     Page<Resume> findResumesOrderByBookMarks(

@@ -6,6 +6,7 @@ import com.inglo.giggle.core.type.EMajor;
 import com.inglo.giggle.core.type.ENationality;
 import com.inglo.giggle.core.type.EVisa;
 import com.inglo.giggle.posting.domain.type.EJobCategory;
+import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailByResumeIdResponseDto;
 import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDtoV1;
 import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDtoV2;
 import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeOverviewResponseDto;
@@ -72,9 +73,10 @@ public class ResumeOwnersQueryV1Controller {
      * 7.25 (고용주) 이력서 상세 조회하기
      */
     @GetMapping("/resumes/{id}/details")
-    public ResponseDto<ReadOwnerResumeDetailResponseDtoV2> readOwnerResumeDetailById(
+    public ResponseDto<ReadOwnerResumeDetailByResumeIdResponseDto> readOwnerResumeDetailById(
+            @AccountID UUID accountId,
             @PathVariable UUID id
     ) {
-        return ResponseDto.ok(readOwnerResumeDetailUseCase.execute(id));
+        return ResponseDto.ok(readOwnerResumeDetailUseCase.execute(accountId, id));
     }
 }
