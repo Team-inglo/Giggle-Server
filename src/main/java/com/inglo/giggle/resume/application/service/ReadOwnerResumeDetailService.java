@@ -6,6 +6,7 @@ import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.posting.domain.UserOwnerJobPosting;
 import com.inglo.giggle.posting.domain.service.UserOwnerJobPostingService;
 import com.inglo.giggle.posting.repository.UserOwnerJobPostingRepository;
+import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailByResumeIdResponseDto;
 import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDtoV1;
 import com.inglo.giggle.resume.application.dto.response.ReadOwnerResumeDetailResponseDtoV2;
 import com.inglo.giggle.resume.application.usecase.ReadOwnerResumeDetailUseCase;
@@ -112,7 +113,7 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
 
     @Override
     @Transactional(readOnly = true)
-    public ReadOwnerResumeDetailResponseDtoV2 execute(UUID resumeId) {
+    public ReadOwnerResumeDetailByResumeIdResponseDto execute(UUID accountId, UUID resumeId) {
 
         // Account 조회
         Account account = accountRepository.findByIdOrElseThrow(resumeId);
@@ -131,7 +132,7 @@ public class ReadOwnerResumeDetailService implements ReadOwnerResumeDetailUseCas
         // WorkPreference 조회
         WorkPreference workPreference = workPreferenceRepository.findByResumeIdOrElseThrow(resumeId);
 
-        return ReadOwnerResumeDetailResponseDtoV2.of(resume, workExperiences, educations, languageSkill, (User) account, workPreference);
+        return ReadOwnerResumeDetailByResumeIdResponseDto.of(resume, workExperiences, educations, languageSkill, (User) account, workPreference, accountId);
     }
 
 }

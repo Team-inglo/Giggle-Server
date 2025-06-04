@@ -69,6 +69,12 @@ public class ResumeRepositoryImpl implements ResumeRepository {
     }
 
     @Override
+    public Resume findWithEducationsAndBookmarksByAccountIdOrElseThrow(UUID accountId) {
+        return resumeJpaRepository.findWithEducationsAndBookmarksByAccountId(accountId)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_RESUME));
+    }
+
+    @Override
     public void save(Resume resume) {
         resumeJpaRepository.save(resume);
     }
