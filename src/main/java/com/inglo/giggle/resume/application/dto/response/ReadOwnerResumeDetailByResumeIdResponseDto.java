@@ -56,7 +56,7 @@ public class ReadOwnerResumeDetailByResumeIdResponseDto extends SelfValidating<R
     private final WorkPreferenceDto workPreference;
 
     @JsonProperty("is_bookmarked")
-    private final boolean isBookmarked;
+    private final Boolean isBookmarked;
 
     @Builder
     public ReadOwnerResumeDetailByResumeIdResponseDto(
