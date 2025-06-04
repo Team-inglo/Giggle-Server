@@ -25,7 +25,8 @@ public interface ReadOwnerResumeOverviewUseCase {
             List<EKorean> korean,
             List<EMajor> major,
             List<ENationality> nationality,
-            List<EJobCategory> industry
+            List<EJobCategory> industry,
+            Boolean isBookmarked
     );
 
 }

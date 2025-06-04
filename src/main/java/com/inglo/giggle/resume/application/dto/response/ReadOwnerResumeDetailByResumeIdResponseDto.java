@@ -419,7 +419,7 @@ public class ReadOwnerResumeDetailByResumeIdResponseDto extends SelfValidating<R
                 .education(!educations.isEmpty() ? educations.stream().map(EducationDto::fromEntity).toList() : null)
                 .languages(LanguagesDto.fromEntity(languageSkill))
                 .workPreference(WorkPreferenceDto.fromEntity(workPreference))
-                .isBookmarked(resume.getBookMarks().stream().anyMatch(bookmark -> bookmark.getResume().getAccountId().equals(ownerId)))
+                .isBookmarked(resume.getBookMarks().stream().anyMatch(bookmark -> bookmark.getOwner().getId().equals(ownerId)))
                 .build();
     }
 }

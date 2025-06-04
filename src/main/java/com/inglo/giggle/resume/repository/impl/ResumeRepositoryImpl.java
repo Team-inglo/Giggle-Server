@@ -153,6 +153,35 @@ public class ResumeRepositoryImpl implements ResumeRepository {
         return new PageImpl<>(results, pageable, total);
     }
 
+    @Override
+    public Page<Resume> findBookmarkedResumes(UUID accountId, Pageable pageable) {
+        QResume resume = QResume.resume;
+        QWorkPreference workPreference = QWorkPreference.workPreference;
+
+        List<Resume> results = queryFactory
+                .selectFrom(resume)
+                .where(resume.bookMarks.any().owner.id.eq(accountId))
+                .leftJoin(resume.user).fetchJoin()
+                .leftJoin(resume.bookMarks).fetchJoin()
+                .leftJoin(resume.workPreference, workPreference).fetchJoin()
+                .leftJoin(workPreference.jobCategories).fetchJoin()
+                .orderBy(resume.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .distinct()
+                .fetch();
+
+        long total = Optional.ofNullable(
+                queryFactory
+                        .select(resume.count())
+                        .from(resume)
+                        .where(resume.bookMarks.any().owner.id.eq(accountId))
+                        .fetchOne()
+        ).orElse(0L);
+
+        return new PageImpl<>(results, pageable, total);
+    }
+
     private BooleanExpression applyFilters(
             QResume resume,
             List<EVisa> visa,
