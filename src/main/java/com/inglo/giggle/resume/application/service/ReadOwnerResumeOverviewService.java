@@ -40,9 +40,16 @@ public class ReadOwnerResumeOverviewService implements ReadOwnerResumeOverviewUs
             List<EKorean> korean,
             List<EMajor> major,
             List<ENationality> nationality,
-            List<EJobCategory> industry
+            List<EJobCategory> industry,
+            Boolean isBookmarked
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
+
+        // 북마크한 인재 조회 시
+        if (isBookmarked) {
+            Page<Resume> bookmarkedResumes = resumeRepository.findBookmarkedResumes(accountId, pageable);
+            return ReadOwnerResumeOverviewResponseDto.from(bookmarkedResumes);
+        }
 
         List<EVisa> visaSafe = (visa == null) ? List.of() : visa;
         List<EKorean> koreanSafe = (korean == null) ? List.of() : korean;

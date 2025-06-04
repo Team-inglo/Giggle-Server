@@ -54,7 +54,8 @@ public class ResumeOwnersQueryV1Controller {
             @RequestParam(value = "korean", required = false) List<EKorean> korean,
             @RequestParam(value = "major", required = false) List<EMajor> major,
             @RequestParam(value = "nationality", required = false) List<ENationality> nationality,
-            @RequestParam(value = "industry", required = false) List<EJobCategory> industry
+            @RequestParam(value = "industry", required = false) List<EJobCategory> industry,
+            @RequestParam(value = "is-book-marked", required = false, defaultValue = "false") Boolean isBookmarked
     ) {
         return ResponseDto.ok(readOwnerResumeOverviewUseCase.execute(
                 accountId,
@@ -65,7 +66,8 @@ public class ResumeOwnersQueryV1Controller {
                 korean,
                 major,
                 nationality,
-                industry
+                industry,
+                isBookmarked
         ));
     }
 

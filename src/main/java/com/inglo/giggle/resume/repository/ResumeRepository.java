@@ -50,4 +50,6 @@ public interface ResumeRepository {
             List<EJobCategory> industry,
             Pageable pageable
     );
+
+    Page<Resume> findBookmarkedResumes(UUID accountId, Pageable pageable);
 }

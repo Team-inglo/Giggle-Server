@@ -141,7 +141,7 @@ Content-Type: multipart/form-data; boundary=boundary
 Content-Disposition: form-data; name="image"; filename="image.png"
 Content-Type: image/png
 
-< /Users/jjuuuunnii/Desktop/image.png
+< /Users/kyeom/Desktop/image.png
 
 --boundary
 Content-Disposition: form-data; name="body"

@@ -42,6 +42,9 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
         @JsonProperty("nationality")
         private final String nationality;
 
+        @JsonProperty("address")
+        private final String address;
+
         @JsonProperty("title")
         private final String title;
 
@@ -55,13 +58,14 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
         private final int bookmarkCount;
 
         @JsonProperty("is_bookmarked")
-        private final boolean isBookmarked;
+        private final Boolean isBookmarked;
 
         public ResumeDto(
                 UUID id,
                 String name,
                 String profileImgUrl,
                 String nationality,
+                String address,
                 String title,
                 EVisa visa,
                 String industry,
@@ -72,6 +76,7 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
             this.name = name;
             this.profileImgUrl = profileImgUrl;
             this.nationality = nationality;
+            this.address = address;
             this.title = title;
             this.visa = visa;
             this.industry = industry;
@@ -89,6 +94,7 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
                         resume.getUser().getName(),
                         resume.getUser().getProfileImgUrl(),
                         resume.getUser().getNationality().getKrName(),
+                        resume.getUser().getAddress() != null ? resume.getUser().getAddress().getFullAddress() : "지역 미등록",
                         resume.getTitle(),
                         resume.getUser().getVisa(),
                         resume.getWorkPreferenceJobCategoriesName(),
