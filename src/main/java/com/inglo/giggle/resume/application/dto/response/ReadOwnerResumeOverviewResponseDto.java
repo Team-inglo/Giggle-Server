@@ -54,6 +54,9 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
         @JsonProperty("bookmark_count")
         private final int bookmarkCount;
 
+        @JsonProperty("is_bookmarked")
+        private final boolean isBookmarked;
+
         public ResumeDto(
                 UUID id,
                 String name,
@@ -62,7 +65,8 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
                 String title,
                 EVisa visa,
                 String industry,
-                int bookmarkCount
+                int bookmarkCount,
+                boolean isBookmarked
         ) {
             this.id = id;
             this.name = name;
@@ -72,6 +76,7 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
             this.visa = visa;
             this.industry = industry;
             this.bookmarkCount = bookmarkCount;
+            this.isBookmarked = isBookmarked;
         }
     }
 
@@ -87,7 +92,9 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
                         resume.getTitle(),
                         resume.getUser().getVisa(),
                         resume.getWorkPreferenceJobCategoriesName(),
-                        resume.getBookMarks().size()
+                        resume.getBookMarks().size(),
+                        resume.getBookMarks().stream()
+                                .anyMatch(bookmark -> bookmark.getResume().getAccountId().equals(resume.getAccountId()))
                 ))
                 .toList();
 
