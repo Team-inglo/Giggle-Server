@@ -130,3 +130,10 @@ Content-Type: application/json
 }
 
 --boundary
+
+
+
+### 14.10 (어드민) 커리어 삭제하기
+//@no-log
+DELETE http://localhost:8080/v1/admins/careers/2
+Authorization: Bearer {{access_token}}

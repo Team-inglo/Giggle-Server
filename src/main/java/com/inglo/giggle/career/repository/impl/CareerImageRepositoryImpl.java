@@ -33,4 +33,9 @@ public class CareerImageRepositoryImpl implements CareerImageRepository {
     public void delete(CareerImage careerImage) {
         careerImageJpaRepository.delete(careerImage);
     }
+
+    @Override
+    public List<CareerImage> findAllByCareerId(Long careerId) {
+        return careerImageJpaRepository.findAllByCareerId(careerId);
+    }
 }

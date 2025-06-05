@@ -12,4 +12,6 @@ public interface CareerImageRepository {
     List<CareerImage> findAllById(List<Long> careerImageIds);
 
     void delete(CareerImage careerImage);
+
+    List<CareerImage> findAllByCareerId(Long careerId);
 }

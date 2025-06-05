@@ -3,6 +3,7 @@ package com.inglo.giggle.career.controller.command;
 import com.inglo.giggle.career.application.dto.request.CreateAdminsCareerRequestDto;
 import com.inglo.giggle.career.application.dto.request.UpdateAdminsCareerRequestDto;
 import com.inglo.giggle.career.application.usecase.CreateAdminsCareerUseCase;
+import com.inglo.giggle.career.application.usecase.DeleteAdminsCareerUseCase;
 import com.inglo.giggle.career.application.usecase.UpdateAdminsCareerUseCase;
 import com.inglo.giggle.core.dto.ResponseDto;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ public class CareerAdminsCommandV1Controller {
 
     private final CreateAdminsCareerUseCase createAdminsCareerUseCase;
     private final UpdateAdminsCareerUseCase updateAdminsCareerUseCase;
+    private final DeleteAdminsCareerUseCase deleteAdminsCareerUseCase;
 
     /**
      * 14.5 (관리자) 커리어 추가히기
@@ -52,6 +54,17 @@ public class CareerAdminsCommandV1Controller {
                 requestDto
         );
 
+        return ResponseDto.ok(null);
+    }
+
+    /**
+     * 14.10 (관리자) 커리어 삭제하기
+     */
+    @DeleteMapping("/admins/careers/{careerId}")
+    public ResponseDto<Void> deleteCareer(
+            @PathVariable(value = "careerId") Long careerId
+    ) {
+        deleteAdminsCareerUseCase.execute(careerId);
         return ResponseDto.ok(null);
     }
 }
