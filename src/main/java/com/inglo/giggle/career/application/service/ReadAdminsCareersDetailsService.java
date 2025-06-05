@@ -1,9 +1,7 @@
 package com.inglo.giggle.career.application.service;
 
 import com.inglo.giggle.career.application.dto.response.ReadAdminsCareersDetailsResponseDto;
-import com.inglo.giggle.career.application.dto.response.ReadGuestsCareersDetailsResponseDto;
 import com.inglo.giggle.career.application.usecase.ReadAdminsCareersDetailsUseCase;
-import com.inglo.giggle.career.application.usecase.ReadGuestsCareersDetailsUseCase;
 import com.inglo.giggle.career.domain.Career;
 import com.inglo.giggle.career.domain.CareerImage;
 import com.inglo.giggle.career.repository.CareerImageRepository;

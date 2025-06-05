@@ -2,10 +2,8 @@ package com.inglo.giggle.career.controller.query;
 
 import com.inglo.giggle.career.application.dto.response.ReadAdminsCareersDetailsResponseDto;
 import com.inglo.giggle.career.application.dto.response.ReadAdminsCareersOverviewsResponseDto;
-import com.inglo.giggle.career.application.dto.response.ReadGuestsCareersDetailsResponseDto;
 import com.inglo.giggle.career.application.usecase.ReadAdminsCareersDetailsUseCase;
 import com.inglo.giggle.career.application.usecase.ReadAdminsCareersOverviewsUseCase;
-import com.inglo.giggle.career.application.usecase.ReadGuestsCareersDetailsUseCase;
 import com.inglo.giggle.core.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
