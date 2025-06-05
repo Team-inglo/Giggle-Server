@@ -38,7 +38,6 @@ public class UpdateOwnerJobPostingService implements UpdateOwnerJobPostingUseCas
     private final AccountRepository accountRepository;
     private final AccountService accountService;
 
-    private final OwnerRepository ownerRepository;
     private final JobPostingRepository jobPostingRepository;
     private final PostingWorkDayTimeRepository postingWorkDayTimeRepository;
     private final CompanyImageRepository companyImageRepository;

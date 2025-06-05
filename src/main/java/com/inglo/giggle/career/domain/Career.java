@@ -132,4 +132,36 @@ public class Career extends BaseEntity {
         this.details = details;
         this.applicationUrl = applicationUrl;
     }
+
+    public void updateSelf(
+            String title,
+            String host,
+            String organizer,
+            String address,
+            LocalDate startDate,
+            LocalDate endDate,
+            Integer reward,
+            Set<EVisa> visa,
+            Integer recruitmentNumber,
+            EEducationLevel educationLevel,
+            String preferredConditions,
+            ECareerCategory category,
+            String details,
+            String applicationUrl
+    ) {
+        this.title = title;
+        this.host = host;
+        this.organizer = organizer;
+        this.address = address;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.reward = reward;
+        this.visa = visa;
+        this.recruitmentNumber = recruitmentNumber;
+        this.educationLevel = educationLevel;
+        this.preferredConditions = preferredConditions;
+        this.category = category;
+        this.details = details;
+        this.applicationUrl = applicationUrl;
+    }
 }

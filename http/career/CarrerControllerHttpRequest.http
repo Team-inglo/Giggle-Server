@@ -32,7 +32,7 @@ Authorization: Bearer {{access_token}}
 
 
 ### 14.5 (어드민) 커리어 추가하기
-###
+//@no-log
 POST http://localhost:8080/v1/admins/careers
 Content-Type: multipart/form-data; boundary=boundary
 Authorization: Bearer {{access_token}}
@@ -77,3 +77,63 @@ Authorization: Bearer {{access_token}}
 
 
 
+### 14.7 (어드민) 커리어 리스트 조회
+//@no-log
+GET http://localhost:8080/v1/admins/careers/overviews?
+    page=1&
+    size=10&
+    sorting=TRENDING
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+
+### 14.8 (어드민) 커리어 디테일 조회
+//@no-log
+GET http://localhost:8080/v1/admins/careers/1/details
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+### 14.9 (어드민) 커리어 수정하기
+//@no-log
+PUT http://localhost:8080/v1/admins/careers/1
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{access_token}}
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="image.png"
+Content-Type: image/png
+
+< /Users/jjuuuunnii/Desktop/image.png
+
+--boundary
+Content-Disposition: form-data; name="body"
+Content-Type: application/json
+
+{
+  "title": "승주니랑 동겸이의 스프링 여행",
+  "career_category": "PROGRAM",
+  "host_name": "한국글로벌협회",
+  "organizer_name": "서울청년센터",
+  "address": "서울 강남구",
+  "recruitment_start_date": "2025-06-01",
+  "recruitment_end_date": "2025-06-30",
+  "reward": 500000,
+  "visa": ["D_2_2", "D_4_1", "F_2"],
+  "recruitment_number": 9,
+  "education": "BACHELOR",
+  "preferred_conditions": "외국어 능통자 우대",
+  "details": "해외 파견 인턴십 프로그램으로, 글로벌 기업에서 실무 경험을 쌓을 수 있는 기회입니다.",
+  "application_url": "https://apply.globalinternship.kr",
+  "deleted_image_ids": [1]
+}
+
+--boundary
+
+
+
+### 14.10 (어드민) 커리어 삭제하기
+//@no-log
+DELETE http://localhost:8080/v1/admins/careers/2
+Authorization: Bearer {{access_token}}

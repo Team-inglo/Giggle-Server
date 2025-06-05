@@ -17,4 +17,6 @@ public interface CareerRepository {
     Career findByIdOrElseThrow(Long careerId);
 
     void save(Career career);
+
+    void delete(Career career);
 }

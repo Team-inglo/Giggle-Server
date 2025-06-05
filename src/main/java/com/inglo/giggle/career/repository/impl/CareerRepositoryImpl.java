@@ -113,6 +113,11 @@ public class CareerRepositoryImpl implements CareerRepository {
         careerJpaRepository.save(career);
     }
 
+    @Override
+    public void delete(Career career) {
+        careerJpaRepository.delete(career);
+    }
+
     private BooleanExpression applyFilters(QCareer career, String search, List<ECareerCategory> categories) {
         BooleanExpression predicate = career.deletedAt.isNull();
 

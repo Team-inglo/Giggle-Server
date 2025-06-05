@@ -23,4 +23,19 @@ public class CareerImageRepositoryImpl implements CareerImageRepository {
     public void saveAll(List<CareerImage> careerImages) {
         careerImageJpaRepository.saveAll(careerImages);
     }
+
+    @Override
+    public List<CareerImage> findAllById(List<Long> careerImageIds) {
+        return careerImageJpaRepository.findAllById(careerImageIds);
+    }
+
+    @Override
+    public void delete(CareerImage careerImage) {
+        careerImageJpaRepository.delete(careerImage);
+    }
+
+    @Override
+    public List<CareerImage> findAllByCareerId(Long careerId) {
+        return careerImageJpaRepository.findAllByCareerId(careerId);
+    }
 }

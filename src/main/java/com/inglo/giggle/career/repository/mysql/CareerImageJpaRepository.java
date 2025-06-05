@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CareerImageJpaRepository extends JpaRepository<CareerImage, Long> {
     List<CareerImage> findByCareerId(Long careerId);
+
+    List<CareerImage> findAllByCareerId(Long careerId);
 }

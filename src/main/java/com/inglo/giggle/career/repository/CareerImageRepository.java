@@ -8,4 +8,10 @@ public interface CareerImageRepository {
     List<CareerImage> findByCareerId(Long careerId);
 
     void saveAll(List<CareerImage> careerImages);
+
+    List<CareerImage> findAllById(List<Long> careerImageIds);
+
+    void delete(CareerImage careerImage);
+
+    List<CareerImage> findAllByCareerId(Long careerId);
 }

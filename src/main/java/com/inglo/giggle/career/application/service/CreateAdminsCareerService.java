@@ -52,15 +52,18 @@ public class CreateAdminsCareerService implements CreateAdminsCareerUseCase {
 
         List<String> imageUrls;
         if (images != null && !images.isEmpty()) {
+            UUID serialId = UUID.randomUUID();
+
             imageUrls = images.stream().map(image -> s3Util.uploadImageFile(
                     image,
-                    UUID.randomUUID().toString(),
+                    serialId.toString(),
                     EImageType.CAREER_IMG
             )).toList();
 
             List<CareerImage> careerImages = imageUrls.stream()
                     .map(url -> CareerImage.builder()
                             .career(career)
+                            .serialId(serialId)
                             .imgUrl(url)
                             .build())
                     .toList();
