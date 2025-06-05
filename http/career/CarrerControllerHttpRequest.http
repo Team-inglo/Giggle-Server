@@ -77,11 +77,19 @@ Authorization: Bearer {{access_token}}
 
 
 
-### 14.7 (게스트) 커리어 리스트 조회
+### 14.7 (어드민) 커리어 리스트 조회
 //@no-log
 GET http://localhost:8080/v1/admins/careers/overviews?
     page=1&
     size=10&
     sorting=TRENDING
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+
+### 14.8 (어드민) 커리어 디테일 조회
+//@no-log
+GET http://localhost:8080/v1/admins/careers/1/details
 Content-Type: application/json
 Authorization: Bearer {{access_token}}

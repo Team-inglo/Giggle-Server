@@ -1,7 +1,9 @@
 package com.inglo.giggle.career.controller.query;
 
+import com.inglo.giggle.career.application.dto.response.ReadAdminsCareersDetailsResponseDto;
 import com.inglo.giggle.career.application.dto.response.ReadAdminsCareersOverviewsResponseDto;
 import com.inglo.giggle.career.application.dto.response.ReadGuestsCareersDetailsResponseDto;
+import com.inglo.giggle.career.application.usecase.ReadAdminsCareersDetailsUseCase;
 import com.inglo.giggle.career.application.usecase.ReadAdminsCareersOverviewsUseCase;
 import com.inglo.giggle.career.application.usecase.ReadGuestsCareersDetailsUseCase;
 import com.inglo.giggle.core.dto.ResponseDto;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class CareerAdminQueryV1Controller {
 
     private final ReadAdminsCareersOverviewsUseCase readAdminsCareersOverviewsUseCase;
-    private final ReadGuestsCareersDetailsUseCase readGuestsCareersDetailsUseCase;
+    private final ReadAdminsCareersDetailsUseCase readAdminsCareersDetailsUseCase;
 
     /**
      * 14.7 (어드민) 커리어 리스트 조회
@@ -39,14 +41,14 @@ public class CareerAdminQueryV1Controller {
     }
 
     /**
-     * 14.2 (어드민) 커리어 디테일 조회
+     * 14.8 (어드민) 커리어 디테일 조회
      */
     @GetMapping("/admins/careers/{career-id}/details")
-    public ResponseDto<ReadGuestsCareersDetailsResponseDto> readGuestsCareersDetails(
+    public ResponseDto<ReadAdminsCareersDetailsResponseDto> readAdminsCareersDetails(
             @PathVariable(value = "career-id") Long careerId
     ) {
         return ResponseDto.ok(
-                readGuestsCareersDetailsUseCase.execute(
+                readAdminsCareersDetailsUseCase.execute(
                         careerId
                 )
         );
