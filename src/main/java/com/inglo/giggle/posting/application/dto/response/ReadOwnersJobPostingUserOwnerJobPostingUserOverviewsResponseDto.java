@@ -10,6 +10,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto extends SelfValidating<ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto> {
@@ -47,6 +48,10 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto ext
         private final Long id;
 
         @NotNull
+        @JsonProperty("resume_id")
+        private final UUID resumeId;
+
+        @NotNull
         @JsonProperty("profile_img_url")
         private final String profileImgUrl;
 
@@ -78,8 +83,20 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto ext
         private final String step;
 
         @Builder
-        private ApplicantOverviewDto(Long id, String profileImgUrl, String name, String nationality, String gender, String visa, String schoolName, Integer durationOfDays, String step) {
+        private ApplicantOverviewDto(
+                Long id,
+                UUID resumeId,
+                String profileImgUrl,
+                String name,
+                String nationality,
+                String gender,
+                String visa,
+                String schoolName,
+                Integer durationOfDays,
+                String step
+        ) {
             this.id = id;
+            this.resumeId = resumeId;
             this.profileImgUrl = profileImgUrl;
             this.name = name;
             this.nationality = nationality;
@@ -115,6 +132,7 @@ public class ReadOwnersJobPostingUserOwnerJobPostingUserOverviewsResponseDto ext
 
             return ApplicantOverviewDto.builder()
                     .id(userOwnerJobPosting.getId())
+                    .resumeId(user.getId())
                     .profileImgUrl(user.getProfileImgUrl())
                     .name(user.getName())
                     .nationality(user.getNationality() != null ? user.getNationality().getEnName() : null)
