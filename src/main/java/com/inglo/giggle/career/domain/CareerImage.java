@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,6 +33,9 @@ public class CareerImage extends BaseEntity {
     @Column(name = "img_url", nullable = false)
     private String imgUrl;
 
+    @Column(name = "serial_id", nullable = false)
+    private UUID serialId;
+
     /* -------------------------------------------- */
     /* Many To One Mapping ------------------------ */
     /* -------------------------------------------- */
@@ -42,8 +47,13 @@ public class CareerImage extends BaseEntity {
     /* Methods ------------------------------------ */
     /* -------------------------------------------- */
     @Builder
-    public CareerImage(String imgUrl, Career career) {
+    public CareerImage(
+            String imgUrl,
+            UUID serialId,
+            Career career
+    ) {
         this.imgUrl = imgUrl;
+        this.serialId = serialId;
         this.career = career;
     }
 }
