@@ -38,32 +38,11 @@ public enum EMajor {
     private final String enName;
 
     public static EMajor fromString(String value) {
-        return switch (value) {
-            case "Business Management" -> BUSINESS_MANAGEMENT;
-            case "Office & Accounting" -> OFFICE_ACCOUNTING;
-            case "Finance & Insurance" -> FINANCE_INSURANCE;
-            case "Education & Research" -> EDUCATION_RESEARCH;
-            case "Law & Public Safety" -> LAW_PUBLIC_SAFETY;
-            case "Healthcare" -> HEALTHCARE;
-            case "Social Work & Religion" -> SOCIAL_WORK_RELIGION;
-            case "Arts & Media" -> ARTS_MEDIA;
-            case "Driving & Delivery" -> DRIVING_DELIVERY;
-            case "Sales" -> SALES;
-            case "Security & Cleaning" -> SECURITY_CLEANING;
-            case "Hospitality & Leisure" -> HOSPITALITY_LEISURE;
-            case "Food Service" -> FOOD_SERVICE;
-            case "Construction" -> CONSTRUCTION;
-            case "Machinery" -> MACHINERY;
-            case "Materials" -> MATERIALS;
-            case "Chemistry & Bio" -> CHEMISTRY_BIO;
-            case "Textiles & Fashion" -> TEXTILES_FASHION;
-            case "Electronics" -> ELECTRONICS;
-            case "IT & Telecommunications" -> IT_TELECOMMUNICATIONS;
-            case "Food Processing" -> FOOD_PROCESSING;
-            case "Printing & Craft" -> PRINTING_CRAFT;
-            case "Environment & Safety" -> ENVIRONMENT_SAFETY;
-            case "Agriculture & Fisheries" -> AGRICULTURE_FISHERIES;
-            default -> throw new IllegalArgumentException("전공이 잘못되었습니다.");
-        };
+        for (EMajor major : EMajor.values()) {
+            if (major.name().equalsIgnoreCase(value.toUpperCase())) {
+                return major;
+            }
+        }
+        throw new IllegalArgumentException("전공이 잘못되었습니다.");
     }
 }
