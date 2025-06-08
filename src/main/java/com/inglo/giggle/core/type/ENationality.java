@@ -255,6 +255,10 @@ public enum ENationality {
     private final String enName;
 
     public static ENationality fromString(String value) {
+        if (value.isEmpty() || value.equals("BLANK")) {
+            return BLANK;
+        }
+
         for (ENationality nationality : ENationality.values()) {
             if (nationality.name().equalsIgnoreCase(value.toUpperCase())) {
                 return nationality;
