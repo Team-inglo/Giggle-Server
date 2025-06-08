@@ -30,7 +30,7 @@ public class CareerImage extends BaseEntity {
     /* Information Column ------------------------- */
     /* -------------------------------------------- */
     @Lob
-    @Column(name = "img_url", nullable = false)
+    @Column(name = "img_url", nullable = false, columnDefinition = "TEXT")
     private String imgUrl;
 
     @Column(name = "serial_id", nullable = false)

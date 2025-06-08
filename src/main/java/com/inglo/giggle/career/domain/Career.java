@@ -78,7 +78,7 @@ public class Career extends BaseEntity {
     private ECareerCategory category;
 
     @Lob
-    @Column(name = "details")
+    @Column(name = "details", columnDefinition = "TEXT")
     private String details;
 
     @Column(name = "application_url")
