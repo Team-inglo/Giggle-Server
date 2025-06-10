@@ -58,7 +58,7 @@ public class ReadGuestsCareersOverviewsResponseDto extends SelfValidating<ReadGu
 
         @NotNull
         @JsonProperty("left_days")
-        private final String leftDays;
+        private final int leftDays;
 
         @NotNull
         @JsonProperty("status")
@@ -84,7 +84,7 @@ public class ReadGuestsCareersOverviewsResponseDto extends SelfValidating<ReadGu
                 List<EVisa> visa,
                 String hostName,
                 String organizerName,
-                String leftDays,
+                int leftDays,
                 ERecruitmentStatus status,
                 String recruitmentStartDate,
                 String recruitmentEndDate,
