@@ -29,8 +29,6 @@ public class ReadGuestCareersOverviewsService implements ReadGuestCareersOvervie
     // 최신순
     private static final String RECENT = "RECENT";
 
-    private static final String END = "end";
-
     private final CareerRepository careerRepository;
 
     @Override
@@ -87,19 +85,19 @@ public class ReadGuestCareersOverviewsService implements ReadGuestCareersOvervie
                 .build();
     }
 
-    private String calculateLeftDays(LocalDate startDate, LocalDate endDate) {
+    private int calculateLeftDays(LocalDate startDate, LocalDate endDate) {
         LocalDate today = LocalDate.now();
-        Long days;
+
         if (today.isBefore(startDate)) {
-            days = ChronoUnit.DAYS.between(LocalDate.now(), startDate);
+            // 아직 시작 전 → 시작일까지 남은 날짜
+            return (int) ChronoUnit.DAYS.between(today, startDate);
+        } else if (!today.isAfter(endDate)) {
+            // 시작일 이상이고 종료일 이하 → 종료일까지 남은 날짜
+            return (int) ChronoUnit.DAYS.between(today, endDate);
+        } else {
+            // 종료일 이후 → 이미 지난 기간 (음수로 반환)
+            return (int) ChronoUnit.DAYS.between(endDate, today) * -1;
         }
-        else if (today.isEqual(startDate) || today.isAfter(startDate)) {
-            days = ChronoUnit.DAYS.between(LocalDate.now(), endDate);
-        }
-        else {
-            days = null;
-        }
-        return days != null ? days + " days left" : END;
     }
 
     private ERecruitmentStatus calculateRecruitmentStatus(LocalDate start, LocalDate end) {
