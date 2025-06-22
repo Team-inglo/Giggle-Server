@@ -3,6 +3,7 @@ package com.inglo.giggle.career.application.service;
 import com.inglo.giggle.career.application.dto.response.ReadUsersCareersOverviewsResponseDto;
 import com.inglo.giggle.career.application.usecase.ReadUsersCareersOverviewsUseCase;
 import com.inglo.giggle.career.domain.Career;
+import com.inglo.giggle.career.domain.CareerImage;
 import com.inglo.giggle.career.domain.type.ECareerCategory;
 import com.inglo.giggle.career.domain.type.ERecruitmentStatus;
 import com.inglo.giggle.career.repository.BookMarkCareerRepository;
@@ -54,6 +55,9 @@ public class ReadUserCareersOverviewsService implements ReadUsersCareersOverview
                         .status(calculateRecruitmentStatus(career.getStartDate(), career.getEndDate()))
                         .recruitmentStartDate(career.getStartDate().toString())
                         .recruitmentEndDate(career.getEndDate().toString())
+                        .imgUrls(new ArrayList<>(career.getCareerImages().stream()
+                                .map(CareerImage::getImgUrl)
+                                .toList()))
                         .createdAt(career.getCreatedAt().toString())
                         .build()
                 )
@@ -122,6 +126,9 @@ public class ReadUserCareersOverviewsService implements ReadUsersCareersOverview
                 .status(calculateRecruitmentStatus(career.getStartDate(), career.getEndDate()))
                 .recruitmentStartDate(career.getStartDate().toString())
                 .recruitmentEndDate(career.getEndDate().toString())
+                .imgUrls(new ArrayList<>(career.getCareerImages().stream()
+                        .map(CareerImage::getImgUrl)
+                        .toList()))
                 .createdAt(career.getCreatedAt().toString())
                 .build();
     }

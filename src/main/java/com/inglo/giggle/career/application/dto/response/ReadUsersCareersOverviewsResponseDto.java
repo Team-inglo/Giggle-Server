@@ -76,6 +76,10 @@ public class ReadUsersCareersOverviewsResponseDto extends SelfValidating<ReadUse
         private final String recruitmentEndDate;
 
         @NotNull
+        @JsonProperty("img_urls")
+        private final List<String> imgUrls;
+
+        @NotNull
         @JsonProperty("created_at")
         private final String createdAt;
 
@@ -91,7 +95,7 @@ public class ReadUsersCareersOverviewsResponseDto extends SelfValidating<ReadUse
                 int leftDays,
                 ERecruitmentStatus status,
                 String recruitmentStartDate,
-                String recruitmentEndDate,
+                String recruitmentEndDate, List<String> imgUrls,
                 String createdAt
         ) {
             this.id = id;
@@ -105,6 +109,7 @@ public class ReadUsersCareersOverviewsResponseDto extends SelfValidating<ReadUse
             this.status = status;
             this.recruitmentStartDate = recruitmentStartDate;
             this.recruitmentEndDate = recruitmentEndDate;
+            this.imgUrls = imgUrls;
             this.createdAt = createdAt;
         }
     }
