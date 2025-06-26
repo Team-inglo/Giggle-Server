@@ -116,4 +116,26 @@ public class Resume extends BaseEntity {
     public void updatePublicStatus(boolean isPublic) {
         this.isPublic = isPublic;
     }
+
+    public Integer getCompletionRate() {
+        int completionRate = 0;
+
+        if(this.introduction != null) {
+            completionRate += 20;
+        }
+        if(!this.educations.isEmpty()) {
+            completionRate += 20;
+        }
+        if(!this.languageSkill.isEmpty()){
+            completionRate += 20;
+        }
+        if(!this.workExperiences.isEmpty()) {
+            completionRate += 20;
+        }
+        if(!this.workPreference.isEmpty()){
+            completionRate += 20;
+        }
+
+        return completionRate;
+    }
 }

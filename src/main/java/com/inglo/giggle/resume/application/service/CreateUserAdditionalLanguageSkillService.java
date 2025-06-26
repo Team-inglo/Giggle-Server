@@ -5,6 +5,7 @@ import com.inglo.giggle.resume.application.usecase.CreateUserAdditionalLanguageS
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
 import com.inglo.giggle.resume.domain.Resume;
 import com.inglo.giggle.resume.domain.service.AdditionalLanguageService;
+import com.inglo.giggle.resume.domain.type.EAdditionalLanguageLevelType;
 import com.inglo.giggle.resume.repository.AdditionalLanguageRepository;
 import com.inglo.giggle.resume.repository.ResumeRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
@@ -49,7 +50,7 @@ public class CreateUserAdditionalLanguageSkillService implements CreateUserAddit
         // AdditionalLanguage 생성
         AdditionalLanguage additionalLanguage = additionalLanguageService.createAdditionalLanguage(
                 requestDto.languageName(),
-                requestDto.level(),
+                EAdditionalLanguageLevelType.fromString(requestDto.level()),
                 resume.getLanguageSkill()
         );
         additionalLanguageRepository.save(additionalLanguage);

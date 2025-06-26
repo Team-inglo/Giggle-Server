@@ -4,6 +4,7 @@ import com.inglo.giggle.core.exception.error.ErrorCode;
 import com.inglo.giggle.core.exception.type.CommonException;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
 import com.inglo.giggle.resume.domain.LanguageSkill;
+import com.inglo.giggle.resume.domain.type.EAdditionalLanguageLevelType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class AdditionalLanguageService {
     public AdditionalLanguage createAdditionalLanguage(
             String language,
-            Integer level,
+            EAdditionalLanguageLevelType level,
             LanguageSkill languageSkill
     ) {
         return AdditionalLanguage.builder()
@@ -26,10 +27,10 @@ public class AdditionalLanguageService {
     public AdditionalLanguage updateAdditionalLanguage(
             AdditionalLanguage additionalLanguage,
             String language,
-            Integer level
+            EAdditionalLanguageLevelType additionalLanguageLevelType
     ) {
         additionalLanguage.updateLanguageName(language);
-        additionalLanguage.updateLevel(level);
+        additionalLanguage.updateLevel(additionalLanguageLevelType);
         return additionalLanguage;
     }
 

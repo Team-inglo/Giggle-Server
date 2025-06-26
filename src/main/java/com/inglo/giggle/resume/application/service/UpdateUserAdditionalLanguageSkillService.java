@@ -4,6 +4,7 @@ import com.inglo.giggle.resume.application.dto.request.UpdateUserAdditionalLangu
 import com.inglo.giggle.resume.application.usecase.UpdateUserAdditionalLanguageSkillUseCase;
 import com.inglo.giggle.resume.domain.AdditionalLanguage;
 import com.inglo.giggle.resume.domain.service.AdditionalLanguageService;
+import com.inglo.giggle.resume.domain.type.EAdditionalLanguageLevelType;
 import com.inglo.giggle.resume.repository.AdditionalLanguageRepository;
 import com.inglo.giggle.security.domain.mysql.Account;
 import com.inglo.giggle.security.domain.service.AccountService;
@@ -42,7 +43,7 @@ public class UpdateUserAdditionalLanguageSkillService implements UpdateUserAddit
 
         // AdditionalLanguage 업데이트
         additionalLanguage = additionalLanguageService.updateAdditionalLanguage(
-                additionalLanguage, requestDto.languageName(), requestDto.level()
+                additionalLanguage, requestDto.languageName(), EAdditionalLanguageLevelType.fromString(requestDto.additionalLanguageLevelType())
         );
         additionalLanguageRepository.save(additionalLanguage);
     }

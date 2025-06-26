@@ -2,16 +2,8 @@ package com.inglo.giggle.resume.controller.query;
 
 import com.inglo.giggle.core.annotation.security.AccountID;
 import com.inglo.giggle.core.dto.ResponseDto;
-import com.inglo.giggle.resume.application.dto.response.ReadUserEducationDetailResponseDto;
-import com.inglo.giggle.resume.application.dto.response.ReadUserLanguageSummaryResponseDto;
-import com.inglo.giggle.resume.application.dto.response.ReadUserResumeDetailResponseDtoV1;
-import com.inglo.giggle.resume.application.dto.response.ReadUserWorkExperienceDetailResponseDto;
-import com.inglo.giggle.resume.application.dto.response.ReadUserWorkPreferenceDetailResponseDto;
-import com.inglo.giggle.resume.application.usecase.ReadUserEducationDetailUseCase;
-import com.inglo.giggle.resume.application.usecase.ReadUserLanguageSummaryUseCase;
-import com.inglo.giggle.resume.application.usecase.ReadUserResumeDetailUseCase;
-import com.inglo.giggle.resume.application.usecase.ReadUserWorkExperienceDetailUseCase;
-import com.inglo.giggle.resume.application.usecase.ReadUserWorkPreferenceDetailUseCase;
+import com.inglo.giggle.resume.application.dto.response.*;
+import com.inglo.giggle.resume.application.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +21,7 @@ public class ResumeUsersQueryV1Controller {
     private final ReadUserEducationDetailUseCase readUserEducationDetailUseCase;
     private final ReadUserLanguageSummaryUseCase readUserLanguageSummaryUseCase;
     private final ReadUserWorkPreferenceDetailUseCase readUserWorkPreferenceDetailUseCase;
+    private final ReadUserResumeCompletionRateUseCase readUserResumeCompletionRateUseCase;
 
     /** 
      * 7.1 (유학생) 이력서 조회하기
@@ -80,5 +73,15 @@ public class ResumeUsersQueryV1Controller {
             @AccountID UUID accountId
     ) {
         return ResponseDto.ok(readUserWorkPreferenceDetailUseCase.execute(accountId));
+    }
+
+    /**
+     * 7.26 (유학생) 이력서 완성도 조회하기
+     */
+    @GetMapping("/completion-rate")
+    public ResponseDto<ReadUserResumeCompletionRateResponseDto> readUserResumeCompletionRate(
+            @AccountID UUID accountId
+    ) {
+        return ResponseDto.ok(readUserResumeCompletionRateUseCase.execute(accountId));
     }
 }

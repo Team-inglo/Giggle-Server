@@ -85,4 +85,8 @@ public class LanguageSkill extends BaseEntity {
     public void updateSejongInstituteLevel(Integer sejongInstituteLevel) {
         this.sejongInstituteLevel = sejongInstituteLevel;
     }
+
+    public boolean isEmpty() {
+        return topikLevel == 0 && socialIntegrationLevel == 0 && sejongInstituteLevel == 0 && additionalLanguages.isEmpty();
+    }
 }

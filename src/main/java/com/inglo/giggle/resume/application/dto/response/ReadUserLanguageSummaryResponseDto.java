@@ -38,10 +38,10 @@ public class ReadUserLanguageSummaryResponseDto extends SelfValidating<ReadUserL
         private final String languageName;
 
         @JsonProperty("level")
-        private final Integer level;
+        private final String level;
 
         @Builder
-        public AdditionalLanguageDto(Long id, String languageName, Integer level) {
+        public AdditionalLanguageDto(Long id, String languageName, String level) {
             this.id = id;
             this.languageName = languageName;
             this.level = level;
@@ -51,7 +51,7 @@ public class ReadUserLanguageSummaryResponseDto extends SelfValidating<ReadUserL
             return AdditionalLanguageDto.builder()
                     .id(additionalLanguage.getId())
                     .languageName(additionalLanguage.getLanguageName())
-                    .level(additionalLanguage.getLevel())
+                    .level(additionalLanguage.getLevel().toString())
                     .build();
         }
     }
