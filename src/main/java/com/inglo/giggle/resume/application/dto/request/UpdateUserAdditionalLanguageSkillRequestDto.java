@@ -15,8 +15,6 @@ public record UpdateUserAdditionalLanguageSkillRequestDto(
 
         @JsonProperty("level")
         @NotNull(message = "언어 레벨은 필수 입력 값입니다.")
-        @Max(value = 10, message = "언어 레벨은 10 이하로 입력 가능합니다.")
-        @Min(value = 0, message = "언어 레벨은 0 이상으로 입력 가능합니다.")
-        Integer level
+        String additionalLanguageLevelType
 ) {
 }

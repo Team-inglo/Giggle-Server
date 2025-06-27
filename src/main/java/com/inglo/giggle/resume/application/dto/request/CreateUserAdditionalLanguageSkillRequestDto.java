@@ -1,6 +1,7 @@
 package com.inglo.giggle.resume.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.inglo.giggle.resume.domain.type.EAdditionalLanguageLevelType;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -14,9 +15,6 @@ public record CreateUserAdditionalLanguageSkillRequestDto(
         String languageName,
 
         @JsonProperty("level")
-        @Max(value = 10, message = "언어 레벨은 10 이하로 입력 가능합니다.")
-        @Min(value = 0, message = "언어 레벨은 0 이상으로 입력 가능합니다.")
-        @NotNull(message = "언어 레벨은 필수 입력 값입니다.")
-        Integer level
+        String level
 ) {
 }

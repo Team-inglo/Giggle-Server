@@ -313,10 +313,10 @@ public class ReadOwnerResumeDetailByResumeIdResponseDto extends SelfValidating<R
         private final String languageName;
 
         @JsonProperty("level")
-        private final Integer level;
+        private final String level;
 
         @Builder
-        public LanguageDetailDto(Long id, String languageName, Integer level) {
+        public LanguageDetailDto(Long id, String languageName, String level) {
             this.id = id;
             this.languageName = languageName;
             this.level = level;
@@ -328,7 +328,7 @@ public class ReadOwnerResumeDetailByResumeIdResponseDto extends SelfValidating<R
             return LanguageDetailDto.builder()
                     .id(language.getId())
                     .languageName(language.getLanguageName())
-                    .level(language.getLevel())
+                    .level(language.getLevel().toString())
                     .build();
         }
     }

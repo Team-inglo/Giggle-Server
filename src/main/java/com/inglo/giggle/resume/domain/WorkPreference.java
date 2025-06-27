@@ -106,4 +106,8 @@ public class WorkPreference extends BaseEntity {
         this.preferenceAddresses.clear();
         this.preferenceAddresses.addAll(preferenceAddresses);
     }
+
+    public boolean isEmpty() {
+        return this.jobCategories.isEmpty() && this.employmentTypes.isEmpty() && this.preferenceAddresses.isEmpty();
+    }
 }
