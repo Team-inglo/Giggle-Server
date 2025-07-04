@@ -3,11 +3,13 @@ package com.inglo.giggle.resume.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inglo.giggle.core.dto.SelfValidating;
 import com.inglo.giggle.core.type.EVisa;
+import com.inglo.giggle.resume.domain.BookMarkResume;
 import com.inglo.giggle.resume.domain.Resume;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -99,8 +101,7 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
                         resume.getUser().getVisa(),
                         resume.getWorkPreferenceJobCategoriesName(),
                         resume.getBookMarks().size(),
-                        resume.getBookMarks().stream()
-                                .anyMatch(bookmark -> bookmark.getResume().getAccountId().equals(resume.getAccountId()))
+                        true
                 ))
                 .toList();
 
@@ -110,4 +111,41 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
                 (int) resumePage.getTotalElements()
         );
     }
+
+    public static ReadOwnerResumeOverviewResponseDto from(
+            Page<Resume> resumePage,
+            Map<UUID, List<BookMarkResume>> bookMarksMap,
+            UUID currentAccountId
+    ) {
+        List<ResumeDto> resumeDtos = resumePage.getContent().stream()
+                .map(resume -> {
+                    List<BookMarkResume> bookMarks = bookMarksMap.getOrDefault(resume.getAccountId(), List.of());
+
+                    boolean isBookmarked = bookMarks.stream()
+                            .anyMatch(bookmark -> bookmark.getOwner().getId().equals(currentAccountId));
+
+                    return new ResumeDto(
+                            resume.getAccountId(),
+                            resume.getUser().getName(),
+                            resume.getUser().getProfileImgUrl(),
+                            resume.getUser().getNationality().getKrName(),
+                            resume.getUser().getAddress() != null
+                                    ? resume.getUser().getAddress().getFullAddress()
+                                    : "지역 미등록",
+                            resume.getTitle(),
+                            resume.getUser().getVisa(),
+                            resume.getWorkPreferenceJobCategoriesName(),
+                            bookMarks.size(),
+                            isBookmarked
+                    );
+                })
+                .toList();
+
+        return new ReadOwnerResumeOverviewResponseDto(
+                resumeDtos,
+                resumePage.hasNext(),
+                (int) resumePage.getTotalElements()
+        );
+    }
+
 }
