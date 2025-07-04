@@ -6,7 +6,9 @@ import com.inglo.giggle.resume.repository.mysql.BookMarkResumeJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -28,5 +30,10 @@ public class BookMarkResumeRepositoryImpl implements BookMarkResumeRepository {
     @Override
     public void save(BookMarkResume bookMarkResume) {
         bookMarkResumeJpaRepository.save(bookMarkResume);
+    }
+
+    @Override
+    public List<BookMarkResume> findAllByResumeAccountIdIn(Set<UUID> resumeAccountIds) {
+        return bookMarkResumeJpaRepository.findAllByResumeAccountIdIn(resumeAccountIds);
     }
 }

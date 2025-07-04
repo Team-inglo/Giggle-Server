@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public interface BookMarkResumeJpaRepository extends JpaRepository<BookMarkResume, Long> {
@@ -16,4 +18,11 @@ public interface BookMarkResumeJpaRepository extends JpaRepository<BookMarkResum
             @Param("ownerId") UUID ownerId,
             @Param("resumeId") UUID resumeId
     );
+
+    @Query("""
+        SELECT bmr FROM BookMarkResume bmr
+        JOIN FETCH bmr.resume r
+        WHERE r.accountId IN :resumeAccountIds
+    """)
+    List<BookMarkResume> findAllByResumeAccountIdIn(@Param("resumeAccountIds") Set<UUID> resumeAccountIds);
 }
