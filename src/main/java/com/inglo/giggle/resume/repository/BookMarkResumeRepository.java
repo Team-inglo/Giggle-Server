@@ -2,7 +2,9 @@ package com.inglo.giggle.resume.repository;
 
 import com.inglo.giggle.resume.domain.BookMarkResume;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public interface BookMarkResumeRepository {
@@ -13,4 +15,5 @@ public interface BookMarkResumeRepository {
 
     void save(BookMarkResume bookMarkResume);
 
+    List<BookMarkResume> findAllByResumeAccountIdIn(Set<UUID> resumeAccountIds);
 }
