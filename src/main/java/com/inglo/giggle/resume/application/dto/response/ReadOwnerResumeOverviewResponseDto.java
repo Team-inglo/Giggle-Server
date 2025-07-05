@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Getter
 public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwnerResumeOverviewResponseDto> {
+
     @JsonProperty("resumes")
     private final List<ResumeDto> resumes;
 
@@ -147,5 +148,4 @@ public class ReadOwnerResumeOverviewResponseDto extends SelfValidating<ReadOwner
                 (int) resumePage.getTotalElements()
         );
     }
-
 }
