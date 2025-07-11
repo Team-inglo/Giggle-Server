@@ -9,7 +9,11 @@ public enum ECareerCategory {
     ACTIVITY("대외활동", "Activity"),
     PROGRAM("교육", "Program"),
     CONTEST("공모전", "Contest"),
-    CLUB("동아리", "Club");
+    CLUB("동아리", "Club"),
+    INTERNSHIP("인턴십", "Internship"),
+
+    ;
+
 
     private final String krName;
     private final String enName;
