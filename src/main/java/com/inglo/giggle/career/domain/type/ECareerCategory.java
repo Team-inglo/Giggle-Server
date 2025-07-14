@@ -24,6 +24,7 @@ public enum ECareerCategory {
             case "PROGRAM" -> PROGRAM;
             case "CONTEST" -> CONTEST;
             case "CLUB" -> CLUB;
+            case "INTERNSHIP" -> INTERNSHIP;
             default -> throw new IllegalArgumentException("잘못된 커리어 타입입니다.");
         };
     }
